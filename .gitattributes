@@ -1,0 +1,20 @@
+# Text files are checked out with LF on every system, Windows included,
+# whatever core.autocrlf says: the tests compare bytes against golden files,
+# and the scripts run in bash there too. Folders that must stay byte for byte
+# as committed have a .gitattributes of their own (`* -text`).
+* text=auto eol=lf
+
+# Never converted, never diffed as text.
+*.bin binary
+*.pb binary
+*.p12 binary
+*.pfx binary
+*.der binary
+*.png binary
+*.ico binary
+*.icns binary
+*.bmp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
