@@ -108,6 +108,9 @@ export default {
   "status.headSize": "{size} headers",
   "status.proxy": "via {kind} proxy",
   "status.proxyTitle": "Sent through the proxy {proxy}",
+  "status.proxyOwnTitle": "Sent through this request's own proxy {proxy}",
+  "status.noProxyOwn": "direct",
+  "status.noProxyOwnTitle": "Sent directly: this request is set to use no proxy",
   "status.headSizeTitle": "Status line and headers: {size} bytes, counted as HTTP/1.1 text",
   "status.protocol": "Protocol",
   "status.noTimeout": "No timeout",
@@ -526,6 +529,8 @@ export default {
 
   // ResponseTimeline (DBG-01): the tab, and the copied or saved timeline (timelineFormat.ts)
   "timeline.empty": "No timeline was recorded for this response.",
+  "timeline.requestProxy": "This request uses its own proxy, {proxy}, instead of the app's, project's or environment's.",
+  "timeline.requestNoProxy": "This request connects directly, whatever proxy the app, project or environment sets.",
   "timeline.masked": "Secret values are masked as ••••••.",
   "timeline.title": "Timeline",
   "timeline.save": "Save timeline…",

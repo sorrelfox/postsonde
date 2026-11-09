@@ -41,7 +41,7 @@ export { formatOffsetMs };
  * timeline…" saves it all as text or JSON. Copies and saves are masked in
  * Go again (commands/logExport).
  */
-export function ResponseTimeline({ timeline }: { timeline: TimelineDTO | undefined }) {
+export function ResponseTimeline({ timeline, requestProxy = "" }: { timeline: TimelineDTO | undefined; requestProxy?: string }) {
   const t = useT();
   const hops = timeline?.hops ?? [];
   const events = timeline?.events ?? [];
@@ -66,6 +66,13 @@ export function ResponseTimeline({ timeline }: { timeline: TimelineDTO | undefin
           {t("response.timeline.save")}
         </SaveLogButton>
       </div>
+      {requestProxy !== "" && (
+        <p className={styles.timelineNote} role="note" data-request-proxy={requestProxy}>
+          {requestProxy === "none"
+            ? t("response.timeline.requestNoProxy")
+            : t("response.timeline.requestProxy", { proxy: requestProxy })}
+        </p>
+      )}
       {hops.map((hop, i) => (
         <Hop key={i} hop={hop} index={i} count={hops.length} />
       ))}

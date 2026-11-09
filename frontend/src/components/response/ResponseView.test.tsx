@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ResponseView } from "./ResponseView";
-import type { CookieDTO, ResponseDTO } from "../../lib/http";
+import type { CookieDTO, ResponseDTO, TimelineHopDTO } from "../../lib/http";
 import { httpResponse } from "../../test/httpResponse";
 
 function responseDTO(over: Partial<ResponseDTO> = {}): ResponseDTO {
@@ -44,6 +44,42 @@ describe("ResponseView", () => {
     expect(badge()?.getAttribute("title")).toContain("request's settings");
     rerender(<ResponseView response={responseDTO({ insecureTls: true, insecureTlsSource: "settings" })} />);
     expect(badge()?.getAttribute("title")).toContain("Settings › Network");
+  });
+
+  it("says when the request's own proxy setting applied", () => {
+    const hop = (via: string): Partial<ResponseDTO> => ({
+      timeline: {
+        masked: false,
+        events: [],
+        hops: [
+          {
+            kind: "final",
+            request: { method: "GET", url: "https://api.test/", proto: "HTTP/1.1", target: "/", headers: [], head: "GET / HTTP/1.1\r\n\r\n", body: "", bodyHex: false, bodyShown: 0, bodyClipped: false, bodySize: 0, bodyChunked: false },
+            startMs: 0,
+            responseProto: "HTTP/1.1",
+            statusCode: 200,
+            status: "200 OK",
+            responseHead: "HTTP/1.1 200 OK\r\n\r\n",
+            conn: { reused: false, wasIdle: false, idleMs: 0, localAddr: "127.0.0.1:5000", remoteAddr: "127.0.0.1:1080", protocol: "HTTP/1.1", via, proxy: null, tls: null },
+          } as unknown as TimelineHopDTO,
+        ],
+      },
+    });
+    const { rerender } = render(<ResponseView response={responseDTO({ requestProxy: "socks5h://bob@jump.test:1080", ...hop("socks5h://jump.test:1080") })} />);
+    const marker = document.querySelector("[data-response-status] [data-proxy]");
+    expect(marker?.textContent).toBe("via SOCKS5 proxy");
+    expect(marker?.getAttribute("title")).toBe("Sent through this request's own proxy socks5h://jump.test:1080");
+    fireEvent.click(screen.getByRole("tab", { name: "Timeline" }));
+    expect(screen.getByRole("note").textContent).toContain("own proxy, socks5h://bob@jump.test:1080");
+
+    rerender(<ResponseView response={responseDTO({ requestProxy: "none", ...hop("") })} />);
+    expect(document.querySelector("[data-response-status] [data-proxy]")).toBeNull();
+    expect(document.querySelector('[data-response-status] [data-request-proxy="none"]')?.textContent).toBe("direct");
+    expect(screen.getByRole("note").textContent).toContain("connects directly");
+
+    rerender(<ResponseView response={responseDTO({ requestProxy: "", ...hop("socks5h://app.test:1080") })} />);
+    expect(document.querySelector("[data-response-status] [data-proxy]")?.getAttribute("title")).toBe("Sent through the proxy socks5h://app.test:1080");
+    expect(screen.queryByRole("note")).toBeNull();
   });
 
   it("lists every header, repeated names included, as a table", () => {

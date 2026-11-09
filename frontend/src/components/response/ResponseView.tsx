@@ -339,7 +339,7 @@ export function ResponseView({ response, graphql, filter: filterFor, tests: test
         {tab === "cookies" && <ResponseCookies cookies={cookies} />}
         {tab === "tests" && <ResponseTests tests={tests} onJump={testsFor?.onJump} />}
         {tab === "variables" && <ResponseExtractions extractions={extractions} onJump={testsFor?.onExtractionJump} />}
-        {tab === "timeline" && <ResponseTimeline timeline={response.timeline} />}
+        {tab === "timeline" && <ResponseTimeline timeline={response.timeline} requestProxy={response.requestProxy} />}
       </div>
     </div>
   );
@@ -370,6 +370,8 @@ function StatusLine({
   // NET-06: the proxy the final exchange went through.
   const hops = response.timeline?.hops ?? [];
   const via = hops[hops.length - 1]?.conn?.via ?? "";
+  // The request's own proxy setting, when it has one: "none", or its URL.
+  const own = response.requestProxy ?? "";
   return (
     <div className={styles.statusLine} data-response-status="">
       <span
@@ -410,8 +412,18 @@ function StatusLine({
         </Meta>
       )}
       {via !== "" && (
-        <span className={`${styles.meta} ${styles.quiet} ${styles.sans}`} data-proxy={via} title={t("response.status.proxyTitle", { proxy: via })}>
+        <span
+          className={`${styles.meta} ${styles.quiet} ${styles.sans}`}
+          data-proxy={via}
+          data-request-proxy={own !== "" ? "" : undefined}
+          title={own !== "" ? t("response.status.proxyOwnTitle", { proxy: via }) : t("response.status.proxyTitle", { proxy: via })}
+        >
           {t("response.status.proxy", { kind: proxyKind(via) })}
+        </span>
+      )}
+      {via === "" && own === "none" && (
+        <span className={`${styles.meta} ${styles.quiet} ${styles.sans}`} data-request-proxy="none" title={t("response.status.noProxyOwnTitle")}>
+          {t("response.status.noProxyOwn")}
         </span>
       )}
       <Meta quiet sans>

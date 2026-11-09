@@ -41,6 +41,7 @@ export function httpResponse(over: Partial<ResponseDTO> = {}): ResponseDTO {
     timeoutSource: "",
     insecureTls: false,
     insecureTlsSource: "",
+    requestProxy: "",
     warnings: [],
     timeline: { hops: [], events: [], masked: false },
     tests: [],

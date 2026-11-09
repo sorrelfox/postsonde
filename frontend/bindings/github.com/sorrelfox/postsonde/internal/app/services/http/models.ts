@@ -1647,6 +1647,15 @@ export interface ResponseDTO {
     "insecureTlsSource": string;
 
     /**
+     * RequestProxy is the request's own proxy setting when it has one
+     * (docs/network.md#a-requests-own-proxy): the proxy URL without its
+     * password for a custom proxy, "none" when it connects directly
+     * whatever proxy is in effect, "" when it inherits the proxy in effect.
+     * The connection's Via says where it actually went.
+     */
+    "requestProxy": string;
+
+    /**
      * Warnings are problems that did not stop the send, such as a body
      * dropped for HEAD.
      */
