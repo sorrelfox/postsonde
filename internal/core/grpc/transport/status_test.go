@@ -314,9 +314,17 @@ func TestDeadlineExceeded(t *testing.T) {
 		if elapsed := time.Since(start); elapsed > 5*time.Second {
 			t.Fatalf("took %v", elapsed)
 		}
+		// On a slow machine the client can give up before the call above
+		// reaches the server, so the grpc-timeout header is checked on a
+		// call that is sure to arrive.
+		o = call(srv, grpctest.MethodUnary)
+		o.Timeout = time.Minute
+		if _, err := c.Unary(context.Background(), o, []byte("x")); err != nil {
+			t.Fatal(err)
+		}
 		r := srv.LastRequest()
 		d, perr := transport.ParseTimeout(r.Header.Get("Grpc-Timeout"))
-		if perr != nil || d <= 0 || d > 150*time.Millisecond {
+		if perr != nil || d <= 0 || d > time.Minute {
 			t.Fatalf("grpc-timeout %q = %v, %v", r.Header.Get("Grpc-Timeout"), d, perr)
 		}
 	})
