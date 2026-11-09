@@ -247,7 +247,7 @@ The same principles apply.
 | Code | Kind | When |
 |---|---|---|
 | `tcp.not_found` | `not_found` | `Send` to a closed or unknown connection. |
-| `tcp.not_open` | `invalid_argument` | `Send` while still connecting. |
+| `tcp.not_open` | `invalid_argument` | `Send` while still connecting. Once the client reported open (from inside `tcpclient.Connect`), a `Send` waits the moment until `Connect` returned the connection, so it never fails after the `open` event. |
 | `tcp.invalid_mode`, `tcp.invalid_line_ending` | `invalid_argument` | A mode other than `text`/`hex`, a line ending other than `none`/`lf`/`crlf`. |
 | `tcp.empty_message` | `invalid_argument` | Nothing to send without a framing (empty text without a line ending, hex without bytes). |
 | `tcp.variables_unsupported` | `unsupported` | `{{` in the address. |

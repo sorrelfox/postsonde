@@ -177,6 +177,7 @@ func (s *UDPService) Open(ctx context.Context, in OpenInputDTO) (ConnectionDTO, 
 		cancel:    cancel,
 		emit:      s.emit,
 		done:      make(chan struct{}),
+		opened:    make(chan struct{}),
 	}
 	c.batch = stream.New(context.Background(), stream.Options[item]{Interval: s.interval, MaxItems: maxItems}, c.flush)
 	s.mu.Lock()
@@ -221,6 +222,7 @@ func (s *UDPService) run(ctx context.Context, c *connection, o udpclient.Options
 	}()
 	conn, err := udpclient.Open(ctx, o)
 	if err != nil {
+		close(c.opened)
 		s.logger.Info("udp open failed", "conn", c.id, "address", c.address, "err", err)
 		return
 	}
@@ -229,6 +231,7 @@ func (s *UDPService) run(ctx context.Context, c *connection, o udpclient.Options
 	c.conn = conn
 	closing := c.closing
 	c.mu.Unlock()
+	close(c.opened)
 	if closing {
 		_ = conn.Close()
 	}
@@ -262,9 +265,7 @@ func (s *UDPService) Send(ctx context.Context, in SendInputDTO) (SendResultDTO, 
 	if err != nil {
 		return SendResultDTO{}, err
 	}
-	c.mu.Lock()
-	conn := c.conn
-	c.mu.Unlock()
+	conn := c.openConn()
 	if conn == nil {
 		return SendResultDTO{}, errs.New(errs.InvalidArgument, "The UDP socket is not open yet.").
 			WithCode(CodeNotOpen).
@@ -366,9 +367,12 @@ type connection struct {
 	batch                  *stream.Batcher[item]
 	done                   chan struct{}
 	via                    string // set when open, read by run's log line
+	// opened is closed once udpclient.Open returned, open or not.
+	opened chan struct{}
 
 	mu      sync.Mutex
-	conn    *udpclient.Conn // set once open
+	conn    *udpclient.Conn // set once Open returned it
+	open    bool            // the client reported open
 	closing bool
 
 	seq int64 // used by flush only (one goroutine)
@@ -378,6 +382,22 @@ type connection struct {
 type item struct {
 	state    *StateEventDTO
 	datagram *DatagramDTO
+}
+
+// openConn returns the socket once it is open, nil before. The client
+// reports open from inside udpclient.Open, and the open event can reach
+// the UI before Open returned the socket: a send in between waits for it.
+func (c *connection) openConn() *udpclient.Conn {
+	c.mu.Lock()
+	conn, open := c.conn, c.open
+	c.mu.Unlock()
+	if conn == nil && open {
+		<-c.opened
+		c.mu.Lock()
+		conn = c.conn
+		c.mu.Unlock()
+	}
+	return conn
 }
 
 // close stops opening, or closes the open socket, without waiting.
@@ -395,6 +415,9 @@ func (c *connection) close() {
 func (c *connection) onState(ch udpclient.StateChange) {
 	if ch.State == udpclient.StateOpen {
 		c.via = ch.Via
+		c.mu.Lock()
+		c.open = true
+		c.mu.Unlock()
 	}
 	ev := StateEventDTO{
 		ConnID:     c.id,

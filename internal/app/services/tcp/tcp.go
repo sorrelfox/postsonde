@@ -194,6 +194,7 @@ func (s *TCPService) Connect(ctx context.Context, in ConnectInputDTO) (Connectio
 		framed:    frame.Framed(),
 		emit:      s.emit,
 		done:      make(chan struct{}),
+		connected: make(chan struct{}),
 	}
 	c.batch = stream.New(context.Background(), stream.Options[item]{Interval: s.interval, MaxItems: maxChunks}, c.flush)
 	s.mu.Lock()
@@ -254,6 +255,7 @@ func (s *TCPService) run(ctx context.Context, c *connection, o tcpclient.Options
 	}()
 	conn, err := tcpclient.Connect(ctx, o)
 	if err != nil {
+		close(c.connected)
 		s.logger.Info("tcp connect failed", "conn", c.id, "address", c.address, "err", err)
 		return
 	}
@@ -262,6 +264,7 @@ func (s *TCPService) run(ctx context.Context, c *connection, o tcpclient.Options
 	c.conn = conn
 	closing := c.closing
 	c.mu.Unlock()
+	close(c.connected)
 	if closing {
 		_ = conn.Close()
 	}
@@ -294,9 +297,7 @@ func (s *TCPService) Send(ctx context.Context, in SendInputDTO) (SendResultDTO, 
 			WithHint("Connect again to send.").
 			WithDetail("connId", in.ConnID)
 	}
-	c.mu.Lock()
-	conn := c.conn
-	c.mu.Unlock()
+	conn := c.openConn()
 	if conn == nil {
 		return SendResultDTO{}, errs.New(errs.InvalidArgument, "The connection is not open yet.").
 			WithCode(CodeNotOpen).
@@ -422,9 +423,12 @@ type connection struct {
 	emit                   func(string, any)
 	batch                  *stream.Batcher[item]
 	done                   chan struct{}
+	// connected is closed once tcpclient.Connect returned, open or not.
+	connected chan struct{}
 
 	mu      sync.Mutex
-	conn    *tcpclient.Conn // set once open
+	conn    *tcpclient.Conn // set once Connect returned it
+	open    bool            // the client reported open
 	closing bool
 
 	seq int64 // used by flush only (one goroutine)
@@ -434,6 +438,23 @@ type connection struct {
 type item struct {
 	state *StateEventDTO
 	chunk *ChunkDTO
+}
+
+// openConn returns the connection once it is open, nil before. The client
+// reports open from inside tcpclient.Connect, and the open event can reach
+// the UI before Connect returned the connection: a send in between waits
+// for it.
+func (c *connection) openConn() *tcpclient.Conn {
+	c.mu.Lock()
+	conn, open := c.conn, c.open
+	c.mu.Unlock()
+	if conn == nil && open {
+		<-c.connected
+		c.mu.Lock()
+		conn = c.conn
+		c.mu.Unlock()
+	}
+	return conn
 }
 
 // close stops connecting, or closes the open connection, without waiting.
@@ -449,6 +470,11 @@ func (c *connection) close() {
 }
 
 func (c *connection) onState(ch tcpclient.StateChange) {
+	if ch.State == tcpclient.StateOpen {
+		c.mu.Lock()
+		c.open = true
+		c.mu.Unlock()
+	}
 	ev := StateEventDTO{
 		ConnID:     c.id,
 		RequestID:  c.requestID,

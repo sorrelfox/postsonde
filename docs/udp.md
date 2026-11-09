@@ -164,7 +164,7 @@ err = conn.Close()               // waits until closed
 | Method | Does |
 |---|---|
 | `Open({requestId, address, ipVersion, connected, maxDatagramBytes, openTimeoutMs})` | Renders the address's `{{variables}}` with the request's scopes (as an HTTP send does), checks it and the options, and returns `{connId, requestId, address}` at once; opening runs in the background, marked as the user's (PRV-05). Unknown variables fail with `template.unresolved`, an IP version other than `ipv4`/`ipv6`/"" with `udp.invalid_ip_version`. |
-| `Send({connId, mode, text})` | `text`: UTF-8 with `{{variables}}` rendered; `hex`: `hexbytes.Parse`; `base64`: the WebSocket composer's Base64 rules (`ws.invalid_base64`). Returns `{bytes}`. `udp.not_found`, `udp.not_open`, `udp.invalid_mode`. |
+| `Send({connId, mode, text})` | `text`: UTF-8 with `{{variables}}` rendered; `hex`: `hexbytes.Parse`; `base64`: the WebSocket composer's Base64 rules (`ws.invalid_base64`). Returns `{bytes}`. `udp.not_found`, `udp.not_open` (while opening; once the client reported open, from inside `udpclient.Open`, a send waits the moment until `Open` returned the socket), `udp.invalid_mode`. |
 | `Close(connId)`, `CloseAll()` | As for TCP; sockets are also closed when the app quits and when the workspace changes. |
 
 Events, batched per socket like TCP's (50 ms or 16 datagrams):
