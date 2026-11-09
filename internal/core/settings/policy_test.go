@@ -49,11 +49,12 @@ func TestLoadPolicyMissingIsNoPolicy(t *testing.T) {
 
 func TestLoadPolicyLocksAndSkipsBadEntries(t *testing.T) {
 	t.Parallel()
+	corp := abs(t, "corp.pem")
 	p := LoadPolicy(writePolicy(t, `{
 		"version": 1,
 		"locked": {
 			"network.verifyTls": true,
-			"network.caBundles": ["/etc/ssl/corp.pem"],
+			"network.caBundles": [`+jsonString(t, corp)+`],
 			"editor.fontSize": 14,
 			"ui.theme": "blue",
 			"network.proxy": "http://proxy",
@@ -77,7 +78,7 @@ func TestLoadPolicyLocksAndSkipsBadEntries(t *testing.T) {
 	s.Network.VerifyTLS = false
 	s.Editor.FontSize = 20
 	got := p.Enforce(s)
-	if !got.Network.VerifyTLS || got.Editor.FontSize != 14 || !slices.Equal(got.Network.CABundles, []string{"/etc/ssl/corp.pem"}) {
+	if !got.Network.VerifyTLS || got.Editor.FontSize != 14 || !slices.Equal(got.Network.CABundles, []string{corp}) {
 		t.Errorf("Enforce = %+v", got)
 	}
 	if got.UI != s.UI {
@@ -262,24 +263,25 @@ func TestStorePolicyLocksListsAndOmittedSections(t *testing.T) {
 	t.Parallel()
 	// Settings added by later features (privacy.allowedDirs,
 	// ui.customTheme) are lockable without changes to the policy code.
-	policy := LoadPolicy(writePolicy(t, `{"locked": {"privacy.allowedDirs": [], "network.caBundles": ["/corp/ca.pem"], "ui.customTheme": "corp.json"}}`))
+	corp, secrets := abs(t, "ca.pem"), abs(t, "secrets")
+	policy := LoadPolicy(writePolicy(t, `{"locked": {"privacy.allowedDirs": [], "network.caBundles": [`+jsonString(t, corp)+`], "ui.customTheme": "corp.json"}}`))
 	if got := policy.LockedKeys(); len(got) != 3 {
 		t.Fatalf("locked = %v, problems %v", got, policy.Problems)
 	}
 	path := filepath.Join(t.TempDir(), FileName)
-	if err := os.WriteFile(path, []byte(`{"ui": {"customTheme": "mine.json"}, "privacy": {"allowedDirs": ["/home/me/secrets"]}}`), 0o600); err != nil {
+	if err := os.WriteFile(path, []byte(`{"ui": {"customTheme": "mine.json"}, "privacy": {"allowedDirs": [`+jsonString(t, secrets)+`]}}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
 	s := Open(path, nil, WithPolicy(policy))
 	got := s.Settings()
-	if len(got.Privacy.AllowedDirs) != 0 || !slices.Equal(got.Network.CABundles, []string{"/corp/ca.pem"}) || got.UI.CustomTheme != "corp.json" {
+	if len(got.Privacy.AllowedDirs) != 0 || !slices.Equal(got.Network.CABundles, []string{corp}) || got.UI.CustomTheme != "corp.json" {
 		t.Fatalf("settings = %+v", got)
 	}
 	none := ""
 	if _, _, err := s.Update(Patch{UI: UIPatch{CustomTheme: &none}}); err == nil {
 		t.Error("turning the locked custom theme off was not refused")
 	}
-	dirs := []string{"/tmp"}
+	dirs := []string{abs(t, "tmp")}
 	if _, _, err := s.Update(Patch{Privacy: PrivacyPatch{AllowedDirs: &dirs}}); err == nil {
 		t.Error("adding an allowed directory was not refused")
 	}
@@ -287,7 +289,7 @@ func TestStorePolicyLocksListsAndOmittedSections(t *testing.T) {
 		t.Fatalf("unlocked update: changed %v, err %v", changed, err)
 	}
 	loaded, _, _ := Load(path)
-	if !slices.Equal(loaded.Privacy.AllowedDirs, []string{"/home/me/secrets"}) || len(loaded.Network.CABundles) != 0 ||
+	if !slices.Equal(loaded.Privacy.AllowedDirs, []string{secrets}) || len(loaded.Network.CABundles) != 0 ||
 		loaded.UI.CustomTheme != "mine.json" || loaded.UI.Theme != ThemeDark {
 		t.Errorf("file = %+v, want the user's lists kept", loaded)
 	}
