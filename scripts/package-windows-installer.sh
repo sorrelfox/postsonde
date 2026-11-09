@@ -47,8 +47,8 @@ if ! command -v makensis >/dev/null 2>&1; then
 	if [ "$(id -u)" = 0 ] && command -v apt-get >/dev/null 2>&1; then
 		echo "==> installing nsis=$nsis_deb_version"
 		export DEBIAN_FRONTEND=noninteractive
-		apt-get update -qq
-		apt-get install -y -qq --no-install-recommends "nsis=$nsis_deb_version"
+		apt-get -o Acquire::Retries=5 update -qq
+		apt-get -o Acquire::Retries=5 install -y -qq --no-install-recommends "nsis=$nsis_deb_version"
 	else
 		die "makensis not found: install NSIS 3 (Debian/Ubuntu: apt-get install nsis; macOS: brew install makensis; Windows: https://nsis.sourceforge.io)"
 	fi
@@ -67,7 +67,7 @@ if [ -n "${POSTSONDE_WINDOWS_CERTIFICATE:-}" ]; then
 	if ! command -v osslsigncode >/dev/null 2>&1 && [ "$(id -u)" = 0 ] && command -v apt-get >/dev/null 2>&1; then
 		echo "==> installing osslsigncode"
 		export DEBIAN_FRONTEND=noninteractive
-		{ apt-get update -qq && apt-get install -y -qq --no-install-recommends osslsigncode; } >/dev/null
+		{ apt-get -o Acquire::Retries=5 update -qq && apt-get -o Acquire::Retries=5 install -y -qq --no-install-recommends osslsigncode; } >/dev/null
 	fi
 	scripts/sign-windows.sh "$exe"
 	sign=("-DSIGN_COMMAND=$root/scripts/sign-windows.sh")

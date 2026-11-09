@@ -96,12 +96,12 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 echo "==> installing GTK 3, WebKit2GTK 4.1 and the linuxdeploy GTK plugin's tools"
-apt-get update -qq
+apt-get -o Acquire::Retries=5 update -qq
 # libgtk-3-0 and libwebkit2gtk-4.1-0 are what gets bundled. The GTK plugin
 # needs dpkg-architecture (dpkg-dev), pkg-config, glib-compile-schemas
 # (libglib2.0-bin) and gtk-query-immodules-3.0 (libgtk-3-bin);
 # librsvg2-common adds the SVG loader for GTK's symbolic icons.
-apt-get install -y -qq --no-install-recommends \
+apt-get -o Acquire::Retries=5 install -y -qq --no-install-recommends \
 	ca-certificates curl file dpkg-dev pkg-config libglib2.0-bin \
 	libgtk-3-0 libgtk-3-bin librsvg2-common libwebkit2gtk-4.1-0
 

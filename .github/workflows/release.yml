@@ -64,8 +64,8 @@ jobs:
         run: scripts/check-release-tag.sh "$GITHUB_REF_NAME"
       - name: Desktop file and metainfo, validated
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq desktop-file-utils appstream
+          sudo apt-get -o Acquire::Retries=5 update -qq
+          sudo apt-get -o Acquire::Retries=5 install -y -qq desktop-file-utils appstream
           desktop-file-validate build/linux/io.github.sorrelfox.PostSonde.desktop
           appstreamcli validate --no-net build/linux/io.github.sorrelfox.PostSonde.metainfo.xml
       - name: Pins, version and commit time
@@ -501,8 +501,8 @@ jobs:
           path: out/sources
       - name: flatpak-builder, Xvfb and D-Bus
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq flatpak flatpak-builder xvfb xauth dbus
+          sudo apt-get -o Acquire::Retries=5 update -qq
+          sudo apt-get -o Acquire::Retries=5 install -y -qq flatpak flatpak-builder xvfb xauth dbus
           # bubblewrap needs unprivileged user namespaces, which Ubuntu's
           # AppArmor restricts by default.
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0

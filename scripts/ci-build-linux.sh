@@ -131,8 +131,8 @@ EOF
 	unset PKG_CONFIG_PATH
 fi
 
-apt-get update -qq
-apt-get install -y -qq --no-install-recommends ca-certificates curl file "${pkgs[@]}"
+apt-get -o Acquire::Retries=5 update -qq
+apt-get -o Acquire::Retries=5 install -y -qq --no-install-recommends ca-certificates curl file "${pkgs[@]}"
 # The C toolchain and headers come from the distribution's current updates,
 # not a pinned set: log their versions, so a rebuild that differs can be
 # traced to them (docs/reproducible-builds.md).

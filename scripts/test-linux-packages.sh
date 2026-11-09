@@ -68,7 +68,7 @@ test_in() {
 # The install scripts run in the container, which expands them (SC2016).
 # shellcheck disable=SC2016
 apt_install='export DEBIAN_FRONTEND=noninteractive
-	{ apt-get update && apt-get install -y "$PKG" xvfb xauth dbus; } >/tmp/apt.log 2>&1 || { tail -30 /tmp/apt.log; exit 1; }
+	{ apt-get -o Acquire::Retries=5 update && apt-get -o Acquire::Retries=5 install -y "$PKG" xvfb xauth dbus; } >/tmp/apt.log 2>&1 || { tail -30 /tmp/apt.log; exit 1; }
 	dpkg-query -W -f="installed \${Package} \${Version}\n" "$(dpkg-deb -f "$PKG" Package)"'
 # shellcheck disable=SC2016
 dnf_install='{ dnf -y install "$PKG" xorg-x11-server-Xvfb xorg-x11-xauth dbus-daemon; } >/tmp/dnf.log 2>&1 || { tail -30 /tmp/dnf.log; exit 1; }
@@ -77,7 +77,7 @@ dnf_install='{ dnf -y install "$PKG" xorg-x11-server-Xvfb xorg-x11-xauth dbus-da
 # nothing else of the desktop.
 # shellcheck disable=SC2016
 appimage_install='export DEBIAN_FRONTEND=noninteractive
-	{ apt-get update && apt-get install -y --no-install-recommends libegl1 libgles2 libgbm1 libgl1 \
+	{ apt-get -o Acquire::Retries=5 update && apt-get -o Acquire::Retries=5 install -y --no-install-recommends libegl1 libgles2 libgbm1 libgl1 \
 		libwayland-client0 libharfbuzz0b libfribidi0 libfontconfig1 libfreetype6 libx11-6 libx11-xcb1 \
 		libgpg-error0 libcom-err2 xvfb xauth dbus; } >/tmp/apt.log 2>&1 || { tail -30 /tmp/apt.log; exit 1; }
 	cp "$PKG" /PostSonde.AppImage && chmod +x /PostSonde.AppImage'

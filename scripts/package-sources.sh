@@ -44,7 +44,7 @@ if ! command -v xz >/dev/null 2>&1; then
 	if [ "$(id -u)" = 0 ] && command -v apt-get >/dev/null 2>&1; then
 		echo "==> installing xz-utils"
 		export DEBIAN_FRONTEND=noninteractive
-		{ apt-get update -qq && apt-get install -y -qq --no-install-recommends xz-utils; } >/dev/null
+		{ apt-get -o Acquire::Retries=5 update -qq && apt-get -o Acquire::Retries=5 install -y -qq --no-install-recommends xz-utils; } >/dev/null
 	else
 		echo "package-sources.sh: xz not found (Debian/Ubuntu: apt-get install xz-utils)" >&2
 		exit 1
