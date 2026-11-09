@@ -45,10 +45,15 @@ for file in MacOS/postsonde Resources/icons.icns Resources/LICENSE Resources/THI
 done
 plutil -lint "$app/Contents/Info.plist"
 archs="$(lipo -archs "$bin")"
-case " $archs " in
-*" x86_64 "*" arm64 "* | *" arm64 "*" x86_64 "*) echo "universal: $archs" ;;
-*) die "the binary is not universal ($archs)" ;;
-esac
+# One word at a time: in a single pattern like *" x86_64 "*" arm64 "* the
+# two words would need a space each, but lipo separates them with one.
+for arch in x86_64 arm64; do
+	case " $archs " in
+	*" $arch "*) ;;
+	*) die "the binary is not universal ($archs)" ;;
+	esac
+done
+echo "universal: $archs"
 
 codesign --verify --deep --strict --verbose=2 "$app"
 signature="$(codesign --display --verbose=2 "$app" 2>&1)"
