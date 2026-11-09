@@ -100,6 +100,28 @@ func (u ProxyURL) WithoutPassword() ProxyURL {
 	return u
 }
 
+// WithPassword returns u with password as its password, checked as
+// ParseProxyURL checks one in the URL: it needs a user name, a SOCKS4 proxy
+// takes none, a SOCKS one is at most 255 bytes, and it has no control
+// characters. "" leaves u's password as it is. Errors are
+// CodeProxyInvalidURL and never contain the password.
+func (u ProxyURL) WithPassword(password string) (ProxyURL, error) {
+	switch {
+	case password == "":
+		return u, nil
+	case u.Username == "":
+		return ProxyURL{}, invalidProxyURL("The proxy has a password but no user name.")
+	case u.IsSOCKS4():
+		return ProxyURL{}, invalidProxyURL("A SOCKS4 proxy takes a user ID but no password.")
+	case !u.IsHTTP() && len(password) > MaxProxyCredentialLen:
+		return ProxyURL{}, invalidProxyURL("The proxy password is longer than 255 bytes.")
+	case strings.ContainsFunc(password, func(r rune) bool { return r < 0x20 || r == 0x7f }):
+		return ProxyURL{}, invalidProxyURL("The proxy password contains a control character.")
+	}
+	u.Password = password
+	return u, nil
+}
+
 // String returns the URL without its password, the port always written:
 // socks5h://user@proxy.example.com:1080. It is what the settings file
 // keeps and what logs and the UI show. The zero ProxyURL is "".
@@ -432,9 +454,10 @@ type ProxyRouter struct {
 	current func(ctx context.Context) (ProxyConfig, error)
 	opts    ProxyOptions
 
-	mu    sync.Mutex
-	key   ProxyURL
-	proxy Dialer
+	// proxies are the dialers of the proxies used so far, built on first
+	// use; at most maxProxyDialers are kept.
+	mu      sync.Mutex
+	proxies map[ProxyURL]Dialer
 
 	// seen is the proxy in effect the router last read (Route,
 	// ForwardProxy, Refresh); onChange are called when it changes.
@@ -484,6 +507,18 @@ func (r *ProxyRouter) Route(ctx context.Context, network, address string) (Diale
 	if fp := forwardFrom(ctx); fp != nil && !IsLoopbackTarget(address) {
 		return DialerFunc(fp.DialForward), nil
 	}
+	if p, ok := RequestProxyFrom(ctx); ok {
+		// A request's own proxy replaces the one in effect, bypass list
+		// included; it is not the proxy in effect, so it is not observed.
+		if p.IsZero() || IsLoopbackTarget(address) {
+			return r.direct, nil
+		}
+		d, err := r.dialer(p)
+		if err != nil {
+			return nil, routeError(err, network, address).WithDetail("via", p.String())
+		}
+		return d, nil
+	}
 	var c ProxyConfig
 	if r.current != nil {
 		var err error
@@ -513,14 +548,25 @@ func (r *ProxyRouter) Route(ctx context.Context, network, address string) (Diale
 // cannot be determined (the dial then fails with the reason). It is the
 // lookup of NewForwardProxier.
 func (r *ProxyRouter) ForwardProxy(ctx context.Context, address string) *HTTPProxy {
-	if r.current == nil || IsLoopbackTarget(address) {
+	if IsLoopbackTarget(address) {
 		return nil
 	}
-	c, err := r.current(ctx)
-	r.observe(c, err)
-	p := c.ForHTTP()
-	if err != nil || !p.IsHTTP() || c.bypassed(address) {
-		return nil
+	var p ProxyURL
+	if rp, ok := RequestProxyFrom(ctx); ok {
+		if !rp.IsHTTP() {
+			return nil
+		}
+		p = rp
+	} else {
+		if r.current == nil {
+			return nil
+		}
+		c, err := r.current(ctx)
+		r.observe(c, err)
+		p = c.ForHTTP()
+		if err != nil || !p.IsHTTP() || c.bypassed(address) {
+			return nil
+		}
 	}
 	d, err := r.dialer(p)
 	if err != nil {
@@ -580,20 +626,50 @@ func (r *ProxyRouter) observe(c ProxyConfig, err error) {
 	}
 }
 
-// dialer returns the dialer of p, built on first use and kept while the
-// proxy stays the same.
+// maxProxyDialers bounds the proxy dialers a ProxyRouter keeps: the proxy
+// in effect and the requests' own proxies (WithRequestProxy). Past it they
+// are all built again on demand.
+const maxProxyDialers = 16
+
+// dialer returns the dialer of p, built on first use and kept, so the
+// same proxy always gets the same dialer (an HTTP proxy's absolute-form
+// pool is keyed by it).
 func (r *ProxyRouter) dialer(p ProxyURL) (Dialer, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	if r.proxy != nil && r.key == p {
-		return r.proxy, nil
+	if d, ok := r.proxies[p]; ok {
+		return d, nil
 	}
 	d, err := p.Dialer(r.direct, r.opts)
 	if err != nil {
 		return nil, err
 	}
-	r.key, r.proxy = p, d
+	if r.proxies == nil || len(r.proxies) >= maxProxyDialers {
+		r.proxies = map[ProxyURL]Dialer{}
+	}
+	r.proxies[p] = d
 	return d, nil
+}
+
+type requestProxyKey struct{}
+
+// WithRequestProxy returns a copy of ctx whose dials go through p instead
+// of the proxy in effect: a request's own proxy
+// (docs/network.md#a-requests-own-proxy). The zero ProxyURL connects
+// directly. ProxyRouter routes such a dial with p alone: no bypass list
+// applies, a loopback target is still connected to directly, and the
+// proxy in effect is neither read nor changed, so the OnChange hooks do
+// not run for it. A client that keeps connections for reuse must keep
+// the connections of each p apart.
+func WithRequestProxy(ctx context.Context, p ProxyURL) context.Context {
+	return context.WithValue(ctx, requestProxyKey{}, p)
+}
+
+// RequestProxyFrom returns the proxy WithRequestProxy put in ctx; ok is
+// false when there is none, the proxy in effect then applies.
+func RequestProxyFrom(ctx context.Context) (p ProxyURL, ok bool) {
+	p, ok = ctx.Value(requestProxyKey{}).(ProxyURL)
+	return p, ok
 }
 
 // routeError returns err as an *errs.Error with the dial's details.
