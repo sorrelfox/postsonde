@@ -130,7 +130,14 @@ func TestMultipartOnTheWire(t *testing.T) {
 	root := t.TempDir()
 	writeFile(t, root, "fixtures/avatar.png", []byte("\x89PNG\r\n\x1a\nfake"))
 	writeFile(t, root, "fixtures/notes.txt", []byte("hello {{user}}\n"))
-	outside := writeFile(t, t.TempDir(), `we"ird name.JSON`, []byte(`{"a":1}`))
+	// A quote in the file name is escaped in the Content-Disposition. A
+	// Windows file name cannot have one, nor CR or LF, the other characters
+	// escaped; the part names below are escaped the same way everywhere.
+	outsideName, sentName := `we"ird name.JSON`, "we%22ird name.JSON"
+	if runtime.GOOS == "windows" {
+		outsideName, sentName = "we'ird name.JSON", "we'ird name.JSON"
+	}
+	outside := writeFile(t, t.TempDir(), outsideName, []byte(`{"a":1}`))
 	writeFile(t, root, "data/Résumé 2026.bin", bytes.Repeat([]byte{0, 1, 2, 255}, 5000))
 	writeFile(t, root, "fixtures/empty", nil)
 
@@ -182,7 +189,7 @@ func TestMultipartOnTheWire(t *testing.T) {
 				{name: "dyn", disposition: `form-data; name="dyn"`, data: "x"},
 				{name: "image", filename: "avatar.png", contentType: "image/png", disposition: `form-data; name="image"; filename="avatar.png"`, data: "\x89PNG\r\n\x1a\nfake"},
 				{name: "notes", filename: "notes.txt", contentType: "text/markdown; charset=utf-8", data: "hello {{user}}\n"},
-				{name: "outside", filename: "we%22ird name.JSON", contentType: "application/json", disposition: `form-data; name="outside"; filename="we%22ird name.JSON"`, data: `{"a":1}`},
+				{name: "outside", filename: sentName, contentType: "application/json", disposition: `form-data; name="outside"; filename="` + sentName + `"`, data: `{"a":1}`},
 				{name: "cv", filename: "Résumé 2026.bin", contentType: "application/octet-stream", data: string(bytes.Repeat([]byte{0, 1, 2, 255}, 5000))},
 				{name: "empty", filename: "empty", contentType: "application/octet-stream", data: ""},
 				{name: "meta", contentType: "application/json", data: `{"k":"v"}`},
@@ -403,7 +410,11 @@ func TestMultipartReaderClosedEarly(t *testing.T) {
 
 func TestStoredAndResolvedFilePaths(t *testing.T) {
 	t.Parallel()
-	root := filepath.Join(string(filepath.Separator), "home", "me", "project")
+	// Absolute on every system: on Windows on the current drive.
+	root, err := filepath.Abs(filepath.FromSlash("/home/me/project"))
+	if err != nil {
+		t.Fatal(err)
+	}
 	in := func(parts ...string) string { return filepath.Join(append([]string{root}, parts...)...) }
 	for abs, want := range map[string]string{
 		in("fixtures", "a.png"):        "fixtures/a.png",
