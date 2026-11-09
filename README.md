@@ -259,9 +259,7 @@ fetched at run time.
 ## Who made it
 
 PostSonde is my personal project, and I made it because I needed it myself. I built it
-together with Claude Opus 5.5, Anthropic's AI model: I decided what PostSonde should do
-and how it should work, and Claude wrote much of the code with me. Commits that Claude
-helped write name it in a `Co-Authored-By` line.
+together with Claude Opus 5.5.
 
 ## Contributing
 
