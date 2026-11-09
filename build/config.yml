@@ -18,7 +18,7 @@ info:
   # bump it in the commit you tag. The binaries and packages take their
   # version from git (scripts/version.sh): X.Y.Z on that tag,
   # 0.0.0~git<commit> anywhere else.
-  version: "0.0.1"
+  version: "1.0.0"
 
 # Dev mode configuration (`wails3 dev` from the repo root).
 dev_mode:
