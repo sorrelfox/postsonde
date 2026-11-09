@@ -67,6 +67,10 @@ func TestService(t *testing.T) {
 	t.Parallel()
 	ws := &workspace{}
 	ev := &events{}
+	// The projects' folders before the service: cleanups run in reverse,
+	// so the service closes its history files before the folders go, and
+	// Windows does not remove a file that is open.
+	a, b := t.TempDir(), t.TempDir()
 	svc := New(nil, ws.localDir, ev.emit, nil)
 	t.Cleanup(func() { _ = svc.ServiceShutdown() })
 	rec := Recorder(svc)
@@ -78,7 +82,6 @@ func TestService(t *testing.T) {
 		t.Error("a send is recorded without a project")
 	}
 
-	a, b := t.TempDir(), t.TempDir()
 	ws.set(a)
 	for i := range 3 {
 		rec()(entry(i))
