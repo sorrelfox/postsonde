@@ -203,9 +203,17 @@ func TestWebDeadline(t *testing.T) {
 		o.Timeout = time.Second
 		_, err := c.Unary(context.Background(), o, nil)
 		// The server answers DEADLINE_EXCEEDED at its deadline, or the
-		// client gives up first; either way the status is the same.
+		// client gives up first, on a slow machine even before the call
+		// reaches the server; either way the status is the same.
 		if st := transport.StatusFromError(err); st.Code != transport.DeadlineExceeded {
 			t.Fatalf("status %v (%v)", st.Code, err)
+		}
+		// The deadline travels as grpc-timeout: a call that is sure to
+		// reach the server shows it.
+		o = webCall(srv, p, grpctest.MethodUnary)
+		o.Timeout = time.Minute
+		if _, err := c.Unary(context.Background(), o, nil); err != nil {
+			t.Fatal(err)
 		}
 		if got := srv.LastRequest().Header.Get("Grpc-Timeout"); got == "" {
 			t.Error("no grpc-timeout sent")
