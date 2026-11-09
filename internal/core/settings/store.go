@@ -51,7 +51,17 @@ type Store struct {
 	broken   bool   // back the file up before writing over it
 	readOnly bool   // never write the file (newer version, unreadable)
 	last     []byte // content last read or written; nil if none
+
+	// readFailedAt is when reading the file, which was there before,
+	// started to fail; zero while reads work. See transientReadFailure.
+	readFailedAt time.Time
 }
+
+// transientReadFailure is how long reading a file that was there may fail
+// before it counts as a problem. Replacing a file is not atomic for readers
+// on Windows: while an editor renames its copy over the old one, opening
+// the file fails with a sharing violation or access denied.
+const transientReadFailure = 250 * time.Millisecond
 
 // State is a snapshot of a Store.
 type State struct {
@@ -251,6 +261,9 @@ func (s *Store) refreshLocked() bool {
 	beforeSettings, beforeProblems := s.cur, s.problems
 
 	data, err := os.ReadFile(s.path)
+	if err == nil || errors.Is(err, fs.ErrNotExist) {
+		s.readFailedAt = time.Time{}
+	}
 	switch {
 	case errors.Is(err, fs.ErrNotExist):
 		if !s.exists && !s.readOnly && len(s.problems) == 0 {
@@ -263,6 +276,17 @@ func (s *Store) refreshLocked() bool {
 		s.last = nil
 
 	case err != nil:
+		if s.exists && !s.readOnly {
+			// Possibly an editor replacing the file: keep the settings in
+			// effect and look again next time, unless reads keep failing.
+			now := s.now()
+			if s.readFailedAt.IsZero() {
+				s.readFailedAt = now
+			}
+			if now.Sub(s.readFailedAt) < transientReadFailure {
+				return false
+			}
+		}
 		s.problems = []*errs.Error{readFailed(s.path, err)}
 		s.exists, s.broken, s.readOnly = true, false, true
 		s.last = nil

@@ -272,6 +272,56 @@ func TestStoreUnreadableFileIsNotWritten(t *testing.T) {
 	}
 }
 
+// TestStoreReloadRidesOutAShortReadFailure: a read that fails while the app
+// runs, as when an editor replaces the file on Windows, keeps the settings
+// in effect at first; only a failure that lasts becomes a problem.
+func TestStoreReloadRidesOutAShortReadFailure(t *testing.T) {
+	t.Parallel()
+	path := writeSettings(t, `{"ui":{"theme":"dark"}}`)
+	s := Open(path, nil)
+	now := time.Date(2026, 11, 9, 12, 0, 0, 0, time.UTC)
+	s.now = func() time.Time { return now }
+
+	// A directory in the file's place: reading it fails on every system.
+	if err := os.Remove(path); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(path, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if s.Reload() {
+		t.Fatal("the first failed read was reported")
+	}
+	now = now.Add(transientReadFailure / 2)
+	if s.Reload() {
+		t.Fatal("a failure shorter than transientReadFailure was reported")
+	}
+	if st := s.State(); st.ReadOnly || len(st.Problems) != 0 || st.Settings.UI.Theme != "dark" {
+		t.Fatalf("state during a short failure = %+v", st)
+	}
+	now = now.Add(transientReadFailure)
+	if !s.Reload() {
+		t.Fatal("a lasting read failure was not reported")
+	}
+	if st := s.State(); !st.ReadOnly || len(st.Problems) != 1 || st.Problems[0].Code != CodeReadFailed {
+		t.Fatalf("state after a lasting failure = %+v, want read-only with a read problem", st)
+	}
+
+	// Readable again: the problem goes, and a new failure starts over.
+	if err := os.Remove(path); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, []byte(`{"ui":{"theme":"light"}}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if !s.Reload() {
+		t.Fatal("the readable file was not picked up")
+	}
+	if st := s.State(); st.ReadOnly || len(st.Problems) != 0 || st.Settings.UI.Theme != "light" {
+		t.Fatalf("state after recovery = %+v", st)
+	}
+}
+
 func TestStoreReload(t *testing.T) {
 	t.Parallel()
 	path := writeSettings(t, `{"ui":{"theme":"dark"}}`)
