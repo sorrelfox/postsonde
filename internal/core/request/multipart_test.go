@@ -176,7 +176,7 @@ func TestMultipartOnTheWire(t *testing.T) {
 			if u.path != "/upload" {
 				t.Fatalf("path = %q", u.path)
 			}
-			_, n, _ := body.Open()
+			n := bodyLength(t, body)
 			if u.contentLength != int64(len(u.body)) || u.contentLength != n {
 				t.Errorf("Content-Length = %d, body = %d bytes, computed length = %d", u.contentLength, len(u.body), n)
 			}
@@ -515,7 +515,7 @@ func TestLargeFileUploadMemory(t *testing.T) {
 			mu.Lock()
 			last := received[len(received)-1]
 			mu.Unlock()
-			_, n, _ := body.Open()
+			n := bodyLength(t, body)
 			if last != n || last < size {
 				t.Errorf("server received %d bytes, want %d (over %d)", last, n, size)
 			}
@@ -530,4 +530,16 @@ func TestLargeFileUploadMemory(t *testing.T) {
 			}
 		})
 	}
+}
+
+// bodyLength opens body for its length and closes it again: an open file
+// can't be removed on Windows, where t.TempDir's cleanup would then fail.
+func bodyLength(t *testing.T, body httpclient.Body) int64 {
+	t.Helper()
+	r, n, err := body.Open()
+	if err != nil {
+		t.Fatal(err)
+	}
+	r.Close()
+	return n
 }
