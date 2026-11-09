@@ -30,11 +30,14 @@ var csContentHeaders = []string{"allow", "content-disposition", "content-encodin
 // credentials are an Authorization header, Digest ones the handler's
 // Credentials (answered to the challenge). A text body is a
 // ByteArrayContent of its UTF-8 bytes (no Content-Type of its own), a
-// file body a StreamContent, a multipart body a MultipartFormDataContent.
-// Redirects (AllowAutoRedirect, MaxAutomaticRedirections), TLS
-// verification off, the client's Timeout and the request's Version
-// (exact) follow the settings. It fails with CodeUnsupportedChar for text
-// that is not UTF-8.
+// file body a StreamContent, a multipart body a MultipartContent of
+// form-data whose parts carry their Content-Disposition as PostSonde
+// writes it (MultipartFormDataContent would rewrite it). The URL is a
+// Uri that keeps its path and query as written when .NET would change
+// them (csURLKept). Redirects (AllowAutoRedirect,
+// MaxAutomaticRedirections), TLS verification off, the client's Timeout
+// and the request's Version (exact) follow the settings. It fails with
+// CodeUnsupportedChar for text that is not UTF-8.
 func CSharp(r Request) (string, error) {
 	if err := textFields(r, func(s, field string) error { return validText(s, field, "C#") }); err != nil {
 		return "", err
@@ -116,27 +119,28 @@ func CSharp(r Request) (string, error) {
 		usings["System.IO"] = true
 		req = append(req, "request.Content = new StreamContent(File.OpenRead("+csString(r.Body.File)+"));")
 	case BodyMultipart:
-		pre = append(pre, "var form = new MultipartFormDataContent();")
+		// MultipartFormDataContent.Add would write the name unquoted when
+		// it is a token, add a filename*, and throw on a quote in it: the
+		// parts carry their own Content-Disposition instead.
+		pre = append(pre, "var form = new MultipartContent(\"form-data\");")
+		if slices.ContainsFunc(r.Body.Parts, func(p Part) bool { return !ascii(partDisposition(p)) || !ascii(p.ContentType) }) {
+			usings["System.Text"] = true
+			pre = append(pre, "form.HeaderEncodingSelector = (_, _) => Encoding.UTF8;")
+		}
 		for i, p := range r.Body.Parts {
-			var c string
+			v := "part" + strconv.Itoa(i+1)
 			if p.File != "" {
 				usings["System.IO"] = true
-				c = "new StreamContent(File.OpenRead(" + csString(p.File) + "))"
+				pre = append(pre, "var "+v+" = new StreamContent(File.OpenRead("+csString(p.File)+"));")
 			} else {
 				usings["System.Text"] = true
-				c = "new ByteArrayContent(Encoding.UTF8.GetBytes(" + csString(p.Value) + "))"
+				pre = append(pre, "var "+v+" = new ByteArrayContent(Encoding.UTF8.GetBytes("+csString(p.Value)+"));")
 			}
+			pre = append(pre, v+".Headers.TryAddWithoutValidation(\"Content-Disposition\", "+csString(partDisposition(p))+");")
 			if p.ContentType != "" {
-				v := "part" + strconv.Itoa(i+1)
-				pre = append(pre, "var "+v+" = "+c+";",
-					v+".Headers.TryAddWithoutValidation(\"Content-Type\", "+csString(p.ContentType)+");")
-				c = v
+				pre = append(pre, v+".Headers.TryAddWithoutValidation(\"Content-Type\", "+csString(p.ContentType)+");")
 			}
-			args := c + ", " + csString(p.Name)
-			if p.File != "" {
-				args += ", " + csString(partFilename(p))
-			}
-			pre = append(pre, "form.Add("+args+");")
+			pre = append(pre, "form.Add("+v+");")
 		}
 		req = append(req, "request.Content = form;")
 	}
@@ -170,7 +174,12 @@ func CSharp(r Request) (string, error) {
 	for _, l := range pre {
 		b.WriteString(l + "\n")
 	}
-	b.WriteString("using var request = new HttpRequestMessage(new HttpMethod(" + csString(r.Method) + "), " + csString(r.URL) + ");\n")
+	uri := csString(r.URL)
+	if !csURLKept(r.URL) {
+		b.WriteString("// Sent as written: Uri would remove dot segments and percent-encode or decode characters.\n")
+		uri = "new Uri(" + uri + ", new UriCreationOptions { DangerousDisablePathAndQueryCanonicalization = true })"
+	}
+	b.WriteString("using var request = new HttpRequestMessage(new HttpMethod(" + csString(r.Method) + "), " + uri + ");\n")
 	for _, l := range req {
 		b.WriteString(l + "\n")
 	}
@@ -178,6 +187,75 @@ func CSharp(r Request) (string, error) {
 	b.WriteString("Console.WriteLine((int)response.StatusCode);\n")
 	b.WriteString("Console.WriteLine(await response.Content.ReadAsStringAsync());")
 	return b.String(), nil
+}
+
+// csURLKept reports whether .NET's Uri keeps the path and query of u as
+// they are, so that HttpClient sends them as written. It removes dot
+// segments (also percent-encoded), turns \ into /, decodes percent-encoded
+// letters, digits and - . _ ~, and percent-encodes the other characters
+// outside RFC 3986 and a % that starts no escape. Anything else is kept.
+// A masked value (Mask) and a template reference ({{name}}) stand for text
+// the user puts in, so they do not count.
+func csURLKept(u string) bool {
+	u = strings.ReplaceAll(u, Mask, "")
+	for {
+		i := strings.Index(u, "{{")
+		j := strings.Index(u[max(i, 0):], "}}")
+		if i < 0 || j < 0 {
+			break
+		}
+		u = u[:i] + u[i+j+2:]
+	}
+	if i := strings.Index(u, "://"); i >= 0 {
+		u = u[i+3:]
+	}
+	i := strings.IndexAny(u, "/?")
+	if i < 0 {
+		return true
+	}
+	rest := u[i:]
+	for i := 0; i < len(rest); i++ {
+		c := rest[i]
+		switch {
+		case 'a' <= c && c <= 'z', 'A' <= c && c <= 'Z', '0' <= c && c <= '9':
+		case strings.IndexByte("-._~!$&'()*+,;=:@/?[]", c) >= 0:
+		case c == '%':
+			hi, ok1 := hexDigit(rest, i+1)
+			lo, ok2 := hexDigit(rest, i+2)
+			if !ok1 || !ok2 {
+				return false
+			}
+			if d := hi<<4 | lo; 'a' <= d && d <= 'z' || 'A' <= d && d <= 'Z' || '0' <= d && d <= '9' || strings.IndexByte("-._~", d) >= 0 {
+				return false
+			}
+			i += 2
+		default:
+			return false
+		}
+	}
+	path, _, _ := strings.Cut(rest, "?")
+	for seg := range strings.SplitSeq(path, "/") {
+		if seg == "." || seg == ".." {
+			return false
+		}
+	}
+	return true
+}
+
+// hexDigit is the value of the hex digit at s[i].
+func hexDigit(s string, i int) (byte, bool) {
+	if i >= len(s) {
+		return 0, false
+	}
+	switch c := s[i]; {
+	case '0' <= c && c <= '9':
+		return c - '0', true
+	case 'a' <= c && c <= 'f':
+		return c - 'a' + 10, true
+	case 'A' <= c && c <= 'F':
+		return c - 'A' + 10, true
+	}
+	return 0, false
 }
 
 // csString is s as a C# string literal: a verbatim string (@"…", " as

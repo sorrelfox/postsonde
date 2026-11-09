@@ -7,7 +7,8 @@ var handler = new SocketsHttpHandler
 };
 using var client = new HttpClient(handler);
 
-using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/a/../b/./c?f={x}&g=[1]|\"q\"");
+// Sent as written: Uri would remove dot segments and percent-encode or decode characters.
+using var request = new HttpRequestMessage(new HttpMethod("GET"), new Uri("https://api.test/a/../b/./c?f={x}&g=[1]|\"q\"", new UriCreationOptions { DangerousDisablePathAndQueryCanonicalization = true }));
 
 using var response = await client.SendAsync(request);
 Console.WriteLine((int)response.StatusCode);

@@ -324,7 +324,8 @@ and `HttpClient`, an `HttpRequestMessage`, the status and body printed.
 | Basic | `request.Headers.Authorization = new AuthenticationHeaderValue("Basic", …)`. Digest: the handler's `Credentials` (answered to the challenge). |
 | Text body | `new ByteArrayContent(Encoding.UTF8.GetBytes(…))` (no Content-Type of its own), several lines as concatenated literals. |
 | File body | `new StreamContent(File.OpenRead(…))`. |
-| Multipart | `MultipartFormDataContent`: text parts as `ByteArrayContent`, files as `StreamContent` with their file name, each part's Content-Type set. |
+| URL | A string, or, when .NET's `Uri` would change its path or query (it removes dot segments, percent-encodes `{ } \| " ^` and the like, decodes `%41`), a `Uri` with `DangerousDisablePathAndQueryCanonicalization` (.NET 6 or later) under a comment, so it is sent as written. A masked value or a `{{reference}}` does not count. |
+| Multipart | `MultipartContent("form-data")`: text parts as `ByteArrayContent`, files as `StreamContent`, each with its Content-Disposition as PostSonde writes it and its Content-Type (`TryAddWithoutValidation`); `HeaderEncodingSelector` UTF-8 when one is not ASCII. Not `MultipartFormDataContent`, which writes a name that is a token unquoted, adds a `filename*` and throws on a `"` in a name. |
 | Redirects, TLS off, timeout, HTTP version | `MaxAutomaticRedirections` or `AllowAutoRedirect = false`; `SslOptions` accepting every certificate; `client.Timeout` (.NET's default is 100 s); `request.Version` with `RequestVersionExact`. |
 
 Strings are verbatim (`@"…"`, `"` doubled) when they have a backslash and
@@ -509,7 +510,8 @@ Running the commands against real servers is left to a manual check.
   them all, `javac -Xlint:all -Werror` over them all, renamed);
   `TestSnippetsSend` runs the code of every curl and quoting case (curl,
   Python with requests, Node, wget, Go and Java built once, and HTTPie and
-  `dotnet run` where installed) against a test server and checks it
+  `dotnet run` of the single file, .NET 10 or later, where installed)
+  against a test server and checks it
   receives what PostSonde sends, apart
   from the headers the client adds of its own, the multipart boundary and
   `Content-Length`. The cases a client cannot send the same way are

@@ -9,13 +9,15 @@ var handler = new SocketsHttpHandler
 };
 using var client = new HttpClient(handler);
 
-var form = new MultipartFormDataContent();
+var form = new MultipartContent("form-data");
 var part1 = new ByteArrayContent(Encoding.UTF8.GetBytes("x"));
+part1.Headers.TryAddWithoutValidation("Content-Disposition", "form-data; name=\"text\"");
 part1.Headers.TryAddWithoutValidation("Content-Type", "text/plain; charset=utf-8");
-form.Add(part1, "text");
+form.Add(part1);
 var part2 = new StreamContent(File.OpenRead("<root>/data.json"));
+part2.Headers.TryAddWithoutValidation("Content-Disposition", "form-data; name=\"file\"; filename=\"data.json\"");
 part2.Headers.TryAddWithoutValidation("Content-Type", "application/json; charset=\"utf-8\"");
-form.Add(part2, "file", "data.json");
+form.Add(part2);
 using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/upload");
 request.Content = form;
 

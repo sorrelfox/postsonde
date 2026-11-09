@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"testing"
@@ -152,6 +153,13 @@ func runners() []runner {
 				"quoting_headers": "HttpClient sends a header character that is not ASCII as ?",
 			}},
 		{lang: "csharp", tool: "dotnet", file: "Program.cs",
+			// dotnet run runs a single .cs file from .NET 10 on.
+			ready: func() bool {
+				out, err := exec.Command("dotnet", "--version").Output()
+				major, _, _ := strings.Cut(strings.TrimSpace(string(out)), ".")
+				n, _ := strconv.Atoi(major)
+				return err == nil && n >= 10
+			},
 			run: func(ctx context.Context, root, name string) *exec.Cmd {
 				cmd := exec.CommandContext(ctx, "dotnet", "run", "Program.cs")
 				cmd.Dir = filepath.Join(root, name)

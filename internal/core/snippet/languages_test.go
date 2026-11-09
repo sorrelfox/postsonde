@@ -210,6 +210,31 @@ func TestLanguagesWriteEveryCase(t *testing.T) {
 	}
 }
 
+// TestCSharpURLKept: the C# code keeps a URL whose path or query .NET's
+// Uri would change (as .NET 10 does) out of its canonicalization.
+func TestCSharpURLKept(t *testing.T) {
+	kept := []string{
+		"https://api.test", "https://api.test/", "https://api.test/items?page=2&q=a%20b", "http://h/[x]?[y]",
+		"http://h/a'!$&()*+,;=:@~-._", "http://h/A%3a%2F%2f%25", "http://h/%E2%9C%93", "http://h/a?x=../y",
+		"http://h/.a/..b/...", "http://user:pw@h:8080/a;b/c;d", "{{base}}/users/{{id}}?q={{q}}", "https://api.test/me?key=" + Mask,
+	}
+	changed := []string{
+		"https://api.test/a/../b/./c?f={x}&g=[1]|\"q\"", "http://h/a/.", "http://h/..", "http://h/%2e%2e/a", "http://h/a b",
+		`http://h/a"b`, "http://h/a<b>", `http://h/a\b`, "http://h/a^b", "http://h/a`b", "http://h/a{b}", "http://h/a|b",
+		"http://h/é", "http://h/a?b c", "http://h/%", "http://h/%zz", "http://h/%41", "http://h/%7e", "http://h/{{id}",
+	}
+	for _, u := range kept {
+		if !csURLKept(u) {
+			t.Errorf("csURLKept(%q) = false, want true", u)
+		}
+	}
+	for _, u := range changed {
+		if csURLKept(u) {
+			t.Errorf("csURLKept(%q) = true, want false", u)
+		}
+	}
+}
+
 // The quoting of the Windows shells reads back as the text, with the curl
 // importer's cmd and PowerShell tokenizers.
 func TestQuoteWindows(t *testing.T) {
