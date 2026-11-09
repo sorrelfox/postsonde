@@ -3,6 +3,7 @@ package socketio
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"strings"
 	"sync"
 	"testing"
@@ -26,6 +27,27 @@ func fixedAuth(auths map[string]projectfile.Auth) request.HandshakeAuthFunc {
 		}
 		return request.Handshake{Type: a.Type, Headers: r.Headers, Query: r.Query, Credentials: r.Credentials, Secrets: r.Secrets}, nil
 	}
+}
+
+// requestsSince returns the requests srv received after its first before,
+// leaving out those of earlier connections: a poll that was in flight when
+// the client closed can reach the server after before was taken, and it
+// carries that earlier connection's session ID.
+func requestsSince(srv *siotest.Server, before int) []*http.Request {
+	all := srv.Requests()
+	old := map[string]bool{}
+	for _, r := range all[:before] {
+		if sid := r.URL.Query().Get("sid"); sid != "" {
+			old[sid] = true
+		}
+	}
+	var out []*http.Request
+	for _, r := range all[before:] {
+		if !old[r.URL.Query().Get("sid")] {
+			out = append(out, r)
+		}
+	}
+	return out
 }
 
 // TestConnectSendsAuthV2 (AUTH-31, SIO-02): socket.io v2 has no auth
@@ -66,7 +88,7 @@ func TestConnectSendsAuthV2(t *testing.T) {
 	if got := last(); got != `/ {"room":"a","token":"v2-s3cret-1"}` {
 		t.Errorf("main namespace saw %s", got)
 	}
-	for _, r := range srv.Requests()[before:] {
+	for _, r := range requestsSince(srv, before) {
 		if r.Header.Get("Authorization") != "" || r.URL.Query().Get("token") != "v2-s3cret-1" {
 			t.Errorf("request %s, Authorization %q", r.URL.RawQuery, r.Header.Get("Authorization"))
 		}
@@ -91,7 +113,7 @@ func TestConnectSendsAuthV2(t *testing.T) {
 	// In the handshake: the header, nothing in the query.
 	before = len(srv.Requests())
 	run(ConnectInputDTO{URL: srv.URL})
-	for _, r := range srv.Requests()[before:] {
+	for _, r := range requestsSince(srv, before) {
 		if r.Header.Get("Authorization") != "Bearer v2-s3cret-1" || r.URL.Query().Has("token") {
 			t.Errorf("handshake mode: %s, Authorization %q", r.URL.RawQuery, r.Header.Get("Authorization"))
 		}
@@ -133,7 +155,7 @@ func TestConnectSendsAuth(t *testing.T) {
 	for _, transport := range []string{"polling", "websocket"} {
 		before := len(srv.Requests())
 		items := run(ConnectInputDTO{RequestID: "req_1", URL: srv.URL, Transport: transport})
-		reqs := srv.Requests()[before:]
+		reqs := requestsSince(srv, before)
 		if len(reqs) == 0 {
 			t.Fatalf("%s: no requests", transport)
 		}
@@ -151,7 +173,7 @@ func TestConnectSendsAuth(t *testing.T) {
 
 	before := len(srv.Requests())
 	run(ConnectInputDTO{RequestID: "req_q", URL: srv.URL, Transport: "polling"})
-	for _, r := range srv.Requests()[before:] {
+	for _, r := range requestsSince(srv, before) {
 		if r.URL.Query().Get("key") != "q-s3cret-2" || r.URL.Query().Get("EIO") != "4" {
 			t.Errorf("server saw query %q", r.URL.RawQuery)
 		}
@@ -163,7 +185,7 @@ func TestConnectSendsAuth(t *testing.T) {
 	items := run(ConnectInputDTO{RequestID: "req_1", URL: srv.URL, Transport: "polling", AuthIn: "payload", AuthPayload: `{"room": "a"}`})
 	run(ConnectInputDTO{RequestID: "req_1", URL: srv.URL, Transport: "polling", AuthIn: "payload", AuthPayload: `{"token": "mine"}`})
 	run(ConnectInputDTO{RequestID: "req_1", URL: srv.URL, Transport: "polling", AuthIn: "payload"})
-	for _, r := range srv.Requests()[before:] {
+	for _, r := range requestsSince(srv, before) {
 		if r.Header.Get("Authorization") != "" {
 			t.Errorf("payload mode sent Authorization %q", r.Header.Get("Authorization"))
 		}
