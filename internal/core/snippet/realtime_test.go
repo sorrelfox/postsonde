@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -117,6 +118,7 @@ func TestRealtimeLanguagesGolden(t *testing.T) {
 	for _, lang := range GRPCLanguages() {
 		for _, c := range grpcCases() {
 			t.Run(lang.ID+"/"+c.name, func(t *testing.T) {
+				skipPOSIXPaths(t, c.r)
 				r := c.r
 				if c.secrets != nil {
 					r, _ = r.Masked(c.secrets)
@@ -291,12 +293,26 @@ func parseGrpcurl(t *testing.T, args []string, exists func(string) bool) GRPCReq
 	return r
 }
 
+// skipPOSIXPaths skips a case whose .proto files or import paths are
+// absolute POSIX paths where they are not absolute (Windows, without a
+// drive): grpcurl's arguments follow the system's own paths, so the
+// golden files and the round trip hold for POSIX systems.
+func skipPOSIXPaths(t *testing.T, r GRPCRequest) {
+	t.Helper()
+	for _, p := range append(slices.Clone(r.ProtoFiles), r.ImportPaths...) {
+		if strings.HasPrefix(p, "/") && !filepath.IsAbs(p) {
+			t.Skip("the case's paths are absolute only on POSIX systems")
+		}
+	}
+}
+
 // TestGrpcurlRoundTrip reads every grpcurl command back as grpcurl would
 // and checks it makes the same call: address with its port, TLS,
 // metadata, message, method, timeouts and the .proto files.
 func TestGrpcurlRoundTrip(t *testing.T) {
 	for _, c := range grpcCases() {
 		t.Run(c.name, func(t *testing.T) {
+			skipPOSIXPaths(t, c.r)
 			cmd, err := Grpcurl(c.r)
 			if codeOf(err) == CodeNulByte {
 				t.Skip(err)

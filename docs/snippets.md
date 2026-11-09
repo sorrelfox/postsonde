@@ -503,7 +503,9 @@ Running the commands against real servers is left to a manual check.
   a templated URL, Unicode Basic credentials), in
   `testdata/<language>/<name>.golden` (an error as `error <code>: …`;
   regenerate with `-run TestLanguagesGolden -update`), masked ones
-  holding no secret; `TestLanguagesWriteEveryCase`; `TestQuoteWindows`;
+  holding no secret. The files of the built requests are named under one
+  fixed POSIX folder, `<root>` in the golden files, so they are the same
+  on every system and machine; `TestLanguagesWriteEveryCase`; `TestQuoteWindows`;
   `TestWindowsCurlRoundTrip`.
 - `internal/core/snippet/languages_exec_test.go`, skipped with `-short`
   and for each tool that is not installed: `TestSnippetsCompile` checks

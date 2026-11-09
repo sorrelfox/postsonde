@@ -211,8 +211,12 @@ func TestCurlGolden(t *testing.T) {
 	rt := root(t)
 	for _, c := range curlCases() {
 		t.Run(c.name, func(t *testing.T) {
-			cmd, _ := generate(t, c)
-			got := strings.ReplaceAll(cmd, rt, "<root>") + "\n"
+			_, r := generate(t, c)
+			cmd, err := Curl(withGoldenRoot(r, rt))
+			if err != nil {
+				t.Fatalf("Curl: %v", err)
+			}
+			got := strings.ReplaceAll(cmd, goldenRoot, "<root>") + "\n"
 			path := filepath.Join("testdata", "curl", c.name+".golden")
 			if *update {
 				if err := os.WriteFile(path, []byte(got), 0o644); err != nil {

@@ -137,6 +137,29 @@ func goldenRequests(t *testing.T) []namedRequest {
 	return out
 }
 
+// goldenRoot stands for root(t) in the file paths of the golden requests:
+// the same POSIX path on every system and machine, written as <root> in the
+// golden files. The code only names the files, it does not read them, and
+// writes a Windows path as such (the windows_* cases).
+const goldenRoot = "/snippet-test-root"
+
+// withGoldenRoot returns r with its file paths under rt moved under
+// goldenRoot, with / separators.
+func withGoldenRoot(r Request, rt string) Request {
+	move := func(p string) string {
+		if rest, ok := strings.CutPrefix(p, rt); ok {
+			return goldenRoot + filepath.ToSlash(rest)
+		}
+		return p
+	}
+	r.Body.File = move(r.Body.File)
+	r.Body.Parts = slices.Clone(r.Body.Parts)
+	for i := range r.Body.Parts {
+		r.Body.Parts[i].File = move(r.Body.Parts[i].File)
+	}
+	return r
+}
+
 // snippetText is lang's code for r, or its error as "error <code>:
 // <message>".
 func snippetText(lang Language, r Request) string {
@@ -161,7 +184,7 @@ func TestLanguagesGolden(t *testing.T) {
 	for _, lang := range Languages() {
 		for _, c := range reqs {
 			t.Run(lang.ID+"/"+c.name, func(t *testing.T) {
-				got := strings.ReplaceAll(snippetText(lang, c.r), rt, "<root>") + "\n"
+				got := strings.ReplaceAll(snippetText(lang, withGoldenRoot(c.r, rt)), goldenRoot, "<root>") + "\n"
 				// A carriage return and a NUL (in a raw HTTP body) as text:
 				// git may turn CRLF into LF, and takes a file with a NUL
 				// for binary.
