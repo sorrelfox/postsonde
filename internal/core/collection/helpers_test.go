@@ -70,15 +70,18 @@ func readFile(t *testing.T, dir, rel string) string {
 }
 
 // snapshot maps every entry below root to its type, mode, modification
-// time and content hash, to detect any change or write.
+// time and content hash, to detect any change or write. It reads each
+// entry's own metadata: on Windows a directory listing has a copy of it
+// that NTFS updates lazily, so a file created in a folder before a
+// snapshot can change the folder's time in a later one.
 func snapshot(t *testing.T, root string) map[string]string {
 	t.Helper()
 	out := map[string]string{}
-	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+	err := filepath.WalkDir(root, func(path string, _ fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		fi, err := d.Info()
+		fi, err := os.Lstat(path)
 		if err != nil {
 			return err
 		}
