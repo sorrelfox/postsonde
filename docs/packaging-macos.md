@@ -123,8 +123,9 @@ versions `scripts/pins.env` pins; Xcode is the image's, and `BUILDINFO`
 records it. [`scripts/test-macos.sh`](../scripts/test-macos.sh) then checks
 the image as above (`spctl` only for a Developer ID signature), runs
 `postsonde --version` from it with no network, and starts the app from the
-image until its first window is ready. `macos:test (arm64)` does the same
-on Apple silicon (`macos-15`), where Rosetta runs the Intel slice too. The
+image until its first window is ready, on Intel. The arm64 slice is not
+started in CI (Apple silicon runners are often unavailable); start it on an
+Apple silicon Mac before a release. The
 `.dmg` and `BUILDINFO` are kept for 30 days and, on a release tag, released
 ([ci.md, Package](ci.md#package)).
 

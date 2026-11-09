@@ -32,7 +32,7 @@ can't drift from CI:
 | `linux:rpm:fc<release>:<arch>` | release | `scripts/package-linux-rpm.sh`, `scripts/test-linux-packages.sh` | `make rpm FEDORA=<release>` |
 | `linux:flatpak` | release | `scripts/package-flatpak.sh`, `scripts/test-flatpak.sh` | `make flatpak` |
 | `linux:packages` | release | `scripts/sha256sums.sh` | `make linux-packages` |
-| `macos:dmg`, `macos:test (arm64)` | release | `scripts/package-macos.sh`, `scripts/test-macos.sh` | `make macos` |
+| `macos:dmg` | release | `scripts/package-macos.sh`, `scripts/test-macos.sh` | `make macos` |
 | `windows:installer` | release | `scripts/package-windows-installer.sh`, `scripts/sha256sums.sh` | `make windows` |
 | `windows:test (<arch>)` | release | `scripts/test-windows.sh` | `scripts/test-windows.sh <installer>` on a Windows PC, in Git Bash |
 | `size:budgets` | release | `scripts/check-size.sh` | `scripts/check-size.sh <files>`, e.g. `dist/linux/postsonde* dist/linux/*.AppImage` after `make linux` |
@@ -115,7 +115,7 @@ setup ─┬─ frontend:build ─┬─ linux:gtk4, linux:gtk3 ─┬─ linux:
        │                  ├─ sources ─┬─ linux:rpm:fc<release>:<arch>
        │                  │           └─ linux:flatpak
        │                  └─ windows:build ─ windows:installer ─ windows:test (<arch>)
-       ├─ macos:dmg ─ macos:test (arm64)
+       ├─ macos:dmg
        └─ reproducible
 ```
 
@@ -457,7 +457,7 @@ system:
 | `linux:test (amd64)`, `(arm64)` | a runner of the architecture, in containers of the pinned images | the gtk4 `.deb` on Ubuntu 24.04 and Debian 13, the gtk3 `.deb` on Ubuntu 22.04 and Debian 12 (`apt install`), the AppImage on a Debian 13 with only the libraries the AppImage leaves to the host |
 | `linux:rpm:fc<release>:<arch>` | the same | the RPM on its Fedora release (`dnf install`) |
 | `linux:flatpak` | the runner itself | the bundle installed for the user, run with its network unshared |
-| `macos:dmg`, `macos:test (arm64)` | `macos-15-intel`, `macos-15` | the disk image's layout, signature and universal binary; the app started from the image, on Intel and on Apple silicon (there with Rosetta, both slices) |
+| `macos:dmg` | `macos-15-intel` | the disk image's layout, signature and universal binary; the app started from the image, on Intel |
 | `windows:test (amd64)`, `(arm64)` | `windows-latest`, `windows-11-arm` | a silent install for the current user, its files, Start menu entry and uninstall entry; the app started; a silent uninstall that leaves nothing behind |
 
 Each test checks that `postsonde --version` prints the package's version,
@@ -618,8 +618,9 @@ must run on its own architecture:
 - **`windows-11-arm`** starts the ARM64 installer's app natively.
 - **macOS**: `macos:dmg` builds on the Intel image `macos-15-intel`, since
   the arm64 macOS runners are often short of capacity and lipo joins both
-  slices anyway; `macos:test (arm64)` starts the app on `macos-15`, Apple
-  silicon, where Rosetta runs the Intel slice too.
+  slices anyway. The app is started on Intel only: a job on Apple silicon
+  (`macos-15`) waited for a runner that never came and was cancelled, so
+  the arm64 slice is started on a real Mac before a release.
 
 The jobs need outbound HTTP(S) to Docker Hub and the Fedora registry, the
 Debian, Ubuntu and Fedora mirrors (`ports.ubuntu.com` too, for the arm64

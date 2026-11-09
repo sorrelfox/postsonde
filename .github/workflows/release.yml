@@ -552,8 +552,10 @@ jobs:
   # The universal (Apple silicon + Intel) app in a disk image, with `make
   # macos` (scripts/package-macos.sh), then checked and started from the
   # image (scripts/test-macos.sh). On the Intel image: arm64 macOS runners
-  # are often short of capacity, and lipo joins both slices anyway;
-  # macos:test starts the image's app on Apple silicon too. Go and Node.js
+  # are often short of capacity, and lipo joins both slices anyway. The app
+  # is started on Intel only: a job on Apple silicon could wait for a runner
+  # that never came and be cancelled, so the arm64 slice is checked on a real
+  # Mac before a release (docs/releasing.md). Go and Node.js
   # are the versions scripts/pins.env pins; Xcode is the image's (BUILDINFO
   # records it).
   macos:
@@ -612,24 +614,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           overwrite: true
-
-  # The disk image's app on Apple silicon: the arm64 slice natively and,
-  # under Rosetta, the Intel one.
-  macos-test:
-    name: macos:test (arm64)
-    needs: [setup, macos]
-    runs-on: macos-15
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: actions/download-artifact@v8
-        with:
-          name: postsonde-macos-${{ needs.setup.outputs.short-sha }}
-          path: dist
-      - name: Check and start from the disk image, offline
-        run: scripts/test-macos.sh dist/PostSonde-*-macos-universal.dmg
 
   # The NSIS installers of both Windows binaries, with SHA256SUMS over them.
   # makensis cross-builds too; the script installs Debian's nsis at a pinned
@@ -746,7 +730,7 @@ jobs:
   release:
     name: Draft release
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [setup, sources, linux-test, linux-packages, macos, macos-test, windows-test, size-budgets, reproducible]
+    needs: [setup, sources, linux-test, linux-packages, macos, windows-test, size-budgets, reproducible]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:

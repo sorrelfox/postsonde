@@ -32,7 +32,9 @@ What the workflow's jobs do: [ci.md](ci.md#releaseyml).
    [`packaging/release-notes.md`](../packaging/release-notes.md) (which file
    to download, how to check it, the first start), followed by GitHub's
    generated notes since the last release. Edit them as needed, try a
-   package or two, then **Publish release**.
+   package or two, then **Publish release**. CI starts the macOS app on
+   Intel only, so open the `.dmg` on an Apple silicon Mac before
+   publishing.
 
 If a job fails, nothing is released: fix the cause and push a new commit
 and tag, or delete the tag and push it again on the fixed commit, before
