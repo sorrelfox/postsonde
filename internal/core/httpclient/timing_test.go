@@ -27,6 +27,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/core/netx"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // --- recorder arithmetic, with a fake clock ---
@@ -344,7 +345,7 @@ func checkPhases(t *testing.T, tm Timing) {
 		}
 		sum += d
 	}
-	if tm.Total <= 0 || sum > tm.Total {
+	if !testenv.Measured(tm.Total) || sum > tm.Total {
 		t.Errorf("phases sum to %v, Total %v: %+v", sum, tm.Total, tm)
 	}
 	// The observed phases follow one another: each starts no earlier than

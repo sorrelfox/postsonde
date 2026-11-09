@@ -18,6 +18,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/netx"
 	"github.com/sorrelfox/postsonde/internal/core/realtime/sioclient/siotest"
 	"github.com/sorrelfox/postsonde/internal/core/realtime/socketio"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // traces records a client's traces.
@@ -171,7 +172,7 @@ func TestTransports(t *testing.T) {
 				t.Errorf("echo type = %v", echo.Packet.Type)
 			}
 			ack := tr.wait(t, "ack", func(x Trace) bool { return x.Kind == TracePacket && x.Matched })
-			if ack.AckID != 0 || ack.AckEvent != "echo" || ack.Packet.Type != socketio.BinaryAck || ack.RTT <= 0 {
+			if ack.AckID != 0 || ack.AckEvent != "echo" || ack.Packet.Type != socketio.BinaryAck || !testenv.Measured(ack.RTT) {
 				t.Errorf("ack = %+v", ack)
 			}
 			// A second emit gets the next ack ID.

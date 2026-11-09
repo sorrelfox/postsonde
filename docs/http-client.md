@@ -1459,7 +1459,11 @@ is in [frontend.md](frontend.md#request-editor).
 Every `Response` says where its time went (DBG-03) and which connection
 carried it (DBG-04, DBG-05). `Send` records this with `net/http/httptrace`
 hooks in the request context, on the client's monotonic clock
-(`time.Now` differences; the clock is injectable for unit tests).
+(`time.Now` differences; the clock is injectable for unit tests). On
+Windows that clock moves on with the system timer, every 0.5 to 15.6 ms
+(Go reads the interrupt time), so a phase shorter than that, common on a
+loopback or reused connection, measures 0 there; the tests accept it
+(`testenv.Measured`).
 
 ### Phases
 

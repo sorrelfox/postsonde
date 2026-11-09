@@ -23,6 +23,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/core/netx"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // newTLSServer starts an httptest TLS server that does not log handshake
@@ -83,7 +84,7 @@ func TestResponseCapture(t *testing.T) {
 	if want := srv.URL + "/x?y=1"; resp.URL != want {
 		t.Errorf("URL = %q, want %q", resp.URL, want)
 	}
-	if resp.Duration <= 0 {
+	if !testenv.Measured(resp.Duration) {
 		t.Errorf("Duration = %v, want > 0", resp.Duration)
 	}
 	var xs []Header

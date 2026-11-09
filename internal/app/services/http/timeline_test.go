@@ -15,6 +15,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/httpclient"
 	"github.com/sorrelfox/postsonde/internal/core/storage/projectfile"
 	"github.com/sorrelfox/postsonde/internal/core/tlsconf/tlstest"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // DBG-01: the timeline shows the request as sent, after variables and
@@ -313,7 +314,7 @@ func checkHopPhases(t *testing.T, tm HopTimingDTO, skipped map[string]string) {
 		}
 		end = p.StartMs + p.DurationMs
 	}
-	if tm.TotalMs <= 0 || end > tm.TotalMs+0.0015 {
+	if !testenv.Measured(tm.TotalMs) || end > tm.TotalMs+0.0015 {
 		t.Errorf("phases end at %v ms, total %v ms", end, tm.TotalMs)
 	}
 }

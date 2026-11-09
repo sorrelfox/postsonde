@@ -11,6 +11,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/core/netx/netxtest"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // TestSOCKS4 (SOCKS-06): SOCKS4 sends an IPv4 address (a host name
@@ -79,7 +80,7 @@ func TestSOCKS4(t *testing.T) {
 				wantAuth = AuthUserID
 			}
 			if hop.Scheme != scheme || hop.Version != version || hop.Proxy != proxy || hop.Auth != wantAuth || hop.RemoteDNS != tt.remote ||
-				!hop.Replied || hop.Reply != 90 || hop.ReplyText != "granted" || hop.Connect <= 0 || (hop.Lookup > 0) != tt.lookup {
+				!hop.Replied || hop.Reply != 90 || hop.ReplyText != "granted" || !testenv.Measured(hop.Connect) || !testenv.MeasuredWhen(hop.Lookup, tt.lookup) {
 				t.Errorf("hop = %+v", hop)
 			}
 			if s := hop.String(); !strings.Contains(s, version+" "+proxy) || !strings.Contains(s, "reply 90 granted") {

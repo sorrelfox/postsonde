@@ -15,6 +15,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/history"
 	"github.com/sorrelfox/postsonde/internal/core/httpclient"
 	"github.com/sorrelfox/postsonde/internal/core/storage/projectfile"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // historyStore is a history in a temporary directory, and the option that
@@ -135,7 +136,7 @@ func TestSendRecordsHistory(t *testing.T) {
 	}
 	// The final hop's phases and addresses, for the HAR export: a new
 	// plain connection to an IP address has no DNS and no TLS.
-	if tm := e.Response.Timings; tm == nil || tm.DNS != -1 || tm.TLS != -1 || tm.Connect < 0 || tm.Wait < 0 || tm.Total <= 0 ||
+	if tm := e.Response.Timings; tm == nil || tm.DNS != -1 || tm.TLS != -1 || tm.Connect < 0 || tm.Wait < 0 || !testenv.Measured(tm.Total) ||
 		!strings.HasPrefix(e.Response.RemoteAddr, "127.0.0.1:") || e.Response.LocalAddr == "" {
 		t.Errorf("timings = %+v, addresses %q %q", e.Response.Timings, e.Response.RemoteAddr, e.Response.LocalAddr)
 	}

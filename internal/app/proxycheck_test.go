@@ -8,6 +8,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/app/services/settings"
 	"github.com/sorrelfox/postsonde/internal/core/netlog"
 	"github.com/sorrelfox/postsonde/internal/core/netx"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // TestProxyConnectionTest (SOCKS-11) through the app's wiring: the
@@ -51,7 +52,7 @@ func TestProxyConnectionTest(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if res.Target != target || res.DurationMs < 0 || (res.OK && res.DurationMs <= 0) {
+			if res.Target != target || res.DurationMs < 0 || (res.OK && !testenv.Measured(res.DurationMs)) {
 				t.Errorf("result = %+v", res)
 			}
 			if tt.wantCode != "" {

@@ -25,6 +25,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/netx"
 	"github.com/sorrelfox/postsonde/internal/core/netx/netxtest"
 	"github.com/sorrelfox/postsonde/internal/core/tlsconf/tlstest"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // proxyHost is a name only the test proxy knows.
@@ -170,7 +171,7 @@ func TestSendThroughHTTPProxy(t *testing.T) {
 				wantAuth = netx.AuthBasic
 			}
 			if hop == nil || hop.Proxy != addr || hop.Version != "HTTP/1.1" || hop.Auth != wantAuth || !hop.RemoteDNS ||
-				hop.Forward == tt.https || (hop.Reply != nil) != tt.https || hop.ConnectMs <= 0 {
+				hop.Forward == tt.https || (hop.Reply != nil) != tt.https || !testenv.Measured(hop.ConnectMs) {
 				t.Errorf("proxy hop = %+v", hop)
 			}
 			var phases []string

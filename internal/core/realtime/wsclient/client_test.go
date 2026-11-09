@@ -14,6 +14,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/httpclient"
 	"github.com/sorrelfox/postsonde/internal/core/netx"
 	"github.com/sorrelfox/postsonde/internal/core/realtime/wsframe"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 func TestConnectAndClientClose(t *testing.T) {
@@ -90,7 +91,7 @@ func TestConnectAndClientClose(t *testing.T) {
 			} else if hs.Conn.TLS != nil || hs.Timing.Observed.Has(httpclient.PhaseTLS) {
 				t.Fatalf("TLS on ws: %+v %v", hs.Conn.TLS, hs.Timing.Observed)
 			}
-			if !hs.Timing.Observed.Has(wantPhases) || hs.Timing.Total <= 0 {
+			if !hs.Timing.Observed.Has(wantPhases) || !testenv.Measured(hs.Timing.Total) {
 				t.Fatalf("timing = %+v (%v)", hs.Timing, hs.Timing.Observed)
 			}
 		})

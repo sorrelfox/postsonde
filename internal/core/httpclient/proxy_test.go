@@ -17,6 +17,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/netx"
 	"github.com/sorrelfox/postsonde/internal/core/netx/netxtest"
 	"github.com/sorrelfox/postsonde/internal/core/tlsconf/tlstest"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // proxyHost is a host name only the test proxy knows.
@@ -343,10 +344,10 @@ func TestProxyHopTimeline(t *testing.T) {
 		t.Fatalf("no proxy hop on the connection: %+v", resp.Conn)
 	}
 	if hop.Version != "HTTP/1.1" || hop.Proxy != w.proxy.Addr() || hop.Auth != netx.AuthBasic || !hop.RemoteDNS ||
-		!hop.Replied || hop.Reply != 200 || hop.Forward || hop.Handshake <= 0 {
+		!hop.Replied || hop.Reply != 200 || hop.Forward || !testenv.Measured(hop.Handshake) {
 		t.Errorf("hop = %+v", hop)
 	}
-	if !resp.Timing.Observed.Has(PhaseConnect|PhaseProxy|PhaseTLS) || resp.Timing.Proxy <= 0 {
+	if !resp.Timing.Observed.Has(PhaseConnect|PhaseProxy|PhaseTLS) || !testenv.Measured(resp.Timing.Proxy) {
 		t.Errorf("phases %v, proxy %v", resp.Timing.Observed, resp.Timing.Proxy)
 	}
 	if o := resp.Timing.Offsets; o.Proxy < o.Connect || o.TLS < o.Proxy {

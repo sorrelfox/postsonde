@@ -11,6 +11,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/core/netx/netxtest"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // lastHop returns the proxy hop of the last DialDone rec saw.
@@ -92,7 +93,7 @@ func TestProxyHopSOCKS5(t *testing.T) {
 			if tt.wantReply < 0 && hop.Replied {
 				t.Errorf("reply = %d, want none", hop.Reply)
 			}
-			if hop.Connect <= 0 || hop.Handshake <= 0 || hop.TLS != 0 || (hop.Lookup > 0) != tt.lookup {
+			if !testenv.Measured(hop.Connect) || !testenv.Measured(hop.Handshake) || hop.TLS != 0 || !testenv.MeasuredWhen(hop.Lookup, tt.lookup) {
 				t.Errorf("timings = lookup %v, connect %v, tls %v, handshake %v", hop.Lookup, hop.Connect, hop.TLS, hop.Handshake)
 			}
 			s := hop.String()
@@ -185,7 +186,7 @@ func TestProxyHopHTTP(t *testing.T) {
 			if tt.wantReply < 0 && (hop.Replied || hop.Handshake != 0) {
 				t.Errorf("an absolute-form connection has a reply: %+v", hop)
 			}
-			if hop.Connect <= 0 || (hop.TLS > 0) != tt.tls || (hop.Handshake > 0) == tt.forward || hop.Lookup != 0 {
+			if !testenv.Measured(hop.Connect) || !testenv.MeasuredWhen(hop.TLS, tt.tls) || !testenv.MeasuredWhen(hop.Handshake, !tt.forward) || hop.Lookup != 0 {
 				t.Errorf("timings = lookup %v, connect %v, tls %v, handshake %v", hop.Lookup, hop.Connect, hop.TLS, hop.Handshake)
 			}
 			if s := hop.String(); strings.Contains(s, proxyPassword) || !strings.Contains(s, "HTTP/1.1 "+addr) {
@@ -287,7 +288,7 @@ func TestProxyRouterTest(t *testing.T) {
 					return next.DialContext(ctx, network, address)
 				})
 			})
-			if res.Target != tt.target || res.Duration < 0 || (res.OK() && res.Duration <= 0) || res.Proxy.Password != "" {
+			if res.Target != tt.target || res.Duration < 0 || (res.OK() && !testenv.Measured(res.Duration)) || res.Proxy.Password != "" {
 				t.Errorf("result = %+v", res)
 			}
 			if tt.wantCode == "" {

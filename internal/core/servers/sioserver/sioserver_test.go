@@ -24,6 +24,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/realtime/wsframe"
 	"github.com/sorrelfox/postsonde/internal/core/servers"
 	"github.com/sorrelfox/postsonde/internal/core/servers/sioserver"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // These tests drive the server with PostSonde's own Socket.IO client
@@ -537,7 +538,7 @@ func TestServerAcks(t *testing.T) {
 	}
 	c.write(t, `430["answer"]`)
 	ev := f.rec.waitFor(t, "ack in", summaryHas("Ack 0 from socket 1 (answers “ask”"))
-	if ev.SIO.Event != "ask" || ev.SIO.RTT <= 0 || string(ev.Content) != `["answer"]` {
+	if ev.SIO.Event != "ask" || !testenv.Measured(ev.SIO.RTT) || string(ev.Content) != `["answer"]` {
 		t.Errorf("ack = %+v %s", ev.SIO, ev.Content)
 	}
 	// An ack nobody waits for, and a packet for a namespace not joined.
