@@ -560,8 +560,15 @@ func TestTimingPlausible(t *testing.T) {
 			}
 			tm := resp.Timing
 			checkPhases(t, tm)
-			if tm.Wait < tt.wait || tm.Download < tt.dl {
-				t.Errorf("Wait %v, Download %v, want at least %v, %v (%+v)", tm.Wait, tm.Download, tt.wait, tt.dl, tm)
+			// The server can start its sleep while the client is still
+			// in RequestWrite (with h2, it reads the headers before the
+			// client reports the request written), so the sleep is only
+			// bound to fall within RequestWrite and Wait together.
+			// RequestWrite starts at GotConn, before any request byte is
+			// sent. Wait itself must still carry most of the sleep.
+			if tm.RequestWrite+tm.Wait < tt.wait || tm.Wait < tt.wait*9/10 || tm.Download < tt.dl {
+				t.Errorf("write %v, Wait %v, Download %v, want write+wait at least %v, wait at least %v, download at least %v (%+v)",
+					tm.RequestWrite, tm.Wait, tm.Download, tt.wait, tt.wait*9/10, tt.dl, tm)
 			}
 			if tm.Total < tt.wait+tt.dl {
 				t.Errorf("Total %v < %v", tm.Total, tt.wait+tt.dl)
