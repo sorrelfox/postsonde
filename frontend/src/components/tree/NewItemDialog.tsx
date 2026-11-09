@@ -97,6 +97,9 @@ function NewItemForm({ request, onClose }: { request: NewItemRequest; onClose: (
       confirmDisabled={nameError !== null}
       busy={busy}
       initialFocus={nameRef}
+      // Wide enough for the eight request types on one line; the type picker
+      // still wraps when the window is narrower than that.
+      width={!isFolder && !isSave ? 560 : undefined}
     >
       {!isFolder && !isSave && (
         <div className={styles.field}>
