@@ -17,6 +17,7 @@ import { IconLock, IconPlay, IconWarning } from "../common/icons";
 import { formatSize } from "../messagelog/format";
 import { MessageLog } from "../messagelog/MessageLog";
 import { NotesPanel } from "./NotesPanel";
+import { RequestProxyFold } from "./RequestProxySettings";
 // The UDP editor shares the TCP editor's layout: address bar, status,
 // options, log and composer.
 import styles from "./TcpEditor.module.css";
@@ -275,6 +276,14 @@ function LoadedUdpEditor({ id, request }: { id: RequestId; request: RequestDTO }
       </p>
 
       <SocketOptions request={request} options={options} readOnly={readOnly} active={active} edit={edit} />
+
+      <RequestProxyFold
+        settings={request.settings}
+        readOnly={readOnly}
+        edit={edit}
+        locked={active ? t("editorProtocols.udp.locked") : undefined}
+        udp
+      />
 
       <details className={styles.notes}>
         <summary className={styles.notesSummary}>{t("editorProtocols.tab.notes")}</summary>

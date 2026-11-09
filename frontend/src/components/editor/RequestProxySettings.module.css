@@ -1,0 +1,197 @@
+/* A request's own proxy in the Settings tab of every request editor (and
+ * in the fold under the TCP and UDP options): the mode as a segmented
+ * control, then the custom proxy's fields in a label/field grid. The
+ * group, heading, help and error text come from RequestSettings.module.css. */
+
+.section {
+  max-width: 560px;
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.segment {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.segment:not(:disabled):hover {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"] {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.segment:disabled {
+  cursor: default;
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+/* Help and error lines under a field, in its column. */
+.fields > p {
+  grid-column: 2;
+}
+
+/* A row that spans both columns: the remote DNS switch. */
+.wide {
+  grid-column: 1 / -1;
+}
+
+.label {
+  color: var(--text2);
+}
+
+.control {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input::placeholder {
+  color: var(--text3);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.input:disabled {
+  color: var(--text3);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.port {
+  flex: none;
+  width: 88px;
+}
+
+.reveal {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.reveal:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.reveal:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.hint {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+}
+
+.hint svg {
+  flex: none;
+  align-self: center;
+}
+
+.hint[data-storage="missing"] {
+  color: var(--warn);
+}
+
+.hint code {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+/* The fold under the TCP and UDP options. */
+.fold {
+  flex: none;
+  padding: 0 var(--space-7) var(--space-5);
+}
+
+.foldSummary {
+  width: fit-content;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.foldSummary:hover {
+  color: var(--text);
+}
+
+.foldSummary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.foldValue {
+  margin-left: var(--space-3);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: normal;
+}
+
+.foldBody {
+  margin-top: var(--space-4);
+}

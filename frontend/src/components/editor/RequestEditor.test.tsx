@@ -1294,6 +1294,50 @@ describe("RequestEditor URL and params sync", () => {
     });
   });
 
+  describe("the request's own proxy", () => {
+    it("shows the Proxy section in Settings and saves settings.proxy with the request", async () => {
+      await setup();
+      fireEvent.click(within(editor()).getByRole("tab", { name: "Settings" }));
+      const section = within(editor()).getByRole("region", { name: "Proxy" });
+      const modes = within(within(section).getByRole("group", { name: "Proxy of this request" }));
+      expect(modes.getByRole("button", { name: "Inherit" }).getAttribute("aria-pressed")).toBe("true");
+      // No proxy scopes from Go here: the rule is shown.
+      expect(within(section).getByText(/Uses the proxy in effect/)).toBeTruthy();
+
+      fireEvent.click(modes.getByRole("button", { name: "Custom proxy" }));
+      fireEvent.change(within(section).getByLabelText("Host"), { target: { value: "{{proxyHost}}" } });
+      fireEvent.change(within(section).getByLabelText("Port"), { target: { value: "1080" } });
+      fireEvent.change(within(section).getByLabelText("User name"), { target: { value: "ann" } });
+      fireEvent.change(within(section).getByLabelText("Password"), { target: { value: "s3cret" } });
+      await act(settle);
+      expect(sent().request.settings).toEqual({
+        ...request().settings,
+        proxy: { mode: "custom", url: "socks5h://ann@{{proxyHost}}:1080", password: "s3cret", localSecrets: [], extra: "" },
+      });
+      expect(sent().request.extra).toBe('{"x-custom":{"a":1}}');
+
+      fireEvent.click(modes.getByRole("button", { name: "No proxy" }));
+      await act(settle);
+      expect(sent().request.settings.proxy).toMatchObject({ mode: "none", url: "socks5h://ann@{{proxyHost}}:1080" });
+    });
+
+    it("drops the local mark of a proxy password typed again", async () => {
+      await setup({
+        dto: request({
+          settings: {
+            ...request().settings,
+            proxy: { mode: "custom", url: "socks5h://ann@proxy.lan", password: "", localSecrets: ["password"], extra: "" },
+          },
+        }),
+      });
+      fireEvent.click(within(editor()).getByRole("tab", { name: "Settings" }));
+      expect(within(editor()).getByText(/typed on another computer/)).toBeTruthy();
+      fireEvent.change(within(editor()).getByLabelText("Password"), { target: { value: "again" } });
+      await act(settle);
+      expect(sent().request.settings.proxy).toEqual({ mode: "custom", url: "socks5h://ann@proxy.lan", password: "again", localSecrets: [], extra: "" });
+    });
+  });
+
   describe("redirect settings (HTTP-22)", () => {
     const box = (name: RegExp) => within(editor()).getByRole("checkbox", { name }) as HTMLInputElement;
     const maxField = () => within(editor()).getByRole("textbox", { name: "Maximum" }) as HTMLInputElement;

@@ -51,6 +51,7 @@ import { GrpcMessageEditor } from "./GrpcMessageEditor";
 import styles from "./GrpcEditor.module.css";
 import { useKeyValueRows } from "./keyValueRows";
 import { NotesPanel } from "./NotesPanel";
+import { RequestProxySettings } from "./RequestProxySettings";
 import { SnippetPanel } from "./SnippetPanel";
 
 const READ_ONLY: Readonly<Record<string, MessageKey>> = {
@@ -1214,6 +1215,7 @@ function GrpcSettings({ request, readOnly, edit }: { request: RequestDTO; readOn
         t("editorProtocols.grpc.settings.deadlinePlaceholder"),
         t("editorProtocols.grpc.settings.deadlineHelp"),
       )}
+      <RequestProxySettings settings={settings} readOnly={readOnly} edit={edit} />
     </div>
   );
 }

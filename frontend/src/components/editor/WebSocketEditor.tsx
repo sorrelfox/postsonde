@@ -39,6 +39,7 @@ import { CodeEditor } from "./CodeEditor";
 import { HEADER_SUGGEST, HEADER_SUGGEST_LABELS } from "./headerSuggest";
 import { useKeyValueRows } from "./keyValueRows";
 import { NotesPanel } from "./NotesPanel";
+import { RequestProxySettings } from "./RequestProxySettings";
 import { SavedMessages, savedFormat } from "./SavedMessages";
 import { SnippetPanel } from "./SnippetPanel";
 import { useUrlParamsSync } from "./useUrlParamsSync";
@@ -764,6 +765,7 @@ function WsSettings({ request, readOnly, edit }: { request: RequestDTO; readOnly
         disabled={!reconnect}
         onChange={setNumber("reconnectMaxDelayMs")}
       />
+      <RequestProxySettings settings={settings} readOnly={readOnly} edit={edit} />
     </div>
   );
 }

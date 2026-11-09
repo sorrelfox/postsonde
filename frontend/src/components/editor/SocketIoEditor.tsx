@@ -26,6 +26,7 @@ import { installErrorMarker, setErrorMarker } from "./errorMarker";
 import { HEADER_SUGGEST, HEADER_SUGGEST_LABELS } from "./headerSuggest";
 import { useKeyValueRows } from "./keyValueRows";
 import { NotesPanel } from "./NotesPanel";
+import { RequestProxySettings } from "./RequestProxySettings";
 import { useReadOnlyNotice } from "./RequestEditor";
 import { SavedMessages } from "./SavedMessages";
 import sioStyles from "./SocketIoEditor.module.css";
@@ -600,6 +601,7 @@ function SioSettings({ request, readOnly, edit }: { request: RequestDTO; readOnl
         <span className={styles.settingLabel}>{t("editorProtocols.ws.settings.cookies")}</span>
         <span className={styles.settingHelp}>{t("editorProtocols.sio.settings.cookiesHelp")}</span>
       </label>
+      <RequestProxySettings settings={settings} readOnly={readOnly} edit={edit} />
     </div>
   );
 }

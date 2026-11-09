@@ -309,6 +309,19 @@ describe("WebSocketEditor", () => {
     expect(ws.Close).toHaveBeenCalledWith({ connId: "ws_1", code: 4000, reason: "bye" });
   });
 
+  it("saves its own proxy from the Settings tab", async () => {
+    await setup();
+    fireEvent.click(within(editor()).getByRole("tab", { name: "Settings" }));
+    const section = within(editor()).getByRole("region", { name: "Proxy" });
+    fireEvent.click(within(section).getByRole("button", { name: "Custom proxy" }));
+    fireEvent.change(within(section).getByLabelText("Host"), { target: { value: "proxy.lan" } });
+    await act(settle);
+    expect(sent().request.settings).toEqual({
+      ...request().settings,
+      proxy: { mode: "custom", url: "socks5h://proxy.lan", password: "", localSecrets: [], extra: "" },
+    });
+  });
+
   it("saves keepalive and reconnect settings, pings, hides pings in the log and shows reconnects (WS-09, WS-10)", async () => {
     await setup();
     fireEvent.click(within(editor()).getByRole("tab", { name: "Settings" }));

@@ -248,6 +248,23 @@ describe("TcpEditor", () => {
     expect(tcp.Send).toHaveBeenLastCalledWith({ connId: "tcp_1", mode: "text", text: "", lineEnding: "crlf" });
   });
 
+  it("saves its own proxy from the fold under the options, locked while connected", async () => {
+    await setup();
+    const fold = () => editor().querySelector("[data-proxy-fold]") as HTMLElement;
+    expect(fold().querySelector("summary")?.textContent).toBe("ProxyInherit");
+    const section = () => within(fold()).getByRole("region", { name: "Proxy", hidden: true });
+    fireEvent.click(within(section()).getByRole("button", { name: "Custom proxy", hidden: true }));
+    fireEvent.change(within(section()).getByLabelText("Host"), { target: { value: "proxy.lan" } });
+    fireEvent.change(within(section()).getByLabelText("Type"), { target: { value: "http" } });
+    await act(settle);
+    expect(sent().request.settings.proxy).toEqual({ mode: "custom", url: "http://proxy.lan", password: "", localSecrets: [], extra: "" });
+    expect(fold().querySelector("summary")?.textContent).toBe("Proxyhttp://proxy.lan");
+
+    await connectAndOpen();
+    expect((within(section()).getByRole("button", { name: "No proxy", hidden: true }) as HTMLButtonElement).disabled).toBe(true);
+    expect((within(section()).getByLabelText("Host") as HTMLInputElement).disabled).toBe(true);
+  });
+
   it("flags invalid hex before sending", async () => {
     await setup(request({ sendMode: "hex", message: "DE AG" }));
     await connectAndOpen();

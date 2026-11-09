@@ -16,6 +16,7 @@ import { IconLock, IconPlay, IconWarning } from "../common/icons";
 import { formatSize } from "../messagelog/format";
 import { MessageLog } from "../messagelog/MessageLog";
 import { NotesPanel } from "./NotesPanel";
+import { RequestProxyFold } from "./RequestProxySettings";
 import styles from "./TcpEditor.module.css";
 
 const READ_ONLY: Readonly<Record<string, MessageKey>> = {
@@ -309,6 +310,13 @@ function LoadedTcpEditor({ id, request }: { id: RequestId; request: RequestDTO }
       </p>
 
       <ConnectionOptions request={request} framing={framing} readOnly={readOnly} active={active} edit={edit} />
+
+      <RequestProxyFold
+        settings={request.settings}
+        readOnly={readOnly}
+        edit={edit}
+        locked={active ? t("editorProtocols.tcp.locked") : undefined}
+      />
 
       {/* No sub-tabs here: the notes (COL-07) fold open under the options. */}
       <details className={styles.notes}>

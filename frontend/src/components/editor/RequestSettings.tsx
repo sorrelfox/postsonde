@@ -5,6 +5,7 @@ import { t as translate, type MessageKey } from "../../i18n";
 import { useT } from "../../i18n/react";
 import { MAX_DEFAULT_TIMEOUT_MS, useSettings, type RequestData } from "../../stores";
 import { IconWarning } from "../common/icons";
+import { RequestProxySettings } from "./RequestProxySettings";
 import styles from "./RequestSettings.module.css";
 
 export interface RequestSettingsProps {
@@ -96,10 +97,10 @@ export function TlsOffBadge({ settings, className, onOpen }: { settings: Setting
  * The Settings sub-tab of the HTTP request editor, also used by the
  * GraphQL and SSE editors: the request's own timeout (HTTP-21), redirect
  * handling (HTTP-22), TLS certificate verification (HTTP-23), URL encoding
- * (HTTP-24), HTTP version (HTTP-25) and cookie behaviour (HTTP-26), and
- * for an sse request its reconnection policy (SSE-03). Each overrides the
- * default; an empty field or "default" choice keeps it. Stored in the
- * request file's settings.
+ * (HTTP-24), HTTP version (HTTP-25), cookie behaviour (HTTP-26) and its
+ * own proxy, and for an sse request its reconnection policy (SSE-03).
+ * Each overrides the default; an empty field or "default" choice keeps
+ * it. Stored in the request file's settings.
  */
 export function RequestSettings({ settings, readOnly, edit, stream = false, children }: RequestSettingsProps) {
   const set = (patch: Partial<Settings>) => edit({ settings: { ...settings, ...patch } });
@@ -112,6 +113,7 @@ export function RequestSettings({ settings, readOnly, edit, stream = false, chil
       <TlsSetting settings={settings} readOnly={readOnly} set={set} />
       <ProtocolSettings settings={settings} readOnly={readOnly} set={set} />
       <CookieSettings settings={settings} readOnly={readOnly} set={set} />
+      <RequestProxySettings settings={settings} readOnly={readOnly} edit={edit} />
     </div>
   );
 }
