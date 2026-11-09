@@ -15,7 +15,8 @@ protocol client (HTTP, gRPC, WebSocket, TCP, OAuth ...)
         │
   Guarded(RequireUserOp) refuses dials whose ctx has no user operation (permission_denied)
         │
-  Routed(ProxyRouter)    picks a dialer per target: no proxy, loopback or on the
+  Routed(ProxyRouter)    picks a dialer per target: the request's own proxy
+        │                when it has one; else no proxy, loopback or on the
         │                bypass list → Direct, else the proxy of the active
         │                environment, the project, or the settings: the OS's,
         │                ALL_PROXY or a manual one (SOCKS-04, SOCKS-08, SOCKS-09,
@@ -392,7 +393,8 @@ proxy error contains the password (`TestParseProxyURLErrors`).
 | `"off"` | directly, whatever the environment says. |
 
 This is the app's proxy, the outermost scope: the open project and its
-environments can replace it ([Proxy scopes](#proxy-scopes)). The admin
+environments can replace it ([Proxy scopes](#proxy-scopes)), and a request
+can name its own ([A request's own proxy](#a-requests-own-proxy)). The admin
 policy can lock `network.proxyMode`, `network.proxyUrl` and
 `network.proxyBypass` like any setting ([settings.md](settings.md#settings-locked-by-your-administrator-set-02)),
 for example to force a company proxy or no proxy at all. The scopes are
@@ -483,12 +485,16 @@ SOCKS, the OS dropping the web proxy, a PAC file) cover it.
 
 ### Proxy scopes
 
-SOCKS-08, SOCKS-10. A proxy can be set at three levels; the most
+SOCKS-08, SOCKS-10. A proxy can be set at four levels; the most
 specific one that sets a proxy, or says "no proxy", wins:
 
 ```
-active environment  >  project  >  app (network.proxyMode, settings.json)
+request  >  active environment  >  project  >  app (network.proxyMode, settings.json)
 ```
+
+The request level is in the request's own settings, in the project
+file, and is described in [A request's own proxy](#a-requests-own-proxy).
+The three others:
 
 | Level | Where it is kept | Modes |
 |---|---|---|
@@ -529,22 +535,11 @@ the URL forgets it; a URL without a user name, or a SOCKS4 one, drops it.
 passwords both ways, then reads every file of the project folder and
 every DTO.
 
-**Why not folders and requests.** SOCKS-08 lists them too; they are left
-out deliberately, and documented as such:
-
-- the scope in effect is one per open project (its active environment),
-  so the pools of kept-alive connections stay correct by being closed when
-  it changes ([Pools and proxy changes](#pools-and-proxy-changes)). A
-  folder or request proxy would make two requests to the same host use
-  different proxies at the same time; net/http, gRPC and the GraphQL
-  clients would then need a pool per proxy, or a connection opened
-  through one proxy would be reused for a request meant for another;
-- a folder or request lives in project files, and a proxy there would be
-  shared with the team, which the local-only rule above refuses.
-
-A request that must go direct uses the bypass list; one that must use
-another proxy belongs in an environment with that proxy. The route still
-receives each dial's `ctx`, so a later per-request scope has its hook.
+**Why not folders.** SOCKS-08 lists them too; they are left out. A
+request can have its own proxy, which covers what a folder proxy would,
+one request at a time, without a fifth level to resolve. The scopes
+above stay local side files; a request's proxy is part of the request,
+for the reasons in [A request's own proxy](#a-requests-own-proxy).
 
 **When it is read.** On every dial, like the app's setting:
 `proxyScopes` (`internal/app/proxy.go`) reads the active environment's ID
@@ -573,6 +568,137 @@ active)` → `Effective{Config, Level, Source, NoProxyVar}`. The bound
 | `Scopes()` | `ScopesDTO` `{open, project: ScopeDTO, environments: [{id, name, active, scope}], effective: {proxy, level, source, remoteDns, bypass, noProxyVar, error}, error}`; `ScopeDTO` is `{mode, url, hasPassword, bypass}`, the URL without its password. `effective` is what the dialer uses now and which level decided (`app`, `project`, `environment`). Without an open project only `effective` is filled in. |
 | `SetScope(input)` | `input` is `ScopeInputDTO` `{level: "project" \| "environment", environmentId, mode, url, password: string \| null, bypass: string[]}`; checks like `SetProxy` (`netx.proxy_invalid_url`, `netx.proxy_invalid_bypass`, `proxyscope.invalid`, detail `field`), `environments.not_found` for an unknown environment; then `Scopes()` and `proxyscopes:changed`. |
 
+### A request's own proxy
+
+Every request, of every kind, can name its own proxy in its settings
+(`settings.proxy`, [file-format.md](file-format.md#proxy)). It is the
+most specific level: it replaces the proxy of the active environment,
+the project and the app for that request's connections, and for nothing
+else.
+
+| Mode | That request's connections go |
+|---|---|
+| Inherit (the default; the member left out) | as before: through the proxy in effect, resolved as above. |
+| Custom | through the request's proxy, a URL of any scheme the app's proxy takes ([Proxy URLs](#proxy-urls)): `socks5h`, `socks5`, `socks4a`, `socks4`, `http`, `https`. The editor leads with SOCKS5 (host, port, user name, password, and whether the proxy resolves host names). |
+| None | directly, whatever proxy the app, the project or the environment sets. |
+
+**Which connections.** Everything the request opens: an HTTP or GraphQL
+send, its redirects and the OAuth 2.0 token call made for it (also for
+a WebSocket, Socket.IO or gRPC handshake), a GraphQL
+schema fetch and a subscription over WebSocket or SSE, an SSE stream and
+its reconnections, a gRPC call and the server reflection of that
+request, a WebSocket connection and its reconnections, Socket.IO over
+long-polling or WebSocket, a TCP connection and a UDP association (SOCKS5
+UDP ASSOCIATE; a SOCKS4 or HTTP request proxy refuses UDP, never going
+direct). A folder run sends each request with its own setting. Other
+requests keep theirs, so two requests to the same host can go through
+different proxies at the same time.
+
+**Bypass list and loopback.** The bypass lists (the app's, a scope's,
+`NO_PROXY`) say which targets skip the proxy in effect; a request that
+names its own proxy has chosen it for its target, so no bypass list
+applies to it. Loopback targets (`localhost`, `127.0.0.0/8`, `::1`) are
+still connected to directly, as at every other level: a remote proxy's
+"localhost" is never the one meant, and PostSonde's own local servers
+must keep working.
+
+**Credentials.** The URL holds no password. The password field takes a
+`{{variable}}` reference, written to the project file as such (the
+recommended way, from a secret environment variable), or a typed value,
+which is kept in the request's local secret side file
+(`<local>/secrets/requests/<request id>.json`, key `proxy.password`), the
+store of the auth secrets typed in requests: `0600`, encrypted with a
+master password, masked in copied logs. A password typed into the URL
+(`socks5h://bob:pw@…`) is moved out of it when the file is written, and
+one typed into a project file by hand moves to local storage the next
+time PostSonde writes that file. On another computer the password is
+missing until typed again, and sending fails with
+`request.proxy_password_missing`. The password is sent only to the
+proxy; the hop and `via` never hold it, and it is masked with the
+request's secrets in the timeline, the history, a copied cURL command
+(unless copied with secrets) and error messages.
+
+**Why in the project file.** A scope is local because which proxy
+reaches a network depends on where this computer is. A request's own
+proxy is part of how that request is meant to be sent (an API only
+reachable through a jump host, a check that a service answers without
+the corporate proxy), so it goes with the request, like its timeout or
+TLS setting; its password does not. Use `{{variables}}` in the URL
+(`socks5h://{{proxyUser}}@{{proxyHost}}:1080`) when it differs per
+person or per environment.
+
+**Errors.** A request proxy that cannot be used fails the request before
+anything is dialed, never going direct or through the proxy in effect:
+an unknown mode (`request.invalid_setting`, `field`
+`settings.proxy.mode`), a custom proxy without a usable URL or password
+(`netx.proxy_invalid_url`, details `source` `request` and `field`), an
+undefined `{{variable}}` (reported with the request's other undefined
+variables).
+
+**Pools.** Connections opened through a request's proxy are kept apart:
+the HTTP service keys its cached clients, and the gRPC service its
+transports, by the request's proxy, and the client of a request proxy
+dials through `netx.RequestProxyDialer`, so its pool only holds
+connections made through that proxy. A kept-alive connection is reused
+only by requests with the same setting. Requests that inherit keep the
+shared pools, closed when the proxy in effect changes
+([Pools and proxy changes](#pools-and-proxy-changes)). A request's proxy
+is not the proxy in effect: using it does not close any pool.
+WebSocket, TCP, UDP and Socket.IO connections are not pooled.
+
+**Where it shows.** The response's status line and Timeline tab name the
+proxy a connection went through (`via`, the hop), as for every proxy,
+and the response says when the request's own setting applied
+(`ResponseDTO.requestProxy`: the URL without its password, or `none`).
+The connection log lists each connection with its proxy. Inherit shows,
+in the request's Settings tab, which proxy that means now.
+
+**In the editor.** The Proxy section of a request's Settings tab (for
+TCP and UDP, which have no Settings tab, a Proxy fold under the
+connection options, locked while connected): **Inherit**, which says
+which proxy that means now (from `ProxyScopesService.Scopes`, refreshed
+when a scope, the settings, the environment or the project change);
+**Custom proxy**, with the type (SOCKS5 first, then SOCKS4, HTTP,
+HTTPS), host, port (1080, or 443 for HTTPS, when left empty), user name,
+password and, for SOCKS, **Resolve host names through the proxy**
+(`socks5h`/`socks5`, `socks4a`/`socks4`); and **No proxy**. The fields
+take `{{variables}}`. A URL the fields cannot hold (edited by hand) shows
+as one **Proxy URL** field. Problems the editor can see (no host, a port
+out of range, a password without a user name, a SOCKS4 password) show
+under the field; what is typed is saved anyway, and sending refuses it.
+`frontend/src/components/editor/RequestProxySettings.tsx`,
+`lib/requestProxy.ts`.
+
+The services of the protocols whose editor sends its settings with the
+connect (TCP, UDP, WebSocket, Socket.IO, gRPC) read the request's proxy
+from its file, pending edits and local password included
+(`collection.LoadRequestProxy`), on every connect, call and reconnect,
+and render it with the request's variables.
+
+**Copy as cURL.** The request's proxy is written as `-x` with
+`--proxy-user` (masked unless copied with secrets), and None as
+`--noproxy '*'`; the cURL importer reads them back
+([curl.md](curl.md)). The app's, project's and environment's proxies are
+not written, as before. The other snippet languages leave the request's
+proxy out.
+
+**Go.** `projectfile.RequestProxy` (`Mode`, `URL`, `Password`,
+`LocalSecrets`) in each kind's settings; `requestsecrets.SplitProxy` and
+`MergeProxy` keep the password local; `request.BuildProxy` renders and
+checks it into a `request.Proxy` (comparable, `Context`, `String`,
+`Secret`). `netx.WithRequestProxy(ctx, url)` puts it in a dial's
+context; `ProxyRouter.Route` and `ForwardProxy` then use it alone (the
+zero URL is direct), without reading the proxy in effect or calling the
+`OnChange` hooks. `netx.RequestProxyDialer(d, url)` is a dialer that
+does it for every dial. `TestProxyRouterRequestProxy` and
+`TestRequestProxyDialer` (netx), `TestBuildProxy` (request),
+`TestSplitMergeProxy` and `TestSplitMergeFileProxy` (requestsecrets),
+`TestRequestProxyRoundTrip` (projectfile),
+`TestProjectFilesNeverHoldSecrets` (collection),
+`TestSendThroughRequestProxy` and `TestRequestProxyErrors` (HTTP
+service), the protocol services' proxy tests and
+`TestEveryProtocolThroughRequestProxy` (internal/app) cover it.
+
 ### Bypass list
 
 SOCKS-09. Targets that connect directly although a proxy is in
@@ -600,7 +726,8 @@ direct, whatever the list says.
 Which lists apply:
 
 - `network.proxyBypass` (the app's list, settings screen **Bypass list**)
-  applies to the proxy of every level;
+  applies to the proxy of every level but a request's own, which no
+  list applies to ([A request's own proxy](#a-requests-own-proxy));
 - a manual project or environment scope adds its own `bypass`;
 - the `ALL_PROXY` proxy (mode `env`) adds `NO_PROXY` (or `no_proxy`),
   comma- or space-separated; entries that cannot be used are skipped.
@@ -614,7 +741,10 @@ and `TestDialerProxyScopes` (internal/app) cover it.
 ### The route
 
 `newDialer` (`internal/app/services.go`) puts a `netx.ProxyRouter`
-(`NewProxyConfigRouter`) inside the guard and the connection log.
+(`NewProxyConfigRouter`) inside the guard and the connection log. A dial
+that carries a request's own proxy (`netx.WithRequestProxy`) is routed
+with it alone ([A request's own proxy](#a-requests-own-proxy)); every
+other one as follows.
 `proxyResolver` (`internal/app/proxy.go`) gives it the proxy of each dial
 and its bypass list (`netx.ProxyConfig`): the active environment's or the
 project's scope ([Proxy scopes](#proxy-scopes)), else the settings in
@@ -781,7 +911,9 @@ through a proxy and which one:
   is `netx.ViaOf` of the connection net/http hands over (`GotConn`), so a
   reused connection, TLS included (`ViaOf` looks through `*tls.Conn`), is
   marked too; `ConnInfoDTO.via` carries it, and the Timeline tab names it
-  on a reused connection ("Through proxy").
+  on a reused connection ("Through proxy"). When the request has a proxy
+  of its own, or says None, `ResponseDTO.requestProxy` says so and the
+  Timeline tab notes it ([A request's own proxy](#a-requests-own-proxy)).
 - **The connection log** (every protocol): `ConnDTO.via`, a "via SOCKS5"
   mark after the remote address (which is the proxy's), the filter
   matches it and a copied line has `via=`.
@@ -877,8 +1009,9 @@ localhost (`IsLoopbackTarget`) and the bypass list (`netx.Bypass`,
 SOCKS-09) and a proxy dialer otherwise. The app's route is
 `netx.ProxyRouter.Route` ([Proxy settings](#the-route)), whose source
 returns a `netx.ProxyConfig` (proxy and bypass list) per dial; it gets
-`ctx`, so a proxy could differ per dial, though the app's scopes are per
-project and environment ([Proxy scopes](#proxy-scopes)). A route error (an
+`ctx`, so a proxy can differ per dial: a request's own proxy travels in
+it ([A request's own proxy](#a-requests-own-proxy)); the app's scopes are
+per project and environment ([Proxy scopes](#proxy-scopes)). A route error (an
 invalid proxy URL) fails the dial and should be an `*errs.Error`; a nil
 dialer fails with `internal` / `netx.no_route`.
 

@@ -86,7 +86,8 @@ C#.
 Every connection goes through one dialer, so a proxy (SOCKS5, SOCKS4 or HTTP, taken from
 the system settings or set for the app, a project or an environment) and extra CA
 certificates apply to every protocol, and the console can list each connection the app
-opens. Each request you send goes into a local history with a copy of its response,
+opens. A single request can also use a proxy of its own, or none, whatever the others
+say. Each request you send goes into a local history with a copy of its response,
 secrets masked.
 
 There are light, dark and custom themes, a command palette (Ctrl+Shift+P, ⇧⌘P on a Mac),

@@ -182,7 +182,9 @@ effort for the preview.
 | `-L` | `settings.followRedirects: true` | Without `-L`, the app's setting applies. `--location-trusted` also sets `forwardAuthorization: true`. `--max-redirs n` sets `maxRedirects` with `-L`; `-1` (no limit) and `--max-redirs` without `-L` are not imported (info). |
 | `-m` | `settings.timeoutMs` | Rounded up to whole milliseconds. |
 | `--compressed` | nothing | Info: PostSonde does not decompress responses, so it asks for none; an `Accept-Encoding` header is dropped with it. |
-| `--connect-timeout`, `--http1.0` … `--http3-only`, `-x`, `-U`, `--noproxy` | nothing | Warning (`curl.not_imported`): no per-request setting. |
+| `-x`, `-U` | `settings.proxy` custom | The request's own proxy ([network.md](network.md#a-requests-own-proxy)): `-x` as its URL (`http://` added when it has no scheme, as curl reads it), `-U`'s user name put into it and its password kept apart, moved to local storage when the request is saved. A proxy PostSonde cannot use (`ftp://…`) is not imported (warning); `-U` without `-x` neither. |
+| `--noproxy '*'`, `-x ''` | `settings.proxy` none | Connects directly, whatever proxy is set; an `-x` next to `--noproxy '*'` is not imported (info). Another `--noproxy` list is not imported (warning): a request has no bypass list. |
+| `--connect-timeout`, `--http1.0` … `--http3-only` | nothing | Warning (`curl.not_imported`): no per-request setting. |
 
 `Name` is the URL's last path segment (percent-decoded), else its host
 without user info, else "Imported request".
@@ -261,6 +263,7 @@ asks for them (`includeSecrets`).
 | Redirects followed | `-L --max-redirs N` (PostSonde's default is 10, curl's is not following); `--location-trusted` with `forwardAuthorization`; `--post301 --post302 --post303` for a POST with `followOriginalMethod`. Nothing when redirects are not followed. |
 | Timeout | `-m seconds` (`1.5` for 1500 ms). |
 | HTTP version | `--http1.1` for HTTP/1.1 only; `--http2-prior-knowledge` for HTTP/2 only (h2c with prior knowledge on http, only h2 offered on https, no fallback), as the request sends. |
+| The request's own proxy | `-x 'socks5h://host:1080'` (any scheme) and `--proxy-user 'user:password'`, the password masked unless copied with secrets; `--noproxy '*'` for a request set to use no proxy. Templated, the URL and password as typed. The app's, project's and environment's proxies are not written. |
 
 **Quoting** (`Quote`): a word of only letters, digits and `-_./:=@%+,`
 (not starting with `-`) is written bare; anything else in single quotes,
@@ -277,7 +280,8 @@ command fails with `snippet.nul_byte`.
 `-X`, curl keeps the method on every redirect, where PostSonde turns
 POST, PUT and the like into GET on 301, 302 and 303 unless
 `followOriginalMethod` is set. The multipart boundary differs. PostSonde's
-connect timeout, proxy and client certificate settings are not written.
+connect timeout, the app's, project's and environment's proxies, and
+client certificate settings are not written.
 
 ## Tests
 

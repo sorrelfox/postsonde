@@ -150,7 +150,7 @@
 
 <section class="chapter prose" id="network" aria-labelledby="network-title">
   <h2 id="network-title">Proxies, certificates and cookies</h2>
-  <p>Every connection goes through one dialer, so the proxy settings apply to every protocol: SOCKS5 and SOCKS5h with a user name and password, SOCKS4 and SOCKS4a, and HTTP or HTTPS proxies. By default PostSonde uses the system's proxy settings (on Linux, GNOME's settings or the proxy environment variables). A project or an environment can have a proxy of its own, and a bypass list sends some hosts direct.</p>
+  <p>Every connection goes through one dialer, so the proxy settings apply to every protocol: SOCKS5 and SOCKS5h with a user name and password, SOCKS4 and SOCKS4a, and HTTP or HTTPS proxies. By default PostSonde uses the system's proxy settings (on Linux, GNOME's settings or the proxy environment variables). A project or an environment can have a proxy of its own, and a bypass list sends some hosts direct. Any request, of any kind, can name its own proxy (a SOCKS5 server, say) or connect directly, and the rest keep the proxy they inherit.</p>
   <p>Extra CA certificates and per-host client certificates apply to every TLS connection. Cookies are kept in a jar per project, or per environment if you prefer, and the cookie manager lists and edits them. The console's Connections view shows every connection the app has open.</p>
 </section>
 

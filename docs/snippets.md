@@ -342,7 +342,10 @@ line in C#, escaped). Text that is not UTF-8 fails with
 Only the curl commands write `forwardAuthorization` (`--location-trusted`)
 and `followOriginalMethod` (`--post301…`); the other clients use their
 own rules for both. The HTTP version is written where the client has the
-choice.
+choice. Only the curl commands (POSIX, cmd and PowerShell) write the
+request's own proxy (`-x`, `--proxy-user`, `--noproxy '*'`,
+[curl.md](curl.md#copy-as-curl)); the other languages leave it out, as
+every language leaves out the app's, project's and environment's proxy.
 
 ## Adding a language
 
@@ -452,8 +455,8 @@ line typed as a text message and print what arrives.
 | Verify TLS off | `-k` | `-n` |
 | Keepalive ping, pong timeout | `--ping-interval`, `--ping-timeout` (whole seconds, rounded up) | Not available. |
 
-**Not carried:** connect timeout, auto-reconnect, custom CA bundles and
-client certificates, binary messages (websocat `--binary`, wscat has
+**Not carried:** connect timeout, auto-reconnect, the request's own
+proxy, custom CA bundles and client certificates, binary messages (websocat `--binary`, wscat has
 none).
 
 ### Checks
