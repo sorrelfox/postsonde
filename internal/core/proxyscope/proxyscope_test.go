@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -138,7 +139,7 @@ func TestSetKeepsCredentialsLocal(t *testing.T) {
 		t.Fatalf("the scopes file holds a password: %s", data)
 	}
 	info, _ := os.Stat(s.Path())
-	if info.Mode().Perm() != 0o600 {
+	if runtime.GOOS != "windows" && info.Mode().Perm() != 0o600 {
 		t.Errorf("scopes file mode %v", info.Mode().Perm())
 	}
 	c, err := s.Read()

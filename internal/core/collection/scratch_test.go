@@ -3,6 +3,7 @@ package collection
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"testing"
 
@@ -40,7 +41,7 @@ func TestScratch(t *testing.T) {
 		t.Errorf("list = %v, want %v (problems %v)", got, want, problems)
 	}
 	info, err := os.Stat(dir)
-	if err != nil || info.Mode().Perm() != 0o700 {
+	if err != nil || runtime.GOOS != "windows" && info.Mode().Perm() != 0o700 {
 		t.Errorf("dir: %v %v", info, err)
 	}
 

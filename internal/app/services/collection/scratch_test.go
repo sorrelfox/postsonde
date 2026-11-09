@@ -3,6 +3,7 @@ package collection
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -56,12 +57,13 @@ func TestScratchRequests(t *testing.T) {
 			t.Error("a scratch request is among the root ids")
 		}
 	}
-	// Not in the project folder: in the local side files, 0600.
+	// Not in the project folder: in the local side files, 0600 (Windows
+	// has no such modes).
 	info, err := os.Stat(scratchFile(t, svc, first.NodeID))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if info.Mode().Perm() != 0o600 {
+	if runtime.GOOS != "windows" && info.Mode().Perm() != 0o600 {
 		t.Errorf("mode = %v", info.Mode().Perm())
 	}
 	if strings.HasPrefix(scratchFile(t, svc, first.NodeID), dir) {
