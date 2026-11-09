@@ -126,11 +126,7 @@ func runners() []runner {
 				"quoting_multipart": "FormData sends a line feed in a text part as CRLF",
 			},
 			noTextPartTypes: true},
-		{lang: "wget", tool: "wget", file: "cmd.sh", run: shellRun(" -q"), posix: true,
-			skip: map[string]string{
-				"url_as_typed":  "wget percent-encodes { } | \" and removes dot segments",
-				"custom_method": "wget upper-cases the method",
-			}},
+		{lang: "wget", tool: "wget", file: "cmd.sh", run: shellRun(" -q"), posix: true, skip: wgetSkips()},
 		{lang: "go", tool: "go", file: "main.go",
 			// One module with a main package per case: go build and go vet
 			// take them all at once.
@@ -167,6 +163,22 @@ func runners() []runner {
 			}},
 		{lang: "httpie", tool: "http", file: "cmd.sh", run: shellRun(""), noTextPartTypes: true, posix: true},
 	}
+}
+
+// wgetSkips are the cases wget cannot send as PostSonde does. The
+// commands are for GNU Wget; Wget2, the wget of some systems (Fedora),
+// also drops a header with an empty value.
+func wgetSkips() map[string]string {
+	skips := map[string]string{
+		"url_as_typed":  "wget percent-encodes { } | \" and removes dot segments",
+		"custom_method": "wget upper-cases the method",
+	}
+	if out, err := exec.Command("wget", "--version").Output(); err == nil && strings.HasPrefix(string(out), "GNU Wget2 ") {
+		for _, name := range []string{"get_headers", "quoting_headers"} {
+			skips[name] = "Wget2 drops a header with an empty value"
+		}
+	}
+	return skips
 }
 
 // goTool runs go with args in root, a module of the cases' main packages.

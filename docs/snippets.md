@@ -212,6 +212,8 @@ such a value cannot be written exactly.
 | TLS off, redirects, timeout | `--no-check-certificate`, `--max-redirect N` (`0` when not followed), `--timeout 1.5`. |
 
 wget percent-encodes `{ } | "` in the URL and removes its dot segments.
+The command is for GNU Wget 1: Wget2, the `wget` of some systems
+(Fedora), drops a header with an empty value.
 
 ### Raw HTTP
 
