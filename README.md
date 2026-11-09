@@ -94,8 +94,8 @@ shortcuts you can change, and several windows. The interface is in English.
 
 ## Where it stands
 
-There has been no release yet. The features above are in the code, and the first public
-release is being prepared.
+PostSonde 1.0.0 is the first release, and everything above is in it. Download it from
+the [latest release](https://github.com/sorrelfox/postsonde/releases/latest).
 
 Linux is where PostSonde is developed and tested. On Fedora 44 with KDE Plasma, a
 `strace` run confirmed that the app opens no connection of its own, online or offline
@@ -104,23 +104,23 @@ Linux is where PostSonde is developed and tested. On Fedora 44 with KDE Plasma, 
 GTK 4 build opened its window in about 280 ms and idled at about 190 MiB, most of it
 WebKit.
 
-The macOS app and the Windows installer build, but neither has been tried on a real Mac
+The release workflow installs every package in a clean system and starts the app: the
+Linux packages on x86-64 and ARM64, the macOS app on an Intel Mac runner, and the Windows
+installers on x64 and ARM64 runners. Beyond that, PostSonde hasn't been used on a real Mac
 or Windows PC yet. Expect rough edges there, and please
 [report](https://github.com/sorrelfox/postsonde/issues) what you find.
 
 | System | Web view | Builds for | State |
 |---|---|---|---|
-| Linux | WebKitGTK 6.0 (GTK 4), or WebKit2GTK 4.1 (GTK 3) for Ubuntu 22.04 and Debian 12 | x86-64, ARM64 | tested on x86-64 |
-| macOS 13 or later | WKWebView | Apple silicon and Intel, as one app | builds, not tested on a Mac yet |
-| Windows 10 and 11 | WebView2 | x64, ARM64 | builds, not tested on a PC yet |
+| Linux | WebKitGTK 6.0 (GTK 4), or WebKit2GTK 4.1 (GTK 3) for Ubuntu 22.04 and Debian 12 | x86-64, ARM64 | used and tested on x86-64 |
+| macOS 13 or later | WKWebView | Apple silicon and Intel, as one app | starts on CI's Intel Mac; not tried on a real Mac yet |
+| Windows 10 and 11 | WebView2 | x64, ARM64 | installs and starts on CI; not tried on a real PC yet |
 
 ## Install
 
-There is nothing to download yet. Releases will be published on the
-[Releases](https://github.com/sorrelfox/postsonde/releases) page. Until the first one is
-out, [build it yourself](#build-it-yourself).
-
-A release will have these files:
+Download PostSonde from the [latest release](https://github.com/sorrelfox/postsonde/releases/latest)
+on GitHub, or [build it yourself](#build-it-yourself). A release has these files, where
+`<version>` is its number, such as `1.0.0`:
 
 | System | File | Install |
 |---|---|---|
