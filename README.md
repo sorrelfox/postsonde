@@ -8,7 +8,8 @@
 
 [What it does](#what-it-does) · [Where it stands](#where-it-stands) · [Install](#install) ·
 [Build it yourself](#build-it-yourself) · [Documentation](#documentation) ·
-[What it is made of](#what-it-is-made-of) · [Contributing](#contributing) · [License](#license)
+[What it is made of](#what-it-is-made-of) · [Who made it](#who-made-it) ·
+[Contributing](#contributing) · [License](#license)
 
 </div>
 
@@ -254,6 +255,13 @@ The desktop shell is [Wails](https://wails.io) v3. The interface is React and Ty
 built with Vite, with [CodeMirror 6](https://codemirror.net) for every editor and no UI
 kit. The fonts, Instrument Sans and JetBrains Mono, are bundled with the app, so nothing is
 fetched at run time.
+
+## Who made it
+
+PostSonde is my personal project, and I made it because I needed it myself. I built it
+together with Claude Opus 5.5, Anthropic's AI model: I decided what PostSonde should do
+and how it should work, and Claude wrote much of the code with me. Commits that Claude
+helped write name it in a `Co-Authored-By` line.
 
 ## Contributing
 
