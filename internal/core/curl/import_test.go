@@ -75,6 +75,7 @@ func TestImport(t *testing.T) {
 		body    string // mode:type:text, or mode:fields, parts, path
 		auth    string
 		setting string
+		proxy   string
 		codes   []string // Import's own codes, in order
 	}{
 		{
@@ -243,7 +244,62 @@ func TestImport(t *testing.T) {
 			headers: []string{},
 			body:    "none",
 			setting: "verifyTls=false followRedirects=true maxRedirects=3 timeoutMs=1500",
-			codes:   []string{CodeNotImported, CodeNotImported, CodeNotImported, CodeNotImported},
+			codes:   []string{CodeNotImported, CodeNotImported, CodeNotImported},
+			proxy:   "custom http://proxy:1",
+		},
+		{
+			name:    "socks5 proxy with credentials",
+			src:     `curl -x socks5h://proxy.lan:1080 -U 'bob:p@ss' https://api.test/`,
+			method:  "GET",
+			url:     "https://api.test/",
+			headers: []string{},
+			body:    "none",
+			proxy:   "custom socks5h://bob@proxy.lan:1080 password=p@ss",
+		},
+		{
+			name:    "proxy without a scheme replaces the URL's user",
+			src:     `curl --proxy carl@proxy.lan:3128 --proxy-user 'ann:pw' https://api.test/`,
+			method:  "GET",
+			url:     "https://api.test/",
+			headers: []string{},
+			body:    "none",
+			proxy:   "custom http://ann@proxy.lan:3128 password=pw",
+		},
+		{
+			name:    "noproxy star",
+			src:     `curl --noproxy '*' https://api.test/`,
+			method:  "GET",
+			url:     "https://api.test/",
+			headers: []string{},
+			body:    "none",
+			proxy:   "none",
+		},
+		{
+			name:    "empty proxy",
+			src:     `curl -x '' https://api.test/`,
+			method:  "GET",
+			url:     "https://api.test/",
+			headers: []string{},
+			body:    "none",
+			proxy:   "none",
+		},
+		{
+			name:    "noproxy list and a proxy user alone",
+			src:     `curl --noproxy example.com -U bob:pw https://api.test/`,
+			method:  "GET",
+			url:     "https://api.test/",
+			headers: []string{},
+			body:    "none",
+			codes:   []string{CodeNotImported, CodeNotImported},
+		},
+		{
+			name:    "unusable proxy",
+			src:     `curl -x ftp://proxy.lan https://api.test/`,
+			method:  "GET",
+			url:     "https://api.test/",
+			headers: []string{},
+			body:    "none",
+			codes:   []string{CodeNotImported},
 		},
 		{
 			name:    "http1.1",
@@ -325,6 +381,7 @@ func TestImport(t *testing.T) {
 			}
 			check("auth", renderAuth(r.Auth), auth)
 			check("settings", renderSettings(r.Settings), tt.setting)
+			check("proxy", renderProxy(r.Settings.Proxy), tt.proxy)
 			want := tt.codes
 			if want == nil {
 				want = []string{}
@@ -400,6 +457,20 @@ func renderSettings(s projectfile.RequestSettings) string {
 		out = append(out, "httpVersion="+s.HTTPVersion)
 	}
 	return strings.Join(out, " ")
+}
+
+func renderProxy(p projectfile.RequestProxy) string {
+	if p.IsZero() {
+		return ""
+	}
+	out := p.EffectiveMode()
+	if p.URL != "" {
+		out += " " + p.URL
+	}
+	if p.Password != "" {
+		out += " password=" + p.Password
+	}
+	return out
 }
 
 func TestRequestName(t *testing.T) {

@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sorrelfox/postsonde/internal/core/netx"
 	"github.com/sorrelfox/postsonde/internal/core/request"
 	"github.com/sorrelfox/postsonde/internal/core/storage/projectfile"
 )
@@ -530,13 +531,70 @@ func (m *mapper) settings() projectfile.RequestSettings {
 		m.option("http"+c.HTTPVersion, CodeNotImported, SeverityWarning,
 			"A request’s HTTP version is automatic (HTTP/2 when a TLS server offers it), HTTP/1.1 or HTTP/2 only; %o is not imported.")
 	}
-	for _, long := range []string{"proxy", "proxy-user", "noproxy"} {
-		if _, ok := c.options[long]; ok {
-			m.option(long, CodeNotImported, SeverityWarning,
-				"Proxies are set for the whole app in Settings; %o is not imported.")
+	s.Proxy = m.proxy()
+	return s
+}
+
+// proxy maps -x, -U and --noproxy onto the request's own proxy
+// (settings.proxy, docs/network.md#a-requests-own-proxy): -x as a custom
+// proxy (http:// when it has no scheme, as curl reads it), -U as its user
+// name and password, and --noproxy '*' (or an empty -x) as no proxy.
+// Other --noproxy lists are not imported: a request has no bypass list.
+func (m *mapper) proxy() projectfile.RequestProxy {
+	c := m.c
+	_, hasProxy := c.options["proxy"]
+	noProxy := strings.TrimSpace(c.NoProxy)
+	switch {
+	case noProxy == "*":
+		if hasProxy {
+			m.option("proxy", CodeNotImported, SeverityInfo, "%o is not used with “--noproxy *”, which connects directly; it is not imported.")
+		}
+		if c.ProxyUser != nil {
+			m.option("proxy-user", CodeNotImported, SeverityInfo, "%o is not used with “--noproxy *”, which connects directly; it is not imported.")
+		}
+		return projectfile.RequestProxy{Mode: projectfile.ProxyNone}
+	case noProxy != "":
+		m.option("noproxy", CodeNotImported, SeverityWarning,
+			"A request’s own proxy has no bypass list; %o is imported only as “*”, which connects directly.")
+	}
+	if !hasProxy {
+		if c.ProxyUser != nil {
+			m.option("proxy-user", CodeNotImported, SeverityWarning, "%o only matters with -x, which the command does not use; it is not imported.")
+		}
+		return projectfile.RequestProxy{}
+	}
+	raw := strings.TrimSpace(c.Proxy)
+	if raw == "" {
+		// curl: an empty proxy turns every proxy off.
+		return projectfile.RequestProxy{Mode: projectfile.ProxyNone}
+	}
+	if !strings.Contains(raw, "://") {
+		raw = "http://" + raw
+	}
+	if !strings.Contains(raw, "{{") {
+		if _, err := netx.ParseProxyURL(raw); err != nil {
+			m.option("proxy", CodeNotImported, SeverityWarning,
+				"PostSonde cannot use this proxy (it takes socks5h, socks5, socks4a, socks4, http and https proxies); %o is not imported.")
+			return projectfile.RequestProxy{}
 		}
 	}
-	return s
+	p := projectfile.RequestProxy{Mode: projectfile.ProxyCustom, URL: raw}
+	if u := c.ProxyUser; u != nil && u.User != "" {
+		// The user goes into the URL, replacing one there; the password
+		// is kept apart, and moved to local storage when the request is
+		// saved.
+		scheme, rest, _ := strings.Cut(raw, "://")
+		if at := strings.LastIndex(strings.SplitN(rest, "/", 2)[0], "@"); at >= 0 {
+			rest = rest[at+1:]
+		}
+		user := u.User
+		if !strings.Contains(user, "{{") {
+			user = url.User(user).String()
+		}
+		p.URL = scheme + "://" + user + "@" + rest
+		p.Password = u.Password
+	}
+	return p
 }
 
 // requestName is the URL's last path segment, else its host, else

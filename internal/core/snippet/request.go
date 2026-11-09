@@ -16,6 +16,7 @@ import (
 	"encoding/base64"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -24,6 +25,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/httpclient"
 	"github.com/sorrelfox/postsonde/internal/core/request"
 	"github.com/sorrelfox/postsonde/internal/core/requestsecrets"
+	"github.com/sorrelfox/postsonde/internal/core/storage/projectfile"
 )
 
 // Error codes of FromBuild and the generators.
@@ -127,6 +129,15 @@ type Request struct {
 	Timeout time.Duration
 	// HTTPVersion is the HTTP version choice (HTTP-25).
 	HTTPVersion httpclient.HTTPVersion
+	// Proxy is the request's own proxy (settings.proxy, custom): its URL
+	// without user info, scheme://host:port; "" when the request has none
+	// of its own. ProxyUser are its credentials, nil for none. NoProxy is
+	// set when the request connects directly whatever proxy is set
+	// (settings.proxy none). The app's, project's and environment's
+	// proxies are not the request's, and are left out.
+	Proxy     string
+	ProxyUser *Credentials
+	NoProxy   bool
 }
 
 // FromBuild returns the request b sends. cookies are the cookie jar's
@@ -193,7 +204,67 @@ func fromBuild(b request.HTTPBuild, cookies []*http.Cookie, templated bool) (Req
 	if out.Body, err = body(r.Body); err != nil {
 		return Request{}, err
 	}
+	if templated || (!b.Proxy.Set && b.ProxySetting.EffectiveMode() != projectfile.ProxyInherit) {
+		// Templated, or a proxy that could not be built for a copy: as
+		// typed.
+		out.Proxy, out.ProxyUser, out.NoProxy = templateProxy(b.ProxySetting)
+	} else {
+		out.Proxy, out.ProxyUser, out.NoProxy = builtProxy(b.Proxy)
+	}
 	return out, nil
+}
+
+// builtProxy returns the request's own proxy as Request has it.
+func builtProxy(p request.Proxy) (string, *Credentials, bool) {
+	switch p.Mode() {
+	case projectfile.ProxyNone:
+		return "", nil, true
+	case projectfile.ProxyCustom:
+		var user *Credentials
+		if p.URL.Username != "" {
+			user = &Credentials{Username: p.URL.Username, Password: p.URL.Password}
+		}
+		u := p.URL
+		u.Username, u.Password = "", ""
+		return u.String(), user, false
+	}
+	return "", nil, false
+}
+
+// templateProxy is builtProxy for a templated request: the URL and the
+// password as written, {{variables}} and all; the user name is cut from
+// the URL as typed.
+func templateProxy(p projectfile.RequestProxy) (string, *Credentials, bool) {
+	switch p.EffectiveMode() {
+	case projectfile.ProxyNone:
+		return "", nil, true
+	case projectfile.ProxyCustom:
+	default:
+		return "", nil, false
+	}
+	raw := strings.TrimSpace(p.URL)
+	scheme, rest, ok := strings.Cut(raw, "://")
+	if !ok {
+		return raw, nil, false
+	}
+	host := rest
+	if i := strings.IndexAny(rest, "/?#"); i >= 0 {
+		host = rest[:i]
+	}
+	at := strings.LastIndex(host, "@")
+	if at < 0 {
+		return raw, nil, false
+	}
+	user, _, _ := strings.Cut(host[:at], ":")
+	if u, err := url.PathUnescape(user); err == nil {
+		user = u
+	}
+	password := p.Password
+	if password == "" && p.PasswordIsLocal() {
+		// Typed on another machine: shown masked, as an auth's.
+		password = Mask
+	}
+	return scheme + "://" + rest[at+1:], &Credentials{Username: user, Password: password}, false
 }
 
 // basicFromHeaders moves the one Authorization row that holds Basic
@@ -369,7 +440,8 @@ func (r Request) masked(secrets []string, templated bool) (Request, bool) {
 		}
 		return &Credentials{Username: text(c.Username), Password: pass}
 	}
-	out.Basic, out.Digest = cred(r.Basic), cred(r.Digest)
+	out.Basic, out.Digest, out.ProxyUser = cred(r.Basic), cred(r.Digest), cred(r.ProxyUser)
+	out.Proxy = text(r.Proxy)
 	if len(r.Body.Data) > 0 {
 		out.Body.Data = []byte(text(string(r.Body.Data)))
 	}

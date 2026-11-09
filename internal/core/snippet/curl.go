@@ -184,6 +184,31 @@ func curlCommand(r Request, sh curlShell) (string, error) {
 		// h2 offered on https.
 		add("--http2-prior-knowledge")
 	}
+	// The request's own proxy: -x takes every scheme PostSonde does
+	// (socks5h://, socks5://, socks4a://, socks4://, http://, https://).
+	// No proxy of its own leaves curl to its environment, as the app's
+	// proxy is not written either.
+	switch {
+	case r.Proxy != "":
+		q, err := quoteArg(r.Proxy, "proxy")
+		if err != nil {
+			return "", err
+		}
+		add("-x", q)
+		if r.ProxyUser != nil {
+			q, err := quoteArg(r.ProxyUser.Username+":"+r.ProxyUser.Password, "proxy credentials")
+			if err != nil {
+				return "", err
+			}
+			add("--proxy-user", q)
+		}
+	case r.NoProxy:
+		q, err := quoteArg("*", "proxy")
+		if err != nil {
+			return "", err
+		}
+		add("--noproxy", q)
+	}
 
 	var b strings.Builder
 	for i, line := range lines {

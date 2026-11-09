@@ -320,6 +320,10 @@ func canon(r Request, lossy []string) string {
 		b.WriteString("keep " + strconv.FormatBool(r.KeepMethod) + "\n")
 	}
 	b.WriteString("timeout " + r.Timeout.String() + " version " + string(r.HTTPVersion) + "\n")
+	b.WriteString("proxy " + r.Proxy + " noproxy " + strconv.FormatBool(r.NoProxy) + "\n")
+	if r.ProxyUser != nil {
+		b.WriteString("proxy user " + r.ProxyUser.Username + ":" + r.ProxyUser.Password + "\n")
+	}
 	return b.String()
 }
 
@@ -399,5 +403,81 @@ func TestFromBuildTimeout(t *testing.T) {
 	cmd, _ := Curl(r)
 	if !strings.Contains(cmd, "-m 2") {
 		t.Errorf("the app's default timeout is not in the command:\n%s", cmd)
+	}
+}
+
+// TestCurlRequestProxy: a request's own proxy is written as -x and
+// --proxy-user (the password masked like an auth's), "none" as
+// --noproxy '*', and the cURL importer reads them back. Other languages
+// leave it out, as they leave out the app's proxy.
+func TestCurlRequestProxy(t *testing.T) {
+	cases := []struct {
+		c    curlCase
+		want string
+	}{
+		{curlCase{name: "socks5", req: with(httpReq("GET", "https://api.test/items"), func(r *projectfile.HTTPRequest) {
+			r.Settings = projectfile.RequestSettings{Proxy: projectfile.RequestProxy{Mode: projectfile.ProxyCustom, URL: "socks5h://bob@proxy.lan:1080", Password: "pr0xy pw"}}
+		})}, "curl https://api.test/items \\\n  -L --max-redirs 10 \\\n  -x socks5h://proxy.lan:1080 \\\n  --proxy-user 'bob:pr0xy pw'"},
+		{curlCase{name: "masked", req: with(httpReq("GET", "https://api.test/items"), func(r *projectfile.HTTPRequest) {
+			r.Settings = projectfile.RequestSettings{Proxy: projectfile.RequestProxy{Mode: projectfile.ProxyCustom, URL: "http://bob@proxy.lan:3128", Password: "pr0xy"}}
+		}), secrets: []string{"pr0xy"}, lossy: []string{"masked"}}, "curl https://api.test/items \\\n  -L --max-redirs 10 \\\n  -x http://proxy.lan:3128 \\\n  --proxy-user 'bob:••••••'"},
+		{curlCase{name: "none", req: with(httpReq("GET", "https://api.test/items"), func(r *projectfile.HTTPRequest) {
+			r.Settings = projectfile.RequestSettings{Proxy: projectfile.RequestProxy{Mode: projectfile.ProxyNone, URL: "socks5h://proxy.lan"}}
+		})}, "curl https://api.test/items \\\n  -L --max-redirs 10 \\\n  --noproxy '*'"},
+	}
+	for _, tt := range cases {
+		t.Run(tt.c.name, func(t *testing.T) {
+			cmd, want := generate(t, tt.c)
+			if cmd != tt.want {
+				t.Errorf("command:\n%s\nwant:\n%s", cmd, tt.want)
+			}
+			if slices.Contains(tt.c.lossy, "masked") {
+				return
+			}
+			imp := curl.Import(cmd)
+			f := imp.Request
+			f.Settings.URLEncoding = projectfile.URLEncodingNone
+			b, err := request.BuildHTTP(f, projectfile.Auth{Type: projectfile.AuthNone}, request.HTTPOptions{})
+			if err != nil {
+				t.Fatalf("build imported: %v\n%s", err, cmd)
+			}
+			got, err := FromBuild(b, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if g, w := canon(got, nil), canon(want, nil); g != w {
+				t.Errorf("round trip differs\ngot:\n%s\nwant:\n%s", g, w)
+			}
+		})
+	}
+}
+
+// TestTemplatedRequestProxy: a templated snippet writes the request's own
+// proxy as typed, {{variables}} kept, and masks a typed password.
+func TestTemplatedRequestProxy(t *testing.T) {
+	for _, tt := range []struct {
+		password, want string
+	}{
+		{"{{proxyPassword}}", "  -x 'socks5h://{{proxyHost}}:1080' \\\n  --proxy-user '{{proxyUser}}:{{proxyPassword}}'"},
+		{"typed-secret", "  -x 'socks5h://{{proxyHost}}:1080' \\\n  --proxy-user '{{proxyUser}}:••••••'"},
+	} {
+		f := httpReq("GET", "https://api.test/")
+		f.Settings.Proxy = projectfile.RequestProxy{Mode: projectfile.ProxyCustom, URL: "socks5h://{{proxyUser}}@{{proxyHost}}:1080", Password: tt.password}
+		b, err := request.BuildHTTP(f, projectfile.Auth{Type: projectfile.AuthNone}, request.HTTPOptions{Expand: KeepReferences, ProxyAsTyped: true})
+		if err != nil {
+			t.Fatal(err)
+		}
+		r, err := FromTemplateBuild(b)
+		if err != nil {
+			t.Fatal(err)
+		}
+		r, _ = r.MaskedTemplate(nil)
+		cmd, err := Curl(r)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(cmd, tt.want) || strings.Contains(cmd, "typed-secret") {
+			t.Errorf("command:\n%s\nwant it to contain:\n%s", cmd, tt.want)
+		}
 	}
 }

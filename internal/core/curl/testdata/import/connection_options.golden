@@ -27,7 +27,12 @@
     },
     "settings": {
       "timeoutMs": 2500,
-      "verifyTls": false
+      "verifyTls": false,
+      "proxy": {
+        "mode": "custom",
+        "url": "http://bob@proxy.local:3128",
+        "password": "pw"
+      }
     }
   },
   "diagnostics": [
@@ -48,23 +53,9 @@
     {
       "code": "curl.not_imported",
       "severity": "warning",
-      "start": 40,
-      "end": 66,
-      "message": "Proxies are set for the whole app in Settings; “-x” is not imported."
-    },
-    {
-      "code": "curl.not_imported",
-      "severity": "warning",
-      "start": 67,
-      "end": 76,
-      "message": "Proxies are set for the whole app in Settings; “-U” is not imported."
-    },
-    {
-      "code": "curl.not_imported",
-      "severity": "warning",
       "start": 77,
       "end": 96,
-      "message": "Proxies are set for the whole app in Settings; “--noproxy” is not imported."
+      "message": "A request’s own proxy has no bypass list; “--noproxy” is imported only as “*”, which connects directly."
     },
     {
       "code": "curl.not_imported",
