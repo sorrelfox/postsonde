@@ -294,6 +294,12 @@ func (cs *callServer) lastMetadata() transport.Metadata {
 // with its own registry.
 func newCallService(t *testing.T, opts ...Option) (*GRPCService, *recorder) {
 	t.Helper()
+	return newCallServiceWith(t, netx.Chain(netx.NewDirect(netx.Options{}), netx.Guarded(netx.RequireUserOp(nil))), opts...)
+}
+
+// newCallServiceWith is newCallService connecting through dialer.
+func newCallServiceWith(t *testing.T, dialer netx.Dialer, opts ...Option) (*GRPCService, *recorder) {
+	t.Helper()
 	dir := filepath.Join(tempDir(t), "calls")
 	writeFile(t, dir, "postsonde.json", `{"schemaVersion": 1, "kind": "workspace", "id": "ws_0123456789abcdef", "name": "Calls"}`)
 	writeFile(t, dir, "proto/calls.proto", callsProto)
@@ -304,7 +310,7 @@ func newCallService(t *testing.T, opts ...Option) (*GRPCService, *recorder) {
 	rec := newRecorder()
 	reg := operation.NewRegistry(rec.emit, nil)
 	t.Cleanup(func() { _ = reg.Shutdown(t.Context()) })
-	return New(manager, reg, netx.Chain(netx.NewDirect(netx.Options{}), netx.Guarded(netx.RequireUserOp(nil))), nil, nil, opts...), rec
+	return New(manager, reg, dialer, nil, nil, opts...), rec
 }
 
 func input(addr, method string) InvokeInputDTO {

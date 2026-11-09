@@ -47,8 +47,9 @@ export function CheckAssertions($in: $models.CheckInputDTO): $CancellablePromise
  * namespace and the auth payload are rendered with the scopes of
  * in.RequestID; undefined names are reported together as one
  * template.unresolved error (details.names) unless in.AllowUnresolved
- * (ENV-11). It fails at once for those, and for options that cannot be
- * used (sioclient.invalid_*).
+ * (ENV-11). It fails at once for those, for options that cannot be used
+ * (sioclient.invalid_*) and for a request proxy that cannot be used
+ * (netx.proxy_invalid_url, request.*; WithProxy).
  */
 export function Connect($in: $models.ConnectInputDTO): $CancellablePromise<operation$0.StartedDTO> {
     return $Call.ByID(1907626937, $in);

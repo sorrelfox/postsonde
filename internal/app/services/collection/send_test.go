@@ -106,3 +106,43 @@ func TestLoadVariablesSource(t *testing.T) {
 	_, err = LoadVariablesSource(New(coreworkspace.New(tempDir(t)), nil, nil), ctx, "req_feed")
 	checkCode(t, err, errs.NotFound, coreworkspace.CodeNoWorkspace)
 }
+
+// TestLoadRequestProxy: the own proxy of a request of any kind, pending
+// edits included, with its typed password merged from the local side
+// file; inherit for a request without one.
+func TestLoadRequestProxy(t *testing.T) {
+	t.Parallel()
+	manager, _ := newProject(t)
+	svc := New(manager, nil, nil)
+	ctx := t.Context()
+	ids := map[string]string{}
+	for _, kind := range []string{"tcp", "udp", "websocket", "socketio", "grpc", "http"} {
+		res, err := svc.CreateRequest(ctx, CreateRequestInputDTO{Name: "P " + kind, Kind: kind, Index: -1})
+		ids[kind] = res.NodeID
+		if err != nil {
+			t.Fatal(err)
+		}
+		if p, err := LoadRequestProxy(svc, ctx, res.NodeID); err != nil || !p.IsZero() {
+			t.Errorf("%s before: %+v, %v", kind, p, err)
+		}
+		req := getRequest(t, svc, res.NodeID)
+		req.Settings.Proxy = &RequestProxyDTO{Mode: "custom", URL: "socks5h://bob@proxy.lan:1080", Password: "load-" + kind}
+		update(t, svc, req, 1)
+		p, err := LoadRequestProxy(svc, ctx, res.NodeID)
+		if err != nil || p.Mode != "custom" || p.URL != "socks5h://bob@proxy.lan:1080" || p.Password != "load-"+kind {
+			t.Errorf("%s: %+v, %v", kind, p, err)
+		}
+	}
+	if err := svc.FlushAll(ctx); err != nil {
+		t.Fatal(err)
+	}
+	// Written: the password comes from the side file now.
+	for kind, id := range ids {
+		if p, err := LoadRequestProxy(svc, ctx, id); err != nil || p.Password != "load-"+kind || !p.PasswordIsLocal() {
+			t.Errorf("%s after the save: %+v, %v", kind, p, err)
+		}
+	}
+	if _, err := LoadRequestProxy(svc, ctx, "req_nope"); err == nil {
+		t.Error("an unknown ID loaded")
+	}
+}

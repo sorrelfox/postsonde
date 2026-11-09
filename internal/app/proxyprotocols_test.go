@@ -253,6 +253,8 @@ type e2eWorld struct {
 	direct  *directDials
 	lookups *netxtest.Lookups
 	ctx     context.Context
+	// wantDirect is set when connections must go directly.
+	wantDirect bool
 }
 
 func newE2EWorld(t *testing.T, proxyURL string, roots *x509.CertPool) *e2eWorld {
@@ -322,91 +324,7 @@ func TestEveryProtocolThroughProxy(t *testing.T) {
 	t.Parallel()
 	srv := startE2EServers(t)
 	host := func(p string) string { return net.JoinHostPort(e2eHost, p) }
-	protocols := []struct {
-		name string
-		run  func(t *testing.T, w *e2eWorld) error
-	}{
-		{"http", func(t *testing.T, w *e2eWorld) error {
-			return httpGet(w, srv, "http://"+host(srv.httpPort)+"/hello", "hello over HTTP/1.1")
-		}},
-		{"https (h2)", func(t *testing.T, w *e2eWorld) error {
-			return httpGet(w, srv, "https://"+host(srv.tlsPort)+"/hello", "hello over HTTP/2.0")
-		}},
-		{"graphql over http", func(t *testing.T, w *e2eWorld) error {
-			c := httpclient.New(w.dialer, httpclient.TransportOptions{RootCAs: srv.ca.Pool()})
-			defer c.CloseIdleConnections()
-			resp, err := c.Send(w.ctx, httpclient.Request{Method: http.MethodPost, URL: "https://" + host(srv.tlsPort) + "/graphql",
-				Body: httpclient.RawBody{Data: []byte(`{"query":"{ ping }"}`), Type: "application/json"}, Settings: httpclient.DefaultSettings()})
-			if err != nil {
-				return err
-			}
-			return expect(string(resp.Body), `{"data":{"ping":"pong"}}`)
-		}},
-		{"sse", func(t *testing.T, w *e2eWorld) error {
-			c := httpclient.New(w.dialer, httpclient.TransportOptions{RootCAs: srv.ca.Pool()})
-			defer c.CloseIdleConnections()
-			var body []byte
-			_, err := c.SendStream(w.ctx, httpclient.Request{Method: http.MethodGet, URL: "http://" + host(srv.httpPort) + "/sse", Settings: httpclient.DefaultSettings()},
-				func(_ *httpclient.Response, r io.Reader) error {
-					var err error
-					body, err = io.ReadAll(r)
-					return err
-				})
-			if err != nil {
-				return err
-			}
-			return expect(string(body), "event: tick\ndata: 0\n\nevent: tick\ndata: 1\n\n")
-		}},
-		{"websocket", func(t *testing.T, w *e2eWorld) error {
-			return wsEcho(w, "ws://"+host(srv.httpPort)+"/ws", nil)
-		}},
-		{"websocket over tls", func(t *testing.T, w *e2eWorld) error {
-			return wsEcho(w, "wss://"+host(srv.tlsPort)+"/ws", srv.ca.Pool())
-		}},
-		{"graphql over websocket", func(t *testing.T, w *e2eWorld) error {
-			ctx, cancel := context.WithTimeout(w.ctx, e2eWait)
-			defer cancel()
-			s, err := transportws.Dial(ctx, transportws.Options{WS: wsclient.Options{URL: "wss://" + host(srv.tlsPort) + "/graphql-ws", Dialer: w.dialer, RootCAs: srv.ca.Pool()}})
-			if err != nil {
-				return err
-			}
-			defer func() {
-				s.Client().Abort()
-				<-s.Done()
-			}()
-			sub, err := s.Subscribe(ctx, transportws.SubscribeRequest{Query: "subscription { tick }"})
-			if err != nil {
-				return err
-			}
-			select {
-			case r := <-sub.C():
-				if r.Kind != transportws.ResultNext {
-					return errors.New("subscription result " + string(r.Kind))
-				}
-				return expect(string(r.Payload), `{"data":{"tick":1}}`)
-			case <-ctx.Done():
-				return ctx.Err()
-			}
-		}},
-		{"socket.io over polling", func(t *testing.T, w *e2eWorld) error {
-			return sioEmit(w, srv, sioclient.TransportPolling)
-		}},
-		{"socket.io over websocket", func(t *testing.T, w *e2eWorld) error {
-			return sioEmit(w, srv, sioclient.TransportWebSocket)
-		}},
-		{"grpc h2c", func(t *testing.T, w *e2eWorld) error {
-			return grpcUnary(w, srv, host(srv.grpcPort), false)
-		}},
-		{"grpc tls", func(t *testing.T, w *e2eWorld) error {
-			return grpcUnary(w, srv, host(srv.grpcsPort), true)
-		}},
-		{"tcp", func(t *testing.T, w *e2eWorld) error {
-			return tcpEcho(w, host(srv.tcpPort), nil)
-		}},
-		{"tcp over tls", func(t *testing.T, w *e2eWorld) error {
-			return tcpEcho(w, host(srv.tcpsPort), &tcpclient.TLSOptions{RootCAs: srv.ca.Pool()})
-		}},
-	}
+	protocols := e2eProtocols(srv)
 	for _, p := range e2eProxies {
 		t.Run(p.name, func(t *testing.T) {
 			t.Parallel()
@@ -479,8 +397,11 @@ func httpGet(w *e2eWorld, srv *e2eServers, url, want string) error {
 	if err != nil {
 		return err
 	}
-	if resp.Conn.Via == "" {
+	if resp.Conn.Via == "" && !w.wantDirect {
 		return errors.New("the response's connection names no proxy")
+	}
+	if resp.Conn.Via != "" && w.wantDirect {
+		return errors.New("the response's connection went through " + resp.Conn.Via)
 	}
 	return expect(string(resp.Body), want)
 }
@@ -606,4 +527,98 @@ func tcpEcho(w *e2eWorld, addr string, tlsOpts *tcpclient.TLSOptions) error {
 		}
 	}
 	return expect(string(all), "ping")
+}
+
+// e2eProtocol is one protocol client's round trip with a test server.
+type e2eProtocol struct {
+	name string
+	run  func(t *testing.T, w *e2eWorld) error
+}
+
+// e2eProtocols are the round trips of every protocol but UDP, each with
+// srv's server under e2eHost, dialing with w's dialer and context.
+func e2eProtocols(srv *e2eServers) []e2eProtocol {
+	host := func(p string) string { return net.JoinHostPort(e2eHost, p) }
+	return []e2eProtocol{
+		{"http", func(t *testing.T, w *e2eWorld) error {
+			return httpGet(w, srv, "http://"+host(srv.httpPort)+"/hello", "hello over HTTP/1.1")
+		}},
+		{"https (h2)", func(t *testing.T, w *e2eWorld) error {
+			return httpGet(w, srv, "https://"+host(srv.tlsPort)+"/hello", "hello over HTTP/2.0")
+		}},
+		{"graphql over http", func(t *testing.T, w *e2eWorld) error {
+			c := httpclient.New(w.dialer, httpclient.TransportOptions{RootCAs: srv.ca.Pool()})
+			defer c.CloseIdleConnections()
+			resp, err := c.Send(w.ctx, httpclient.Request{Method: http.MethodPost, URL: "https://" + host(srv.tlsPort) + "/graphql",
+				Body: httpclient.RawBody{Data: []byte(`{"query":"{ ping }"}`), Type: "application/json"}, Settings: httpclient.DefaultSettings()})
+			if err != nil {
+				return err
+			}
+			return expect(string(resp.Body), `{"data":{"ping":"pong"}}`)
+		}},
+		{"sse", func(t *testing.T, w *e2eWorld) error {
+			c := httpclient.New(w.dialer, httpclient.TransportOptions{RootCAs: srv.ca.Pool()})
+			defer c.CloseIdleConnections()
+			var body []byte
+			_, err := c.SendStream(w.ctx, httpclient.Request{Method: http.MethodGet, URL: "http://" + host(srv.httpPort) + "/sse", Settings: httpclient.DefaultSettings()},
+				func(_ *httpclient.Response, r io.Reader) error {
+					var err error
+					body, err = io.ReadAll(r)
+					return err
+				})
+			if err != nil {
+				return err
+			}
+			return expect(string(body), "event: tick\ndata: 0\n\nevent: tick\ndata: 1\n\n")
+		}},
+		{"websocket", func(t *testing.T, w *e2eWorld) error {
+			return wsEcho(w, "ws://"+host(srv.httpPort)+"/ws", nil)
+		}},
+		{"websocket over tls", func(t *testing.T, w *e2eWorld) error {
+			return wsEcho(w, "wss://"+host(srv.tlsPort)+"/ws", srv.ca.Pool())
+		}},
+		{"graphql over websocket", func(t *testing.T, w *e2eWorld) error {
+			ctx, cancel := context.WithTimeout(w.ctx, e2eWait)
+			defer cancel()
+			s, err := transportws.Dial(ctx, transportws.Options{WS: wsclient.Options{URL: "wss://" + host(srv.tlsPort) + "/graphql-ws", Dialer: w.dialer, RootCAs: srv.ca.Pool()}})
+			if err != nil {
+				return err
+			}
+			defer func() {
+				s.Client().Abort()
+				<-s.Done()
+			}()
+			sub, err := s.Subscribe(ctx, transportws.SubscribeRequest{Query: "subscription { tick }"})
+			if err != nil {
+				return err
+			}
+			select {
+			case r := <-sub.C():
+				if r.Kind != transportws.ResultNext {
+					return errors.New("subscription result " + string(r.Kind))
+				}
+				return expect(string(r.Payload), `{"data":{"tick":1}}`)
+			case <-ctx.Done():
+				return ctx.Err()
+			}
+		}},
+		{"socket.io over polling", func(t *testing.T, w *e2eWorld) error {
+			return sioEmit(w, srv, sioclient.TransportPolling)
+		}},
+		{"socket.io over websocket", func(t *testing.T, w *e2eWorld) error {
+			return sioEmit(w, srv, sioclient.TransportWebSocket)
+		}},
+		{"grpc h2c", func(t *testing.T, w *e2eWorld) error {
+			return grpcUnary(w, srv, host(srv.grpcPort), false)
+		}},
+		{"grpc tls", func(t *testing.T, w *e2eWorld) error {
+			return grpcUnary(w, srv, host(srv.grpcsPort), true)
+		}},
+		{"tcp", func(t *testing.T, w *e2eWorld) error {
+			return tcpEcho(w, host(srv.tcpPort), nil)
+		}},
+		{"tcp over tls", func(t *testing.T, w *e2eWorld) error {
+			return tcpEcho(w, host(srv.tcpsPort), &tcpclient.TLSOptions{RootCAs: srv.ca.Pool()})
+		}},
+	}
 }

@@ -178,3 +178,32 @@ func TestRequestProxyErrors(t *testing.T) {
 		})
 	}
 }
+
+// TestHandshakeTokenThroughRequestProxy: the OAuth 2.0 token request of a
+// websocket, socketio or grpc handshake goes through the request's own
+// proxy when the handshake has one, not through the proxy in effect.
+func TestHandshakeTokenThroughRequestProxy(t *testing.T) {
+	t.Parallel()
+	idp := newTokenIDP(t)
+	_, port, _ := net.SplitHostPort(idp.Listener.Addr().String())
+	ambient := &netxtest.SOCKS5Server{Hosts: map[string]string{proxyHost: "127.0.0.1"}}
+	ambientURL, _ := netx.ParseProxyURL("socks5h://" + ambient.Start(t))
+	own := &netxtest.SOCKS5Server{Hosts: map[string]string{proxyHost: "127.0.0.1"}}
+	ownURL, _ := netx.ParseProxyURL("socks5h://" + own.Start(t))
+
+	src := oauth2Source("ws://feed.test", "http://"+net.JoinHostPort(proxyHost, port))
+	src.Handshake = projectfile.KindWebSocket
+	f := newProxyFixture(t, src, ambientDialer(ambientURL), nil)
+	ctx := netx.WithUserOp(t.Context(), netx.UserOp{Kind: "test", ID: "1"})
+	h, err := HandshakeAuth(ctx, f.svc, request.HandshakeInput{RequestID: "req_1", Protocol: request.HandshakeWebSocket, URL: "ws://feed.test/",
+		Proxy: request.Proxy{Set: true, URL: ownURL}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if h.Credentials == nil || h.Credentials.Token != "issued-token-1" {
+		t.Errorf("handshake = %+v", h)
+	}
+	if len(own.Requests()) != 1 || ambient.Accepted() != 0 {
+		t.Errorf("token request: own proxy %v, proxy in effect %d connections", own.Requests(), ambient.Accepted())
+	}
+}

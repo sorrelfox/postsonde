@@ -104,6 +104,8 @@ type GRPCService struct {
 	// variables (WithAuth); nil sends none.
 	auth   request.HandshakeAuthFunc
 	scopes Scopes
+	// proxies gives the request's own proxy (WithProxy); nil inherits.
+	proxies ProxySource
 
 	clientsMu sync.Mutex
 	clients   map[clientKey]*transport.Client

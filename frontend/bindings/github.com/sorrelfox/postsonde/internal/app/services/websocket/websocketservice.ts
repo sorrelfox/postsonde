@@ -69,7 +69,8 @@ export function CloseAll(): $CancellablePromise<number> {
  * {{variables}} rendered anew for every attempt.
  * 
  * It fails at once only for input that cannot be used: those variables,
- * or an invalid URL, header or subprotocol (wsclient.*).
+ * an invalid URL, header or subprotocol (wsclient.*), or a request proxy
+ * that cannot be used (netx.proxy_invalid_url, request.*; WithProxy).
  */
 export function Connect($in: $models.ConnectInputDTO): $CancellablePromise<$models.ConnectionDTO> {
     return $Call.ByID(751386803, $in);

@@ -6,19 +6,26 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/core/netx"
 	"github.com/sorrelfox/postsonde/internal/core/netx/netxtest"
 	"github.com/sorrelfox/postsonde/internal/core/realtime/wsclient"
 	"github.com/sorrelfox/postsonde/internal/core/realtime/wsframe"
+	"github.com/sorrelfox/postsonde/internal/core/request"
+	"github.com/sorrelfox/postsonde/internal/core/storage/projectfile"
+	"github.com/sorrelfox/postsonde/internal/core/template"
 	"github.com/sorrelfox/postsonde/internal/core/tlsconf/tlstest"
 )
 
@@ -165,5 +172,159 @@ func TestConnectThroughHTTPProxy(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// reqProxyTarget is a name only the test proxies and the test's direct
+// dialer can resolve: reaching it proves which way a connection went.
+const reqProxyTarget = "ws.example.test"
+
+// hostsDialer connects directly, to the address hosts gives a target's
+// name, so a name that is not loopback can be reached without a proxy.
+func hostsDialer(hosts map[string]string) netx.Dialer {
+	direct := netx.NewDirect(netx.Options{})
+	return netx.DialerFunc(func(ctx context.Context, network, address string) (net.Conn, error) {
+		if h, p, err := net.SplitHostPort(address); err == nil {
+			if ip, ok := hosts[h]; ok {
+				address = net.JoinHostPort(ip, p)
+			}
+		}
+		return direct.DialContext(ctx, network, address)
+	})
+}
+
+// reqProxied is a service whose dialer routes like the app's: through
+// the ambient SOCKS5 proxy in effect, or a request's own proxy (own,
+// which takes only alice with proxySecret). Both can name reqProxyTarget.
+type reqProxied struct {
+	s            *WebSocketService
+	ev           *events
+	ambient, own *netxtest.SOCKS5Server
+}
+
+func newReqProxied(t *testing.T) *reqProxied {
+	t.Helper()
+	hosts := map[string]string{reqProxyTarget: "127.0.0.1"}
+	p := &reqProxied{
+		ev:      newEvents(),
+		ambient: &netxtest.SOCKS5Server{Hosts: hosts},
+		own:     &netxtest.SOCKS5Server{Username: "alice", Password: proxySecret, Hosts: hosts},
+	}
+	ambientURL, err := netx.ParseProxyURL("socks5h://" + p.ambient.Start(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	ownAddr := p.own.Start(t)
+	proxies := map[string]projectfile.RequestProxy{
+		"req_custom": {Mode: projectfile.ProxyCustom, URL: "socks5h://alice@{{proxyAddr}}", Password: "{{proxyPassword}}"},
+		"req_none":   {Mode: projectfile.ProxyNone},
+		"req_no_url": {Mode: projectfile.ProxyCustom},
+		"req_undef":  {Mode: projectfile.ProxyCustom, URL: "socks5h://{{nope}}:1080"},
+	}
+	router := netx.NewProxyRouter(hostsDialer(hosts), func(context.Context) (netx.ProxyURL, error) { return ambientURL, nil }, netx.ProxyOptions{})
+	dialer := netx.NewForwardProxier(netx.Chain(netx.Routed(router.Route), netx.Guarded(netx.RequireUserOp(nil))), router.ForwardProxy)
+	source := func(_ context.Context, id string) (projectfile.RequestProxy, error) { return proxies[id], nil }
+	scopes := func(context.Context, string) (template.Chain, error) {
+		return template.Chain{template.MapScope{Label: "Globals", Variables: map[string]template.Variable{
+			"proxyAddr":     {Value: ownAddr},
+			"proxyPassword": {Value: proxySecret, Secret: true},
+		}}}, nil
+	}
+	p.s = New(dialer, nil, p.ev.emit, nil, withInterval(5*time.Millisecond),
+		withClientOptions(func(o *wsclient.Options) { o.CloseLinger = 50 * time.Millisecond }),
+		WithScopes(scopes), WithProxy(source))
+	t.Cleanup(func() { _ = p.s.ServiceShutdown() })
+	return p
+}
+
+// TestConnectThroughRequestProxy: a websocket request's own proxy
+// replaces the one in effect, for the first attempt and every reconnect:
+// custom connects through it with its credentials, its URL and password
+// rendered with the request's variables; none connects directly; inherit
+// uses the proxy in effect. No event holds the password.
+func TestConnectThroughRequestProxy(t *testing.T) {
+	t.Parallel()
+	srv := scriptServer(t, nil, func(_ int, _ *http.Request, conn *wsframe.Conn, nc net.Conn) { echoAll(conn, nc) })
+	_, port, _ := net.SplitHostPort(srv.Listener.Addr().String())
+	portNum, _ := strconv.Atoi(port)
+	target := netxtest.SOCKS5Request{Name: true, Host: reqProxyTarget, Port: portNum}
+	for _, tt := range []struct {
+		name, requestID    string
+		viaOwn, viaAmbient bool
+	}{
+		{name: "custom", requestID: "req_custom", viaOwn: true},
+		{name: "none", requestID: "req_none"},
+		{name: "inherit", requestID: "req_inherit", viaAmbient: true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			p := newReqProxied(t)
+			on, delay := true, int64(100)
+			conn, err := p.s.Connect(t.Context(), ConnectInputDTO{RequestID: tt.requestID, URL: "ws://" + net.JoinHostPort(reqProxyTarget, port) + "/feed",
+				AutoReconnect: &on, ReconnectDelayMs: &delay})
+			if err != nil {
+				t.Fatal(err)
+			}
+			id := conn.ConnID
+			opens := func(e *events) int { return strings.Count(e.statesOf(id), "open") }
+			p.ev.waitFor(t, "open", func(e *events) bool { return opens(e) == 1 })
+			// The server drops the first connection: the reconnect goes
+			// the same way.
+			if _, err := p.s.Send(t.Context(), SendInputDTO{ConnID: id, Text: "drop"}); err != nil {
+				t.Fatal(err)
+			}
+			p.ev.waitFor(t, "the reconnect", func(e *events) bool { return opens(e) == 2 })
+			hs := p.ev.state(id, "open").Handshake
+			if err := p.s.Close(t.Context(), CloseInputDTO{ConnID: id, Code: 1000}); err != nil {
+				t.Fatal(err)
+			}
+			want := []netxtest.SOCKS5Request{target, target}
+			if got := p.own.Requests(); tt.viaOwn != (len(got) > 0) || tt.viaOwn && !slices.Equal(got, want) {
+				t.Errorf("the request's proxy got %+v", got)
+			}
+			if got := p.ambient.Requests(); tt.viaAmbient != (len(got) > 0) || tt.viaAmbient && !slices.Equal(got, want) {
+				t.Errorf("the proxy in effect got %+v", got)
+			}
+			wantRemote := "127.0.0.1:" + port
+			switch {
+			case tt.viaOwn:
+				wantRemote = p.own.Addr()
+				if got := p.own.Credentials(); !slices.Equal(got, []string{"alice:" + proxySecret, "alice:" + proxySecret}) {
+					t.Errorf("credentials = %q", got)
+				}
+			case tt.viaAmbient:
+				wantRemote = p.ambient.Addr()
+			}
+			if hs == nil || hs.RemoteAddr != wantRemote {
+				t.Errorf("handshake = %+v, want remote address %s", hs, wantRemote)
+			}
+			p.ev.mu.Lock()
+			all, _ := json.Marshal(p.ev.states)
+			p.ev.mu.Unlock()
+			if strings.Contains(string(all), proxySecret) {
+				t.Errorf("an event shows the proxy's password: %s", all)
+			}
+		})
+	}
+}
+
+// TestRequestProxyRefused: a request proxy that cannot be used fails
+// Connect before anything is dialed: no URL (netx.proxy_invalid_url,
+// source request), an undefined variable (template.unresolved, listed
+// with the URL's).
+func TestRequestProxyRefused(t *testing.T) {
+	t.Parallel()
+	p := newReqProxied(t)
+	url := "ws://" + reqProxyTarget + ":7/feed"
+	_, err := p.s.Connect(t.Context(), ConnectInputDTO{RequestID: "req_no_url", URL: url})
+	if e, ok := errors.AsType[*errs.Error](err); !ok || e.Code != netx.CodeProxyInvalidURL || e.Details["source"] != request.ProxySourceRequest {
+		t.Errorf("no URL: %v", err)
+	}
+	_, err = p.s.Connect(t.Context(), ConnectInputDTO{RequestID: "req_undef", URL: url + "?{{other}}"})
+	if e, ok := errors.AsType[*errs.Error](err); !ok || e.Code != template.CodeUnresolved || e.Details["names"] != "other,nope" && e.Details["names"] != "nope,other" {
+		t.Errorf("undefined: %v %v", err, e)
+	}
+	if n := p.ambient.Accepted() + p.own.Accepted(); n != 0 {
+		t.Errorf("the proxies accepted %d connections", n)
 	}
 }

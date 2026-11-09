@@ -37,7 +37,9 @@ export function CloseAll(): $CancellablePromise<number> {
  * udp:state events: opening, then open, or closed with the error. It
  * fails at once only for input that cannot be used: an undefined variable
  * (template.unresolved), an invalid address (udpclient.invalid_address),
- * IP version (udp.invalid_ip_version), family or maximum size.
+ * IP version (udp.invalid_ip_version), family or maximum size, and a
+ * request proxy that cannot be used (netx.proxy_invalid_url, request.*;
+ * WithProxy).
  */
 export function Open($in: $models.OpenInputDTO): $CancellablePromise<$models.ConnectionDTO> {
     return $Call.ByID(2413021131, $in);

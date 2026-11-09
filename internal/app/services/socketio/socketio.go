@@ -81,6 +81,8 @@ type SocketIOService struct {
 	tweak       func(*sioclient.Options)
 	// auth builds the auth of the handshake (WithAuth); nil sends none.
 	auth request.HandshakeAuthFunc
+	// proxies gives the request's own proxy (WithProxy); nil inherits.
+	proxies ProxySource
 
 	mu    sync.Mutex
 	conns map[string]*conn
@@ -164,8 +166,9 @@ func (s *SocketIOService) ServiceName() string { return Domain }
 // namespace and the auth payload are rendered with the scopes of
 // in.RequestID; undefined names are reported together as one
 // template.unresolved error (details.names) unless in.AllowUnresolved
-// (ENV-11). It fails at once for those, and for options that cannot be
-// used (sioclient.invalid_*).
+// (ENV-11). It fails at once for those, for options that cannot be used
+// (sioclient.invalid_*) and for a request proxy that cannot be used
+// (netx.proxy_invalid_url, request.*; WithProxy).
 func (s *SocketIOService) Connect(ctx context.Context, in ConnectInputDTO) (operation.StartedDTO, error) {
 	if err := ctx.Err(); err != nil {
 		return operation.StartedDTO{}, errs.Wrap(err, errs.KindOf(err), "Connecting was interrupted.")
@@ -185,12 +188,18 @@ func (s *SocketIOService) Connect(ctx context.Context, in ConnectInputDTO) (oper
 		return operation.StartedDTO{}, err
 	}
 	c := &conn{s: s, requestID: in.RequestID, checks: s.checks, log: streamcheck.NewLog(time.Now())}
+	if c.proxy, err = s.requestProxy(ctx, in.RequestID, r); err != nil {
+		return operation.StartedDTO{}, err
+	}
 	headers := toHeaders(in.Headers)
 	if err := s.addAuth(ctx, r, &in, &headers, c); err != nil {
 		if uerr := r.unresolvedErr(); uerr != nil {
 			return operation.StartedDTO{}, uerr
 		}
 		return operation.StartedDTO{}, err
+	}
+	if c.masker == nil {
+		c.masker = secretMasker(nil, c.proxy)
 	}
 	if err := r.unresolvedErr(); err != nil {
 		return operation.StartedDTO{}, err
@@ -268,7 +277,7 @@ func (s *SocketIOService) Connect(ctx context.Context, in ConnectInputDTO) (oper
 
 // addAuth adds the auth of in's request to the handshake (WithAuth):
 // to headers and in.URL, or to in.AuthPayload, and keeps its secrets in
-// c's masker.
+// c's masker, with the password of c's proxy.
 func (s *SocketIOService) addAuth(ctx context.Context, r *rendering, in *ConnectInputDTO, headers *[]httpclient.Header, c *conn) error {
 	switch in.AuthIn {
 	case "", projectfile.SocketIOAuthHandshake, projectfile.SocketIOAuthPayload:
@@ -283,14 +292,12 @@ func (s *SocketIOService) addAuth(ctx context.Context, r *rendering, in *Connect
 	}
 	h, err := s.auth(ctx, request.HandshakeInput{
 		RequestID: in.RequestID, Protocol: request.HandshakeSocketIO, URL: in.URL,
-		Expand: r.render, Ready: r.unresolvedErr,
+		Expand: r.render, Ready: r.unresolvedErr, Proxy: c.proxy,
 	})
 	if err != nil {
 		return err
 	}
-	if len(h.Secrets) > 0 {
-		c.masker = httpclient.NewSecretMasker(h.Secrets)
-	}
+	c.masker = secretMasker(h.Secrets, c.proxy)
 	if in.AuthIn == projectfile.SocketIOAuthPayload && sioclient.Version(in.Version) == sioclient.VersionV2 {
 		// Socket.IO v2 has no auth payload: its servers read the
 		// credentials from socket.handshake.query, the URL's query that
@@ -309,6 +316,18 @@ func (s *SocketIOService) addAuth(ctx context.Context, r *rendering, in *Connect
 	*headers = append(*headers, request.HandshakeHeaders(*headers, h.Headers, false)...)
 	in.URL = request.WithAuthQuery(in.URL, h.Query)
 	return nil
+}
+
+// secretMasker masks secrets and the password of proxy; nil when there is
+// nothing to mask.
+func secretMasker(secrets []string, proxy request.Proxy) *httpclient.SecretMasker {
+	if pw := proxy.Secret(); pw != "" {
+		secrets = append(append([]string(nil), secrets...), pw)
+	}
+	if len(secrets) == 0 {
+		return nil
+	}
+	return httpclient.NewSecretMasker(secrets)
 }
 
 // logURL is the part of a connection URL the app log may hold: scheme and
@@ -429,9 +448,12 @@ type conn struct {
 	requestID string
 	client    *sioclient.Client
 	finished  bool // run returned (under s.mu)
-	// masker hides the auth's secrets in the items (AUTH-31); nil
-	// without any.
+	// masker hides the auth's secrets and the proxy's password in the
+	// items (AUTH-31); nil without any.
 	masker *httpclient.SecretMasker
+	// proxy is the request's own proxy (WithProxy), put in the context of
+	// every dial of the connection; the zero Proxy inherits.
+	proxy request.Proxy
 
 	mu   sync.Mutex
 	emit *operation.Emitter[ItemDTO]
@@ -448,6 +470,9 @@ func (c *conn) run(ctx context.Context, emit *operation.Emitter[ItemDTO]) error 
 	c.mu.Lock()
 	c.emit = emit
 	c.mu.Unlock()
+	// The transports keep the values of this context for every request
+	// and dial they make, the upgrade's included.
+	ctx = c.proxy.Context(ctx)
 	defer func() {
 		c.s.mu.Lock()
 		c.finished = true

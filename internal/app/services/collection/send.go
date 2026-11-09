@@ -289,3 +289,51 @@ func LoadVariablesSource(s *CollectionService, ctx context.Context, id string) (
 	}
 	return VariablesSource{Globals: globals, FolderVariables: vars, Folders: folders, Workspace: ws}, nil
 }
+
+// LoadRequestProxy returns the own proxy of request id, of any kind
+// (settings.proxy, docs/network.md#a-requests-own-proxy), pending edits
+// included and its local password merged in: what the TCP, UDP,
+// WebSocket, Socket.IO and gRPC services connect with, whose other
+// settings come from the editor. Like LoadHTTPSource it is not a method,
+// so it is not bound. It fails with collection.not_found for an ID that
+// is not a request of the open project, and
+// requestsecrets.local_data_failed when the password cannot be read.
+func LoadRequestProxy(s *CollectionService, ctx context.Context, id string) (projectfile.RequestProxy, error) {
+	if err := interrupted(ctx, "Loading the request"); err != nil {
+		return projectfile.RequestProxy{}, err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	ws, tree, err := s.currentLocked(false)
+	if err != nil {
+		return projectfile.RequestProxy{}, err
+	}
+	n := tree.Node(id)
+	var file projectfile.File
+	switch {
+	case n != nil && n.Kind == core.KindRequest && n.File != nil:
+		file = n.File
+	case n == nil && isScratchLocked(ws, tree, id):
+		it, err := scratchOf(ws).Get(id)
+		if err != nil {
+			return projectfile.RequestProxy{}, err
+		}
+		file = it.File
+	default:
+		return projectfile.RequestProxy{}, errs.New(errs.NotFound, "The request is no longer in the project.").
+			WithCode(core.CodeNotFound).
+			WithHint("It may have been moved or deleted; reload the project.").
+			WithDetail("id", id)
+	}
+	var secrets map[string]string
+	if p, ok := s.saver.Get(saveKey{tree, id}); ok {
+		file, secrets = p.file, p.secrets
+	} else if secrets, err = readSecretsFor(ws.LocalDir, id, file); err != nil {
+		return projectfile.RequestProxy{}, err
+	}
+	p := projectfile.ProxyOf(mergeSecrets(file, secrets))
+	if p == nil {
+		return projectfile.RequestProxy{}, nil
+	}
+	return *p, nil
+}

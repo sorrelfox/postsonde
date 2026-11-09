@@ -73,6 +73,10 @@ type TCPService struct {
 	requireTLS bool
 	// tweak changes the client options of every connection, for tests.
 	tweak func(*tcpclient.Options)
+	// proxies and scopes give the request's own proxy (WithProxy); nil
+	// inherits.
+	proxies ProxySource
+	scopes  Scopes
 
 	mu    sync.Mutex
 	conns map[string]*connection
@@ -150,8 +154,10 @@ func (s *TCPService) ServiceShutdown() error {
 // once only for input that cannot be used: an invalid address
 // (tcpclient.invalid_address) or one with {{variables}}
 // (tcp.variables_unsupported), an invalid framing
-// (framing.invalid_options), and for TLS a custom CA bundle or a client
-// certificate that cannot be loaded (tlsconf.*).
+// (framing.invalid_options), a request proxy that cannot be used
+// (netx.proxy_invalid_url, request.*, template.unresolved; WithProxy),
+// and for TLS a custom CA bundle or a client certificate that cannot be
+// loaded (tlsconf.*).
 func (s *TCPService) Connect(ctx context.Context, in ConnectInputDTO) (ConnectionDTO, error) {
 	if err := ctx.Err(); err != nil {
 		return ConnectionDTO{}, errs.Wrap(err, errs.KindOf(err), "Connecting was interrupted.")
@@ -174,6 +180,10 @@ func (s *TCPService) Connect(ctx context.Context, in ConnectInputDTO) (Connectio
 			return ConnectionDTO{}, err
 		}
 	}
+	proxy, err := s.requestProxy(ctx, in.RequestID)
+	if err != nil {
+		return ConnectionDTO{}, err
+	}
 	timeout := time.Duration(0) // tcpclient.DefaultConnectTimeout
 	if in.ConnectTimeoutMs != nil {
 		timeout = time.Duration(*in.ConnectTimeoutMs) * time.Millisecond
@@ -184,8 +194,9 @@ func (s *TCPService) Connect(ctx context.Context, in ConnectInputDTO) (Connectio
 
 	id := newConnID()
 	// The connection outlives this call, so it gets a context of its own,
-	// marked as the user's connect so the dialer allows it (PRV-05).
-	cctx, cancel := context.WithCancel(netx.WithUserOp(context.Background(), netx.UserOp{Kind: Domain + ".connect", ID: id}))
+	// marked as the user's connect so the dialer allows it (PRV-05), with
+	// the request's own proxy.
+	cctx, cancel := context.WithCancel(proxy.Context(netx.WithUserOp(context.Background(), netx.UserOp{Kind: Domain + ".connect", ID: id})))
 	c := &connection{
 		id:        id,
 		requestID: in.RequestID,

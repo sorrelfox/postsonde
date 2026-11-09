@@ -84,7 +84,7 @@ func HandshakeAuth(ctx context.Context, s *HTTPService, in request.HandshakeInpu
 	if p == nil {
 		return out, nil
 	}
-	b := request.HTTPBuild{OAuth2: p, InsecureSkipVerify: s.defaultInsecure()}
+	b := request.HTTPBuild{OAuth2: p, InsecureSkipVerify: s.defaultInsecure(), Proxy: in.Proxy}
 	b.Request.Settings = httpclient.DefaultSettings()
 	ctx = netx.WithUserOp(ctx, netx.UserOp{Kind: string(in.Protocol) + ".oauth2_token", ID: in.RequestID})
 	log, err := s.obtainToken(ctx, &b, tokenAuto, nil)

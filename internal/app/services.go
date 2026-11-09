@@ -195,12 +195,15 @@ func services(cfg Config) []application.Service {
 		return &httpclient.ClientCert{Certificate: c.Certificate, Description: c.Describe()}, nil
 	}
 
-	// Raw TCP connections belong to the open project's requests, so they
-	// are closed whenever the open workspace changes (docs/tcp.md). TLS
-	// over TCP (TCP-02) uses the same trust and client certificates as
-	// the other protocols.
-	tcpService := tcp.New(dialer, emitEvent, logger, tcp.WithTrust(trust.Roots), tcp.WithClientCerts(pickClientCert),
-		tcp.WithRequireTLSVerification(requireTLS))
+	// The own proxy of a TCP, UDP, WebSocket, Socket.IO or gRPC request
+	// (settings.proxy, docs/network.md#a-requests-own-proxy), read from its
+	// file with the password from the local side file: those services get
+	// their other settings from the editor. Set once the collection
+	// service exists (below).
+	var collectionService *collection.CollectionService
+	requestProxy := func(ctx context.Context, id string) (projectfile.RequestProxy, error) {
+		return collection.LoadRequestProxy(collectionService, ctx, id)
+	}
 	// The open project's cookie jars (its shared jar and, with separate
 	// cookies per environment, one per environment; CK-03): one registry
 	// and one Jars for every protocol and the cookie manager, so a cookie
@@ -217,7 +220,7 @@ func services(cfg Config) []application.Service {
 	// Postman exports (EXP-03) save with the native save dialog.
 	// Polling pauses while every window is hidden; edits from several
 	// windows are versioned (collection/windows.go).
-	collectionService := collection.New(workspaces, emitEvent, logger, collection.WithFilePicker(pickImportFile),
+	collectionService = collection.New(workspaces, emitEvent, logger, collection.WithFilePicker(pickImportFile),
 		collection.WithWatch(collection.DefaultWatchInterval),
 		collection.WithWindowCount(windows.Count),
 		collection.WithSaveDialog(func(ctx context.Context, d collection.SaveDialog) (string, error) {
@@ -264,17 +267,24 @@ func services(cfg Config) []application.Service {
 	// (docs/websocket.md, docs/cookies.md).
 	wsService := websocket.New(dialer, websocket.WorkspaceJars(cookieJars), emitEvent, logger,
 		websocket.WithScopes(requestScopes), websocket.WithTrust(trust.Roots), websocket.WithClientCerts(pickClientCert),
-		websocket.WithRequireTLSVerification(requireTLS), websocket.WithAuth(handshakeAuth), websocket.WithChecks(streamChecks))
+		websocket.WithRequireTLSVerification(requireTLS), websocket.WithAuth(handshakeAuth), websocket.WithChecks(streamChecks),
+		websocket.WithProxy(requestProxy))
 	// Socket.IO connections run as operations and use the same cookie jar
 	// and trust settings (docs/socketio.md).
 	sioService := socketioservice.New(operations, dialer, websocket.WorkspaceJars(cookieJars), logger,
 		socketioservice.WithScopes(requestScopes), socketioservice.WithTrust(trust.Roots), socketioservice.WithClientCerts(pickClientCert),
 		socketioservice.WithRequireTLSVerification(requireTLS), socketioservice.WithAuth(handshakeAuth),
-		socketioservice.WithChecks(streamChecks))
+		socketioservice.WithChecks(streamChecks), socketioservice.WithProxy(requestProxy))
 	// UDP sockets (UDP-01) belong to the open project's requests like TCP
 	// connections; through a SOCKS5 proxy their datagrams go through its
 	// UDP ASSOCIATE relay (SOCKS-07, docs/udp.md).
-	udpService := udp.New(dialer, emitEvent, logger, udp.WithScopes(udp.Scopes(requestScopes)))
+	udpService := udp.New(dialer, emitEvent, logger, udp.WithScopes(udp.Scopes(requestScopes)), udp.WithProxy(requestProxy))
+	// Raw TCP connections belong to the open project's requests, so they
+	// are closed whenever the open workspace changes (docs/tcp.md). TLS
+	// over TCP (TCP-02) uses the same trust and client certificates as
+	// the other protocols.
+	tcpService := tcp.New(dialer, emitEvent, logger, tcp.WithTrust(trust.Roots), tcp.WithClientCerts(pickClientCert),
+		tcp.WithRequireTLSVerification(requireTLS), tcp.WithProxy(requestProxy, tcp.Scopes(requestScopes)))
 	workspaceEmit := func(name string, data any) {
 		if name == workspace.EventChanged {
 			// Another project has other proxy scopes (SOCKS-08).
@@ -464,7 +474,7 @@ func services(cfg Config) []application.Service {
 		grpc.WithRequireTLSVerification(requireTLS), grpc.WithAllowedDirs(allowedDirs),
 		// The request's auth in the call's metadata (AUTH-31).
 		grpc.WithAuth(handshakeAuth, grpc.Scopes(requestScopes)),
-		grpc.WithChecks(streamChecks))
+		grpc.WithChecks(streamChecks), grpc.WithProxy(requestProxy, grpc.Scopes(requestScopes)))
 	// A change of the proxy in effect closes the idle kept-alive
 	// connections of every pool, so none opened with the old route is
 	// reused (SOCKS-05, docs/network.md#pools-and-proxy-changes). The

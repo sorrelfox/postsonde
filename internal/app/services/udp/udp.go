@@ -66,6 +66,8 @@ type UDPService struct {
 	logger   *slog.Logger
 	interval time.Duration // batch interval; 0 = stream default
 	scopes   Scopes
+	// proxies gives the request's own proxy (WithProxy); nil inherits.
+	proxies ProxySource
 	// tweak changes the client options of every socket, for tests.
 	tweak func(*udpclient.Options)
 
@@ -123,7 +125,9 @@ func (s *UDPService) ServiceShutdown() error {
 // udp:state events: opening, then open, or closed with the error. It
 // fails at once only for input that cannot be used: an undefined variable
 // (template.unresolved), an invalid address (udpclient.invalid_address),
-// IP version (udp.invalid_ip_version), family or maximum size.
+// IP version (udp.invalid_ip_version), family or maximum size, and a
+// request proxy that cannot be used (netx.proxy_invalid_url, request.*;
+// WithProxy).
 func (s *UDPService) Open(ctx context.Context, in OpenInputDTO) (ConnectionDTO, error) {
 	if err := ctx.Err(); err != nil {
 		return ConnectionDTO{}, errs.Wrap(err, errs.KindOf(err), "Opening was interrupted.")
@@ -166,10 +170,16 @@ func (s *UDPService) Open(ctx context.Context, in OpenInputDTO) (ConnectionDTO, 
 		return ConnectionDTO{}, err
 	}
 
+	proxy, err := s.requestProxy(ctx, in.RequestID)
+	if err != nil {
+		return ConnectionDTO{}, err
+	}
+
 	id := newConnID()
 	// The socket outlives this call, so it gets a context of its own,
-	// marked as the user's open so the dialer allows it (PRV-05).
-	cctx, cancel := context.WithCancel(netx.WithUserOp(context.Background(), netx.UserOp{Kind: Domain + ".open", ID: id}))
+	// marked as the user's open so the dialer allows it (PRV-05), with the
+	// request's own proxy.
+	cctx, cancel := context.WithCancel(proxy.Context(netx.WithUserOp(context.Background(), netx.UserOp{Kind: Domain + ".open", ID: id})))
 	c := &connection{
 		id:        id,
 		requestID: in.RequestID,

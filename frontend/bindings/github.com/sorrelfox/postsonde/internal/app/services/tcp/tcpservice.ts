@@ -38,8 +38,10 @@ export function CloseAll(): $CancellablePromise<number> {
  * once only for input that cannot be used: an invalid address
  * (tcpclient.invalid_address) or one with {{variables}}
  * (tcp.variables_unsupported), an invalid framing
- * (framing.invalid_options), and for TLS a custom CA bundle or a client
- * certificate that cannot be loaded (tlsconf.*).
+ * (framing.invalid_options), a request proxy that cannot be used
+ * (netx.proxy_invalid_url, request.*, template.unresolved; WithProxy),
+ * and for TLS a custom CA bundle or a client certificate that cannot be
+ * loaded (tlsconf.*).
  */
 export function Connect($in: $models.ConnectInputDTO): $CancellablePromise<$models.ConnectionDTO> {
     return $Call.ByID(4041754423, $in);

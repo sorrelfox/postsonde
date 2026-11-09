@@ -99,7 +99,8 @@ export function ExampleMessage($in: $models.MessageInputDTO): $CancellablePromis
  * It fails at once, without starting anything, for input that cannot be
  * sent: {{variables}}, no method, a method that is not in the loaded
  * .proto files, a message that does not fit the input type, metadata that
- * is not valid, and an invalid address.
+ * is not valid, an invalid address, and a request proxy that cannot be
+ * used (netx.proxy_invalid_url, request.*; WithProxy).
  */
 export function Invoke($in: $models.InvokeInputDTO): $CancellablePromise<operation$0.StartedDTO> {
     return $Call.ByID(2288141795, $in);

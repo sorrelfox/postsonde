@@ -120,6 +120,8 @@ type WebSocketService struct {
 	// auth builds the auth of the upgrade request (WithAuth); nil sends
 	// none.
 	auth request.HandshakeAuthFunc
+	// proxies gives the request's own proxy (WithProxy); nil inherits.
+	proxies ProxySource
 
 	mu    sync.Mutex
 	conns map[string]*connection
@@ -237,7 +239,8 @@ func (s *WebSocketService) ServiceShutdown() error {
 // {{variables}} rendered anew for every attempt.
 //
 // It fails at once only for input that cannot be used: those variables,
-// or an invalid URL, header or subprotocol (wsclient.*).
+// an invalid URL, header or subprotocol (wsclient.*), or a request proxy
+// that cannot be used (netx.proxy_invalid_url, request.*; WithProxy).
 func (s *WebSocketService) Connect(ctx context.Context, in ConnectInputDTO) (ConnectionDTO, error) {
 	if err := ctx.Err(); err != nil {
 		return ConnectionDTO{}, errs.Wrap(err, errs.KindOf(err), "Connecting was interrupted.")
@@ -282,10 +285,14 @@ func (s *WebSocketService) newClient(ctx context.Context, c *connection, in Conn
 	}
 	headers := toHeaders(in.Headers)
 	a := &attempt{}
+	if a.proxy, err = s.requestProxy(ctx, in.RequestID, r); err != nil {
+		return nil, err
+	}
+	var secrets []string
 	if s.auth != nil && in.RequestID != "" {
 		h, err := s.auth(ctx, request.HandshakeInput{
 			RequestID: in.RequestID, Protocol: request.HandshakeWebSocket, URL: in.URL,
-			Expand: r.render, Ready: r.unresolvedErr,
+			Expand: r.render, Ready: r.unresolvedErr, Proxy: a.proxy,
 		})
 		if err != nil {
 			if uerr := r.unresolvedErr(); uerr != nil {
@@ -295,9 +302,13 @@ func (s *WebSocketService) newClient(ctx context.Context, c *connection, in Conn
 		}
 		headers = append(headers, request.HandshakeHeaders(headers, h.Headers, false)...)
 		in.URL = request.WithAuthQuery(in.URL, h.Query)
-		if len(h.Secrets) > 0 {
-			a.masker = httpclient.NewSecretMasker(h.Secrets)
-		}
+		secrets = h.Secrets
+	}
+	if pw := a.proxy.Secret(); pw != "" {
+		secrets = append(secrets, pw)
+	}
+	if len(secrets) > 0 {
+		a.masker = httpclient.NewSecretMasker(secrets)
 	}
 	if err := r.unresolvedErr(); err != nil {
 		return nil, err
@@ -356,7 +367,7 @@ func (s *WebSocketService) newClient(ctx context.Context, c *connection, in Conn
 	}
 	a.client = client
 	c.mu.Lock()
-	c.masker = a.masker
+	c.masker, c.proxy = a.masker, a.proxy
 	c.mu.Unlock()
 	return client, nil
 }
@@ -405,8 +416,9 @@ func (s *WebSocketService) runAttempt(c *connection, client *wsclient.Client) {
 		kind = Domain + ".reconnect"
 	}
 	// The connection outlives Connect, so it gets a context of its own,
-	// marked as the user's connect so the dialer allows it (PRV-05).
-	ctx, cancel := context.WithCancel(netx.WithUserOp(context.Background(), netx.UserOp{Kind: kind, ID: c.id}))
+	// marked as the user's connect so the dialer allows it (PRV-05), with
+	// the request's own proxy as this attempt rendered it.
+	ctx, cancel := context.WithCancel(c.proxy.Context(netx.WithUserOp(context.Background(), netx.UserOp{Kind: kind, ID: c.id})))
 	c.client, c.url, c.cancel, c.opened = client, client.URL(), cancel, false
 	if c.closing {
 		cancel() // closed while waiting to reconnect: Connect fails at once
@@ -703,8 +715,10 @@ type connection struct {
 	messagesSent, received int64
 	bytesSent, bytesRecv   int64
 
-	// masker is the latest attempt's (attempt.masker).
+	// masker and proxy are the latest attempt's (attempt.masker,
+	// attempt.proxy).
 	masker *httpclient.SecretMasker
+	proxy  request.Proxy
 
 	seq int64 // used by flush only (one goroutine)
 
@@ -719,9 +733,12 @@ type connection struct {
 // attempt ties the callbacks of one wsclient.Client to it.
 type attempt struct {
 	client *wsclient.Client
-	// masker hides the auth's secrets in the URL and handshake shown
-	// (AUTH-31); nil without any.
+	// masker hides the auth's secrets and the proxy's password in the URL
+	// and handshake shown (AUTH-31); nil without any.
 	masker *httpclient.SecretMasker
+	// proxy is the request's own proxy (WithProxy); the zero Proxy
+	// inherits.
+	proxy request.Proxy
 }
 
 // item is a state change or a message, in the order they happened.

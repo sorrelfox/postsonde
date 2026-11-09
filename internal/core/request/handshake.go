@@ -261,6 +261,10 @@ type HandshakeInput struct {
 	// goes on the network (an OAuth 2.0 token request): an error from it
 	// (the connection's undefined variables) stops there. nil is ready.
 	Ready func() error
+	// Proxy is the request's own proxy (settings.proxy), which an OAuth
+	// 2.0 token request made for the handshake goes through too; the zero
+	// Proxy inherits the proxy in effect.
+	Proxy Proxy
 }
 
 // Handshake is the auth a handshake sends.

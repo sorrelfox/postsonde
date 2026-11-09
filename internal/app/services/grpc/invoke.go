@@ -21,6 +21,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/grpc/transport"
 	"github.com/sorrelfox/postsonde/internal/core/httpclient"
 	"github.com/sorrelfox/postsonde/internal/core/netx"
+	"github.com/sorrelfox/postsonde/internal/core/request"
 	coresettings "github.com/sorrelfox/postsonde/internal/core/settings"
 )
 
@@ -78,6 +79,11 @@ type clientKey struct {
 	// certKey is cert's certificate, which tells the clients apart (the
 	// same while the certificate is unchanged).
 	certKey *tls.Certificate
+	// proxy is the request's own proxy: the zero Proxy (inherit) for the
+	// proxy in effect. A client's connections are all of one proxy
+	// setting, so a call never reuses a connection opened through
+	// another one.
+	proxy request.Proxy
 }
 
 // Invoke starts a call of any kind and returns its operation ID at once.
@@ -97,7 +103,8 @@ type clientKey struct {
 // It fails at once, without starting anything, for input that cannot be
 // sent: {{variables}}, no method, a method that is not in the loaded
 // .proto files, a message that does not fit the input type, metadata that
-// is not valid, and an invalid address.
+// is not valid, an invalid address, and a request proxy that cannot be
+// used (netx.proxy_invalid_url, request.*; WithProxy).
 func (s *GRPCService) Invoke(ctx context.Context, in InvokeInputDTO) (operation.StartedDTO, error) {
 	if err := ctx.Err(); err != nil {
 		return operation.StartedDTO{}, errs.Wrap(err, errs.KindOf(err), "Starting the call was interrupted.")
@@ -136,9 +143,20 @@ func (s *GRPCService) Invoke(ctx context.Context, in InvokeInputDTO) (operation.
 	if err != nil {
 		return operation.StartedDTO{}, err
 	}
-	md, masker, err := s.callAuth(ctx, in, md)
+	proxy, err := s.requestProxy(ctx, in.RequestID)
 	if err != nil {
 		return operation.StartedDTO{}, err
+	}
+	md, secrets, err := s.callAuth(ctx, in, md, proxy)
+	if err != nil {
+		return operation.StartedDTO{}, err
+	}
+	if pw := proxy.Secret(); pw != "" {
+		secrets = append(secrets, pw)
+	}
+	var masker *httpclient.SecretMasker
+	if len(secrets) > 0 {
+		masker = httpclient.NewSecretMasker(secrets)
 	}
 	var deadline time.Duration
 	if in.DeadlineMs != nil {
@@ -147,7 +165,7 @@ func (s *GRPCService) Invoke(ctx context.Context, in InvokeInputDTO) (operation.
 		}
 		deadline = time.Duration(*in.DeadlineMs) * time.Millisecond
 	}
-	key := clientKey{insecure: in.VerifyTLS != nil && !*in.VerifyTLS, connect: -1}
+	key := clientKey{insecure: in.VerifyTLS != nil && !*in.VerifyTLS, connect: -1, proxy: proxy}
 	if in.TLS && key.insecure && s.requireTLS {
 		return operation.StartedDTO{}, coresettings.TLSVerificationRequiredError("gRPC")
 	}
@@ -476,6 +494,11 @@ func (s *GRPCService) client(key clientKey) *transport.Client {
 		}
 	}
 	d := s.dialer
+	if key.proxy.Set {
+		// Every dial of this client, whatever its context, goes through
+		// the request's proxy (or directly for none).
+		d = netx.RequestProxyDialer(d, key.proxy.URL)
+	}
 	o := transport.Options{Transport: httpclient.TransportOptions{InsecureSkipVerify: key.insecure, RootCAs: key.roots, ClientCertificate: key.cert}}
 	switch {
 	case key.connect > 0:

@@ -26,36 +26,23 @@ func WithAuth(auth request.HandshakeAuthFunc, scopes Scopes) Option {
 	return func(s *GRPCService) { s.auth, s.scopes = auth, scopes }
 }
 
-// callAuth returns md with the auth of in's request added, and the
-// masker of its secrets (nil without any). Undefined variables in the
-// auth fields refuse the call (template.unresolved): there is no "call
-// anyway" for gRPC.
-func (s *GRPCService) callAuth(ctx context.Context, in InvokeInputDTO, md transport.Metadata) (transport.Metadata, *httpclient.SecretMasker, error) {
+// callAuth returns md with the auth of in's request added, and its
+// secrets to mask. Undefined variables in the auth fields refuse the
+// call (template.unresolved): there is no "call anyway" for gRPC.
+func (s *GRPCService) callAuth(ctx context.Context, in InvokeInputDTO, md transport.Metadata, proxy request.Proxy) (transport.Metadata, []string, error) {
 	if s.auth == nil || in.RequestID == "" {
 		return md, nil, nil
 	}
-	var chain template.Chain
-	if s.scopes != nil {
-		c, err := s.scopes(ctx, in.RequestID)
-		if err != nil {
-			return nil, nil, err
-		}
-		chain = c
-	}
-	resolver := template.Resolver{Scopes: chain}
-	expand := func(text string) (string, error) {
-		res := resolver.Render(text)
-		if err := res.Err(); err != nil {
-			return "", err
-		}
-		return res.Text, nil
+	expand, err := s.expander(ctx, in.RequestID)
+	if err != nil {
+		return nil, nil, err
 	}
 	scheme := "http://"
 	if in.TLS {
 		scheme = "https://"
 	}
 	h, err := s.auth(ctx, request.HandshakeInput{
-		RequestID: in.RequestID, Protocol: request.HandshakeGRPC, URL: scheme + strings.TrimSpace(in.Address), Expand: expand,
+		RequestID: in.RequestID, Protocol: request.HandshakeGRPC, URL: scheme + strings.TrimSpace(in.Address), Expand: expand, Proxy: proxy,
 	})
 	if err != nil {
 		return nil, nil, err
@@ -67,11 +54,7 @@ func (s *GRPCService) callAuth(ctx context.Context, in InvokeInputDTO, md transp
 	for _, a := range request.HandshakeHeaders(rows, h.Headers, true) {
 		md = append(md, transport.MDEntry{Key: a.Name, Value: a.Value})
 	}
-	var m *httpclient.SecretMasker
-	if len(h.Secrets) > 0 {
-		m = httpclient.NewSecretMasker(h.Secrets)
-	}
-	return md, m, nil
+	return md, h.Secrets, nil
 }
 
 // maskMetadata hides the auth's secrets in the metadata shown.
