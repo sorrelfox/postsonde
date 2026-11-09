@@ -251,7 +251,12 @@ const maxEvents = 1000
 // recorder collects the timing of one Send from httptrace and netx.Trace
 // hooks. Hooks may run on other goroutines (dials, the HTTP/2 read loop)
 // and after Send returned (a dial Go finishes in the background), so
-// everything is under mu and nothing is recorded once done.
+// everything is under mu and nothing is recorded once done. Each hop's
+// request carries hooks of its own (request), bound to that hop: a hook
+// that runs late still updates the hop whose request it traces, not the
+// one that is current by then. HTTP/2 writes a request on a goroutine of
+// its own, so its WroteRequest can come after the response, and after the
+// redirect that started the next hop.
 type recorder struct {
 	now   func() time.Time
 	start time.Time
@@ -293,8 +298,9 @@ func newRecorder(now func() time.Time, start time.Time) *recorder {
 	return &recorder{now: now, start: start, hops: []*hopRecord{{start: start}}}
 }
 
-// record adds an event and applies update to the current hop.
-func (r *recorder) record(name, detail string, update func(h *hopRecord, at time.Time)) {
+// record adds an event and, when update is set, runs it with the time of
+// the event, under the lock.
+func (r *recorder) record(name, detail string, update func(at time.Time)) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.done {
@@ -303,7 +309,7 @@ func (r *recorder) record(name, detail string, update func(h *hopRecord, at time
 	at := r.now()
 	r.addEvent(at, name, detail)
 	if update != nil {
-		update(r.hops[len(r.hops)-1], at)
+		update(at)
 	}
 }
 
@@ -320,11 +326,11 @@ func (r *recorder) addEvent(at time.Time, name, detail string) {
 // it does not use.
 func setup(h *hopRecord) bool { return h.gotConn.IsZero() }
 
-// clientTrace returns the httptrace hooks of r.
-func (r *recorder) clientTrace() *httptrace.ClientTrace {
+// clientTrace returns the httptrace hooks of the request of hop h.
+func (r *recorder) clientTrace(h *hopRecord) *httptrace.ClientTrace {
 	return &httptrace.ClientTrace{
 		GetConn: func(hostPort string) {
-			r.record(EventGetConn, hostPort, func(h *hopRecord, at time.Time) {
+			r.record(EventGetConn, hostPort, func(at time.Time) {
 				switch {
 				case h.getConn.IsZero():
 					h.getConn = at
@@ -337,7 +343,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 			})
 		},
 		DNSStart: func(i httptrace.DNSStartInfo) {
-			r.record(EventDNSStart, i.Host, func(h *hopRecord, at time.Time) {
+			r.record(EventDNSStart, i.Host, func(at time.Time) {
 				if setup(h) && h.dnsStart.IsZero() {
 					h.dnsStart = at
 				}
@@ -352,14 +358,14 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 				}
 				detail = strings.Join(addrs, ", ")
 			}
-			r.record(EventDNSDone, detail, func(h *hopRecord, at time.Time) {
+			r.record(EventDNSDone, detail, func(at time.Time) {
 				if setup(h) && !h.dnsStart.IsZero() {
 					h.dnsDone = at
 				}
 			})
 		},
 		ConnectStart: func(network, addr string) {
-			r.record(EventConnectStart, network+" "+addr, func(h *hopRecord, at time.Time) {
+			r.record(EventConnectStart, network+" "+addr, func(at time.Time) {
 				if setup(h) && h.connStart.IsZero() {
 					h.connStart = at
 				}
@@ -370,7 +376,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 			if err != nil {
 				detail += ": " + err.Error()
 			}
-			r.record(EventConnectDone, detail, func(h *hopRecord, at time.Time) {
+			r.record(EventConnectDone, detail, func(at time.Time) {
 				switch {
 				case !setup(h) || h.connStart.IsZero():
 				case err != nil:
@@ -381,7 +387,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 			})
 		},
 		TLSHandshakeStart: func() {
-			r.record(EventTLSStart, "", func(h *hopRecord, at time.Time) {
+			r.record(EventTLSStart, "", func(at time.Time) {
 				if setup(h) && h.tlsStart.IsZero() {
 					h.tlsStart = at
 				}
@@ -395,7 +401,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 					detail += ", " + cs.NegotiatedProtocol
 				}
 			}
-			r.record(EventTLSDone, detail, func(h *hopRecord, at time.Time) {
+			r.record(EventTLSDone, detail, func(at time.Time) {
 				if setup(h) && !h.tlsStart.IsZero() {
 					h.tlsDone = at
 				}
@@ -416,7 +422,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 				}
 			}
 			detail += " " + c.LocalAddr + " → " + c.RemoteAddr
-			r.record(EventGotConn, detail, func(h *hopRecord, at time.Time) {
+			r.record(EventGotConn, detail, func(at time.Time) {
 				if h.gotConn.IsZero() {
 					h.gotConn = at
 					h.conn = c
@@ -429,7 +435,6 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 			if r.done {
 				return
 			}
-			h := r.hops[len(r.hops)-1]
 			for _, v := range values {
 				if r.proxyAuth != "" && v == r.proxyAuth && strings.EqualFold(key, "Proxy-Authorization") {
 					continue // the proxy's credentials, not the request's
@@ -439,7 +444,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 		},
 		WroteHeaders: func() { r.record(EventWroteHeaders, "", nil) },
 		WroteRequest: func(i httptrace.WroteRequestInfo) {
-			r.record(EventWroteRequest, errDetail(i.Err), func(h *hopRecord, at time.Time) {
+			r.record(EventWroteRequest, errDetail(i.Err), func(at time.Time) {
 				if h.wroteRequest.IsZero() {
 					h.wroteRequest = at
 				}
@@ -450,7 +455,7 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 			return nil
 		},
 		GotFirstResponseByte: func() {
-			r.record(EventFirstByte, "", func(h *hopRecord, at time.Time) {
+			r.record(EventFirstByte, "", func(at time.Time) {
 				if h.firstByte.IsZero() {
 					h.firstByte = at
 				}
@@ -459,9 +464,10 @@ func (r *recorder) clientTrace() *httptrace.ClientTrace {
 	}
 }
 
-// netxTrace returns the dial hooks of r. They only add events: the phases
-// come from httptrace (docs/http-client.md, "netx trace and httptrace").
-func (r *recorder) netxTrace() *netx.Trace {
+// netxTrace returns the dial hooks of the request of hop h. They add
+// events, and a proxy hop to h: the phases come from httptrace
+// (docs/http-client.md, "netx trace and httptrace").
+func (r *recorder) netxTrace(h *hopRecord) *netx.Trace {
 	return &netx.Trace{
 		DialStart: func(i netx.DialStartInfo) { r.record(EventDialStart, i.Network+" "+i.Address+via(i.Via), nil) },
 		DialDone: func(i netx.DialDoneInfo) {
@@ -474,7 +480,7 @@ func (r *recorder) netxTrace() *netx.Trace {
 				return
 			}
 			hop := *i.Proxy
-			r.record(EventProxyHop, hop.String(), func(h *hopRecord, at time.Time) {
+			r.record(EventProxyHop, hop.String(), func(at time.Time) {
 				if i.Err != nil || !setup(h) || h.proxy != nil {
 					return
 				}
@@ -543,15 +549,17 @@ func (r *recorder) authChallenge(resp *http.Response, detail string) {
 }
 
 // request starts recording the request of the current hop: req as the
-// transport gets it, its body read through body (nil for none).
-func (r *recorder) request(req *http.Request, body *bodyCapture) {
+// transport gets it, its body read through body (nil for none). It returns
+// req with the hop's hooks in its context.
+func (r *recorder) request(req *http.Request, body *bodyCapture) *http.Request {
 	r.mu.Lock()
-	defer r.mu.Unlock()
-	if r.done {
-		return
-	}
 	h := r.hops[len(r.hops)-1]
-	h.req = sentRecord{method: req.Method, url: displayURL(req.URL), target: req.URL.RequestURI(), body: body}
+	if !r.done {
+		h.req = sentRecord{method: req.Method, url: displayURL(req.URL), target: req.URL.RequestURI(), body: body}
+	}
+	r.mu.Unlock()
+	ctx := netx.WithTrace(req.Context(), r.netxTrace(h))
+	return req.WithContext(httptrace.WithClientTrace(ctx, r.clientTrace(h)))
 }
 
 func (r *recorder) endHop(resp *http.Response, at time.Time) {

@@ -1545,6 +1545,12 @@ Reuse, precisely:
   HEADERS) frame is written.
 - h2 hooks run on the connection's goroutines, and a racing dial runs on
   its own, so the recorder is guarded by a mutex.
+- h2 writes a request on a goroutine of its own, so the answer, and the
+  redirect that follows it, can come before the request's `WroteRequest`.
+  Each hop's request carries hooks of its own (added by the client's
+  RoundTripper for that hop), so a hook that runs late still lands on the
+  hop whose request it traces, not on the next one; that hop's
+  `RequestWrite` ends at the first response byte.
 
 ### Redirects
 

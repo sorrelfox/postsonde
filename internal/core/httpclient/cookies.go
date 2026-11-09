@@ -44,7 +44,8 @@ func (c *Client) WithCookieJar(jar CookieJar) *Client {
 // headers onto it:
 //
 //   - it starts recording the hop's request for Response.Request and
-//     Hop.Request, reading the body through a capture (sent.go);
+//     Hop.Request, reading the body through a capture (sent.go), and adds
+//     the hop's timing hooks to its context (recorder.request);
 //   - it records the Cookie header each hop sends;
 //   - with a jar, it adds the jar's cookies to the request (a copy) and
 //     stores the response's Set-Cookie values before net/http follows a
@@ -66,7 +67,7 @@ func (t *cookieTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	if st.rec != nil {
 		var body *bodyCapture
 		req, body = captureBody(req)
-		st.rec.request(req, body)
+		req = st.rec.request(req, body)
 	}
 
 	resp, err := t.base.RoundTrip(req)

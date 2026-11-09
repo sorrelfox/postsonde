@@ -344,9 +344,8 @@ func (c *Client) send(ctx context.Context, r Request, stream StreamFunc, target 
 	defer hdr.stop()
 
 	ctx = context.WithValue(ctx, stateKey{}, st)
+	// The recorder's hooks go on each hop's request (cookieTransport).
 	// Both compose with the traces the caller put in ctx; ours run first.
-	ctx = netx.WithTrace(ctx, rec.netxTrace())
-	ctx = httptrace.WithClientTrace(ctx, rec.clientTrace())
 	ctx = httptrace.WithClientTrace(ctx, &httptrace.ClientTrace{
 		GetConn:              func(string) { st.stage.Store(int32(stageConnecting)) },
 		GotConn:              func(httptrace.GotConnInfo) { st.stage.Store(int32(stageWaiting)) },

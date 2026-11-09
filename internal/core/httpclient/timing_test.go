@@ -48,7 +48,7 @@ const allPhases = PhaseDNS | PhaseConnect | PhaseTLS | PhaseRequestWrite | Phase
 
 // TestRecorderPhases checks the phase arithmetic on scripted hook calls:
 // each step sets the clock (in ms after the start of Send), then calls one
-// hook.
+// hook of the current hop's request (after a redirect, the next one's).
 func TestRecorderPhases(t *testing.T) {
 	t.Parallel()
 
@@ -76,6 +76,12 @@ func TestRecorderPhases(t *testing.T) {
 	redirect := func(_ *httptrace.ClientTrace, r *recorder) {
 		next, _ := url.Parse("https://example.com/to")
 		r.redirect(fakeResponse(302, 1, "https://example.com/from"), &http.Request{URL: next})
+	}
+	// A hook of the first hop's request that runs after its redirect: h2
+	// writes a request on a goroutine of its own, and the answer can come
+	// first.
+	lateWrote := func(_ *httptrace.ClientTrace, r *recorder) {
+		r.clientTrace(r.hops[0]).WroteRequest(httptrace.WroteRequestInfo{})
 	}
 	refused := errors.New("connection refused")
 
@@ -166,16 +172,35 @@ func TestRecorderPhases(t *testing.T) {
 				Offsets:  PhaseOffsets{DNS: ms(1), Connect: ms(3), TLS: ms(7), RequestWrite: ms(16), Wait: ms(18)},
 			}},
 		},
+		{
+			name: "the redirected request's WroteRequest after the redirect",
+			steps: append(slices.Clone(newConn[:8]),
+				step{30, firstByte}, step{35, redirect}, step{35, lateWrote},
+				step{36, getConn}, step{36, gotConn(true)}, step{37, wrote}, step{40, firstByte}),
+			end: 45, reused: true,
+			want: Timing{RequestWrite: ms(1), Wait: ms(3), Download: ms(5), Total: ms(45), Observed: PhaseRequestWrite | PhaseWait | PhaseDownload,
+				Offsets: PhaseOffsets{RequestWrite: ms(1), Wait: ms(2), Download: ms(5)}},
+			redirects: []Timing{{
+				DNS: ms(2), Connect: ms(4), TLS: ms(8), RequestWrite: ms(14), Wait: 0, Total: ms(35),
+				Observed: PhaseDNS | PhaseConnect | PhaseTLS | PhaseRequestWrite | PhaseWait,
+				Offsets:  PhaseOffsets{DNS: ms(1), Connect: ms(3), TLS: ms(7), RequestWrite: ms(16), Wait: ms(30)},
+			}},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			clk := &fakeClock{t: epoch}
 			r := newRecorder(clk.now, epoch)
-			tr := r.clientTrace()
+			hop := r.hops[0]
+			tr := r.clientTrace(hop)
 			for _, s := range tt.steps {
 				clk.t = epoch.Add(ms(s.at))
 				s.call(tr, r)
+				// The next request carries the hooks of the hop it starts.
+				if h := r.hops[len(r.hops)-1]; h != hop {
+					hop, tr = h, r.clientTrace(h)
+				}
 			}
 			clk.t = epoch.Add(ms(tt.end))
 			got, conn, hops, events, _ := r.finish(fakeResponse(200, 1, "https://example.com/to"), 2, false)
@@ -224,7 +249,7 @@ func TestRecorderEvents(t *testing.T) {
 
 	clk := &fakeClock{t: epoch}
 	r := newRecorder(clk.now, epoch)
-	tr, nt := r.clientTrace(), r.netxTrace()
+	tr, nt := r.clientTrace(r.hops[0]), r.netxTrace(r.hops[0])
 	for range maxEvents + 5 {
 		tr.WroteHeaders()
 	}
@@ -240,7 +265,7 @@ func TestRecorderEvents(t *testing.T) {
 
 	r = newRecorder(clk.now, epoch)
 	r.close()
-	r.clientTrace().GetConn("x:1")
+	r.clientTrace(r.hops[0]).GetConn("x:1")
 	if len(r.events) != 0 {
 		t.Errorf("events after close = %+v", r.events)
 	}
