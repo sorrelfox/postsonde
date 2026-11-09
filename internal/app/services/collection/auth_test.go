@@ -17,6 +17,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/request"
 	"github.com/sorrelfox/postsonde/internal/core/requestsecrets"
 	"github.com/sorrelfox/postsonde/internal/core/storage/projectfile"
+	"github.com/sorrelfox/postsonde/internal/testutil/fakeclock"
 )
 
 const typedToken = "tok-Zoë-s3cr3t"
@@ -463,7 +464,10 @@ func TestInheritedAuth(t *testing.T) {
 	writeFile(t, dir, "users/admins/list.json", `{"kind": "http", "id": "req_list", "name": "List", "method": "GET", "auth": {"type": "none"}}`)
 	writeFile(t, dir, "broken/_folder.json", `{"kind": "folder", "id": `)
 	writeFile(t, dir, "broken/inner.json", `{"kind": "http", "id": "req_inner", "name": "Inner", "method": "GET"}`)
-	svc := New(manager, nil, nil)
+	// On a manual clock the folder edit below stays pending, as the test
+	// means it to, and no auto-save writes into the temp dirs while they
+	// are being removed.
+	svc := New(manager, nil, nil, withClock(fakeclock.New(clockStart)))
 	ctx := t.Context()
 
 	// head drops the folder's auth fields, checked below.
