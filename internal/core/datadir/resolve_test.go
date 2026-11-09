@@ -203,7 +203,12 @@ func TestAppFolder(t *testing.T) {
 	env := func(m map[string]string) func(string) string { return func(k string) string { return m[k] } }
 	none := env(nil)
 	j := filepath.Join
-	root := string(filepath.Separator)
+	// Absolute on every system (on Windows, the current drive): the
+	// AppImage case trusts only an absolute APPIMAGE.
+	root, err := filepath.Abs(string(filepath.Separator))
+	if err != nil {
+		t.Fatal(err)
+	}
 	tests := []struct {
 		name   string
 		goos   string
