@@ -330,6 +330,21 @@ func examples() []struct {
 				OpenTimeoutMs:    ptr(int64(5000)),
 			},
 		}},
+		{"http_proxy", &HTTPRequest{
+			ID:     "req_2f6a0c8e4b1d9573",
+			Name:   "Internal status",
+			Method: "GET",
+			URL:    "https://status.internal.example/v1",
+			Body:   Body{Mode: BodyNone},
+			Auth:   Auth{Type: AuthInherit},
+			Settings: RequestSettings{
+				Proxy: RequestProxy{
+					Mode:         ProxyCustom,
+					URL:          "socks5h://bob@jump.example.net:1080",
+					LocalSecrets: []string{ProxyPasswordMember},
+				},
+			},
+		}},
 		{"tcp", &TCPRequest{
 			ID:         "req_7d2b5e90c41a6f38",
 			Name:       "Echo server",

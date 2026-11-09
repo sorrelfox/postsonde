@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_2f6a0c8e4b1d9573",
+  "name": "Internal status",
+  "method": "GET",
+  "url": "https://status.internal.example/v1",
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "inherit"
+  },
+  "settings": {
+    "proxy": {
+      "mode": "custom",
+      "url": "socks5h://bob@jump.example.net:1080",
+      "localSecrets": [
+        "password"
+      ]
+    }
+  }
+}

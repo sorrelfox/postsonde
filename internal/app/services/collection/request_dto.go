@@ -326,7 +326,11 @@ type RequestSettingsDTO struct {
 	ReconnectMaxAttempts *int   `json:"reconnectMaxAttempts,omitempty"`
 	ReconnectDelayMs     *int64 `json:"reconnectDelayMs,omitempty"`
 	ReconnectMaxDelayMs  *int64 `json:"reconnectMaxDelayMs,omitempty"`
-	Extra                string `json:"extra"`
+	// Proxy is every kind's own proxy
+	// (docs/network.md#a-requests-own-proxy). Left out (null) when the
+	// request inherits the proxy in effect and keeps nothing else.
+	Proxy *RequestProxyDTO `json:"proxy,omitempty"`
+	Extra string           `json:"extra"`
 }
 
 // SSEReconnectDTO is an sse request's reconnection policy (SSE-03); a null
@@ -509,6 +513,7 @@ func kindRequestDTO(f projectfile.File) RequestDTO {
 				ConnectTimeoutMs: clonePtr(r.Settings.ConnectTimeoutMs),
 				TLS:              trueOrNil(r.Settings.TLS),
 				VerifyTLS:        clonePtr(r.Settings.VerifyTLS),
+				Proxy:            toProxyDTO(r.Settings.Proxy),
 				Extra:            extraText(r.Settings.Unknown),
 			},
 			Extra: extraText(r.Unknown),
@@ -542,6 +547,7 @@ func kindRequestDTO(f projectfile.File) RequestDTO {
 				ReconnectMaxAttempts: clonePtr(r.Settings.ReconnectMaxAttempts),
 				ReconnectDelayMs:     clonePtr(r.Settings.ReconnectDelayMs),
 				ReconnectMaxDelayMs:  clonePtr(r.Settings.ReconnectMaxDelayMs),
+				Proxy:                toProxyDTO(r.Settings.Proxy),
 				Extra:                extraText(r.Settings.Unknown),
 			},
 			Extra: extraText(r.Unknown),
@@ -576,6 +582,7 @@ func kindRequestDTO(f projectfile.File) RequestDTO {
 				ConnectTimeoutMs: clonePtr(r.Settings.ConnectTimeoutMs),
 				SendCookies:      clonePtr(r.Settings.SendCookies),
 				AckTimeoutMs:     clonePtr(r.Settings.AckTimeoutMs),
+				Proxy:            toProxyDTO(r.Settings.Proxy),
 				Extra:            extraText(r.Settings.Unknown),
 			},
 			Extra: extraText(r.Unknown),
@@ -611,6 +618,7 @@ func kindRequestDTO(f projectfile.File) RequestDTO {
 				DeadlineMs:       clonePtr(r.Settings.DeadlineMs),
 				Transport:        r.Settings.Transport,
 				Compression:      r.Settings.Compression,
+				Proxy:            toProxyDTO(r.Settings.Proxy),
 				Extra:            extraText(r.Settings.Unknown),
 			},
 			Extra: extraText(r.Unknown),
@@ -721,6 +729,7 @@ func (in RequestDTO) toFile() (projectfile.File, error) {
 				ConnectTimeoutMs: clonePtr(in.Settings.ConnectTimeoutMs),
 				TLS:              in.Settings.TLS != nil && *in.Settings.TLS,
 				VerifyTLS:        clonePtr(in.Settings.VerifyTLS),
+				Proxy:            c.proxy(in.Settings.Proxy),
 				Unknown:          c.extra("settings.extra", in.Settings.Extra),
 			},
 			Unknown: c.extra("extra", in.Extra),
@@ -756,6 +765,7 @@ func (in RequestDTO) toFile() (projectfile.File, error) {
 				ReconnectMaxAttempts: clonePtr(in.Settings.ReconnectMaxAttempts),
 				ReconnectDelayMs:     clonePtr(in.Settings.ReconnectDelayMs),
 				ReconnectMaxDelayMs:  clonePtr(in.Settings.ReconnectMaxDelayMs),
+				Proxy:                c.proxy(in.Settings.Proxy),
 				Unknown:              c.extra("settings.extra", in.Settings.Extra),
 			},
 			Unknown: c.extra("extra", in.Extra),
@@ -787,6 +797,7 @@ func (in RequestDTO) toFile() (projectfile.File, error) {
 				AckTimeoutMs:     clonePtr(in.Settings.AckTimeoutMs),
 				VerifyTLS:        clonePtr(in.Settings.VerifyTLS),
 				SendCookies:      clonePtr(in.Settings.SendCookies),
+				Proxy:            c.proxy(in.Settings.Proxy),
 				Unknown:          c.extra("settings.extra", in.Settings.Extra),
 			},
 			Unknown: c.extra("extra", in.Extra),
@@ -812,6 +823,7 @@ func (in RequestDTO) toFile() (projectfile.File, error) {
 				DeadlineMs:       clonePtr(in.Settings.DeadlineMs),
 				Transport:        grpcDefault(in.Settings.Transport, projectfile.GRPCTransportGRPC),
 				Compression:      grpcDefault(in.Settings.Compression, projectfile.GRPCCompressionIdentity),
+				Proxy:            c.proxy(in.Settings.Proxy),
 				Unknown:          c.extra("settings.extra", in.Settings.Extra),
 			},
 			Unknown: c.extra("extra", in.Extra),
@@ -1045,6 +1057,7 @@ func (c *converter) settings(s RequestSettingsDTO) projectfile.RequestSettings {
 		Reconnect:            c.reconnect(s.Reconnect),
 		GraphQLTransport:     c.graphQLTransport(s.GraphQLTransport),
 		GraphQLSchemaRefresh: c.graphQLSchemaRefresh(s.GraphQLSchemaRefresh),
+		Proxy:                c.proxy(s.Proxy),
 		Unknown:              c.extra("settings.extra", s.Extra),
 	}
 }
@@ -1322,6 +1335,7 @@ func toSettingsDTO(s projectfile.RequestSettings) RequestSettingsDTO {
 		Reconnect:            toReconnectDTO(s.Reconnect),
 		GraphQLTransport:     toGraphQLTransportDTO(s.GraphQLTransport),
 		GraphQLSchemaRefresh: toGraphQLSchemaRefreshDTO(s.GraphQLSchemaRefresh),
+		Proxy:                toProxyDTO(s.Proxy),
 		Extra:                extraText(s.Unknown),
 	}
 }

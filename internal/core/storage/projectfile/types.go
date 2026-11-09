@@ -276,8 +276,11 @@ type TCPSettings struct {
 	// TLS connects with TLS (TCP-02) instead of plain TCP.
 	TLS bool `json:"tls,omitempty"`
 	// VerifyTLS false turns off certificate verification with TLS.
-	VerifyTLS *bool   `json:"verifyTls,omitempty"`
-	Unknown   Unknown `json:"-"`
+	VerifyTLS *bool `json:"verifyTls,omitempty"`
+	// Proxy is the request's own proxy (docs/network.md#a-requests-own-proxy);
+	// the zero value inherits the proxy in effect.
+	Proxy   RequestProxy `json:"proxy,omitzero"`
+	Unknown Unknown      `json:"-"`
 }
 
 // Message formats of a WebSocket request's composer, for
@@ -373,9 +376,12 @@ type WebSocketSettings struct {
 	// ReconnectDelayMs is the first wait, doubled for each further
 	// reconnect (missing: 1000); ReconnectMaxDelayMs caps it (missing:
 	// 30000).
-	ReconnectDelayMs    *int64  `json:"reconnectDelayMs,omitempty"`
-	ReconnectMaxDelayMs *int64  `json:"reconnectMaxDelayMs,omitempty"`
-	Unknown             Unknown `json:"-"`
+	ReconnectDelayMs    *int64 `json:"reconnectDelayMs,omitempty"`
+	ReconnectMaxDelayMs *int64 `json:"reconnectMaxDelayMs,omitempty"`
+	// Proxy is the request's own proxy (docs/network.md#a-requests-own-proxy);
+	// the zero value inherits the proxy in effect.
+	Proxy   RequestProxy `json:"proxy,omitzero"`
+	Unknown Unknown      `json:"-"`
 }
 
 // Where a Socket.IO request's auth goes, for SocketIORequest.AuthIn
@@ -513,8 +519,11 @@ type SocketIOSettings struct {
 	// VerifyTLS false turns off certificate verification.
 	VerifyTLS *bool `json:"verifyTls,omitempty"`
 	// SendCookies false leaves the workspace cookie jar out.
-	SendCookies *bool   `json:"sendCookies,omitempty"`
-	Unknown     Unknown `json:"-"`
+	SendCookies *bool `json:"sendCookies,omitempty"`
+	// Proxy is the request's own proxy (docs/network.md#a-requests-own-proxy);
+	// the zero value inherits the proxy in effect.
+	Proxy   RequestProxy `json:"proxy,omitzero"`
+	Unknown Unknown      `json:"-"`
 }
 
 // GRPCRequest is a gRPC call file (kind "grpc", GRPC-01, GRPC-02, GRPC-10):
@@ -633,8 +642,11 @@ type GRPCSettings struct {
 	Transport string `json:"transport,omitempty"`
 	// Compression is the request compression (GRPC-24):
 	// GRPCCompressionIdentity (also when missing) or GRPCCompressionGzip.
-	Compression string  `json:"compression,omitempty"`
-	Unknown     Unknown `json:"-"`
+	Compression string `json:"compression,omitempty"`
+	// Proxy is the request's own proxy (docs/network.md#a-requests-own-proxy);
+	// the zero value inherits the proxy in effect.
+	Proxy   RequestProxy `json:"proxy,omitzero"`
+	Unknown Unknown      `json:"-"`
 }
 
 // Values of GRPCSettings.Transport and GRPCSettings.Compression.
@@ -1217,7 +1229,10 @@ type RequestSettings struct {
 	// nil (the member left out) never does: the schema is fetched only
 	// from the Fetch schema / Refresh button.
 	GraphQLSchemaRefresh *GraphQLSchemaRefresh `json:"graphqlSchemaRefresh,omitempty"`
-	Unknown              Unknown               `json:"-"`
+	// Proxy is the request's own proxy (docs/network.md#a-requests-own-proxy);
+	// the zero value inherits the proxy in effect.
+	Proxy   RequestProxy `json:"proxy,omitzero"`
+	Unknown Unknown      `json:"-"`
 }
 
 // GraphQLSchemaRefresh is the opt-in schema auto-refresh of a graphql

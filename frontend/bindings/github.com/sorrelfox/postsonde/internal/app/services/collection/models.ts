@@ -1597,6 +1597,40 @@ export interface RequestDTO {
 }
 
 /**
+ * RequestProxyDTO is a request's own proxy, settings.proxy of every kind
+ * (docs/network.md#a-requests-own-proxy, docs/file-format.md#settings).
+ */
+export interface RequestProxyDTO {
+    /**
+     * Mode is "inherit" (also ""), "custom" or "none". A mode this
+     * version does not know is kept, and sending refuses it.
+     */
+    "mode": string;
+
+    /**
+     * URL is the custom proxy, scheme://[user@]host[:port], {{variables}}
+     * unresolved; kept in the other modes too.
+     */
+    "url": string;
+
+    /**
+     * Password is the proxy user's password: a {{variable}} reference,
+     * or a typed value, which UpdateRequest keeps in the local side file,
+     * never in the project file.
+     */
+    "password": string;
+
+    /**
+     * LocalSecrets is ["password"] when the password is kept in local
+     * storage. With Password "" too, it was typed on another machine and
+     * is missing here. The editor removes the name when the user edits
+     * the password.
+     */
+    "localSecrets": string[] | null;
+    "extra": string;
+}
+
+/**
  * RequestSettingsDTO overrides app settings for one request; null means
  * "use the app setting".
  */
@@ -1706,6 +1740,13 @@ export interface RequestSettingsDTO {
     "reconnectMaxAttempts"?: number | null;
     "reconnectDelayMs"?: number | null;
     "reconnectMaxDelayMs"?: number | null;
+
+    /**
+     * Proxy is every kind's own proxy
+     * (docs/network.md#a-requests-own-proxy). Left out (null) when the
+     * request inherits the proxy in effect and keeps nothing else.
+     */
+    "proxy"?: RequestProxyDTO | null;
     "extra": string;
 }
 

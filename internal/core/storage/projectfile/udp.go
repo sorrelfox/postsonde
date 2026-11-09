@@ -52,8 +52,11 @@ type UDPSettings struct {
 	MaxDatagramBytes *int64 `json:"maxDatagramBytes,omitempty"`
 	// OpenTimeoutMs bounds DNS and the proxy's UDP association, in
 	// milliseconds; missing means 10 s, 0 no limit.
-	OpenTimeoutMs *int64  `json:"openTimeoutMs,omitempty"`
-	Unknown       Unknown `json:"-"`
+	OpenTimeoutMs *int64 `json:"openTimeoutMs,omitempty"`
+	// Proxy is the request's own proxy (docs/network.md#a-requests-own-proxy);
+	// the zero value inherits the proxy in effect.
+	Proxy   RequestProxy `json:"proxy,omitzero"`
+	Unknown Unknown      `json:"-"`
 }
 
 func (*UDPRequest) FileKind() Kind { return KindUDP }

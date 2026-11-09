@@ -62,6 +62,7 @@ export type {
     RecreateRequestInputDTO,
     RenameInputDTO,
     RequestDTO,
+    RequestProxyDTO,
     RequestSettingsDTO,
     ResponseExampleDTO,
     RestoreResultDTO,

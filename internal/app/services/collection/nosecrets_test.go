@@ -174,6 +174,36 @@ func TestProjectFilesNeverHoldSecrets(t *testing.T) {
 		}
 	}
 
+	// The password of a request's own proxy, of every kind: typed in the
+	// password field, and typed into the URL.
+	proxyIDs := map[string]string{}
+	for _, kind := range []string{"http", "graphql", "sse", "tcp", "udp", "websocket", "socketio", "grpc"} {
+		res, err := svc.CreateRequest(ctx, CreateRequestInputDTO{Name: "Proxied " + kind, Kind: kind, Index: -1})
+		if err != nil {
+			t.Fatal(err)
+		}
+		req := getRequest(t, svc, res.NodeID)
+		req.Settings.Proxy = &RequestProxyDTO{Mode: "custom", URL: "socks5h://bob@proxy.lan:1080", Password: "typed-proxy-" + kind}
+		update(t, svc, req, 1)
+		req = getRequest(t, svc, res.NodeID)
+		if req.Settings.Proxy == nil || req.Settings.Proxy.Password != "typed-proxy-"+kind {
+			t.Errorf("%s proxy = %+v", kind, req.Settings.Proxy)
+		}
+		req.Settings.Proxy = &RequestProxyDTO{Mode: "custom", URL: "socks5h://bob:url-proxy-" + kind + "@proxy.lan:1080"}
+		update(t, svc, req, 2)
+		proxyIDs[kind] = res.NodeID
+		secrets = append(secrets, "typed-proxy-"+kind, "url-proxy-"+kind)
+	}
+	writeFile(t, dir, "hand-proxy.json", `{"kind": "tcp", "id": "req_handproxy", "name": "Hand proxy", "address": "x:1",
+  "settings": {"proxy": {"mode": "custom", "url": "socks5://bob:hand-proxy-url@proxy.lan", "password": "hand-proxy-password"}}}`)
+	if _, err := svc.Reload(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := svc.Rename(ctx, RenameInputDTO{ID: "req_handproxy", Name: "Hand proxy 2"}); err != nil {
+		t.Fatal(err)
+	}
+	secrets = append(secrets, "hand-proxy-url", "hand-proxy-password")
+
 	folderRes, err := svc.CreateFolder(ctx, CreateFolderInputDTO{Name: "Admin", Index: -1})
 	if err != nil {
 		t.Fatal(err)
@@ -316,6 +346,15 @@ func TestProjectFilesNeverHoldSecrets(t *testing.T) {
 	}
 	if copyOf := getFolder(t, svc, dup.NodeID); copyOf.Auth.Value != "hand-folder-apikey" || copyOf.Variables[0].Value != "hand-folder-var" {
 		t.Errorf("duplicate = %+v", copyOf)
+	}
+	for kind, id := range proxyIDs {
+		got := getRequest(t, svc, id)
+		if p := got.Settings.Proxy; p == nil || p.Password != "url-proxy-"+kind || p.URL != "socks5h://bob@proxy.lan:1080" {
+			t.Errorf("%s proxy after the migration = %+v", kind, p)
+		}
+	}
+	if p := getRequest(t, svc, "req_handproxy").Settings.Proxy; p == nil || p.Password != "hand-proxy-url" || p.URL != "socks5://bob@proxy.lan" {
+		t.Errorf("hand-typed proxy after the migration = %+v", p)
 	}
 	for name, auth := range typed {
 		got := getRequest(t, svc, created[name])

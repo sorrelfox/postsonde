@@ -2,6 +2,7 @@ package requestsecrets
 
 import (
 	"maps"
+	"reflect"
 	"slices"
 	"strings"
 
@@ -88,11 +89,13 @@ func HasSecretVariables(vars []projectfile.Variable) bool {
 	return slices.ContainsFunc(vars, func(v projectfile.Variable) bool { return v.Secret })
 }
 
-// SplitFile is Split and SplitVariables for a whole project file: the auth
-// of an HTTP, GraphQL, SSE, WebSocket, Socket.IO or gRPC request or a folder, and the variables of a
-// folder or the workspace file. It returns a copy of f as it may be
-// written to the project and the side file's values (nil when there are
-// none). Other files, and f without secrets, are returned as they are.
+// SplitFile is Split, SplitProxy and SplitVariables for a whole project
+// file: the auth of an HTTP, GraphQL, SSE, WebSocket, Socket.IO or gRPC
+// request or a folder, the password of any request's own proxy, and the
+// variables of a folder or the workspace file. It returns a copy of f as
+// it may be written to the project and the side file's values (nil when
+// there are none). Other files, and f without secrets, are returned as
+// they are.
 func SplitFile(f projectfile.File) (projectfile.File, map[string]string) {
 	var values map[string]string
 	add := func(m map[string]string) {
@@ -104,43 +107,56 @@ func SplitFile(f projectfile.File) (projectfile.File, map[string]string) {
 		}
 		maps.Copy(values, m)
 	}
+	var out projectfile.File
 	switch r := f.(type) {
 	case *projectfile.HTTPRequest:
 		c := *r
 		var m map[string]string
 		c.Auth, m = Split(r.Auth)
 		add(m)
-		return &c, values
+		out = &c
 	case *projectfile.GraphQLRequest:
 		c := *r
 		var m map[string]string
 		c.Auth, m = Split(r.Auth)
 		add(m)
-		return &c, values
+		out = &c
 	case *projectfile.SSERequest:
 		c := *r
 		var m map[string]string
 		c.Auth, m = Split(r.Auth)
 		add(m)
-		return &c, values
+		out = &c
 	case *projectfile.WebSocketRequest:
 		c := *r
 		var m map[string]string
 		c.Auth, m = Split(r.Auth)
 		add(m)
-		return &c, values
+		out = &c
 	case *projectfile.SocketIORequest:
 		c := *r
 		var m map[string]string
 		c.Auth, m = Split(r.Auth)
 		add(m)
-		return &c, values
+		out = &c
 	case *projectfile.GRPCRequest:
 		c := *r
 		var m map[string]string
 		c.Auth, m = Split(r.Auth)
 		add(m)
-		return &c, values
+		out = &c
+	case *projectfile.TCPRequest:
+		if proxyUnchanged(r.Settings.Proxy) {
+			return f, nil
+		}
+		c := *r
+		out = &c
+	case *projectfile.UDPRequest:
+		if proxyUnchanged(r.Settings.Proxy) {
+			return f, nil
+		}
+		c := *r
+		out = &c
 	case *projectfile.Folder:
 		c := *r
 		var m map[string]string
@@ -155,39 +171,61 @@ func SplitFile(f projectfile.File) (projectfile.File, map[string]string) {
 		c.Variables, m = SplitVariables(r.Variables)
 		add(m)
 		return &c, values
+	default:
+		return f, nil
 	}
-	return f, nil
+	if p := projectfile.ProxyOf(out); p != nil {
+		var m map[string]string
+		*p, m = SplitProxy(*p)
+		add(m)
+	}
+	return out, values
+}
+
+// proxyUnchanged reports whether SplitProxy leaves p as it is: a request
+// of a kind without auth needs no copy then.
+func proxyUnchanged(p projectfile.RequestProxy) bool {
+	out, values := SplitProxy(p)
+	return len(values) == 0 && reflect.DeepEqual(out, p)
 }
 
 // MergeFile puts the local values back into f, the inverse of SplitFile:
-// its auth secret (Merge) and its secret variables (MergeVariables). It
-// returns a copy when something changed.
+// its auth secret (Merge), its own proxy's password (MergeProxy) and its
+// secret variables (MergeVariables). It returns a copy when something
+// changed.
 func MergeFile(f projectfile.File, values map[string]string) projectfile.File {
+	var out projectfile.File
 	switch r := f.(type) {
 	case *projectfile.HTTPRequest:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
-		return &c
+		out = &c
 	case *projectfile.GraphQLRequest:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
-		return &c
+		out = &c
 	case *projectfile.SSERequest:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
-		return &c
+		out = &c
 	case *projectfile.WebSocketRequest:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
-		return &c
+		out = &c
 	case *projectfile.SocketIORequest:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
-		return &c
+		out = &c
 	case *projectfile.GRPCRequest:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
-		return &c
+		out = &c
+	case *projectfile.TCPRequest:
+		c := *r
+		out = &c
+	case *projectfile.UDPRequest:
+		c := *r
+		out = &c
 	case *projectfile.Folder:
 		c := *r
 		c.Auth = Merge(r.Auth, values)
@@ -197,14 +235,22 @@ func MergeFile(f projectfile.File, values map[string]string) projectfile.File {
 		c := *r
 		c.Variables = MergeVariables(r.Variables, values)
 		return &c
+	default:
+		return f
 	}
-	return f
+	if p := projectfile.ProxyOf(out); p != nil {
+		*p = MergeProxy(*p, values)
+	}
+	return out
 }
 
 // NeedsLocal reports whether f has something its side file may hold: an
-// auth secret marked local or a secret variable. Reading the side file of
-// any other file is not needed.
+// auth secret or a proxy password marked local, or a secret variable.
+// Reading the side file of any other file is not needed.
 func NeedsLocal(f projectfile.File) bool {
+	if p := projectfile.ProxyOf(f); p != nil && p.PasswordIsLocal() {
+		return true
+	}
 	switch r := f.(type) {
 	case *projectfile.HTTPRequest:
 		return r.Auth.SecretIsLocal()

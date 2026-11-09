@@ -69,7 +69,8 @@ IDs below, and never written into the project (STO-04):
   [environments.md](environments.md#local-values)): the file keeps the
   shared value, a local value replaces it on one computer only;
 - passwords, tokens and API keys typed in a request's or folder's auth
-  ([Auth](#auth));
+  ([Auth](#auth)), and the password of a request's own proxy
+  ([Proxy](#proxy));
 - which environment is active, open tabs, expanded folders;
 - history, cookies, OAuth tokens, cached GraphQL schemas.
 
@@ -1229,7 +1230,7 @@ How the connection works is in [tcp.md](tcp.md).
 | `lineEnding` | string, optional | Appended to text messages when sent without a framing: left out for `"none"`, `"lf"` or `"crlf"`. Hex messages are sent exactly as written. |
 | `message` | string, optional | The composer's text as typed, also when it is not valid hex yet. |
 | `framing` | object, optional | How received bytes are split into messages and sent messages framed ([tcp.md](tcp.md#framing)); left out for no framing. `mode`: left out for `"none"`, `"newline"` or `"length"`. `delimiter` (newline): left out for `"lf"`, or `"crlf"`, appended to sent messages. `prefixBytes` (length): `1`, `2`, `4` (missing) or `8`. `byteOrder` (length): left out for `"big"`, or `"little"`. `maxMessageBytes`: the largest message received, whole number from 1 to 33554432; missing is 1 MiB. The other members are kept when the mode changes. Values this version does not know are kept, and connecting fails with `framing.invalid_options`. |
-| `settings` | object, optional | `connectTimeoutMs`: whole number, optional, the timeout of connect and the TLS handshake in milliseconds (`0`: no limit); missing uses the app's (10 s). `tls`: `true` connects with TLS (TCP-02); left out for plain TCP. `verifyTls`: `false` turns off certificate verification; left out verifies. |
+| `settings` | object, optional | `connectTimeoutMs`: whole number, optional, the timeout of connect and the TLS handshake in milliseconds (`0`: no limit); missing uses the app's (10 s). `tls`: `true` connects with TLS (TCP-02); left out for plain TCP. `verifyTls`: `false` turns off certificate verification; left out verifies. `proxy`: the request's own proxy, as for `http` ([Proxy](#proxy)). |
 
 The defaults are written as missing members, so a file that says
 `"sendMode": "text"` loses that member on its first save. Files written
@@ -1278,7 +1279,7 @@ unknown kind and leave it as it is.
 | `address` | string | `host:port` as typed (`localhost:5353`, `[::1]:53`, `{{dnsHost}}:53`). |
 | `sendMode` | string, optional | How `message` becomes a datagram: left out for `"text"` (UTF-8, `{{variables}}` rendered), `"hex"` or `"base64"` (the bytes as written). A mode this version does not know is kept. |
 | `message` | string, optional | The composer's text as typed, also when it is not valid hex or Base64 yet. |
-| `settings` | object, optional | `connected`: `true` receives only from the target and reports ICMP "port unreachable"; left out receives from any sender. `ipVersion`: left out for either, `"ipv4"` or `"ipv6"`. `maxDatagramBytes`: whole number from 1 to 65535, larger datagrams are not sent and longer received ones are cut; missing is 65535. `openTimeoutMs`: whole number, DNS and the proxy's UDP association in milliseconds (`0`: no limit); missing is 10 s. Values this version does not know are kept, and opening fails. |
+| `settings` | object, optional | `connected`: `true` receives only from the target and reports ICMP "port unreachable"; left out receives from any sender. `ipVersion`: left out for either, `"ipv4"` or `"ipv6"`. `maxDatagramBytes`: whole number from 1 to 65535, larger datagrams are not sent and longer received ones are cut; missing is 65535. `openTimeoutMs`: whole number, DNS and the proxy's UDP association in milliseconds (`0`: no limit); missing is 10 s. Values this version does not know are kept, and opening fails. `proxy`: the request's own proxy, as for `http` ([Proxy](#proxy)). |
 
 The defaults are written as missing members.
 
@@ -1321,7 +1322,7 @@ and reconnect settings. How the connection works is in
 | `messageFormat` | string, optional | Left out for `"text"`, or `"json"` (checked and beautified in the editor, sent as a text message), `"hex"` or `"base64"` (`message` spells the bytes of a binary message, WS-04: hex pairs as for TCP, or Base64 in either alphabet). A format this version does not know is kept; older versions keep `"hex"` and `"base64"` the same way and edit them as text. |
 | `auth` | [auth](#auth), optional | The request's [auth](#auth) (AUTH-31), sent with the upgrade request ([auth.md](auth.md#auth-on-every-protocol-auth-31)). Missing (as in files written before PostSonde applied auth to handshakes) reads as `"none"`, so such a file connects as before, and `"none"` is written as a missing member; requests created in the app start as `"inherit"`. Digest, OAuth 1.0, AWS Signature and Hawk are kept but refused when connecting. |
 | `savedMessages` | array, optional | Saved messages (WS-07), in the order the editor lists them; left out when there are none. Each is an object: `name` (the label, need not be unique), `text` (the message as typed; `{{variables}}` resolved only when a text or JSON message is sent, never in hex or Base64) and `format` (left out for `"text"`, or `"json"`, `"hex"` or `"base64"`, as `messageFormat`). Unknown members of each object are kept. Files without the member (written before saved messages existed) read as having none. |
-| `settings` | object, optional | `connectTimeoutMs`: whole number, the limit for connect, TLS and the upgrade in milliseconds (`0`: none; missing: 30 s). `verifyTls`: `false` accepts any certificate for `wss`. `sendCookies`: `false` leaves the project's cookie jar out of the handshake (missing: cookies are sent and stored). Keepalive (WS-09): `pingIntervalMs` sends a ping this often while connected (missing or `0`: none; at least 100); `pongTimeoutMs` closes the connection when a keepalive ping gets no pong in time (missing: 10 s; `0`: never). Reconnect (WS-10): `autoReconnect` `true` connects again after a drop (missing: off); `reconnectMaxAttempts` (missing: 5; `0`: no limit), `reconnectDelayMs` (the first wait, doubled for each further reconnect; missing: 1000) and `reconnectMaxDelayMs` (the cap; missing: 30000). Files written before these settings existed have none of them and connect as before: no keepalive, no reconnect. |
+| `settings` | object, optional | `connectTimeoutMs`: whole number, the limit for connect, TLS and the upgrade in milliseconds (`0`: none; missing: 30 s). `verifyTls`: `false` accepts any certificate for `wss`. `sendCookies`: `false` leaves the project's cookie jar out of the handshake (missing: cookies are sent and stored). Keepalive (WS-09): `pingIntervalMs` sends a ping this often while connected (missing or `0`: none; at least 100); `pongTimeoutMs` closes the connection when a keepalive ping gets no pong in time (missing: 10 s; `0`: never). Reconnect (WS-10): `autoReconnect` `true` connects again after a drop (missing: off); `reconnectMaxAttempts` (missing: 5; `0`: no limit), `reconnectDelayMs` (the first wait, doubled for each further reconnect; missing: 1000) and `reconnectMaxDelayMs` (the cap; missing: 30000). Files written before these settings existed have none of them and connect as before: no keepalive, no reconnect. `proxy`: the request's own proxy, as for `http` ([Proxy](#proxy)). |
 | `assertions` | array of [assertions](#assertions), optional | Checks on the messages received (TEST-08), run when the connection ends and on demand; left out when there are none. |
 
 The defaults are written as missing members.
@@ -1409,7 +1410,7 @@ composed. How the setup is loaded is in [grpc.md](grpc.md).
 | `message` | string, optional | The request message's JSON text as typed, also when it is not valid JSON yet. |
 | `metadata` | array of [rows](#rows), optional | Request metadata, including disabled rows. |
 | `auth` | [auth](#auth), optional | The request's [auth](#auth) (AUTH-31), sent in the call's metadata ([auth.md](auth.md#auth-on-every-protocol-auth-31)). Missing (as in files written before PostSonde applied auth to handshakes) reads as `"none"`, so such a file calls as before, and `"none"` is written as a missing member; requests created in the app start as `"inherit"`. Digest, OAuth 1.0, AWS Signature and Hawk are kept but refused when calling, as is `in` `"query"` (gRPC has no query string). |
-| `settings` | object, optional | `tls`: `true` connects with TLS (missing: plaintext HTTP/2). `verifyTls`: `false` accepts any certificate. `connectTimeoutMs`: whole number, the limit for connect and TLS in milliseconds (`0`: none). `deadlineMs`: the call's deadline in milliseconds (`0` or missing: none). `transport`: `"grpc-web"` or `"grpc-web-text"` calls a gRPC-Web endpoint with binary or Base64 framing (missing or `"grpc"`: gRPC over HTTP/2). `compression`: `"gzip"` compresses request messages (missing or `"identity"`: none). |
+| `settings` | object, optional | `tls`: `true` connects with TLS (missing: plaintext HTTP/2). `verifyTls`: `false` accepts any certificate. `connectTimeoutMs`: whole number, the limit for connect and TLS in milliseconds (`0`: none). `deadlineMs`: the call's deadline in milliseconds (`0` or missing: none). `transport`: `"grpc-web"` or `"grpc-web-text"` calls a gRPC-Web endpoint with binary or Base64 framing (missing or `"grpc"`: gRPC over HTTP/2). `compression`: `"gzip"` compresses request messages (missing or `"identity"`: none). `proxy`: the request's own proxy, as for `http` ([Proxy](#proxy)). |
 | `assertions` | array of [assertions](#assertions), optional | Checks on the response messages, the status and the metadata (TEST-08), run when the call ends and on demand; left out when there are none. |
 
 ### Proto setup
@@ -1555,7 +1556,7 @@ connection works is in [socketio.md](socketio.md#request-kind-socketio).
 | `listen` | array of strings, optional | The event names the log shows (SIO-04); missing: every event. |
 | `auth` | [auth](#auth), optional | The request's [auth](#auth) (AUTH-31), sent with the handshake ([auth.md](auth.md#auth-on-every-protocol-auth-31)). Missing (as in files written before PostSonde applied auth to handshakes) reads as `"none"`, so such a file connects as before, and `"none"` is written as a missing member; requests created in the app start as `"inherit"`. Digest, OAuth 1.0, AWS Signature and Hawk are kept but refused when connecting. |
 | `authIn` | string, optional | Where `auth` goes: left out for `"handshake"` (the headers and query string of every transport request), or `"payload"` (members of the CONNECT packet's auth payload: `token`, `username` and `password`, or the API key's name, after the members typed in `authPayload`, which win; with `version` `"v2"`, which has no auth payload, the same members as query parameters of the URL, after those typed there, which win). A value this version does not know is kept and refused when connecting. |
-| `settings` | object, optional | `connectTimeoutMs`: the limit for the handshake, the upgrade and the namespace CONNECT in milliseconds (`0`: none; missing: 20 s). `ackTimeoutMs`: how long an emit waits for its acknowledgement (missing: 10 s). `verifyTls`: `false` accepts any certificate. `sendCookies`: `false` leaves the project's cookie jar out. |
+| `settings` | object, optional | `connectTimeoutMs`: the limit for the handshake, the upgrade and the namespace CONNECT in milliseconds (`0`: none; missing: 20 s). `ackTimeoutMs`: how long an emit waits for its acknowledgement (missing: 10 s). `verifyTls`: `false` accepts any certificate. `sendCookies`: `false` leaves the project's cookie jar out. `proxy`: the request's own proxy, as for `http` ([Proxy](#proxy)). |
 | `assertions` | array of [assertions](#assertions), optional | Checks on the events received (TEST-08), run when the connection ends and on demand; left out when there are none. |
 
 The defaults are written as missing members.
@@ -1895,6 +1896,7 @@ uses the app setting, and `settings` itself is left out when it is empty.
 | `reconnect` | object, optional | sse requests only: the reconnection policy (SSE-03), [above](#sse-request-kind-sse). Missing: no reconnecting. |
 | `graphqlTransport` | object, optional | graphql requests only: the transport of each operation type (GQL-35), [above](#graphql-request-kind-graphql). Missing: the defaults. |
 | `graphqlSchemaRefresh` | object, optional | graphql requests only: the opt-in schema auto-refresh (GQL-19), `onSend` and `intervalMinutes`, [above](#graphql-request-kind-graphql). Missing: the schema is fetched only when the user asks. |
+| `proxy` | object, optional | The request's own proxy ([below](#proxy)). Every kind has it, in its own `settings`. Missing: the proxy in effect for the project. |
 
 An unknown `urlEncoding` or `httpVersion` value is kept in the file but
 fails the send with `request.invalid_setting` (details: `field`), rather
@@ -1912,6 +1914,56 @@ them as typed.
 PostSonde version wrote the member, so there is no migration and no version
 bump: a hand-written `0` now follows no redirect, as the member's name
 says. Write `10`, or leave it out, for the default.
+
+#### Proxy
+
+`settings.proxy` is a request's own proxy, the same member in the
+`settings` of every kind (http, graphql, sse, tcp, udp, websocket,
+socketio, grpc). Which connections use it and how it is resolved is in
+[network.md](network.md#a-requests-own-proxy).
+
+| Member | Type | Meaning |
+|---|---|---|
+| `mode` | string, optional | `"custom"`: connect through `url`. `"none"`: connect directly, whatever proxy is in effect. Left out (or `"inherit"`, written as a missing member): the proxy in effect for the project, of the active environment, the project or the app. |
+| `url` | string, optional | The proxy, `scheme://[user@]host[:port]`, any scheme the app's proxy takes: `socks5h`, `socks5`, `socks4a`, `socks4`, `http`, `https` ([network.md](network.md#proxy-urls)). May hold `{{variables}}`. Kept in the other modes too, so switching back finds it. Never holds a password: one typed into it is moved to `password` when the file is written. |
+| `password` | string, optional | The password of the proxy's user (the user name is in `url`). Secret, as an auth's: written to the file only when made of `{{variable}}` references; a typed value is kept in local storage. |
+| `localSecrets` | array of strings, optional | `["password"]` when the password is kept in local storage, keyed by the file's `id` (`proxy.password` in its side file). On another machine it is missing until typed again, and sending fails with `request.proxy_password_missing`. |
+
+The whole member is left out when the request inherits and keeps nothing
+else, so files written before it existed, which have none, connect as
+they did. A `mode` this version does not know is kept and fails the send
+with `request.invalid_setting` (details: `field` `settings.proxy.mode`);
+a custom proxy without a usable URL fails with `netx.proxy_invalid_url`
+(details: `source` `request`, `field`), never going direct.
+
+An HTTP request through a SOCKS5 proxy whose password is kept in local
+storage:
+
+```json
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_2f6a0c8e4b1d9573",
+  "name": "Internal status",
+  "method": "GET",
+  "url": "https://status.internal.example/v1",
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "inherit"
+  },
+  "settings": {
+    "proxy": {
+      "mode": "custom",
+      "url": "socks5h://bob@jump.example.net:1080",
+      "localSecrets": [
+        "password"
+      ]
+    }
+  }
+}
+```
 
 ### Assertions
 
@@ -2100,7 +2152,7 @@ secret values.
   `TCPRequest`, `WebSocketRequest`, `GRPCRequest`, `Environment`, each
   embedding `Head{SchemaVersion, Kind}`,
   and the shared `KeyValue`, `Variable`, `Body`, `Part`, `Auth`,
-  `RequestSettings`, `TCPSettings`, `WebSocketSettings`, `WebSocketMessage`, `GRPCProto`,
+  `RequestSettings`, `RequestProxy`, `TCPSettings`, `WebSocketSettings`, `WebSocketMessage`, `GRPCProto`,
   `GRPCSettings`, `FolderGRPC`, `SSEReconnect`, `Assertion`, `Extraction`. Each
   object type has an `Unknown` map with the members this version does not
   know. They all implement `File`.
@@ -2135,4 +2187,5 @@ secret values.
    (`Marshal` itself does not check auth members, so hand-written files
    still load). A new secret member must be added to
    `requestsecrets.SplitFile` and `MergeFile`, and to the project scan of
-   `TestProjectFilesNeverHoldSecrets`.
+   `TestProjectFilesNeverHoldSecrets`; `settings.proxy.password` is one
+   (`requestsecrets.SplitProxy`).

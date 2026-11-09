@@ -40,7 +40,7 @@ func udpRequestDTO(r *projectfile.UDPRequest) RequestDTO {
 			MaxDatagramBytes: clonePtr(r.Settings.MaxDatagramBytes),
 			OpenTimeoutMs:    clonePtr(r.Settings.OpenTimeoutMs),
 		},
-		Settings: RequestSettingsDTO{Extra: extraText(r.Settings.Unknown)},
+		Settings: RequestSettingsDTO{Proxy: toProxyDTO(r.Settings.Proxy), Extra: extraText(r.Settings.Unknown)},
 		Extra:    extraText(r.Unknown),
 	}
 }
@@ -65,6 +65,7 @@ func (c *converter) udpRequest(in RequestDTO) *projectfile.UDPRequest {
 			IPVersion:        o.IPVersion,
 			MaxDatagramBytes: clonePtr(o.MaxDatagramBytes),
 			OpenTimeoutMs:    clonePtr(o.OpenTimeoutMs),
+			Proxy:            c.proxy(in.Settings.Proxy),
 			Unknown:          c.extra("settings.extra", in.Settings.Extra),
 		},
 		Unknown: c.extra("extra", in.Extra),
