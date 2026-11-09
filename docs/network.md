@@ -1245,7 +1245,8 @@ and TCP clients have the same kind of test for their own messages.
 `netx/netxtest` (test support only) provides `NXDomainResolver` and
 `FailingResolver` for `Options.Resolver`, so DNS tests never depend on the
 network or the machine's resolver; `RecordingResolver`, which answers
-from a map and records every name it is asked for; `SOCKS5Server`, an
+from a map and records every name it is asked for (localhost, which the
+hosts file of Windows leaves out, gets 127.0.0.1 unrecorded); `SOCKS5Server`, an
 in-process SOCKS5 proxy (no authentication or username/password) that
 records each CONNECT, name or IP, and relays it to loopback servers, never
 resolving names through DNS (it has a `Hosts` map); and `HTTPProxyServer`,

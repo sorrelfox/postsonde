@@ -104,6 +104,9 @@ func (l *Lookups) add(name string) {
 // is asked for. Tests use it to prove that a name was, or was not, looked
 // up locally. The machine's hosts file is still consulted first by the Go
 // resolver, so use names that are not in it (RFC 2606 .test, .invalid).
+// localhost and the names under it get 127.0.0.1 and are not recorded:
+// the hosts file answers them on most systems, but not on Windows, whose
+// resolver knows them without it.
 func RecordingResolver(hosts map[string]string) (*net.Resolver, *Lookups) {
 	l := &Lookups{}
 	return &net.Resolver{
@@ -141,15 +144,19 @@ func serveRecording(c net.Conn, hosts map[string]string, l *Lookups) {
 		if end > len(q) {
 			return
 		}
-		name := strings.Join(labels, ".")
-		l.add(name)
+		name := strings.ToLower(strings.Join(labels, "."))
+		ip, known := hosts[name]
+		if name == "localhost" || strings.HasSuffix(name, ".localhost") {
+			ip, known = "127.0.0.1", true
+		} else {
+			l.add(strings.Join(labels, "."))
+		}
 		qtype := binary.BigEndian.Uint16(q[end-4 : end-2])
 
 		resp := append([]byte(nil), q[:end]...)
 		resp[2] = 0x80 | q[2]&0x01 // QR, keep RD
 		resp[3] = 0x80             // RA, NOERROR
 		clear(resp[6:12])
-		ip, known := hosts[strings.ToLower(name)]
 		addr, err := netip.ParseAddr(ip)
 		switch {
 		case !known || err != nil:
