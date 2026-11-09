@@ -188,10 +188,11 @@ func goTool(t *testing.T, root string, args ...string) {
 func javaClass(name string) string { return "Snippet_" + name }
 
 // javac compiles every case's Main.java, renamed, into root/classes, with
-// every lint warning an error.
+// every lint warning an error. The files are UTF-8, which javac before
+// Java 18 does not assume (on Windows it reads windows-1252).
 func javac(t *testing.T, root string, names []string) {
 	t.Helper()
-	args := []string{"-Xlint:all", "-Werror", "-d", filepath.Join(root, "classes")}
+	args := []string{"-encoding", "UTF-8", "-Xlint:all", "-Werror", "-d", filepath.Join(root, "classes")}
 	for _, n := range names {
 		code, err := os.ReadFile(filepath.Join(root, n, "Main.java"))
 		if err != nil {

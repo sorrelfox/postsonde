@@ -507,7 +507,8 @@ Running the commands against real servers is left to a manual check.
   and for each tool that is not installed: `TestSnippetsCompile` checks
   the code of every golden request with the language's tool
   (`python3 -m py_compile`, `node --check`, `go vet` over one module of
-  them all, `javac -Xlint:all -Werror` over them all, renamed);
+  them all, `javac -encoding UTF-8 -Xlint:all -Werror` over them all,
+  renamed);
   `TestSnippetsSend` runs the code of every curl and quoting case (curl,
   Python with requests, Node, wget, Go and Java built once, and HTTPie and
   `dotnet run` of the single file, .NET 10 or later, where installed)
