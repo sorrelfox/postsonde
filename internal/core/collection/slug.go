@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"syscall"
 	"unicode"
 	"unicode/utf8"
 
@@ -101,7 +102,17 @@ func Slug(name string) string {
 // entries. slug should come from Slug; an empty slug is FallbackSlug.
 func UniqueName(dir, slug, ext string, root bool) (string, error) {
 	entries, err := os.ReadDir(dir)
-	if err != nil && !errors.Is(err, fs.ErrNotExist) {
+	if errors.Is(err, fs.ErrNotExist) {
+		// A missing folder has every name free. Windows reports a file
+		// where the folder should be as a path not found too: that is an
+		// error, as on the other systems.
+		if fi, serr := os.Stat(dir); serr == nil && !fi.IsDir() {
+			err = &fs.PathError{Op: "readdir", Path: dir, Err: syscall.ENOTDIR}
+		} else {
+			err = nil
+		}
+	}
+	if err != nil {
 		return "", errs.Wrap(err, errs.KindOf(err), "The folder could not be read to choose a file name.").
 			WithCode(CodeReadDirFailed).
 			WithHint("Check that the project folder is readable.").
