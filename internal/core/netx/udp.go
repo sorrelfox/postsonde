@@ -109,6 +109,11 @@ func maxPayloadFor(addr net.Addr) int {
 	return MaxUDPPayloadIPv4
 }
 
+// IsPortUnreachable reports whether err, from a read or write of a
+// connected UDP socket, is the ICMP "port unreachable" that a datagram it
+// sent got back: ECONNREFUSED, or WSAECONNRESET on Windows.
+func IsPortUnreachable(err error) bool { return isErrno(err, portUnreachableErrnos) }
+
 // IsConnectedUDP reports whether conn receives only from the address it
 // was dialed to: false for an UnconnectedUDP dial. It looks through
 // wrappers with an Unwrap() net.Conn method.

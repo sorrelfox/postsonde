@@ -443,7 +443,7 @@ func (c *Conn) noteOf(err error) error {
 	if netx.IsDroppedDatagram(err) {
 		return err
 	}
-	if c.State() == StateOpen && netx.Classify(err) == netx.FailureRefused {
+	if c.State() == StateOpen && netx.IsPortUnreachable(err) {
 		return refused(err, c.o.Address)
 	}
 	return nil

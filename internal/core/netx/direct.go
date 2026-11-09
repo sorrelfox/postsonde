@@ -117,10 +117,13 @@ func (d *Direct) DialContext(ctx context.Context, network, address string) (net.
 	if err == nil && IsUDP(network) {
 		// A UDP socket (UDP-01): buffers large enough for any datagram,
 		// and unconnected when ctx asks for it, once the target is
-		// resolved and checked.
+		// resolved and checked. Connected, it reports an ICMP "port
+		// unreachable" on every system.
 		setUDPBuffers(conn)
 		if IsUnconnectedUDP(ctx) {
 			conn, err = unconnect(ctx, conn, network, address)
+		} else {
+			reportPortUnreachable(conn)
 		}
 	}
 	info := DialDoneInfo{Network: network, Address: address, Duration: d.now().Sub(start)}

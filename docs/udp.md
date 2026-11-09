@@ -53,7 +53,11 @@ keeps `ReadFrom` visible (it counts the bytes too).
 - **Direct, connected** (the default). `net.Dialer` with `"udp"`: the
   name is resolved, `Options.Guard` checks the address, and the socket is
   connected: it receives only from the target, and an ICMP "port
-  unreachable" for a datagram arrives as `ECONNREFUSED` on the next read.
+  unreachable" for a datagram arrives as `ECONNREFUSED` on the next read
+  (`netx.IsPortUnreachable`). On Windows it arrives as `WSAECONNRESET`,
+  and only because netx turns that report back on for a connected socket:
+  Go turns it off for every UDP socket there (`SIO_UDP_CONNRESET`), since
+  an unconnected one would fail its reads for any peer that went away.
 - **Direct, unconnected** (`netx.UnconnectedUDP(ctx)`). Dialed as above
   (so resolution and the guard are the same), then replaced by an
   unconnected socket bound to the same local IP address and a port the OS

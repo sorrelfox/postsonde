@@ -1175,6 +1175,7 @@ hint whatever the protocol. The classification lives here, in
 f := netx.Classify(err)        // FailureDNSNotFound, FailureReset, FailureTLSExpired, … or FailureNone
 e := netx.ConnError(err, addr) // *errs.Error with kind, netx.* code, message and hint; nil for FailureNone
 netx.IsReset(err)              // ECONNRESET, ECONNABORTED, EPIPE (and the Winsock numbers)
+netx.IsPortUnreachable(err)    // a connected UDP socket's ICMP "port unreachable": ECONNREFUSED, WSAECONNRESET on Windows
 ```
 
 `Classify` looks through the whole error tree (`*url.Error`,

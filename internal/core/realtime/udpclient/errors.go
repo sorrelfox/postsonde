@@ -122,7 +122,7 @@ func writeError(err error, address string, size, max int) error {
 	if errors.Is(err, syscall.EMSGSIZE) {
 		return tooLarge(size, max, false)
 	}
-	if netx.Classify(err) == netx.FailureRefused {
+	if netx.IsPortUnreachable(err) {
 		return refused(err, address)
 	}
 	if e := netx.ConnError(err, address); e != nil {

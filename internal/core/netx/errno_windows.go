@@ -17,4 +17,7 @@ var (
 	refusedErrnos     = []syscall.Errno{wsaeConnRefused, syscall.ECONNREFUSED}
 	unreachableErrnos = []syscall.Errno{wsaeHostUnreach, wsaeNetUnreach, syscall.EHOSTUNREACH, syscall.ENETUNREACH}
 	resetErrnos       = []syscall.Errno{wsaeConnReset, wsaeConnAborted, syscall.ECONNRESET, syscall.ECONNABORTED, syscall.EPIPE}
+	// Winsock reports an ICMP "port unreachable" on a connected UDP
+	// socket as WSAECONNRESET (reportPortUnreachable).
+	portUnreachableErrnos = []syscall.Errno{wsaeConnReset, wsaeConnRefused, syscall.ECONNREFUSED}
 )
