@@ -1,0 +1,7 @@
+wscat -c 'wss://echo.test/socket?room=1&x=a%20b' \
+  -H 'Authorization: Bearer ••••••' \
+  -H 'Origin: https://app.test' \
+  -H 'X-Tricky: 100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\' \
+  -s chat.v1 \
+  -s graphql-ws \
+  -n

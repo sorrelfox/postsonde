@@ -1,0 +1,20 @@
+# source
+syntax = "proto3";
+message M {
+  int32 a =
+  string b = 2;
+  repeated
+}
+# tree
+File [0:71] Name="p.proto"
+  Decls[0]: Syntax [0:18]
+    Value: StringLit [9:17] Value="proto3"
+  Decls[1]: Message [19:71] Name=[27:28]"M" RBrace=70
+    Body[0]: Field [33:42] Type=[33:38]"int32" Name=[39:40]"a"
+    Body[1]: Field [45:58] Type=[45:51]"string" Name=[52:53]"b"
+      Number: IntLit [56:57] Raw="2" Value=2
+    Body[2]: Field [61:69] Type=[61:69]"repeated" Name=[69:69]""
+# errors
+4:3 [45:51] unexpected token: expected a field number, found "string"
+6:1 [70:71] unexpected token: expected a field name, found "}"
+# diagnostics

@@ -1,0 +1,433 @@
+{
+  "diagnostics": null,
+  "environments": 0,
+  "name": "Security schemes",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "basic",
+      "username": "{{basicAuth.username}}",
+      "password": "{{basicAuth.password}}"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "paths./basic.get @12:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/basic",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "inheritsBasic"
+      },
+      {
+        "at": "paths./bearer.get @16:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/bearer",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "bearer",
+            "token": "{{bearerAuth.token}}"
+          }
+        },
+        "request": "bearer"
+      },
+      {
+        "at": "paths./digest.get @21:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/digest",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "digest",
+            "username": "{{digestAuth.username}}",
+            "password": "{{digestAuth.password}}"
+          }
+        },
+        "request": "digest"
+      },
+      {
+        "at": "paths./key-header.get @26:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.parameter_ignored",
+            "Severity": "info",
+            "Message": "The parameter “X-API-Key” was left out: the auth sends it.",
+            "At": "paths./key-header.get @26:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/key-header",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "apikey",
+            "key": "X-API-Key",
+            "value": "{{headerKey.key}}"
+          }
+        },
+        "request": "keyHeader"
+      },
+      {
+        "at": "paths./key-query.get @36:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.parameter_ignored",
+            "Severity": "info",
+            "Message": "The parameter “api_key” was left out: the auth sends it.",
+            "At": "paths./key-query.get @36:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/key-query",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "apikey",
+            "key": "api_key",
+            "value": "{{queryKey.key}}",
+            "in": "query"
+          }
+        },
+        "request": "keyQuery"
+      },
+      {
+        "at": "paths./key-cookie.get @45:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.auth_changed",
+            "Severity": "warning",
+            "Message": "The “cookieKey” API key is sent as a cookie; it is imported as a Cookie header holding the key.",
+            "At": "paths./key-cookie.get @45:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/key-cookie",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "apikey",
+            "key": "Cookie",
+            "value": "session={{cookieKey.key}}"
+          }
+        },
+        "request": "keyCookie"
+      },
+      {
+        "at": "paths./oauth.get @50:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.auth_changed",
+            "Severity": "warning",
+            "Message": "PostSonde has no OAuth 2.0 flow: the “oauth” scheme became Bearer auth with {{oauth.token}}. Get an access token with the scopes read write (token URL https://auth.secure.example/token) and put it into that variable.",
+            "At": "paths./oauth.get @50:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/oauth",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "bearer",
+            "token": "{{oauth.token}}"
+          }
+        },
+        "request": "oauth"
+      },
+      {
+        "at": "paths./oidc.get @55:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.auth_changed",
+            "Severity": "warning",
+            "Message": "PostSonde has no OpenID Connect flow: the “oidc” scheme became Bearer auth with {{oidc.token}}. Get an access token (discovery document https://auth.secure.example/.well-known/openid-configuration) and put it into that variable.",
+            "At": "paths./oidc.get @55:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/oidc",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "bearer",
+            "token": "{{oidc.token}}"
+          }
+        },
+        "request": "oidc"
+      },
+      {
+        "at": "paths./mtls.get @60:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.auth_unsupported",
+            "Severity": "warning",
+            "Message": "PostSonde has no auth for “mtls” (mutual TLS), which the operation requires: no auth is sent. For mutual TLS, set up a client certificate for the host in the settings.",
+            "At": "paths./mtls.get @60:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/mtls",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "none"
+          }
+        },
+        "request": "mtls"
+      },
+      {
+        "at": "paths./hoba.get @65:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.auth_unsupported",
+            "Severity": "warning",
+            "Message": "PostSonde has no auth for “hoba” (HTTP hoba), which the operation requires: no auth is sent. Set up the credentials by hand, e.g. as a header.",
+            "At": "paths./hoba.get @65:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/hoba",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "none"
+          }
+        },
+        "request": "hoba"
+      },
+      {
+        "at": "paths./public.get @70:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/public",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "none"
+          }
+        },
+        "request": "public"
+      },
+      {
+        "at": "paths./optional.get @75:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/optional",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "none"
+          }
+        },
+        "request": "optional"
+      },
+      {
+        "at": "paths./prefer-direct.get @80:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/prefer-direct",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "apikey",
+            "key": "X-API-Key",
+            "value": "{{headerKey.key}}"
+          }
+        },
+        "request": "preferDirect"
+      },
+      {
+        "at": "paths./both.get @85:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.auth_extra",
+            "Severity": "warning",
+            "Message": "The security requirement of the operation also needs “digestAuth” (HTTP Digest) together with “bearerAuth” (HTTP bearer); it was not set up: add it by hand.",
+            "At": "paths./both.get @85:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{baseUrl}}/both",
+          "headers": [
+            {
+              "name": "X-App-Id",
+              "value": "{{appKey.key}}",
+              "description": "The “appKey” API key."
+            }
+          ],
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "bearer",
+            "token": "{{bearerAuth.token}}"
+          }
+        },
+        "request": "both"
+      }
+    ],
+    "variables": [
+      {
+        "name": "baseUrl",
+        "value": "https://secure.example"
+      },
+      {
+        "name": "basicAuth.username",
+        "value": "",
+        "description": "The user name for the “basicAuth” scheme. Company login"
+      },
+      {
+        "name": "basicAuth.password",
+        "value": "",
+        "secret": true,
+        "description": "The password for the “basicAuth” scheme."
+      },
+      {
+        "name": "bearerAuth.token",
+        "value": "",
+        "secret": true,
+        "description": "The bearer token (JWT) for the “bearerAuth” scheme."
+      },
+      {
+        "name": "digestAuth.username",
+        "value": "",
+        "description": "The user name for the “digestAuth” scheme."
+      },
+      {
+        "name": "digestAuth.password",
+        "value": "",
+        "secret": true,
+        "description": "The password for the “digestAuth” scheme."
+      },
+      {
+        "name": "headerKey.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “headerKey” scheme."
+      },
+      {
+        "name": "queryKey.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “queryKey” scheme."
+      },
+      {
+        "name": "cookieKey.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “cookieKey” scheme."
+      },
+      {
+        "name": "oauth.token",
+        "value": "",
+        "secret": true,
+        "description": "An access token for the “oauth” scheme."
+      },
+      {
+        "name": "oidc.token",
+        "value": "",
+        "secret": true,
+        "description": "An access token for the “oidc” scheme."
+      },
+      {
+        "name": "appKey.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “appKey” scheme (the X-App-Id header)."
+      }
+    ]
+  }
+}

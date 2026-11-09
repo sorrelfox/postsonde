@@ -1,0 +1,53 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String boundary = "PostSonde" + UUID.randomUUID();
+        List<byte[]> form = new ArrayList<>();
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"title\"\r\n"
+                + "\r\n"
+                + "a;b,c \"q\"\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"meta\"\r\n"
+                + "Content-Type: application/json\r\n"
+                + "\r\n"
+                + "{\"k\":1}\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"at\"\r\n"
+                + "\r\n"
+                + "@literal\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"file\"; filename=\"data.json\"\r\n"
+                + "Content-Type: application/json\r\n"
+                + "\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(Files.readAllBytes(Path.of("<root>/data.json")));
+        form.add("\r\n".getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"odd\"; filename=\"odd name;1.txt\"\r\n"
+                + "Content-Type: text/x-odd\r\n"
+                + "\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(Files.readAllBytes(Path.of("<root>/odd name;1.txt")));
+        form.add("\r\n".getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.test/upload"))
+                .POST(HttpRequest.BodyPublishers.ofByteArrays(form))
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  GET https://api.test/me \
+  'Authorization:Bearer ••••••' \
+  'Proxy-Authorization:Basic {{token}}'

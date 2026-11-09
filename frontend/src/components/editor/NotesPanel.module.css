@@ -1,0 +1,93 @@
+/* The Notes sub-tab (COL-07): an Edit/Preview toggle and a hint, then the
+ * Markdown editor or its preview, filling the section. */
+
+.notes {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.toolbar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+}
+
+.segmented {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.segment {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.segment:hover {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"] {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.hint {
+  min-width: 0;
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.editorFrame {
+  flex: 1;
+  min-height: 160px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.editorFrame:focus-within {
+  border-color: var(--line2);
+}
+
+.preview {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.empty {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}

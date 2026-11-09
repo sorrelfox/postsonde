@@ -1,0 +1,520 @@
+/* The Auth section, after the mockup: a two-column grid, 140px labels
+ * and the fields, the type picker as a segmented control, 32px fields in
+ * the URL bar's box style, and dimmed notes under the fields. */
+
+.auth {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: var(--space-6) var(--space-8);
+  align-content: start;
+  align-items: center;
+  padding-top: var(--space-2);
+  font-size: var(--fs-md2);
+}
+
+.label {
+  color: var(--text2);
+}
+
+.types {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.typeOption {
+  position: relative;
+  height: var(--h-control-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* The native radio stays for keyboard and screen readers; the segment shows the state. */
+.typeOption input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.typeOption:hover {
+  color: var(--text);
+}
+
+.typeOption:has(input:checked) {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.typeOption:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.typeOption[data-disabled] {
+  cursor: default;
+}
+
+.typeOption[data-disabled]:not(:has(input:checked)) {
+  color: var(--text3);
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  overflow: hidden;
+}
+
+.field:focus-within {
+  border-color: var(--accent);
+}
+
+.editor {
+  flex: 1;
+  min-width: 0;
+}
+
+.password {
+  flex: 1;
+  min-width: 0;
+  padding: 0 var(--space-5);
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-lg);
+}
+
+.secret {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.reveal {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.reveal:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.reveal:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.select {
+  width: fit-content;
+  height: var(--h-control);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.select:disabled {
+  opacity: 0.7;
+}
+
+.check {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.check input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.note,
+.hint {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.hint {
+  margin-top: calc(-1 * var(--space-4));
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.hint svg {
+  flex: none;
+  align-self: center;
+}
+
+.hint[data-storage="missing"] {
+  color: var(--warn);
+}
+
+.note code,
+.hint code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  color: var(--text2);
+}
+
+.warn {
+  color: var(--warn);
+}
+
+/* The inherited auth's fields (AUTH-01), read-only: label and value take
+ * the grid's two columns. */
+.inheritedRow {
+  display: contents;
+}
+
+.inheritedValue {
+  min-width: 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.inheritedHidden {
+  color: var(--text3);
+  font-family: var(--font-sans);
+}
+
+/* The JWT auth (AUTH-16): options in a row, the header, payload and a PEM
+ * key in small code editors, the token preview and the decoder. */
+.inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-8);
+}
+
+.inline code,
+.check code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.number {
+  width: 80px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg0);
+  color: var(--text);
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.number:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.codeBox {
+  flex: 1;
+  min-width: 0;
+  height: 112px;
+  display: flex;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  overflow: hidden;
+}
+
+.codeBox:focus-within {
+  border-color: var(--accent);
+}
+
+.codeBox > * {
+  flex: 1;
+  min-width: 0;
+}
+
+.maskedBox {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.action {
+  flex: none;
+  height: var(--h-control-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.action:hover:not(:disabled) {
+  background: var(--bg2);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.action:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* The extra parameters of an OAuth 2.0 token request: a checkbox, name,
+ * value and remove button per row. */
+.paramList {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.paramRow {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.paramInput {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.paramInput:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.jwtTools {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.jwtActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.jwtError {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  color: var(--warn);
+  font-size: var(--fs-md);
+}
+
+.jwtError svg {
+  flex: none;
+  align-self: center;
+}
+
+.token {
+  display: block;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.decoded {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.decodedLabel {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.json {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.claims {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-left: var(--space-8);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.idToken {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.idClaims {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2) var(--space-5);
+  font-size: var(--fs-md);
+}
+
+.idClaims dt {
+  color: var(--text2);
+}
+
+.idClaims dd {
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.decoder {
+  min-width: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.decoder > summary {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.decoder[open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.decoder[open] > summary {
+  margin-bottom: var(--space-2);
+}
+
+.decoderInput {
+  min-width: 0;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  resize: vertical;
+}
+
+.decoderInput:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* The file-access notice of the key file picker (PRV-10): under the
+ * field, in the second column. */
+.fieldNotice {
+  grid-column: 2;
+  margin-top: calc(-1 * var(--space-4));
+}
+
+@media (max-width: 520px) {
+  .auth {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  .hint {
+    margin-top: 0;
+  }
+
+  .fieldNotice {
+    grid-column: 1;
+    margin-top: 0;
+  }
+}

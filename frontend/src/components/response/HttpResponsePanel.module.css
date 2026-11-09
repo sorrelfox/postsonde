@@ -1,0 +1,174 @@
+/* The response pane of an HTTP request (HTTP-20): progress, error, or the
+ * response (ResponseView.module.css). */
+
+.panel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Running */
+
+.running {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--line2);
+  border-top-color: var(--accent);
+  border-radius: var(--radius-round);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+.stage {
+  margin: 0;
+  color: var(--text);
+}
+
+.elapsed {
+  margin: 0;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+/* Above an incremental GraphQL response while its parts arrive (GQL-08). */
+.receiving {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-7);
+  border-bottom: 1px solid var(--line);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.receiving .spinner {
+  width: 12px;
+  height: 12px;
+}
+
+.receiving .cancel {
+  margin-left: auto;
+}
+
+/* The bytes of the body received so far (HTTP-37). */
+.received {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.progress {
+  width: 220px;
+  height: 4px;
+  appearance: none;
+  border: none;
+  border-radius: var(--radius-round);
+  background: var(--bg3);
+  overflow: hidden;
+}
+
+.progress::-webkit-progress-bar {
+  background: var(--bg3);
+}
+
+.progress::-webkit-progress-value {
+  background: var(--accent);
+}
+
+.progress::-moz-progress-bar {
+  background: var(--accent);
+}
+
+.bytes {
+  margin: 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.cancel {
+  height: var(--h-control);
+  padding: 0 var(--space-7);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.cancel:hover {
+  background: var(--bg3);
+}
+
+.cancel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Error */
+
+.error {
+  margin: var(--space-6) var(--space-7);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--line2);
+  border-left: 3px solid var(--bad);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+}
+
+.errorTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-3);
+  color: var(--bad);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+}
+
+.errorMessage,
+.errorHint {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.errorMessage {
+  color: var(--text);
+}
+
+.errorHint {
+  margin-top: var(--space-2);
+  color: var(--text2);
+}

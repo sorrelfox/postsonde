@@ -1,0 +1,15 @@
+using System;
+using System.Net.Http;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/me");
+request.Headers.TryAddWithoutValidation("Authorization", "Bearer tok-123");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

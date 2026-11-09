@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_2f6a9c1e4b7d0835",
+  "name": "Upload avatar",
+  "url": "{{baseUrl}}/graphql",
+  "query": "mutation Upload($file: Upload!, $docs: [Upload!]!) {\n  upload(file: $file, docs: $docs)\n}",
+  "variables": "{\n  \"docs\": [null, null]\n}",
+  "extensions": "{\"persistedQuery\": {\"version\": 1, \"sha256Hash\": \"{{hash}}\"}}",
+  "files": [
+    {
+      "name": "variables.file",
+      "value": "",
+      "file": "fixtures/avatar.png"
+    },
+    {
+      "name": "variables.docs.0",
+      "value": "",
+      "file": "fixtures/a.pdf"
+    },
+    {
+      "name": "variables.docs.1",
+      "value": "",
+      "file": "/Users/me/Documents/b.pdf",
+      "contentType": "application/pdf"
+    }
+  ],
+  "auth": {
+    "type": "inherit"
+  }
+}

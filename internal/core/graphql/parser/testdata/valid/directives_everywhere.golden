@@ -1,0 +1,55 @@
+# source
+query Q @a(x: 1) { f @b @c(y: $v) { ...S @d } ... on T @e { g } } fragment S on T @f(z: [$v]) { h }
+# tree
+Document [0:99]
+  Definitions[0]: OperationDefinition [0:65] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+    Directives[0]: Directive [8:16] At=8
+      Name: Name [9:10] Value="a"
+      Arguments: ArgumentList [10:16] LParen=10 RParen=15
+        Arguments[0]: Argument [11:15] Colon=12
+          Name: Name [11:12] Value="x"
+          Value: IntValue [14:15] Raw="1"
+    SelectionSet: SelectionSet [17:65] LBrace=17 RBrace=64
+      Selections[0]: Field [19:45] Colon=-1
+        Name: Name [19:20] Value="f"
+        Directives[0]: Directive [21:23] At=21
+          Name: Name [22:23] Value="b"
+        Directives[1]: Directive [24:33] At=24
+          Name: Name [25:26] Value="c"
+          Arguments: ArgumentList [26:33] LParen=26 RParen=32
+            Arguments[0]: Argument [27:32] Colon=28
+              Name: Name [27:28] Value="y"
+              Value: Variable [30:32] Dollar=30
+                Name: Name [31:32] Value="v"
+        SelectionSet: SelectionSet [34:45] LBrace=34 RBrace=44
+          Selections[0]: FragmentSpread [36:43] Spread=36
+            Name: Name [39:40] Value="S"
+            Directives[0]: Directive [41:43] At=41
+              Name: Name [42:43] Value="d"
+      Selections[1]: InlineFragment [46:63] Spread=46
+        TypeCondition: TypeCondition [50:54] On=50
+          Type: NamedType [53:54]
+            Name: Name [53:54] Value="T"
+        Directives[0]: Directive [55:57] At=55
+          Name: Name [56:57] Value="e"
+        SelectionSet: SelectionSet [58:63] LBrace=58 RBrace=62
+          Selections[0]: Field [60:61] Colon=-1
+            Name: Name [60:61] Value="g"
+  Definitions[1]: FragmentDefinition [66:99] Keyword=66
+    Name: Name [75:76] Value="S"
+    TypeCondition: TypeCondition [77:81] On=77
+      Type: NamedType [80:81]
+        Name: Name [80:81] Value="T"
+    Directives[0]: Directive [82:93] At=82
+      Name: Name [83:84] Value="f"
+      Arguments: ArgumentList [84:93] LParen=84 RParen=92
+        Arguments[0]: Argument [85:92] Colon=86
+          Name: Name [85:86] Value="z"
+          Value: ListValue [88:92] LBracket=88 RBracket=91
+            Values[0]: Variable [89:91] Dollar=89
+              Name: Name [90:91] Value="v"
+    SelectionSet: SelectionSet [94:99] LBrace=94 RBrace=98
+      Selections[0]: Field [96:97] Colon=-1
+        Name: Name [96:97] Value="h"
+# errors

@@ -1,0 +1,8 @@
+curl "{{base}}/users/{{id}}?q={{q}}&t={{token}}" ^
+  -g ^
+  -H "X-User: {{user}}" ^
+  -H "X-Token: {{token}}" ^
+  -H "X-Uuid: {{$uuid}}" ^
+  -H "Content-Type: application/json" ^
+  --data-raw "{""user"":""{{user}}"",""token"":""{{token}}""}" ^
+  -L --max-redirs 10

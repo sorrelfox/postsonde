@@ -1,0 +1,4 @@
+wscat -c ws://localhost:8080/ws \
+  -H 'Cookie: a=1; b=2' \
+  -H 'X-A: 1, 2' \
+  -H X-Empty:

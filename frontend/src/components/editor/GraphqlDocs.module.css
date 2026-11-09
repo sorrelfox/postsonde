@@ -1,0 +1,566 @@
+/* The GraphQL docs explorer (GQL-14): a side panel next to the editor's
+ * sections with a header, the search field, breadcrumbs and the page. */
+
+.docs {
+  flex: none;
+  width: 320px;
+  max-width: 45%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line);
+  background: var(--bg1);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.header {
+  flex: none;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.title {
+  flex: 1;
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+}
+
+.iconButton {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.iconButton:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.iconButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.search {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4);
+  padding: 0 var(--space-4);
+  height: var(--h-control-sm);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text3);
+}
+
+.search:focus-within {
+  border-color: var(--accent);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.crumbs {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  padding: 0 var(--space-5) var(--space-3);
+  font-size: var(--fs-sm2);
+}
+
+.crumb {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text3);
+  font: inherit;
+  cursor: pointer;
+}
+
+.crumb:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.crumbSep {
+  color: var(--text3);
+}
+
+.crumbCurrent {
+  color: var(--text);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 var(--space-5) var(--space-6);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  line-height: var(--lh-base);
+}
+
+.empty p {
+  margin: 0;
+}
+
+.action {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.action:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.muted {
+  margin: var(--space-2) 0;
+  color: var(--text3);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+  color: var(--bad);
+}
+
+.caption {
+  margin: var(--space-4) 0 var(--space-2);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.list,
+.typeList,
+.args,
+.hits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 20px;
+}
+
+.typeList {
+  display: flex;
+  flex-direction: column;
+  padding-left: var(--space-7);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 20px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  cursor: pointer;
+}
+
+.groupHead:hover {
+  color: var(--text);
+}
+
+.count {
+  color: var(--text3);
+  font-size: var(--fs-xs);
+}
+
+.member {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.member[data-target] {
+  margin: 0 calc(-1 * var(--space-3));
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--sel);
+}
+
+.arg {
+  padding: var(--space-1) 0 var(--space-1) var(--space-6);
+}
+
+.signature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 20px;
+}
+
+.name {
+  color: var(--tk-field);
+}
+
+.name[data-deprecated] {
+  color: var(--text3);
+  text-decoration: line-through;
+}
+
+.arg .name {
+  color: var(--tk-arg);
+}
+
+.punct {
+  color: var(--tk-punct);
+  white-space: pre;
+}
+
+.default {
+  color: var(--tk-num);
+  white-space: pre;
+}
+
+.typeRef {
+  color: var(--tk-punct);
+}
+
+.typeLink {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tk-type);
+  font: inherit;
+  cursor: pointer;
+}
+
+.typeLink:hover {
+  text-decoration: underline;
+}
+
+.typeLink:focus-visible,
+.crumb:focus-visible,
+.groupHead:focus-visible,
+.iconButton:focus-visible,
+.insert:focus-visible,
+.generate:focus-visible,
+.generateType:focus-visible,
+.depthSelect:focus-visible,
+.more:focus-visible,
+.action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.badge,
+.deprecated {
+  margin-left: var(--space-3);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-xs);
+  background: var(--bg3);
+  color: var(--text2);
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  line-height: 16px;
+}
+
+.deprecated {
+  background: transparent;
+  border: 1px solid var(--warn);
+  color: var(--warn);
+}
+
+.insert {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.insert:hover {
+  background: var(--bg3);
+  color: var(--accent);
+}
+
+/* Writes the field's operation or fragment into the query (GQL-16). */
+.generate {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  margin-left: var(--space-1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.generate:hover {
+  background: var(--bg3);
+  color: var(--accent);
+}
+
+.generateType {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  height: 20px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.generateType:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.depth {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.depthSelect {
+  height: 20px;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-xs);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+}
+
+.description {
+  margin: var(--space-1) 0 0;
+  color: var(--text2);
+  line-height: var(--lh-base);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.reason {
+  margin: var(--space-1) 0 0;
+  color: var(--warn);
+  line-height: var(--lh-base);
+}
+
+.locations {
+  margin: var(--space-1) 0 0;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  overflow-wrap: anywhere;
+}
+
+.typeHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: var(--space-2);
+}
+
+.typeName {
+  margin: 0;
+  color: var(--tk-type);
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+}
+
+.related {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 20px;
+}
+
+.relatedLabel {
+  margin-right: var(--space-3);
+  color: var(--text3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+}
+
+.more {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.hit {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.hit:hover,
+.hit[aria-selected="true"] {
+  background: var(--bg2);
+}
+
+.hitKind {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  border-radius: var(--radius-xs);
+  background: var(--bg3);
+  color: var(--tk-field);
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+}
+
+.hitKind[data-kind="type"] {
+  color: var(--tk-type);
+}
+
+.hitKind[data-kind="argument"] {
+  color: var(--tk-arg);
+}
+
+.hitKind[data-kind="enum-value"] {
+  color: var(--tk-num);
+}
+
+.hitKind[data-kind="input-field"] {
+  color: var(--tk-key);
+}
+
+.hitMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.hitName {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.hitName mark {
+  background: transparent;
+  color: var(--accent);
+}
+
+.hitName [data-deprecated] {
+  text-decoration: line-through;
+}
+
+.hitParent {
+  color: var(--text3);
+}
+
+.hitDetail {
+  margin-left: var(--space-3);
+  color: var(--tk-type);
+}
+
+.hitDescription {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

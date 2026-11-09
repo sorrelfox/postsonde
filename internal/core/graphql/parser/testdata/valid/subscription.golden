@@ -1,0 +1,32 @@
+# source
+subscription StoryLikeSubscription($input: StoryLikeSubscribeInput) {
+  storyLikeSubscribe(input: $input) { story { likers { count } } }
+}
+# tree
+Document [0:138]
+  Definitions[0]: OperationDefinition [0:138] Operation=subscription Keyword=0
+    Name: Name [13:34] Value="StoryLikeSubscription"
+    VariableDefinitions: VariableDefinitionList [34:67] LParen=34 RParen=66
+      Definitions[0]: VariableDefinition [35:66] Colon=41 Equals=-1
+        Variable: Variable [35:41] Dollar=35
+          Name: Name [36:41] Value="input"
+        Type: NamedType [43:66]
+          Name: Name [43:66] Value="StoryLikeSubscribeInput"
+    SelectionSet: SelectionSet [68:138] LBrace=68 RBrace=137
+      Selections[0]: Field [72:136] Colon=-1
+        Name: Name [72:90] Value="storyLikeSubscribe"
+        Arguments: ArgumentList [90:105] LParen=90 RParen=104
+          Arguments[0]: Argument [91:104] Colon=96
+            Name: Name [91:96] Value="input"
+            Value: Variable [98:104] Dollar=98
+              Name: Name [99:104] Value="input"
+        SelectionSet: SelectionSet [106:136] LBrace=106 RBrace=135
+          Selections[0]: Field [108:134] Colon=-1
+            Name: Name [108:113] Value="story"
+            SelectionSet: SelectionSet [114:134] LBrace=114 RBrace=133
+              Selections[0]: Field [116:132] Colon=-1
+                Name: Name [116:122] Value="likers"
+                SelectionSet: SelectionSet [123:132] LBrace=123 RBrace=131
+                  Selections[0]: Field [125:130] Colon=-1
+                    Name: Name [125:130] Value="count"
+# errors

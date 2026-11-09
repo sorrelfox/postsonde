@@ -1,0 +1,11 @@
+{
+  "kind": "timeout",
+  "code": "",
+  "message": "The operation timed out.",
+  "hint": "",
+  "details": {},
+  "causes": [
+    "dial api.example.test",
+    "context deadline exceeded"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "customers",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "GET",
+    "url": "https://api.example.com/v1/customers?limit=3\u0026email=ada%2Btest%40example.com",
+    "params": [
+      {
+        "name": "limit",
+        "value": "3"
+      },
+      {
+        "name": "email",
+        "value": "ada%2Btest%40example.com"
+      }
+    ],
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "basic",
+      "username": "sk_test_example"
+    }
+  },
+  "diagnostics": []
+}

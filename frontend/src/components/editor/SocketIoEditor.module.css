@@ -1,0 +1,132 @@
+/* The Socket.IO editor (SIO-01, SIO-03…SIO-07). The layout is the
+ * WebSocket editor's (WebSocketEditor.module.css); these are its own
+ * pieces: the option fields, the auth payload and the event row above the
+ * composer. */
+
+.fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+  max-width: 640px;
+}
+
+.fieldLabel {
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.fieldHelp {
+  grid-column: 2;
+  margin: calc(-1 * var(--space-3)) 0 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.textInput,
+.select {
+  width: 100%;
+  min-width: 0;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.select {
+  font-family: inherit;
+  font-size: var(--fs-md);
+}
+
+.textInput:focus-visible,
+.select:focus-visible,
+.eventInput:focus-visible {
+  border-color: var(--accent);
+}
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.authFrame {
+  min-height: 72px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.authStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  color: var(--warn);
+  font-size: var(--fs-sm2);
+}
+
+.authStatus svg {
+  flex: none;
+}
+
+/* The event name and the ack switch, above the arguments. */
+.eventRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-7) 0;
+  border-top: 1px solid var(--line);
+}
+
+.eventLabel {
+  flex: none;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.eventInput {
+  flex: 1;
+  min-width: 0;
+  max-width: 320px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.ackLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.argsHint {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Where the Auth tab's credentials go (AUTH-31). */
+.authTarget {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-3) 0 var(--space-2);
+}

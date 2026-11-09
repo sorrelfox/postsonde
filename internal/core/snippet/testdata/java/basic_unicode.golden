@@ -1,0 +1,36 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        // TLS verification is off: trust every certificate and host name.
+        System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
+        TrustManager[] trustAll = { new X509TrustManager() {
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+        } };
+        SSLContext ssl = SSLContext.getInstance("TLS");
+        ssl.init(null, trustAll, new SecureRandom());
+        HttpClient client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_2)
+                .sslContext(ssl)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("http://api.test/me"))
+                .GET()
+                .header("Authorization", "Basic " + Base64.getEncoder().encodeToString("jürgen:pässwörd ✓".getBytes(StandardCharsets.UTF_8)))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

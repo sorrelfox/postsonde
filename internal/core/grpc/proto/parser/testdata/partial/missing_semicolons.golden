@@ -1,0 +1,23 @@
+# source
+enum E {
+  A = 0
+  B = 1
+}
+service S { rpc Get(Req) returns (Resp) }
+# tree
+File [0:68] Name="p.proto"
+  Decls[0]: Enum [0:26] Name=[5:6]"E" RBrace=25
+    Body[0]: EnumValue [11:16] Name=[11:12]"A"
+      Number: IntLit [15:16] Raw="0" Value=0
+    Body[1]: EnumValue [19:24] Name=[19:20]"B"
+      Number: IntLit [23:24] Raw="1" Value=1
+  Decls[1]: Service [27:68] Name=[35:36]"S" RBrace=67
+    Body[0]: RPC [39:66] Name=[43:46]"Get" LBrace=-1 RBrace=-1
+      Input: RPCType [46:51] Type=[47:50]"Req"
+      Output: RPCType [60:66] Type=[61:65]"Resp"
+# errors
+2:8 [16:16] unexpected token: expected ";", found "B"
+3:8 [24:24] unexpected token: expected ";", found "}"
+5:40 [66:66] unexpected token: expected ";", found "}"
+# diagnostics
+1:1 [0:0] warning syntax: no syntax specified; the file is treated as proto2 (add syntax = "proto2"; or syntax = "proto3";)

@@ -1,0 +1,7 @@
+http --follow --max-redirects=10 \
+  GET https://api.test/items \
+  Accept:application/json \
+  'X-Quote:it'\''s "quoted" $HOME `id`' \
+  'X-Empty;' \
+  'X-Unicode:héllo ✓' \
+  User-Agent:PostSonde-test

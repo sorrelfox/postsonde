@@ -1,0 +1,7 @@
+curl.exe https://api.test/q `
+  --form-string 'we"ird name=line1
+line2 "q" ''q'' $x %PATH%' `
+  -F 'unicode ✓="héllo 😀";headers="Content-Type: text/plain; charset=utf-8"' `
+  --form-string 'a@b:c=@not-a-file' `
+  -F 'file=@"<root>/odd name;1.txt";type=text/plain' `
+  -L --max-redirs 10

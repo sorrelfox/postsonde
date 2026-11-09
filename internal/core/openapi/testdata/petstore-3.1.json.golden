@@ -1,0 +1,150 @@
+openapi 3.1.0 (3.1) dialect="https://spec.openapis.org/oas/3.1/dialect/base"
+info "Petstore 3.1" version "2.0.0"
+  summary: "A pet store that uses OpenAPI 3.1 features."
+  description: "Webhooks, JSON Schema 2020-12 keywords, recursive schemas,\n$anchor references and path items in components.\n"
+  license {Name:MIT Identifier:MIT URL:}
+server "https://{env}.petstore.example:{port}/v2" "Hosted" -> "https://api.petstore.example:443/v2" @15:5 #/servers/0
+  var env default="api" enum=["api" "staging"] ""
+  var port default="443" enum=[] ""
+server "http://localhost:8080/v2" "" -> "http://localhost:8080/v2" @31:5 #/servers/1
+security api_key[]
+security oauth[read:pets]
+tag "pets" "Pets in the store" @36:5 #/tags/0
+tag "trees" "" @40:5 #/tags/1
+components.schemas.Pet type=object required=id,name @254:14 #/components/schemas/Pet
+  property id type=integer format=int64 exclusiveMinimum=0 @261:17 #/components/schemas/Pet/properties/id
+  property name type=string minLength=1 @266:19 #/components/schemas/Pet/properties/name
+    examples[] "Rex"
+    examples[] "Tom"
+  property tag type=string|null @274:18 #/components/schemas/Pet/properties/tag
+  property status  @280:21 #/components/schemas/Pet/properties/status
+    default: "available"
+    enum[] "available"
+    enum[] "pending"
+    enum[] "sold"
+  property price  @288:20 #/components/schemas/Pet/properties/price
+    description: "What the pet costs"
+    allOf[] type=object $anchor=money @311:16 #/components/schemas/Money
+      property amount type=number multipleOf=0.01 @315:21 #/components/schemas/Money/properties/amount
+      property currency  @319:23 #/components/schemas/Money/properties/currency
+        const: "EUR"
+  property category type=object recursive=true @324:19 #/components/schemas/Category
+    property name type=string @327:19 #/components/schemas/Category/properties/name
+    property parent recursive=true @335:26 #/components/schemas/Category/$defs/CategoryRef
+      oneOf[] see #/components/schemas/Category
+      oneOf[] type=null @340:15 #/components/schemas/Category/$defs/CategoryRef/oneOf/1
+    $defs CategoryRef see #/components/schemas/Category/$defs/CategoryRef
+  additionalProperties false
+components.schemas.NewPet  @298:17 #/components/schemas/NewPet
+  allOf[] see #/components/schemas/Pet
+  allOf[] type=object @303:11 #/components/schemas/NewPet/allOf/1
+    property id false
+components.schemas.Money see #/components/schemas/Money
+components.schemas.Category see #/components/schemas/Category
+components.schemas.TreeNode type=object recursive=true @347:19 #/components/schemas/TreeNode
+  property value type=string @350:20 #/components/schemas/TreeNode/properties/value
+  property children type=array recursive=true @353:23 #/components/schemas/TreeNode/properties/children
+    items see #/components/schemas/TreeNode
+components.schemas.Event type=object @361:16 #/components/schemas/Event
+  property kind type=string @369:19 #/components/schemas/Event/properties/kind
+  property pet see #/components/schemas/Pet
+  prefixItems[] type=string @364:11 #/components/schemas/Event/prefixItems/0
+components.schemas.Error type=object required=code,message @377:16 #/components/schemas/Error
+  property code type=integer format=int32 @384:19 #/components/schemas/Error/properties/code
+  property message type=string @388:22 #/components/schemas/Error/properties/message
+components.parameters.limit query limit required=false style=(form) explode=-(true) @395:16 #/components/parameters/limit
+  description: "How many items to return"
+  schema type=integer maximum=100 @399:19 #/components/parameters/limit/schema
+    default: 20
+components.parameters.petId path petId required=true style=(simple) explode=-(false) @405:16 #/components/parameters/petId
+  schema type=integer @409:19 #/components/parameters/petId/schema
+components.requestBodies.NewPet required=true @415:17 #/components/requestBodies/NewPet
+  content application/json @418:31 #/components/requestBodies/NewPet/content/application~1json
+    schema see #/components/schemas/NewPet
+    example rex summary="A dog" value={"name":"Rex","tag":"dog"} external="" @423:22 #/components/requestBodies/NewPet/content/application~1json/examples/rex
+components.responses.Error "Unexpected error" @436:16 #/components/responses/Error
+  content application/json @439:31 #/components/responses/Error/content/application~1json
+    schema see #/components/schemas/Error
+components.headers.X-Next required=false "Link to the next page" @448:17 #/components/headers/X-Next
+  schema type=string @450:19 #/components/headers/X-Next/schema
+components.examples.twoPets summary="Two pets" value=[{"id":1,"name":"Rex"},{"id":2,"name":"Tom"}] external="" @456:18 #/components/examples/twoPets
+components.pathItems.PetById @471:18 #/components/pathItems/PetById
+  param path petId see #/components/parameters/petId
+  GET  id="showPetById" tags=["pets"] deprecated=false @477:16 #/components/pathItems/PetById/get
+    param path petId see #/components/parameters/petId
+    response 200 "The pet" @483:20 #/components/pathItems/PetById/get/responses/200
+      content application/json @486:37 #/components/pathItems/PetById/get/responses/200/content/application~1json
+        schema see #/components/schemas/Pet
+    response 404 "No such pet" @436:16 #/components/responses/Error
+      content application/json @439:31 #/components/responses/Error/content/application~1json
+        schema see #/components/schemas/Error
+  DELETE  id="deletePet" tags=["pets"] deprecated=false @499:19 #/components/pathItems/PetById/delete
+    param path petId see #/components/parameters/petId
+    response 204 "Deleted" @505:20 #/components/pathItems/PetById/delete/responses/204
+components.securitySchemes.api_key type=apiKey name="X-API-Key" in="header" scheme="" bearerFormat="" oidc="" @513:18 #/components/securitySchemes/api_key
+components.securitySchemes.oauth type=oauth2 name="" in="" scheme="" bearerFormat="" oidc="" @518:16 #/components/securitySchemes/oauth
+  flow authorizationCode auth="https://auth.petstore.example/authorize" token="https://auth.petstore.example/token" refresh="" scopes=[{read:pets Read pets} {write:pets Change pets}]
+components.securitySchemes.bearer type=http name="" in="" scheme="bearer" bearerFormat="JWT" oidc="" @531:17 #/components/securitySchemes/bearer
+path /pets @55:14 #/paths/~1pets
+  GET /pets id="listPets" tags=["pets"] deprecated=false @56:14 #/paths/~1pets/get
+    summary: "List pets"
+    param query limit see #/components/parameters/limit
+    param query tags required=false style=form(form) explode=false(false) @66:11 #/paths/~1pets/get/parameters/1
+      schema type=array @71:23 #/paths/~1pets/get/parameters/1/schema
+        items type=string @73:24 #/paths/~1pets/get/parameters/1/schema/items
+    response 200 "A page of pets" @80:18 #/paths/~1pets/get/responses/200
+      header X-Next see #/components/headers/X-Next
+      content application/json @88:35 #/paths/~1pets/get/responses/200/content/application~1json
+        schema type=array @89:27 #/paths/~1pets/get/responses/200/content/application~1json/schema
+          items see #/components/schemas/Pet
+        example two see #/components/examples/twoPets
+    response default see #/components/responses/Error
+  POST /pets id="createPet" tags=["pets"] deprecated=false @108:15 #/paths/~1pets/post
+    summary: "Add a pet"
+    security 0
+    requestBody see #/components/requestBodies/NewPet
+    response 201 "Created" @118:18 #/paths/~1pets/post/responses/201
+      content application/json @121:35 #/paths/~1pets/post/responses/201/content/application~1json
+        schema see #/components/schemas/Pet
+        example: {"id":7,"name":"Rex","tag":null}
+path /pets/{petId} @471:18 #/components/pathItems/PetById
+  param path petId see #/components/parameters/petId
+  GET /pets/{petId} id="showPetById" tags=["pets"] deprecated=false @477:16 #/components/pathItems/PetById/get
+    param path petId see #/components/parameters/petId
+    response 200 see #/components/pathItems/PetById/get/responses/200
+    response 404 see #/components/responses/Error
+  DELETE /pets/{petId} id="deletePet" tags=["pets"] deprecated=false @499:19 #/components/pathItems/PetById/delete
+    param path petId see #/components/parameters/petId
+    response 204 see #/components/pathItems/PetById/delete/responses/204
+path /trees/{id} @140:20 #/paths/~1trees~1{id}
+  param path id required=true style=(simple) explode=-(false) @142:9 #/paths/~1trees~1{id}/parameters/0
+    schema type=string format=uuid @146:21 #/paths/~1trees~1{id}/parameters/0/schema
+  GET /trees/{id} id="getTree" tags=["trees"] deprecated=false @152:14 #/paths/~1trees~1{id}/get
+    param path id see #/paths/~1trees~1{id}/parameters/0
+    response 200 "A tree" @158:18 #/paths/~1trees~1{id}/get/responses/200
+      content application/json @161:35 #/paths/~1trees~1{id}/get/responses/200/content/application~1json
+        schema see #/components/schemas/TreeNode
+path /subscriptions @171:23 #/paths/~1subscriptions
+  POST /subscriptions id="subscribe" tags=[] deprecated=false @172:15 #/paths/~1subscriptions/post
+    requestBody required=false @174:24 #/paths/~1subscriptions/post/requestBody
+      content application/x-www-form-urlencoded @176:50 #/paths/~1subscriptions/post/requestBody/content/application~1x-www-form-urlencoded
+        schema type=object @177:25 #/paths/~1subscriptions/post/requestBody/content/application~1x-www-form-urlencoded/schema
+          property callbackUrl type=string format=uri @180:34 #/paths/~1subscriptions/post/requestBody/content/application~1x-www-form-urlencoded/schema/properties/callbackUrl
+          property events type=array @184:29 #/paths/~1subscriptions/post/requestBody/content/application~1x-www-form-urlencoded/schema/properties/events
+            items type=string @186:30 #/paths/~1subscriptions/post/requestBody/content/application~1x-www-form-urlencoded/schema/properties/events/items
+        encoding events contentType="" style="form" explode=true
+    response 202 "Subscribed" @224:18 #/paths/~1subscriptions/post/responses/202
+    callback onEvent @202:22 #/paths/~1subscriptions/post/callbacks/onEvent
+      expression {$request.body#/callbackUrl} @203:45 #/paths/~1subscriptions/post/callbacks/onEvent/{$request.body#~1callbackUrl}
+        POST {$request.body#/callbackUrl} id="" tags=[] deprecated=false @204:23 #/paths/~1subscriptions/post/callbacks/onEvent/{$request.body#~1callbackUrl}/post
+          requestBody required=false @205:32 #/paths/~1subscriptions/post/callbacks/onEvent/{$request.body#~1callbackUrl}/post/requestBody
+            content application/json @207:41 #/paths/~1subscriptions/post/callbacks/onEvent/{$request.body#~1callbackUrl}/post/requestBody/content/application~1json
+              schema see #/components/schemas/Event
+          response 204 "Received" @215:26 #/paths/~1subscriptions/post/callbacks/onEvent/{$request.body#~1callbackUrl}/post/responses/204
+webhook newPet @232:15 #/webhooks/newPet
+  POST  id="" tags=[] deprecated=false @233:15 #/webhooks/newPet/post
+    summary: "A pet was added"
+    requestBody required=false @235:24 #/webhooks/newPet/post/requestBody
+      content application/json @237:33 #/webhooks/newPet/post/requestBody/content/application~1json
+        schema see #/components/schemas/Pet
+    response 200 "Acknowledged" @245:18 #/webhooks/newPet/post/responses/200

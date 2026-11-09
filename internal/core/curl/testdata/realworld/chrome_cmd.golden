@@ -1,0 +1,82 @@
+{
+  "dialect": "cmd",
+  "method": "POST",
+  "methodExplicit": false,
+  "url": "https://api.example.com/v1/orders?page=2\u0026sort=desc",
+  "urls": [
+    {
+      "value": "https://api.example.com/v1/orders?page=2\u0026sort=desc",
+      "start": 5,
+      "end": 60
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "accept",
+      "value": "application/json, text/plain, */*",
+      "kind": "set",
+      "implied": false,
+      "start": 66,
+      "end": 114
+    },
+    {
+      "name": "content-type",
+      "value": "application/json",
+      "kind": "set",
+      "implied": false,
+      "start": 120,
+      "end": 157
+    },
+    {
+      "name": "sec-ch-ua",
+      "value": "\"Chromium\";v=\"128\"",
+      "kind": "set",
+      "implied": false,
+      "start": 202,
+      "end": 250
+    },
+    {
+      "name": "user-agent",
+      "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "kind": "set",
+      "implied": false,
+      "start": 256,
+      "end": 316
+    }
+  ],
+  "data": [
+    {
+      "kind": "raw",
+      "option": "--data-raw",
+      "value": "{\"note\":\"100%\",\"env\":\"%PATH%\",\"path\":\"C:\\\\tmp\",\"text\":\"a\nb\"}",
+      "name": "",
+      "file": "",
+      "start": 322,
+      "end": 461
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": [
+    "session=abc123; theme=dark"
+  ],
+  "insecure": false,
+  "compressed": true,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

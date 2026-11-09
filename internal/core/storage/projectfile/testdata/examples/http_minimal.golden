@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_5a0f93c7e2b14d68",
+  "name": "Health check",
+  "method": "GET",
+  "url": "{{baseUrl}}/health",
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "inherit"
+  }
+}

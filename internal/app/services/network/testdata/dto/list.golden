@@ -1,0 +1,46 @@
+{
+  "conns": [
+    {
+      "id": 3,
+      "opKind": "http.send",
+      "opId": "op_3f9a0c12d4e5b678",
+      "network": "tcp",
+      "address": "example.com:443",
+      "localAddr": "192.168.1.20:53211",
+      "remoteAddr": "10.0.0.1:1080",
+      "via": "socks5h://proxy.lan:1080",
+      "state": "closed",
+      "startedAt": "2026-09-19T09:30:00Z",
+      "connectedAt": "2026-09-19T09:30:00.0425Z",
+      "endedAt": "2026-09-19T09:30:02Z",
+      "connectMs": 42.5,
+      "durationMs": 2000,
+      "bytesIn": 5120,
+      "bytesOut": 812,
+      "errorCode": "",
+      "error": ""
+    },
+    {
+      "id": 4,
+      "opKind": "",
+      "opId": "",
+      "network": "tcp",
+      "address": "example.com:443",
+      "localAddr": "",
+      "remoteAddr": "",
+      "via": "",
+      "state": "refused",
+      "startedAt": "2026-09-19T09:30:00Z",
+      "connectedAt": "",
+      "endedAt": "2026-09-19T09:30:00.001Z",
+      "connectMs": 0,
+      "durationMs": 1,
+      "bytesIn": 0,
+      "bytesOut": 0,
+      "errorCode": "netx.not_user_initiated",
+      "error": "PostSonde did not connect to example.com:443 because no action of yours started the connection."
+    }
+  ],
+  "active": 0,
+  "capacity": 500
+}

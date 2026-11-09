@@ -1,0 +1,18 @@
+# source
+{ a @include(if: 
+# tree
+Document [0:17]
+  Definitions[0]: OperationDefinition [0:17] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:17] LBrace=0 RBrace=-1
+      Selections[0]: Field [2:17] Colon=-1
+        Name: Name [2:3] Value="a"
+        Directives[0]: Directive [4:17] At=4
+          Name: Name [5:12] Value="include"
+          Arguments: ArgumentList [12:17] LParen=12 RParen=-1
+            Arguments[0]: Argument [13:17] Colon=15
+              Name: Name [13:15] Value="if"
+              Value: InvalidValue [16:17] Missing=true
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"
+1:13 [12:13] unclosed delimiter: "(" has no matching ")"
+1:18 [17:17] unexpected token: expected value, found end of input

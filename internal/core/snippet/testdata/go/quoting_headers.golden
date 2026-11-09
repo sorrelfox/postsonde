@@ -1,0 +1,34 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	req, err := http.NewRequest("GET", "https://api.test/q", nil)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("X-Odd!#$%&'*+.^_`|~", "100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\")
+	req.Header.Add("X-Unicode", "héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛")
+	req.Header.Add("X-Long", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
+	req.Header.Add("X-Json", `{"a":"b\"c","d":[1,2],"e":"C:\\dir\\"}`)
+	req.Header.Add("X-Tab", "a\tb")
+	req.Header.Add("X-Empty", "")
+	req.Header.Add("User-Agent", "")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(data))
+}

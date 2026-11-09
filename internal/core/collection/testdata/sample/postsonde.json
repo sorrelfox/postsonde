@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "kind": "workspace",
+  "id": "ws_7c1e4b9a2f3d5e60",
+  "name": "Acme API",
+  "description": "Requests for the Acme public API.",
+  "order": [
+    "users",
+    "health.json"
+  ],
+  "variables": [
+    {
+      "name": "apiVersion",
+      "value": "v2"
+    }
+  ]
+}

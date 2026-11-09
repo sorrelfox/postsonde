@@ -1,0 +1,7 @@
+wget http://api.test/me \
+  --user 'jürgen' \
+  --password 'pässwörd ✓' \
+  --auth-no-challenge \
+  --no-check-certificate \
+  --max-redirect 0 \
+  -O -

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Application context for the orders service -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <context:property-placeholder location="classpath:application.properties"/>
+
+  <!-- Data source: pool sized for the batch jobs -->
+  <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <property name="jdbcUrl" value="${db.url}"/>
+    <property name="maximumPoolSize" value="20"/>
+    <property name="connectionTestQuery">
+      <value><![CDATA[SELECT 1 WHERE 2 > 1 AND 'a' <> 'b']]></value>
+    </property>
+  </bean>
+
+  <bean id="orderRepository" class="com.example.orders.JdbcOrderRepository">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
+  <bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate" lazy-init="true">
+    <property name="maxAttempts" value="3"/>
+    <!-- TODO: exponential backoff -->
+  </bean>
+
+  <?generator orders-codegen 2.1?>
+</beans>

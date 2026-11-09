@@ -1,0 +1,22 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8,
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/q");
+request.Headers.TryAddWithoutValidation("X-Odd!#$%&'*+.^_`|~", @"100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' ""double"" """"two"""" \ \\ \"" end\");
+request.Headers.TryAddWithoutValidation("X-Unicode", "héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛");
+request.Headers.TryAddWithoutValidation("X-Long", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef");
+request.Headers.TryAddWithoutValidation("X-Json", @"{""a"":""b\""c"",""d"":[1,2],""e"":""C:\\dir\\""}");
+request.Headers.TryAddWithoutValidation("X-Tab", "a\tb");
+request.Headers.TryAddWithoutValidation("X-Empty", "");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

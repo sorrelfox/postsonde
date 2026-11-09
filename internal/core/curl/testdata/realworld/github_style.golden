@@ -1,0 +1,72 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": true,
+  "url": "https://api.example.com/repos/OWNER/REPO/issues",
+  "urls": [
+    {
+      "value": "https://api.example.com/repos/OWNER/REPO/issues",
+      "start": 155,
+      "end": 202
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "Accept",
+      "value": "application/vnd.github+json",
+      "kind": "set",
+      "implied": false,
+      "start": 24,
+      "end": 64
+    },
+    {
+      "name": "Authorization",
+      "value": "Bearer \u003cYOUR-TOKEN\u003e",
+      "kind": "set",
+      "implied": false,
+      "start": 69,
+      "end": 108
+    },
+    {
+      "name": "X-GitHub-Api-Version",
+      "value": "2022-11-28",
+      "kind": "set",
+      "implied": false,
+      "start": 113,
+      "end": 150
+    }
+  ],
+  "data": [
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "{\"title\":\"Found a bug\",\"body\":\"I'm having a problem with this.\",\"labels\":[\"bug\"]}",
+      "name": "",
+      "file": "",
+      "start": 207,
+      "end": 297
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": true,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

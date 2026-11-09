@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "DELETE",
+    "{{baseUrl}}/items/{{id}}",
+    headers={
+        "Authorization": "Bearer {{token}}",
+    },
+    timeout=0.25,
+)
+
+print(response.status_code)
+print(response.text)

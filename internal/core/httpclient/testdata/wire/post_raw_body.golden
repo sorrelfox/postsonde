@@ -1,0 +1,6 @@
+POST /items HTTP/1.1\r\n
+Host: ADDR\r\n
+Content-Length: 7\r\n
+Content-Type: application/json\r\n
+\r\n
+{"a":1}

@@ -1,0 +1,92 @@
+[
+  {
+    "name": "base64",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Base64 (standard alphabet, padded)"
+  },
+  {
+    "name": "base64Decode",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Decodes Base64, standard or URL alphabet, padded or not"
+  },
+  {
+    "name": "base64url",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Base64 with the URL alphabet, unpadded (as in JWTs)"
+  },
+  {
+    "name": "hex",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Lowercase hex of the bytes"
+  },
+  {
+    "name": "hexDecode",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Decodes hex digits to bytes"
+  },
+  {
+    "name": "hmacMd5",
+    "keys": 1,
+    "maxArgs": 1,
+    "description": "HMAC-MD5 with a key, hex (or base64, base64url)"
+  },
+  {
+    "name": "hmacSha1",
+    "keys": 1,
+    "maxArgs": 1,
+    "description": "HMAC-SHA1 with a key, hex (or base64, base64url)"
+  },
+  {
+    "name": "hmacSha256",
+    "keys": 1,
+    "maxArgs": 1,
+    "description": "HMAC-SHA256 with a key, hex (or base64, base64url)"
+  },
+  {
+    "name": "hmacSha512",
+    "keys": 1,
+    "maxArgs": 1,
+    "description": "HMAC-SHA512 with a key, hex (or base64, base64url)"
+  },
+  {
+    "name": "md5",
+    "keys": 0,
+    "maxArgs": 1,
+    "description": "MD5 digest, hex (or base64, base64url)"
+  },
+  {
+    "name": "sha1",
+    "keys": 0,
+    "maxArgs": 1,
+    "description": "SHA-1 digest, hex (or base64, base64url)"
+  },
+  {
+    "name": "sha256",
+    "keys": 0,
+    "maxArgs": 1,
+    "description": "SHA-256 digest, hex (or base64, base64url)"
+  },
+  {
+    "name": "sha512",
+    "keys": 0,
+    "maxArgs": 1,
+    "description": "SHA-512 digest, hex (or base64, base64url)"
+  },
+  {
+    "name": "urlDecode",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Decodes %XX sequences (a + stays a +)"
+  },
+  {
+    "name": "urlEncode",
+    "keys": 0,
+    "maxArgs": 0,
+    "description": "Percent-encodes everything but letters, digits and - . _ ~"
+  }
+]

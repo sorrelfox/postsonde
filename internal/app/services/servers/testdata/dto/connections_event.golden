@@ -1,0 +1,16 @@
+{
+  "serverId": "srv_00000000000000cc",
+  "connections": [
+    {
+      "id": "4",
+      "connId": 4,
+      "peer": "127.0.0.1:53125",
+      "local": "127.0.0.1:7000",
+      "connectedAt": "2026-09-16T08:00:00Z",
+      "bytesIn": 5,
+      "bytesOut": 4,
+      "messagesIn": 1,
+      "messagesOut": 1
+    }
+  ]
+}

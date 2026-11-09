@@ -1,0 +1,167 @@
+# The checks, on every push and every pull request (docs/ci.md): on Linux,
+# in the pinned images, the Go checks (gofmt, the stdlib-only core guard,
+# go vet, the race tests, the bindings check) and the frontend checks (the
+# CSS tokens, tsc, Vitest, the production build and its no-remote-resources
+# check); on macOS and Windows, go vet and the Go tests, since both have code
+# of their own (the keychain, the system proxy, the Wails shell). The
+# packages are built and tested by release.yml. The steps live in scripts/;
+# this file picks the image, installs what it lacks, sets the caches and
+# calls the script.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+# A newer push to the same branch or pull request cancels the run that is
+# still going for the older one.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # The pins the jobs need (scripts/pins.env): the images and the Go
+  # version. One run per change: a pull request from a branch of this
+  # repository is checked by that branch's push run already, so its own run
+  # skips every job; a pull request from a fork has no push run here and is
+  # checked by its own.
+  setup:
+    name: setup
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      image-golang: ${{ steps.pins.outputs.image-golang }}
+      image-node: ${{ steps.pins.outputs.image-node }}
+      go-version: ${{ steps.pins.outputs.go-version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Pins
+        id: pins
+        run: |
+          . scripts/lib.sh
+          golang="$(pinned_image GOLANG)"
+          node="$(pinned_image NODE)"
+          {
+            echo "image-golang=$golang"
+            echo "image-node=$node"
+            echo "go-version=$POSTSONDE_PIN_GO_VERSION"
+          } >>"$GITHUB_OUTPUT"
+
+  # Go: formatting, the stdlib-only core guard, vet, the race tests and the
+  # bindings check. Debian 13 (trixie), because the Wails packages
+  # (internal/app, cmd/postsonde) use cgo against GTK4 + WebKitGTK 6.0 and
+  # X11 (`#cgo linux pkg-config: gtk4 webkitgtk-6.0` and `#cgo pkg-config:
+  # x11` in wails v3.0.0), and trixie ships all of them.
+  go-lint-test:
+    name: go:lint-test
+    needs: setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.setup.outputs.image-golang }}
+    env:
+      # Use the image's Go; never download another toolchain behind our back.
+      GOTOOLCHAIN: local
+      CGO_ENABLED: "1"
+      # Go's default flags plus silencing Wails' GTK deprecation warnings,
+      # which otherwise bury the test output.
+      CGO_CFLAGS: -O2 -g -Wno-deprecated-declarations
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # The checkout belongs to the runner's user and the container runs as
+      # root, so git refuses it (gofmt, bindings check) unless it is marked
+      # safe.
+      - name: Trust the checkout, keep the Go caches in it
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "GOMODCACHE=$GITHUB_WORKSPACE/.cache/go-mod" >>"$GITHUB_ENV"
+          echo "GOCACHE=$GITHUB_WORKSPACE/.cache/go-build" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/go-mod
+            .cache/go-build
+          key: go-${{ hashFiles('go.sum') }}
+      - name: Install the GTK dev packages and wails3
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends gcc libc6-dev pkg-config libgtk-4-dev libwebkitgtk-6.0-dev libx11-dev
+          go version
+          # The wails3 CLI at the Wails module version in go.mod, for the
+          # bindings check.
+          scripts/install-wails3.sh
+      # gofmt, the stdlib-only core guard, go vet, the race tests and the
+      # bindings check; `make check-go` runs the same script locally.
+      - run: scripts/check-go.sh
+
+  # Frontend: the CSS-token check, strict type check, Vitest, the production
+  # build and the no-remote-resources check of that build (docs/privacy.md);
+  # `make check-frontend` runs the same script locally.
+  frontend-typecheck-test:
+    name: frontend:typecheck-test
+    needs: setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-node }}
+    env:
+      npm_config_update_notifier: "false"
+      npm_config_prefer_offline: "true"
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Keep npm's download cache in the workspace
+        run: echo "npm_config_cache=$GITHUB_WORKSPACE/.npm" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: .npm
+          key: npm-${{ hashFiles('frontend/package-lock.json') }}
+      - run: scripts/check-frontend.sh
+
+  # go vet and the Go tests on macOS (cgo against WebKit; with the race
+  # detector) and on Windows (no cgo there, so no race detector). Each
+  # system's result counts on its own: one failing doesn't cancel the other.
+  go-test-os:
+    name: go:test (${{ matrix.os }})
+    needs: setup
+    strategy:
+      fail-fast: false
+      matrix:
+        # The Intel image: arm64 macOS runners are often short of capacity.
+        os: [macos-15-intel, windows-latest]
+    runs-on: ${{ matrix.os }}
+    # A hung test would otherwise hold the runner for the default six hours.
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Go at the version the Linux builds pin; setup-go caches the modules
+      # and the build cache, keyed on go.sum.
+      - uses: actions/setup-go@v7
+        with:
+          go-version: ${{ needs.setup.outputs.go-version }}
+          cache-dependency-path: go.sum
+      - name: go vet
+        run: go vet ./...
+      - name: Tests
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then
+            go test -race ./...
+          else
+            go test ./...
+          fi

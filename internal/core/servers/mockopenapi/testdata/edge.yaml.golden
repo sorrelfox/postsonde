@@ -1,0 +1,132 @@
+title: Edge cases 1 (openapi 3.0.3)
+prefix: "/base/v9" (default "/base/v9")
+
+route 0 GET /base/v9/files/{name_ext:.+\..+} id=rt_getfile enabled=true
+  from GET /files/{name}.{ext} operationId="getFile" response="200" mediaType="application/octet-stream"
+  status 200, delay none
+  body none 
+
+route 1 POST /base/v9/items/{item_id:.+:activate} id=rt_activateitem enabled=true
+  from POST /items/{item-id}:activate operationId="activateItem" response="202" mediaType=""
+  status 202, delay none
+  header Location: https://example.com (enabled=true)
+  header X-Tags: a,b (enabled=true)
+  header X-Obj: a,1,k,v (enabled=true)
+  header X-Enum: fast (enabled=true)
+  body none 
+
+route 2 GET /base/v9/a/:id/b/:id_2 id=rt_twice enabled=true
+  from GET /a/{id}/b/{id} operationId="twice" response="default" mediaType="text/plain; charset=utf-8"
+  status 200, delay none
+  body raw text
+    | hello
+
+route 3 GET /base/v9/dup/:a id=rt_dupfirst enabled=true
+  from GET /dup/{a} operationId="dupFirst" response="200" mediaType=""
+  status 200, delay none
+  body none 
+
+route 4 GET /base/v9/problems id=rt_get_problems enabled=true
+  from GET /problems operationId="" response="404" mediaType="application/problem+json"
+  status 404, delay none
+  header Content-Type: application/problem+json (enabled=true)
+  body raw json
+    | {
+    |   "title": "Not Found",
+    |   "status": 404
+    | }
+
+route 5 DELETE /base/v9/empty id=rt_deleteempty enabled=true
+  from DELETE /empty operationId="deleteEmpty" response="204" mediaType=""
+  status 204, delay none
+  body none 
+
+route 6 OPTIONS /base/v9/empty id=rt_options_empty enabled=true
+  from OPTIONS /empty operationId="" response="" mediaType=""
+  status 200, delay none
+  body none 
+
+route 7 GET /base/v9/formats id=rt_getformats enabled=true
+  from GET /formats operationId="getFormats" response="200" mediaType="application/yaml"
+  status 200, delay none
+  body raw yaml
+    | {
+    |   "n": 0
+    | }
+
+route 8 GET /base/v9/yaml id=rt_getyaml enabled=true
+  from GET /yaml operationId="getYaml" response="200" mediaType="application/x-yaml"
+  status 200, delay none
+  header Content-Type: application/x-yaml (enabled=true)
+  body raw yaml
+    | {
+    |   "n": 3
+    | }
+
+route 9 GET /base/v9/named id=rt_getnamed enabled=true
+  from GET /named operationId="getNamed" response="201" mediaType="application/json"
+  status 201, delay none
+  body raw json
+    | {
+    |   "which": "first"
+    | }
+
+route 10 GET /base/v9/external id=rt_getexternal enabled=true
+  from GET /external operationId="getExternal" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "ok": true
+    | }
+
+route 11 GET /base/v9/wild id=rt_getwild enabled=true
+  from GET /wild operationId="getWild" response="200" mediaType="*/*"
+  status 200, delay none
+  body raw text
+    | plain
+
+route 12 GET /base/v9/noschema id=rt_getnoschema enabled=true
+  from GET /noschema operationId="getNoSchema" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+
+route 13 GET /base/v9/glob%2A/:x id=rt_getglob enabled=true
+  from GET /glob*/{x} operationId="getGlob" response="200" mediaType=""
+  status 200, delay none
+  body none 
+
+route 14 GET /base/v9/search id=rt_search enabled=true
+  from GET /search?type=x operationId="search" response="200" mediaType=""
+  status 200, delay none
+  body none 
+
+route 15 GET /base/v9/xml id=rt_getxml enabled=true
+  from GET /xml operationId="getXml" response="200" mediaType="application/xml"
+  status 200, delay none
+  body raw xml
+    | <ok/>
+
+diagnostics:
+  warning openapi.path_parameter route=-1 op="" line=12: GET /files/{name}.{ext} does not define the path parameter {name}.
+  warning openapi.path_parameter route=-1 op="" line=12: GET /files/{name}.{ext} does not define the path parameter {ext}.
+  warning openapi.path_parameter route=-1 op="" line=21: POST /items/{item-id}:activate does not define the path parameter {item-id}.
+  warning openapi.path_parameter route=-1 op="" line=49: GET /a/{id}/b/{id} does not define the path parameter {id}.
+  warning openapi.path_parameter route=-1 op="" line=49: GET /a/{id}/b/{id} does not define the path parameter {id}.
+  warning openapi.path_parameter route=-1 op="" line=59: GET /dup/{a} does not define the path parameter {a}.
+  warning openapi.path_parameter route=-1 op="" line=64: GET /dup/{b} does not define the path parameter {b}.
+  warning openapi.path_parameter route=-1 op="" line=168: GET /glob*/{x} does not define the path parameter {x}.
+  info mockopenapi.path route=0 op="GET /files/{name}.{ext}" line=12: The segment "{name}.{ext}" mixes parameters and text; it is matched by the parameter name_ext with a regular expression.
+  info mockopenapi.media_type route=0 op="GET /files/{name}.{ext}" line=12: The response is a file (application/octet-stream); the route sends no body. Paste one or change the body by hand.
+  info mockopenapi.path route=1 op="POST /items/{item-id}:activate" line=21: The parameter name "item-id" was changed to item_id.
+  info mockopenapi.path route=1 op="POST /items/{item-id}:activate" line=21: The segment "{item-id}:activate" mixes parameters and text; it is matched by the parameter item_id with a regular expression.
+  info mockopenapi.header route=1 op="POST /items/{item-id}:activate" line=21: The example of the header X-Bad has a line break or control character; the header is left out.
+  info mockopenapi.path route=2 op="GET /a/{id}/b/{id}" line=49: The parameter id appears more than once in the path; the next one is id_2.
+  warning mockopenapi.duplicate_route route=-1 op="GET /dup/{b}" line=64: Another operation already has the route GET /base/v9/dup/:b; this one is left out.
+  warning mockopenapi.status route=4 op="GET /problems" line=69: The operation has no 2xx or default response; the route answers with the 404 response.
+  info mockopenapi.media_type route=5 op="DELETE /empty" line=81: A 204 response has no body; the documented content is left out.
+  warning mockopenapi.status route=6 op="OPTIONS /empty" line=89: The operation documents no responses; the route answers 200 with no body.
+  info mockopenapi.media_type route=7 op="GET /formats" line=92: The body is application/yaml; the response is also documented as text/csv, text/html.
+  info mockopenapi.example route=9 op="GET /named" line=121: The body is the example “first”, the first of 3 in the document.
+  info mockopenapi.example route=10 op="GET /external" line=136: The document's examples of this response are external files, which are not read; the body was generated from the schema.
+  info mockopenapi.no_example route=12 op="GET /noschema" line=160: The application/json response has no example and no schema to make one from; the body is empty.
+  info mockopenapi.path route=14 op="GET /search?type=x" line=173: The query string or fragment in the path was left out; routes match the path only.

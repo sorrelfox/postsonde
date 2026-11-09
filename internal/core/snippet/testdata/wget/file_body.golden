@@ -1,0 +1,6 @@
+wget https://api.test/blob \
+  --method POST \
+  --header 'Content-Type: application/json' \
+  --body-file <root>/data.json \
+  --max-redirect 10 \
+  -O -

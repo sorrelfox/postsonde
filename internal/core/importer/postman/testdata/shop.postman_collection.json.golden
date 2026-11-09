@@ -1,0 +1,823 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Shop API",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "bearer",
+      "token": "{{token}}"
+    },
+    "description": "The shop's public API.\n\nSet `base_url` in an environment.\n\nPostman pre-request script (not run by PostSonde):\n\n```js\npm.request.headers.add({key: 'X-Client', value: 'postman'});\n```\n\nPostman test script (turned off in Postman; not run by PostSonde):\n\n```js\npm.test('fast', () => pm.expect(pm.response.responseTime).to.be.below(500));\n```",
+    "diagnostics": [
+      {
+        "Code": "postman.script",
+        "Severity": "warning",
+        "Message": "The collection's pre-request script is kept in its description: PostSonde does not run Postman scripts.",
+        "At": " @1:1"
+      },
+      {
+        "Code": "postman.script",
+        "Severity": "warning",
+        "Message": "The collection's test script is kept in its description: PostSonde does not run Postman scripts.",
+        "At": " @1:1"
+      }
+    ],
+    "folder": "Shop API",
+    "headers": null,
+    "items": [
+      {
+        "at": "item[0] @10:3",
+        "auth": {
+          "type": "bearer",
+          "token": "{{user_token}}"
+        },
+        "description": "Everything about users.\n\nPostman pre-request script (not run by PostSonde):\n\n```js\nconsole.log(\"users folder\");\n```",
+        "diagnostics": [
+          {
+            "Code": "postman.script",
+            "Severity": "warning",
+            "Message": "The folder's pre-request script is kept in its description: PostSonde does not run Postman scripts.",
+            "At": "item[0] @10:3"
+          }
+        ],
+        "folder": "Users",
+        "headers": null,
+        "items": [
+          {
+            "at": "item[0].item[0] @14:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Lists users, a page at a time.",
+              "method": "GET",
+              "url": "{{base_url}}/users?sort=name&limit={{page_size}}&active",
+              "params": [
+                {
+                  "name": "sort",
+                  "value": "name"
+                },
+                {
+                  "name": "limit",
+                  "value": "{{page_size}}",
+                  "description": "Page size"
+                },
+                {
+                  "name": "q",
+                  "value": "ada",
+                  "disabled": true
+                },
+                {
+                  "name": "active",
+                  "value": ""
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "name": "X-Trace",
+                  "value": "{{$randomUUID}}",
+                  "disabled": true
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              },
+              "settings": {
+                "followRedirects": false,
+                "maxRedirects": 3,
+                "sendCookies": false,
+                "storeCookies": false
+              },
+              "responseExamples": [
+                {
+                  "name": "Two users",
+                  "request": {
+                    "method": "GET",
+                    "url": "{{base_url}}/users",
+                    "headers": [
+                      {
+                        "name": "Authorization",
+                        "value": "Bearer ••••••"
+                      }
+                    ]
+                  },
+                  "statusCode": 200,
+                  "statusText": "OK",
+                  "headers": [
+                    {
+                      "name": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "[\n  {\"id\": 1, \"name\": \"Ada\"},\n  {\"id\": 2, \"name\": \"Grace\"}\n]"
+                },
+                {
+                  "name": "Example 2",
+                  "statusCode": 401,
+                  "statusText": "Unauthorized",
+                  "headers": [
+                    {
+                      "name": "Content-Type",
+                      "value": "application/problem+json"
+                    }
+                  ],
+                  "body": "{\"title\": \"No ```token```\"}"
+                },
+                {
+                  "name": "Empty",
+                  "statusCode": 204
+                }
+              ]
+            },
+            "request": "List users"
+          },
+          {
+            "at": "item[0].item[1] @110:5",
+            "diagnostics": [
+              {
+                "Code": "postman.script",
+                "Severity": "warning",
+                "Message": "The request's test script is kept in its description: PostSonde does not run Postman scripts.",
+                "At": "item[0].item[1] @110:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Postman test script (not run by PostSonde):\n\n```js\npm.test(\"status is 200\", function () {\n    pm.response.to.have.status(200);\n});\n```",
+              "method": "GET",
+              "url": "{{base_url}}/users/:id/orders/:orderId",
+              "pathParams": [
+                {
+                  "name": "id",
+                  "value": "{{user_id}}",
+                  "description": "The user's ID"
+                },
+                {
+                  "name": "orderId",
+                  "value": ""
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "none"
+              },
+              "settings": {
+                "sendCookies": false,
+                "storeCookies": false
+              }
+            },
+            "request": "Get user"
+          },
+          {
+            "at": "item[0].item[2] @153:5",
+            "diagnostics": [
+              {
+                "Code": "postman.script",
+                "Severity": "warning",
+                "Message": "The request's pre-request script is kept in its description: PostSonde does not run Postman scripts.",
+                "At": "item[0].item[2] @153:5"
+              },
+              {
+                "Code": "postman.dynamic_converted",
+                "Severity": "info",
+                "Message": "The Postman dynamic variable {{$randomAlphaNumeric}} became the dynamic value {{$randomString 1}}.",
+                "At": "item[0].item[2] @153:5"
+              },
+              {
+                "Code": "postman.dynamic_converted",
+                "Severity": "info",
+                "Message": "The Postman dynamic variable {{$randomHexadecimal}} became the dynamic value {{$randomHex 1}}.",
+                "At": "item[0].item[2] @153:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Postman pre-request script (not run by PostSonde):\n\n```js\npm.variables.set(\"now\", Date.now());\n```",
+              "method": "POST",
+              "url": "{{base_url}}/users",
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\n  \"id\": \"{{$guid}}\",\n  \"name\": \"{{$randomFirstName}}\",\n  \"code\": \"{{$randomString 1}}{{$randomHex 1}}\",\n  \"created\": {{$timestamp}},\n  \"lucky\": {{$randomInt}},\n  \"email\": \"{{$randomEmail}}\"\n}"
+              },
+              "auth": {
+                "type": "basic",
+                "username": "{{admin_user}}",
+                "password": "hunter2"
+              },
+              "settings": {
+                "sendCookies": false,
+                "storeCookies": false
+              }
+            },
+            "request": "Create user"
+          },
+          {
+            "at": "item[0].item[3] @206:5",
+            "auth": {
+              "type": "apikey",
+              "key": "X-API-Key",
+              "value": "{{api_key}}"
+            },
+            "description": "",
+            "diagnostics": null,
+            "folder": "Avatars",
+            "headers": null,
+            "items": [
+              {
+                "at": "item[0].item[3].item[0] @236:7",
+                "diagnostics": [
+                  {
+                    "Code": "postman.file_path",
+                    "Severity": "info",
+                    "Message": "The body sends a file by its path on the machine the export was made on; check that the path exists here.",
+                    "At": "item[0].item[3].item[0] @236:7"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "method": "POST",
+                  "url": "{{base_url}}/users/{{user_id}}/avatar",
+                  "body": {
+                    "mode": "multipart",
+                    "parts": [
+                      {
+                        "name": "image",
+                        "value": "",
+                        "file": "/Users/ada/Pictures/me.png",
+                        "contentType": "image/png"
+                      },
+                      {
+                        "name": "caption",
+                        "value": "Me at {{$isoTimestamp}}"
+                      },
+                      {
+                        "name": "extra",
+                        "value": "",
+                        "file": "/Users/ada/Pictures/a.png"
+                      },
+                      {
+                        "name": "extra",
+                        "value": "",
+                        "file": "/Users/ada/Pictures/b.png"
+                      },
+                      {
+                        "name": "draft",
+                        "value": "true",
+                        "disabled": true
+                      }
+                    ]
+                  },
+                  "auth": {
+                    "type": "inherit"
+                  },
+                  "settings": {
+                    "sendCookies": false,
+                    "storeCookies": false
+                  }
+                },
+                "request": "Upload avatar"
+              },
+              {
+                "at": "item[0].item[3].item[1] @285:7",
+                "diagnostics": [
+                  {
+                    "Code": "postman.file_path",
+                    "Severity": "info",
+                    "Message": "The body sends a file by its path on the machine the export was made on; check that the path exists here.",
+                    "At": "item[0].item[3].item[1] @285:7"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "method": "PUT",
+                  "url": "{{base_url}}/users/{{user_id}}/avatar",
+                  "headers": [
+                    {
+                      "name": "Content-Type",
+                      "value": "image/png"
+                    }
+                  ],
+                  "body": {
+                    "mode": "file",
+                    "path": "/Users/ada/Pictures/new.png"
+                  },
+                  "auth": {
+                    "type": "inherit"
+                  },
+                  "settings": {
+                    "sendCookies": false,
+                    "storeCookies": false
+                  }
+                },
+                "request": "Replace avatar"
+              }
+            ],
+            "variables": [
+              {
+                "name": "avatar_secret",
+                "value": "s3cr3t-avatar",
+                "secret": true
+              },
+              {
+                "name": "max_size",
+                "value": "1048576"
+              }
+            ]
+          }
+        ],
+        "variables": [
+          {
+            "name": "user_id",
+            "value": "42"
+          }
+        ]
+      },
+      {
+        "at": "item[1] @339:3",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Auth",
+        "headers": null,
+        "items": [
+          {
+            "at": "item[1].item[0] @342:5",
+            "diagnostics": [
+              {
+                "Code": "postman.setting_skipped",
+                "Severity": "info",
+                "Message": "Postman settings PostSonde does not have are not imported: insecureHTTPParser, tlsDisabledProtocols.",
+                "At": "item[1].item[0] @342:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{base_url}}/login",
+              "body": {
+                "mode": "urlencoded",
+                "fields": [
+                  {
+                    "name": "username",
+                    "value": "{{username}}"
+                  },
+                  {
+                    "name": "password",
+                    "value": "{{password}}",
+                    "description": "Never typed here"
+                  },
+                  {
+                    "name": "remember",
+                    "value": "1",
+                    "disabled": true
+                  }
+                ]
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "api_key",
+                "value": "{{api_key}}",
+                "in": "query"
+              },
+              "settings": {
+                "followOriginalMethod": true,
+                "forwardAuthorization": false,
+                "verifyTls": false,
+                "urlEncoding": "none",
+                "httpVersion": "http2"
+              }
+            },
+            "request": "Log in"
+          },
+          {
+            "at": "item[1].item[1] @413:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{base_url}}/admin",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "digest",
+                "username": "admin",
+                "password": "{{digest_password}}"
+              }
+            },
+            "request": "Digest login"
+          },
+          {
+            "at": "item[1].item[2] @447:5",
+            "diagnostics": [
+              {
+                "Code": "postman.auth_changed",
+                "Severity": "warning",
+                "Message": "The OAuth 2.0 auth was imported with a change. Its authorization URL is not set: enter it before sending the request.",
+                "At": "item[1].item[2] @447:5"
+              },
+              {
+                "Code": "postman.setting_skipped",
+                "Severity": "info",
+                "Message": "Postman settings PostSonde does not have are not imported: proxy.",
+                "At": "item[1].item[2] @447:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{base_url}}/me",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "oauth2",
+                "grantType": "authorization_code",
+                "tokenUrl": "https://auth.shop.example/token",
+                "clientSecret": "oauth-client-secret-1"
+              }
+            },
+            "request": "OAuth token"
+          },
+          {
+            "at": "item[1].item[3] @475:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "https://s3.amazonaws.com/shop-assets",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "awsv4",
+                "secretKey": "aws-secret-2"
+              }
+            },
+            "request": "Signed request"
+          },
+          {
+            "at": "item[1].item[4] @494:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{base_url}}/oauth/request_token",
+              "body": {
+                "mode": "urlencoded",
+                "fields": [
+                  {
+                    "name": "scope",
+                    "value": "orders"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "oauth1",
+                "in": "body",
+                "consumerKey": "shop-consumer",
+                "consumerSecret": "oauth1-consumer-secret-5",
+                "tokenSecret": "{{oauth_token_secret}}",
+                "signatureMethod": "HMAC-SHA256",
+                "callback": "https://app.shop.example/cb",
+                "realm": "shop"
+              }
+            },
+            "request": "Request token"
+          },
+          {
+            "at": "item[1].item[5] @528:5",
+            "diagnostics": [
+              {
+                "Code": "postman.auth_changed",
+                "Severity": "warning",
+                "Message": "The OAuth 1.0 auth was imported with a change. It signed empty parameters; PostSonde leaves an empty token, callback or verifier out.",
+                "At": "item[1].item[5] @528:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "PUT",
+              "url": "{{base_url}}/partner/orders",
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\"status\": \"shipped\"}"
+              },
+              "auth": {
+                "type": "oauth1",
+                "consumerKey": "{{partner_key}}",
+                "consumerSecret": "-----BEGIN PRIVATE KEY-----\nrsa-key-6\n-----END PRIVATE KEY-----",
+                "accessToken": "partner-token",
+                "signatureMethod": "RSA-SHA1",
+                "omitVersion": true,
+                "nonce": "fixed-nonce",
+                "timestamp": "1700000000",
+                "bodyHash": true
+              }
+            },
+            "request": "Partner orders"
+          },
+          {
+            "at": "item[1].item[6] @559:5",
+            "diagnostics": [
+              {
+                "Code": "postman.auth_changed",
+                "Severity": "warning",
+                "Message": "The OAuth 1.0 auth was imported with a change. It sent oauth_version \"1.0a\"; PostSonde sends 1.0. PostSonde cannot sign with RSA-SHA512: choose HMAC-SHA1, HMAC-SHA256, RSA-SHA1 or PLAINTEXT before sending. It did not encode the header's values; PostSonde encodes them.",
+                "At": "item[1].item[6] @559:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{base_url}}/legacy",
+              "body": {
+                "mode": "urlencoded"
+              },
+              "auth": {
+                "type": "oauth1",
+                "in": "body",
+                "consumerKey": "legacy",
+                "consumerSecret": "{{legacy_key}}",
+                "signatureMethod": "RSA-SHA512"
+              }
+            },
+            "request": "Legacy partner"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "item[2] @584:3",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "url": "{{base_url}}/graphql",
+          "query": "query Search($q: String!) {\n  products(q: $q) { id name }\n}",
+          "variables": "{\n  \"q\": \"{{query}}\"\n}",
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Search products"
+      },
+      {
+        "at": "item[3] @608:3",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{base_url}}/graphql",
+          "query": "{ product(id: \"{{product_id}}\") { name } }",
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Product by GET"
+      },
+      {
+        "at": "item[4] @624:3",
+        "diagnostics": [
+          {
+            "Code": "postman.graphql_method",
+            "Severity": "warning",
+            "Message": "The GraphQL request used the PATCH method; PostSonde sends GraphQL requests with POST or GET, so it is sent with POST.",
+            "At": "item[4] @624:3"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "url": "{{base_url}}/graphql",
+          "query": "mutation { touch }",
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Patch product (GraphQL)"
+      },
+      {
+        "at": "item[5] @639:3",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{base_url}}/scripts",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/javascript"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "type": "text",
+            "text": "console.log('hi')"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Run script"
+      },
+      {
+        "at": "item[6] @657:3",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{base_url}}/orders#top",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/xml"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "type": "xml",
+            "text": "<order><sku>{{sku}}</sku></order>"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Place order (XML)"
+      },
+      {
+        "at": "item[7] @675:3",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{base_url}}/health",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Health"
+      },
+      {
+        "at": "item[8] @679:3",
+        "diagnostics": [
+          {
+            "Code": "postman.body_skipped",
+            "Severity": "info",
+            "Message": "The body was turned off in Postman and is not imported.",
+            "At": "item[8] @679:3"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{base_url}}/muted",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Muted body"
+      },
+      {
+        "at": "item[9] @693:3",
+        "diagnostics": [
+          {
+            "Code": "postman.variables_skipped",
+            "Severity": "warning",
+            "Message": "The request's own variables were not imported: PostSonde requests have no variables. Add them to its folder.",
+            "At": "item[9] @693:3"
+          },
+          {
+            "Code": "postman.vault",
+            "Severity": "warning",
+            "Message": "A Postman Vault reference in a header is left as written: PostSonde has no vault. Use a secret variable instead.",
+            "At": "item[9] @693:3"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "https://api.stripe.example/v1/charges",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{vault:stripe-key}}"
+            }
+          ],
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Charge card"
+      },
+      {
+        "at": "item[10] @713:3",
+        "code": "postman.unsupported",
+        "name": "Placeholder",
+        "reason": "The item has neither a request nor items.",
+        "skipped": "item"
+      }
+    ],
+    "variables": [
+      {
+        "name": "base_url",
+        "value": "https://shop.example/api"
+      },
+      {
+        "name": "page_size",
+        "value": "20",
+        "description": "Items per page"
+      },
+      {
+        "name": "api_key",
+        "value": "coll-api-key-5",
+        "secret": true
+      },
+      {
+        "name": "legacy",
+        "value": "x",
+        "disabled": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "_comment": "Filter pipe parsing cases, run by filter_sync_test.go and by frontend/src/lib/templateFilters.test.ts, so the editor reads a pipe exactly as a send does. pipe: false means the name is not a pipe at all; error is the Problem.Message of an invalid pipe.",
+  "cases": [
+    { "name": "a | base64", "pipe": true, "input": "a", "quoted": false, "filters": ["base64"] },
+    { "name": "a|base64|base64Decode", "pipe": true, "input": "a", "quoted": false, "filters": ["base64", "base64Decode"] },
+    { "name": "\"user:pass\" | base64", "pipe": true, "input": "user:pass", "quoted": true, "filters": ["base64"] },
+    { "name": "\"a|b\" | urlEncode", "pipe": true, "input": "a|b", "quoted": true, "filters": ["urlEncode"] },
+    { "name": "auth.token | sha256 base64", "pipe": true, "input": "auth.token", "quoted": false, "filters": ["sha256"] },
+    { "name": "$randomInt 1 6 | md5", "pipe": true, "input": "$randomInt 1 6", "quoted": false, "filters": ["md5"] },
+    { "name": "body | hmacSha256 key", "pipe": true, "input": "body", "quoted": false, "filters": ["hmacSha256"], "keys": ["key"] },
+    { "name": "body | hmacSha256 \"k e y\" base64url", "pipe": true, "input": "body", "quoted": false, "filters": ["hmacSha256"], "keys": [] },
+    { "name": "a", "pipe": false },
+    { "name": "\"a|b\"", "pipe": false },
+    { "name": "a | hmacSha256 \"k", "pipe": false },
+    { "name": "a | nope", "pipe": true, "error": "\"nope\" is not a filter" },
+    { "name": "a | \"base64\"", "pipe": true, "error": "\"base64\" is not a filter" },
+    { "name": "a |", "pipe": true, "error": "a filter name is missing after a |" },
+    { "name": "| base64", "pipe": true, "error": "a variable or a quoted text must come before the first |" },
+    { "name": "\"a\" b | base64", "pipe": true, "error": "the quoted text before the first | is not closed or has text after it" },
+    { "name": "a | base64 x", "pipe": true, "error": "base64 takes no arguments" },
+    { "name": "a | sha1 hex x", "pipe": true, "error": "sha1 takes at most an output encoding" },
+    { "name": "a | sha1 b32", "pipe": true, "error": "sha1: the output encoding \"b32\" is not hex, base64 or base64url" },
+    { "name": "a | hmacSha1", "pipe": true, "error": "hmacSha1 needs a key: a variable name or a quoted text" },
+    { "name": "a | hmacSha1 k hex x", "pipe": true, "error": "hmacSha1 takes a key and at most an output encoding" },
+    { "name": "a | hmacSha1 \"k\"x", "pipe": true, "error": "the filter \"hmacSha1 \\\"k\\\"x\" has a quote that is not closed or text right after a quote" }
+  ]
+}

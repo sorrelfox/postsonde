@@ -1,0 +1,30 @@
+{
+  "name": "notes",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://app.example.com/api/notes",
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "x-note",
+        "value": "café ☕"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\n  \"msg\": \"it's done!\",\n  \"esc\": \"a\\nb\",\n  \"tab\": \"\t\"\n}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": []
+}

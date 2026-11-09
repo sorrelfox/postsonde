@@ -1,0 +1,14 @@
+import requests
+
+response = requests.request(
+    "PUT",
+    "https://api.test/blob",
+    headers={
+        "Content-Type": "application/json",
+    },
+    data=open("C:\\Users\\Me\\My Files\\report 100%.json", "rb"),
+    allow_redirects=False,
+)
+
+print(response.status_code)
+print(response.text)

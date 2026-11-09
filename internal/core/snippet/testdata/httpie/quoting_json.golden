@@ -1,0 +1,10 @@
+http --follow --max-redirects=10 \
+  --raw '{
+  "path": "C:\\dir\\",
+  "quote": "say \"hi\"",
+  "escape": "\u00e9\n",
+  "template": "${x} `y` {{z}}",
+  "text": "héllo ✓"
+}' \
+  PATCH https://api.test/q \
+  Content-Type:application/json

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/rss.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Example Engineering Blog</title>
+    <link>https://blog.example.com/</link>
+    <atom:link href="https://blog.example.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Posts about APIs &amp; tooling</description>
+    <item>
+      <title>Designing   idempotent
+        APIs</title>
+      <link>https://blog.example.com/idempotent-apis</link>
+      <dc:creator>Ada</dc:creator>
+      <category>api</category>
+      <category>http</category>
+      <pubDate>Mon, 07 Sep 2026 09:00:00 GMT</pubDate>
+      <description><![CDATA[<p>Retries are <b>hard</b>.</p>]]></description>
+    </item>
+    <item>
+      <title>XPath for testers</title>
+      <link>https://blog.example.com/xpath</link>
+      <dc:creator>Grace</dc:creator>
+      <category>xml</category>
+      <pubDate>Tue, 08 Sep 2026 09:00:00 GMT</pubDate>
+      <description>Querying responses</description>
+    </item>
+    <item>
+      <title>Release notes 2.4</title>
+      <link>https://blog.example.com/release-2-4</link>
+      <dc:creator>Ada</dc:creator>
+      <category>release</category>
+      <pubDate>Wed, 09 Sep 2026 09:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

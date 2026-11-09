@@ -1,0 +1,7 @@
+GET /items HTTP/1.1
+Host: api.test
+Accept: application/json
+X-Quote: it's "quoted" $HOME `id`
+X-Empty: 
+X-Unicode: héllo ✓
+User-Agent: PostSonde-test

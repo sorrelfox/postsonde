@@ -1,0 +1,96 @@
+/* The Repeat dialog of the Send button (HTTP-27). */
+
+.help {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mode {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: 0 0 var(--space-3) var(--space-8);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.fields[aria-disabled="true"] .row {
+  color: var(--text3);
+}
+
+.label {
+  min-width: 96px;
+}
+
+.unit {
+  color: var(--text3);
+}
+
+.input {
+  width: 120px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.input:disabled {
+  color: var(--text3);
+}
+
+.input::placeholder {
+  color: var(--text3);
+}
+
+.error {
+  margin: 0 0 0 calc(96px + var(--space-4));
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}

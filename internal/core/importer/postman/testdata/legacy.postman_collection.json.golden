@@ -1,0 +1,193 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Legacy Orders",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "basic",
+      "username": "{{user}}",
+      "password": "legacy-pass-3"
+    },
+    "description": "Orders API, exported as **v2.0**.",
+    "diagnostics": null,
+    "folder": "Legacy Orders",
+    "headers": null,
+    "items": [
+      {
+        "at": "item[0] @32:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Orders",
+        "headers": null,
+        "items": [
+          {
+            "at": "item[0].item[0] @36:9",
+            "auth": {
+              "type": "oauth1",
+              "consumerKey": "archive-key",
+              "consumerSecret": "legacy-oauth1-secret-8",
+              "accessToken": "{{archive_token}}",
+              "tokenSecret": "{{archive_token_secret}}",
+              "signatureMethod": "PLAINTEXT",
+              "timestamp": "1700000000"
+            },
+            "description": "",
+            "diagnostics": null,
+            "folder": "Archive",
+            "headers": null,
+            "items": [
+              {
+                "at": "item[0].item[0].item[0] @55:13",
+                "auth": {
+                  "type": "inherit"
+                },
+                "description": "",
+                "diagnostics": null,
+                "folder": "2019",
+                "headers": null,
+                "items": [
+                  {
+                    "at": "item[0].item[0].item[0].item[0] @58:17",
+                    "diagnostics": null,
+                    "file": {
+                      "schemaVersion": 1,
+                      "kind": "http",
+                      "id": "req_x",
+                      "name": "",
+                      "description": "Orders of 2019.",
+                      "method": "GET",
+                      "url": "https://{{host}}:8443/v1/archive/:year?page=1#list",
+                      "params": [
+                        {
+                          "name": "page",
+                          "value": "1"
+                        },
+                        {
+                          "name": "debug",
+                          "value": "1",
+                          "disabled": true
+                        }
+                      ],
+                      "pathParams": [
+                        {
+                          "name": "year",
+                          "value": "2019"
+                        }
+                      ],
+                      "headers": [
+                        {
+                          "name": "Accept",
+                          "value": "application/json"
+                        },
+                        {
+                          "name": "X-Debug",
+                          "value": "1",
+                          "disabled": true
+                        },
+                        {
+                          "name": "X-Client",
+                          "value": "{{client}}"
+                        }
+                      ],
+                      "body": {
+                        "mode": "none"
+                      },
+                      "auth": {
+                        "type": "inherit"
+                      },
+                      "settings": {
+                        "verifyTls": false
+                      }
+                    },
+                    "request": "List archived orders"
+                  }
+                ],
+                "variables": null
+              }
+            ],
+            "variables": null
+          },
+          {
+            "at": "item[0].item[1] @81:9",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "https://{{host}}/v1/orders?source=legacy",
+              "params": [
+                {
+                  "name": "source",
+                  "value": "legacy"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\"sku\": \"{{sku}}\", \"ref\": \"{{$guid}}\"}"
+              },
+              "auth": {
+                "type": "bearer",
+                "token": "{{order_token}}"
+              },
+              "settings": {
+                "verifyTls": false
+              }
+            },
+            "request": "Create order"
+          },
+          {
+            "at": "item[0].item[2] @102:9",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "https://{{host}}/v1/orders/sign",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "hawk",
+                "hawkId": "id",
+                "hawkKey": "hawk-key-4"
+              },
+              "settings": {
+                "verifyTls": false
+              }
+            },
+            "request": "Sign order"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "item[1] @122:5",
+        "code": "postman.unsupported",
+        "name": "",
+        "reason": "The item is not a JSON object, so it is not a request or a folder.",
+        "skipped": "item"
+      }
+    ],
+    "variables": [
+      {
+        "name": "host",
+        "value": "api.example.com"
+      }
+    ]
+  }
+}

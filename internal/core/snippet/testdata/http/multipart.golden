@@ -1,0 +1,28 @@
+POST /upload HTTP/1.1
+Host: api.test
+Content-Type: multipart/form-data; boundary=PostSondeFormBoundary
+
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="title"
+
+a;b,c "q"
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="meta"
+Content-Type: application/json
+
+{"k":1}
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="at"
+
+@literal
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="file"; filename="data.json"
+Content-Type: application/json
+
+< <root>/data.json
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="odd"; filename="odd name;1.txt"
+Content-Type: text/x-odd
+
+< <root>/odd name;1.txt
+--PostSondeFormBoundary--

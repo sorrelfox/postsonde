@@ -1,0 +1,5 @@
+grpcurl -plaintext \
+  -H 'x-tricky: 100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\' \
+  -H $'x-control: a\x1bb' \
+  -d '{"text": "it'\''s $(id) `tick` \"q\" é ✓", "tab": "a\tb"}' \
+  localhost:50051 a.B/C

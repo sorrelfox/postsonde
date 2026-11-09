@@ -1,0 +1,8 @@
+wget 'https://api.test/items?key=••••••' \
+  --method POST \
+  --header 'X-Api-Key: ••••••' \
+  --header 'Authorization: Bearer ••••••' \
+  --header 'Content-Type: application/json' \
+  --body-data '{"password":"••••••"}' \
+  --max-redirect 10 \
+  -O -

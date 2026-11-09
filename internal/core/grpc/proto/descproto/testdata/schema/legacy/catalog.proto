@@ -1,0 +1,66 @@
+syntax = "proto2";
+
+package legacy;
+
+import "shop/v1/options.proto";
+
+enum Color {
+  RED = 1;
+  GREEN = 2;
+}
+
+message Item {
+  required string name = 1 [default = "unnamed \"item\"\n\ttab"];
+  optional bytes code = 2 [default = "\000\001\377abc\\"];
+  optional double price = 3 [default = inf];
+  optional float discount = 4 [default = -1.5e-3];
+  optional Color color = 5 [default = GREEN];
+  optional int64 stock = 6 [default = -9223372036854775808];
+  optional uint64 big = 7 [default = 18446744073709551615];
+  optional bool active = 8 [default = true];
+  optional double missing = 9 [default = nan];
+  repeated int32 sizes = 10 [packed = true];
+
+  optional group Detail = 11 {
+    optional string text = 1;
+    repeated group Note = 2 {
+      optional string body = 1 [(shop.v1.label) = "note"];
+    }
+  }
+
+  message Nested {
+    optional int32 a = 1;
+  }
+
+  oneof choice {
+    string word = 12;
+    group Pick = 13 {
+      optional int32 index = 1;
+    }
+  }
+
+  optional Nested nested = 14;
+
+  extensions 100 to 199;
+  extensions 1000 to max;
+
+  extend Item {
+    optional string nested_ext = 150;
+  }
+}
+
+message Set {
+  option message_set_wire_format = true;
+  extensions 4 to max;
+}
+
+extend Item {
+  optional int32 rank = 100;
+  repeated group Tag = 101 {
+    optional string value = 1;
+  }
+}
+
+extend Set {
+  optional Item item_in_set = 1000000;
+}

@@ -1,0 +1,139 @@
+# source
+type Person implements NamedEntity & ValuedEntity {
+  name: String
+  age: Int
+  picture(size: Int = 50, "The format" format: Format = PNG @deprecated): Url
+  relationship: Person
+}
+
+interface NamedEntity { name: String }
+interface ValuedEntity { value: Int }
+
+interface Resource implements & Node {
+  id: ID!
+  url: String
+}
+
+type Business implements
+  & NamedEntity
+  & ValuedEntity {
+  name: String
+  value: Int
+  employeeCount: Int
+}
+
+type Empty
+
+extend type Story { isHiddenLocally: Boolean }
+extend type User @addedDirective
+extend type Person implements Node
+extend interface NamedEntity { nickname: String }
+extend interface Resource @key
+# tree
+Document [0:645]
+  Definitions[0]: TypeDefinition [0:180] Extend=-1 Kind=type Keyword=0 Implements=12 Equals=-1 LBrace=50 RBrace=179
+    Name: Name [5:11] Value="Person"
+    Interfaces[0]: NamedType [23:34]
+      Name: Name [23:34] Value="NamedEntity"
+    Interfaces[1]: NamedType [37:49]
+      Name: Name [37:49] Value="ValuedEntity"
+    Fields[0]: FieldDefinition [54:66] Colon=58
+      Name: Name [54:58] Value="name"
+      Type: NamedType [60:66]
+        Name: Name [60:66] Value="String"
+    Fields[1]: FieldDefinition [69:77] Colon=72
+      Name: Name [69:72] Value="age"
+      Type: NamedType [74:77]
+        Name: Name [74:77] Value="Int"
+    Fields[2]: FieldDefinition [80:155] Colon=150
+      Name: Name [80:87] Value="picture"
+      Arguments: ArgumentDefinitionList [87:150] LParen=87 RParen=149
+        Arguments[0]: InputValueDefinition [88:102] Colon=92 Equals=98
+          Name: Name [88:92] Value="size"
+          Type: NamedType [94:97]
+            Name: Name [94:97] Value="Int"
+          DefaultValue: IntValue [100:102] Raw="50"
+        Arguments[1]: InputValueDefinition [104:149] Colon=123 Equals=132
+          Description: StringValue [104:116] Block=false Value="The format"
+          Name: Name [117:123] Value="format"
+          Type: NamedType [125:131]
+            Name: Name [125:131] Value="Format"
+          DefaultValue: EnumValue [134:137] Value="PNG"
+          Directives[0]: Directive [138:149] At=138
+            Name: Name [139:149] Value="deprecated"
+      Type: NamedType [152:155]
+        Name: Name [152:155] Value="Url"
+    Fields[3]: FieldDefinition [158:178] Colon=170
+      Name: Name [158:170] Value="relationship"
+      Type: NamedType [172:178]
+        Name: Name [172:178] Value="Person"
+  Definitions[1]: TypeDefinition [182:220] Extend=-1 Kind=interface Keyword=182 Implements=-1 Equals=-1 LBrace=204 RBrace=219
+    Name: Name [192:203] Value="NamedEntity"
+    Fields[0]: FieldDefinition [206:218] Colon=210
+      Name: Name [206:210] Value="name"
+      Type: NamedType [212:218]
+        Name: Name [212:218] Value="String"
+  Definitions[2]: TypeDefinition [221:258] Extend=-1 Kind=interface Keyword=221 Implements=-1 Equals=-1 LBrace=244 RBrace=257
+    Name: Name [231:243] Value="ValuedEntity"
+    Fields[0]: FieldDefinition [246:256] Colon=251
+      Name: Name [246:251] Value="value"
+      Type: NamedType [253:256]
+        Name: Name [253:256] Value="Int"
+  Definitions[3]: TypeDefinition [260:324] Extend=-1 Kind=interface Keyword=260 Implements=279 Equals=-1 LBrace=297 RBrace=323
+    Name: Name [270:278] Value="Resource"
+    Interfaces[0]: NamedType [292:296]
+      Name: Name [292:296] Value="Node"
+    Fields[0]: FieldDefinition [301:308] Colon=303
+      Name: Name [301:303] Value="id"
+      Type: NonNullType [305:308] Bang=307
+        Type: NamedType [305:307]
+          Name: Name [305:307] Value="ID"
+    Fields[1]: FieldDefinition [311:322] Colon=314
+      Name: Name [311:314] Value="url"
+      Type: NamedType [316:322]
+        Name: Name [316:322] Value="String"
+  Definitions[4]: TypeDefinition [326:436] Extend=-1 Kind=type Keyword=326 Implements=340 Equals=-1 LBrace=384 RBrace=435
+    Name: Name [331:339] Value="Business"
+    Interfaces[0]: NamedType [355:366]
+      Name: Name [355:366] Value="NamedEntity"
+    Interfaces[1]: NamedType [371:383]
+      Name: Name [371:383] Value="ValuedEntity"
+    Fields[0]: FieldDefinition [388:400] Colon=392
+      Name: Name [388:392] Value="name"
+      Type: NamedType [394:400]
+        Name: Name [394:400] Value="String"
+    Fields[1]: FieldDefinition [403:413] Colon=408
+      Name: Name [403:408] Value="value"
+      Type: NamedType [410:413]
+        Name: Name [410:413] Value="Int"
+    Fields[2]: FieldDefinition [416:434] Colon=429
+      Name: Name [416:429] Value="employeeCount"
+      Type: NamedType [431:434]
+        Name: Name [431:434] Value="Int"
+  Definitions[5]: TypeDefinition [438:448] Extend=-1 Kind=type Keyword=438 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [443:448] Value="Empty"
+  Definitions[6]: TypeDefinition [450:496] Extend=450 Kind=type Keyword=457 Implements=-1 Equals=-1 LBrace=468 RBrace=495
+    Name: Name [462:467] Value="Story"
+    Fields[0]: FieldDefinition [470:494] Colon=485
+      Name: Name [470:485] Value="isHiddenLocally"
+      Type: NamedType [487:494]
+        Name: Name [487:494] Value="Boolean"
+  Definitions[7]: TypeDefinition [497:529] Extend=497 Kind=type Keyword=504 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [509:513] Value="User"
+    Directives[0]: Directive [514:529] At=514
+      Name: Name [515:529] Value="addedDirective"
+  Definitions[8]: TypeDefinition [530:564] Extend=530 Kind=type Keyword=537 Implements=549 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [542:548] Value="Person"
+    Interfaces[0]: NamedType [560:564]
+      Name: Name [560:564] Value="Node"
+  Definitions[9]: TypeDefinition [565:614] Extend=565 Kind=interface Keyword=572 Implements=-1 Equals=-1 LBrace=594 RBrace=613
+    Name: Name [582:593] Value="NamedEntity"
+    Fields[0]: FieldDefinition [596:612] Colon=604
+      Name: Name [596:604] Value="nickname"
+      Type: NamedType [606:612]
+        Name: Name [606:612] Value="String"
+  Definitions[10]: TypeDefinition [615:645] Extend=615 Kind=interface Keyword=622 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [632:640] Value="Resource"
+    Directives[0]: Directive [641:645] At=641
+      Name: Name [642:645] Value="key"
+# errors

@@ -1,0 +1,8 @@
+type: codec.p3.Nested
+a: 1
+child: {}
+child.a: 2
+child.child: {}
+child.child.a: 3
+child.child.child: {}
+child.child.child.b: "deep"

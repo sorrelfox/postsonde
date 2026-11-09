@@ -1,0 +1,18 @@
+# source
+\uFEFF# leading comment
+{,,a,,b # trailing\r
+,c\r}
+
+# tree
+Document [0:46]
+  Definitions[0]: OperationDefinition [21:45] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [21:45] LBrace=21 RBrace=44
+      Selections[0]: Field [24:25] Colon=-1
+        Name: Name [24:25] Value="a"
+      Selections[1]: Field [27:28] Colon=-1
+        Name: Name [27:28] Value="b"
+      Selections[2]: Field [42:43] Colon=-1
+        Name: Name [42:43] Value="c"
+  Comments[0]: Comment [3:20] Text="# leading comment"
+  Comments[1]: Comment [29:39] Text="# trailing"
+# errors

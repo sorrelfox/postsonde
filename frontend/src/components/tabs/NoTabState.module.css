@@ -1,0 +1,185 @@
+/* The request pane with no tab open (COL-06): New scratch request and the
+ * list of scratch requests. */
+
+.panel {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding: 64px var(--space-8) var(--space-8);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  color: var(--text3);
+}
+
+.title {
+  color: var(--text2);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+}
+
+.body {
+  max-width: 320px;
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.actions {
+  display: flex;
+  margin-top: var(--space-4);
+}
+
+.primary,
+.more {
+  height: var(--h-control);
+  display: flex;
+  align-items: center;
+  border: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.primary {
+  gap: var(--space-3);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+}
+
+.more {
+  padding: 0 var(--space-4);
+  border-left: 1px solid var(--accent-ink);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.primary:focus-visible,
+.more:focus-visible,
+.open:focus-visible,
+.action:focus-visible,
+.icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.list {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+}
+
+.item + .item {
+  border-top: 1px solid var(--line);
+}
+
+.open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.open:hover {
+  background: var(--bg2);
+}
+
+.badge {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-medium);
+}
+
+.badge[data-tone="get"] { color: var(--m-get); }
+.badge[data-tone="post"] { color: var(--m-post); }
+.badge[data-tone="put"] { color: var(--m-put); }
+.badge[data-tone="patch"] { color: var(--m-patch); }
+.badge[data-tone="del"] { color: var(--m-del); }
+.badge[data-tone="gql"] { color: var(--m-gql); }
+.badge[data-tone="ws"] { color: var(--m-ws); }
+.badge[data-tone="dir"] { color: var(--m-dir); }
+.badge[data-tone="warn"] { color: var(--warn); }
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-md2);
+}
+
+.action,
+.icon {
+  flex: none;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.icon {
+  width: 26px;
+  padding: 0;
+  color: var(--text3);
+}
+
+.action:hover:not(:disabled),
+.icon:hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

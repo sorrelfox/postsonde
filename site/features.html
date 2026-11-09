@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Features: PostSonde</title>
+<meta name="description" content="What PostSonde does: HTTP, GraphQL, gRPC, WebSocket, Socket.IO, SSE, TCP and UDP requests, local mock and test servers, auth from Basic to OAuth 2.0, environments and encrypted secrets, declarative tests, a folder runner, import from Postman, Insomnia and OpenAPI, and proxies for every protocol.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#eef0f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://sorrelfox.github.io/postsonde/features.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="preload" href="fonts/InstrumentSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/InstrumentSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PostSonde">
+<meta property="og:title" content="What PostSonde does">
+<meta property="og:description" content="Requests of every common kind, local servers to test clients against, declarative tests and a folder runner, in a desktop app with no account and no cloud.">
+<meta property="og:url" content="https://sorrelfox.github.io/postsonde/features.html">
+<meta property="og:image" content="https://sorrelfox.github.io/postsonde/screenshots/graphql-dark.png">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="A GraphQL query in PostSonde, checked against its schema, with the JSON response beside it">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="./"><img src="favicon.svg" alt="" width="28" height="28"><span>PostSonde</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        <li><a href="features.html" aria-current="page">Features</a></li>
+        <li><a href="download.html">Download</a></li>
+        <li><a href="https://github.com/sorrelfox/postsonde">Source code</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="page-head" aria-labelledby="title">
+  <div class="wrap">
+    <h1 id="title">What PostSonde does</h1>
+    <p class="lede">Everything on this page is in the current code. There is no release yet, so to try it you <a href="download.html#build">build it from source</a> for now.</p>
+    <nav class="toc" aria-label="On this page">
+      <ul>
+        <li><a href="#http">HTTP</a></li>
+        <li><a href="#graphql">GraphQL</a></li>
+        <li><a href="#grpc">gRPC</a></li>
+        <li><a href="#realtime">WebSocket, Socket.IO, SSE, TCP and UDP</a></li>
+        <li><a href="#servers">Local servers</a></li>
+        <li><a href="#auth">Auth</a></li>
+        <li><a href="#variables">Variables and secrets</a></li>
+        <li><a href="#tests">Tests and the runner</a></li>
+        <li><a href="#import">Import, export and code</a></li>
+        <li><a href="#network">Proxies and certificates</a></li>
+        <li><a href="#files">Project files</a></li>
+        <li><a href="#app">The app</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<div class="wrap">
+
+<section class="chapter prose" id="http" aria-labelledby="http-title">
+  <h2 id="http-title">HTTP requests and responses</h2>
+  <p>Every method is there, including QUERY, HEAD, OPTIONS and custom ones. Query parameters, path parameters and headers are tables whose rows you can switch off one by one, or edit as plain text. A body is JSON, XML, HTML, YAML or plain text, a URL-encoded or multipart form, or a file, and JSON bodies can be checked, formatted and minified.</p>
+  <p>Each request can set its own timeout, whether to follow redirects, TLS verification, the HTTP version and how the URL is encoded. The request on the wire is the one you wrote: the few headers PostSonde adds are listed in a preview, and each can be turned off.</p>
+  <p>The response pane shows the status, time and size, the body pretty-printed or raw and filtered with JSONPath or XPath, the headers, the cookies, and the results of the request's tests. Its timeline lists every hop, redirects included, with a waterfall of DNS, connect, TLS, waiting and download times, the TLS version and certificate chain, and the request exactly as it was sent. Large bodies stream to disk instead of memory, and any body can be saved to a file.</p>
+  <p>Earlier responses stay one click away. A response can be saved with the request as an example, compared side by side with another, or turned into a mock server route. A request can also be sent again and again, a set number of times or at an interval, with every result listed.</p>
+</section>
+
+<section class="chapter" id="graphql" aria-labelledby="graphql-title">
+  <div class="prose">
+    <h2 id="graphql-title">GraphQL</h2>
+    <p>The schema comes from introspection, cached for when the server is unreachable, or from an SDL file in the project. The editor checks the query against it as you type and completes fields, arguments, variables, directives and enum values. Fill fields writes out the missing fields of a selection, to the depth you choose. A docs explorer browses the types, and the schema can be saved as SDL.</p>
+    <p>Queries and mutations go over HTTP, as POST or GET. Subscriptions use graphql-transport-ws, the older subscriptions-transport-ws, or GraphQL over SSE, and any operation can be sent over a WebSocket instead. File uploads follow the GraphQL multipart request spec, and a response that uses <code>@defer</code> or <code>@stream</code> shows each part as it arrives.</p>
+  </div>
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="screenshots/graphql-light.png">
+      <img src="screenshots/graphql-dark.png" width="1440" height="900" loading="lazy" decoding="async" alt="A GraphQL request in PostSonde. Above the query, a line says the schema has 4 types and comes from the file sounding.graphql. The query editor highlights the query, a note under it says the document is valid against the schema, and the response pane shows the data returned with no errors.">
+    </picture>
+    <figcaption>A query checked against a schema loaded from a file, and the server's answer.</figcaption>
+  </figure>
+</section>
+
+<section class="chapter prose" id="grpc" aria-labelledby="grpc-title">
+  <h2 id="grpc-title">gRPC</h2>
+  <p>PostSonde reads <code>.proto</code> files itself, imports and include paths included, so you don't need <code>protoc</code>. The services can also come from server reflection, and they are cached, so the editor still knows them when the server is down.</p>
+  <p>Unary, server-streaming, client-streaming and bidirectional calls are supported, with metadata, a deadline and TLS. Messages are written as JSON, with completion from the message types. A call's log lists the messages in both directions with the headers, the trailers and the final status, and the error details in a status are decoded.</p>
+</section>
+
+<section class="chapter prose" id="realtime" aria-labelledby="realtime-title">
+  <h2 id="realtime-title">WebSocket, Socket.IO, SSE, TCP and UDP</h2>
+  <p>A WebSocket request has its subprotocols and headers, sends text, or binary typed as hex or Base64 or loaded from a file, and keeps saved messages to send again. The log shows both directions, binary as a hex dump.</p>
+  <p>Socket.IO talks to v3 and v4 servers, and to v2 servers with a switch, over WebSocket or long-polling. It emits events, listens for them and handles acknowledgements.</p>
+  <p>Server-Sent Events appear as they arrive, and a stream can reconnect on its own and carry on from the last event ID.</p>
+  <p>Raw TCP connections can use TLS and split messages by line or by a length prefix, and input can be typed as text or hex. UDP sends datagrams directly or through a SOCKS5 proxy.</p>
+  <p>Tests work on streams as well: on any message, every one, none, the first, the last or a given one, or on the number of messages.</p>
+</section>
+
+<section class="chapter prose" id="servers" aria-labelledby="servers-title">
+  <h2 id="servers-title">Local servers</h2>
+  <p>PostSonde can run servers for the clients you are working on:</p>
+  <ul>
+    <li>a mock HTTP server, whose routes you write by hand, generate from an OpenAPI document or make from a response you received, with templated responses;</li>
+    <li>an echo server, which answers each request with a JSON description of it;</li>
+    <li>a webhook receiver, which answers any request and keeps each one whole, to inspect and to send again;</li>
+    <li>WebSocket, Socket.IO, SSE, TCP and UDP servers;</li>
+    <li>gRPC and GraphQL mock servers.</li>
+  </ul>
+  <p>They listen on 127.0.0.1 unless you choose another address, can use TLS, and log every connection and message. A folder can keep a server's settings in its <code>_folder.json</code>, so the server travels with the project.</p>
+</section>
+
+<section class="chapter prose" id="auth" aria-labelledby="auth-title">
+  <h2 id="auth-title">Auth</h2>
+  <p>Basic, bearer tokens, API keys in a header or the query, Digest (MD5, SHA-256 and SHA-512-256), JWTs signed at send time with HMAC, RSA, ECDSA or EdDSA keys, OAuth 1.0, AWS Signature Version 4, Hawk, and the credentials of a <code>.netrc</code> file.</p>
+  <p>OAuth 2.0 covers client credentials, the authorization code grant with PKCE (you sign in through your own browser, which hands the code back to a loopback port), the password grant and the implicit grant. Tokens are kept on your computer and refreshed when they expire, and the OpenID Connect ID token can be sent in place of the access token.</p>
+  <p>A request can inherit the auth of its folder, and WebSocket, Socket.IO and gRPC handshakes carry the same auth. Client certificates for mutual TLS, as PEM files or PKCS#12, are set per host.</p>
+</section>
+
+<section class="chapter prose" id="variables" aria-labelledby="variables-title">
+  <h2 id="variables-title">Environments, variables and secrets</h2>
+  <p>Variables come from the active environment, the project's global variables, the collection and each folder, and from the values that extraction rules take from responses. <code>{{name}}</code> works in URLs, headers, bodies, auth fields and more, and the editors mark a name that doesn't resolve. Dynamic values such as <code>{{$uuid}}</code>, <code>{{$timestamp}}</code> or <code>{{$randomInt}}</code> are filled in when the request is sent, and <code>{{$response …}}</code> reads from another request's last response.</p>
+  <p>Secret variables are kept out of the project folder, and so are local values, which replace a shared value on your computer only. Once you set a master password, the secrets on disk are encrypted with AES-256-GCM. The key can also go into the system keychain, so you don't have to type the password at every start.</p>
+</section>
+
+<section class="chapter prose" id="tests" aria-labelledby="tests-title">
+  <h2 id="tests-title">Tests and the folder runner</h2>
+  <p>A test is a row of target, operator and expected value. The target is the status, a header, a cookie, a JSONPath or XPath result, a regular expression, the body, the time or the size. A JSON Schema check validates a body, or part of it, against a schema. There is no scripting, and the tests run after every send.</p>
+  <p>Extraction rules take a value from a response, such as a token or a new ID, and put it in a variable for the requests that follow.</p>
+  <p>The folder runner sends a folder's requests in order, or the ones you pick in the order you pick. It runs them a number of times or once per row of a CSV or JSON file, with a delay between requests if you want one, and can stop at the first failure. Past runs are kept, and a run can be saved as a JUnit XML, JSON or HTML report.</p>
+</section>
+
+<section class="chapter prose" id="import" aria-labelledby="import-title">
+  <h2 id="import-title">Import, export and code</h2>
+  <p>Import reads cURL commands, Postman collections, environments and globals, Insomnia v4 and v5 exports, OpenAPI 3.0 and 3.1 and Swagger 2.0 documents, HAR files and Altair exports. It shows what it will create before it writes anything, and reports what it had to leave out. A cURL command pasted into the URL field becomes a request.</p>
+  <p>Folders can be exported for Postman, as HAR, or as a zip of the project files, and environments can be exported on their own.</p>
+  <p>The Code tab writes a request out as a cURL command for a POSIX shell, cmd or PowerShell, as an HTTPie or wget command, as raw HTTP, or as code for JavaScript <code>fetch</code>, Python <code>requests</code>, Go <code>net/http</code>, Java <code>HttpClient</code> or C# <code>HttpClient</code>.</p>
+</section>
+
+<section class="chapter prose" id="network" aria-labelledby="network-title">
+  <h2 id="network-title">Proxies, certificates and cookies</h2>
+  <p>Every connection goes through one dialer, so the proxy settings apply to every protocol: SOCKS5 and SOCKS5h with a user name and password, SOCKS4 and SOCKS4a, and HTTP or HTTPS proxies. By default PostSonde uses the system's proxy settings (on Linux, GNOME's settings or the proxy environment variables). A project or an environment can have a proxy of its own, and a bypass list sends some hosts direct.</p>
+  <p>Extra CA certificates and per-host client certificates apply to every TLS connection. Cookies are kept in a jar per project, or per environment if you prefer, and the cookie manager lists and edits them. The console's Connections view shows every connection the app has open.</p>
+</section>
+
+<section class="chapter prose" id="files" aria-labelledby="files-title">
+  <h2 id="files-title">Project files</h2>
+  <p>A project is a folder with a <code>postsonde.json</code> at the top, one JSON file per request, a directory with a <code>_folder.json</code> for each folder, and one file per environment. The format is <a href="https://github.com/sorrelfox/postsonde/blob/HEAD/docs/file-format.md">documented field by field</a> and versioned. Changes made outside PostSonde, by an editor or a <code>git pull</code>, show up in the tree within a couple of seconds.</p>
+  <p>History, cookies, tokens and secret values stay in PostSonde's data directory instead, never in the project. Deleted requests go to a trash you can restore from, and scratch requests let you try something without adding it to the project.</p>
+</section>
+
+<section class="chapter prose page-end" id="app" aria-labelledby="app-title">
+  <h2 id="app-title">The app</h2>
+  <p>Light and dark themes follow the system or your choice, and a custom theme is a small JSON file. The command palette (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, or <kbd>⇧⌘P</kbd> on a Mac) runs any action, <kbd>Ctrl</kbd>+<kbd>P</kbd> (<kbd>⌘P</kbd>) jumps to a request, folder or environment, and every shortcut can be changed.</p>
+  <p>A project can be open in several windows. The response sits beside the request or below it, and focus mode hides everything but the request and its response. Requests and folders can carry notes in Markdown.</p>
+  <p>The settings are one JSON file you can edit by hand, and an administrator can lock some of them with a policy file. In portable mode PostSonde keeps its settings and data in a folder next to the app. The interface is in English.</p>
+</section>
+
+</div>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>PostSonde is free software under the <a href="https://github.com/sorrelfox/postsonde/blob/HEAD/LICENSE">MIT License</a>.</p>
+    <ul class="foot-links">
+      <li><a href="https://github.com/sorrelfox/postsonde">Source code</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/releases">Releases</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/issues">Issues</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/blob/HEAD/PRIVACY.md">Privacy</a></li>
+    </ul>
+    <p class="fine">This site sets no cookies and loads nothing from other sites. It is set in Instrument Sans and JetBrains Mono, the app's own typefaces, under the SIL Open Font License 1.1 (<a href="fonts/OFL-InstrumentSans.txt">Instrument Sans</a>, <a href="fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a>).</p>
+  </div>
+</footer>
+</body>
+</html>

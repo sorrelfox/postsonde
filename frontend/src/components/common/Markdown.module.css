@@ -1,0 +1,187 @@
+/* Rendered Markdown notes (COL-07). Element selectors are scoped to the
+ * .markdown root, since the renderer outputs plain elements. */
+
+.markdown {
+  color: var(--text);
+  font-size: var(--fs-md2);
+  line-height: var(--lh-base);
+  overflow-wrap: anywhere;
+}
+
+.markdown > :first-child {
+  margin-top: 0;
+}
+
+.markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  margin: var(--space-6) 0 var(--space-3);
+  color: var(--text);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+}
+
+.markdown h1 {
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+  font-size: calc(var(--fs-lg) * 1.35);
+}
+
+.markdown h2 {
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+  font-size: calc(var(--fs-lg) * 1.15);
+}
+
+.markdown h3 {
+  font-size: var(--fs-lg);
+}
+
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  font-size: var(--fs-md2);
+}
+
+.markdown h6 {
+  color: var(--text2);
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol,
+.markdown blockquote,
+.markdown pre,
+.markdown hr,
+.tableWrap {
+  margin: 0 0 var(--space-4);
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: var(--space-7);
+}
+
+.markdown li > ul,
+.markdown li > ol {
+  margin-bottom: 0;
+}
+
+.markdown li > p:last-child {
+  margin-bottom: var(--space-2);
+}
+
+.task {
+  list-style: none;
+}
+
+.task .checkbox {
+  margin: 0 var(--space-3) 0 calc(-1 * var(--space-6));
+  vertical-align: middle;
+}
+
+.markdown blockquote {
+  padding: 0 var(--space-5);
+  border-left: 3px solid var(--line2);
+  color: var(--text2);
+}
+
+.markdown code {
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.markdown pre {
+  padding: var(--space-4) var(--space-5);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  line-height: var(--lh-code);
+}
+
+.markdown pre code {
+  padding: 0;
+  background: transparent;
+  white-space: pre;
+}
+
+.markdown hr {
+  height: 0;
+  border: 0;
+  border-top: 1px solid var(--line2);
+}
+
+.tableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.markdown table {
+  border-collapse: collapse;
+  font-size: var(--fs-md);
+}
+
+.markdown th,
+.markdown td {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line2);
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown th {
+  background: var(--bg2);
+  font-weight: var(--fw-semibold);
+}
+
+.link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-radius: var(--radius-xs);
+}
+
+/* A link that is never followed: a relative path, an anchor, javascript:. */
+.inertLink {
+  color: var(--text2);
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: help;
+}
+
+/* An image that is not loaded: its alt text in a chip. */
+.image {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 0 var(--space-2);
+  border: 1px dashed var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.imageMark {
+  margin-right: var(--space-2);
+  color: var(--text3);
+}

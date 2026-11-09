@@ -1,0 +1,16 @@
+# source
+{ user(id: 
+# tree
+Document [0:11]
+  Definitions[0]: OperationDefinition [0:11] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:11] LBrace=0 RBrace=-1
+      Selections[0]: Field [2:11] Colon=-1
+        Name: Name [2:6] Value="user"
+        Arguments: ArgumentList [6:11] LParen=6 RParen=-1
+          Arguments[0]: Argument [7:11] Colon=9
+            Name: Name [7:9] Value="id"
+            Value: InvalidValue [10:11] Missing=true
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"
+1:7 [6:7] unclosed delimiter: "(" has no matching ")"
+1:12 [11:11] unexpected token: expected value, found end of input

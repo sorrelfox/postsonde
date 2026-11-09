@@ -1,0 +1,4 @@
+wget http://api.test/items \
+  --max-redirect 0 \
+  --timeout 30 \
+  -O -

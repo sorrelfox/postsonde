@@ -1,0 +1,580 @@
+/* The Environments sidebar view, after the mockup: the header
+ * matches the other sidebar views (components/shell/Sidebar.module.css), then
+ * 34px environment rows, a divider and the selected environment's variables. */
+
+.header {
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-5) 0 var(--space-7);
+}
+
+.title {
+  color: var(--text2);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.headerButton {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  color: var(--text3);
+}
+
+.headerButton:not(:disabled):hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.headerButton:focus-visible {
+  border-radius: var(--radius-md);
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 0 var(--space-3) var(--space-6);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.envRow {
+  width: 100%;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-size: var(--fs-md2);
+  text-align: left;
+}
+
+.envRow:hover {
+  background: var(--bg2);
+}
+
+.envRowSelected,
+.envRowSelected:hover {
+  background: var(--sel);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--env-color, var(--text3));
+}
+
+/* The active environment's dot gets a ring in its own colour. */
+.dotActive {
+  background: var(--env-color, var(--accent));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--env-color, var(--accent)) 30%, transparent);
+}
+
+.envName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: var(--fw-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activeTag {
+  flex: none;
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.divider {
+  height: 1px;
+  flex: none;
+  margin: var(--space-5) var(--space-4);
+  background: var(--line);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.detailsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+}
+
+.detailsTitle {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detailsTitle strong {
+  color: var(--text);
+  font-weight: var(--fw-semibold);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+}
+
+.smallButton {
+  height: 22px;
+  flex: none;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: 5px;
+  background: var(--bg1);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.smallButton:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.activeButton {
+  height: 22px;
+  flex: none;
+  padding: 0 var(--space-2);
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.linkButton {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.linkButton:hover {
+  color: var(--text);
+}
+
+.variables {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0 var(--space-3);
+}
+
+.variable {
+  color: var(--tk-var);
+}
+
+.rowButton {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  opacity: 0.55;
+}
+
+.rowButton:not(:disabled):hover,
+.rowButton:focus-visible {
+  background: var(--bg3);
+  color: var(--text);
+  opacity: 1;
+}
+
+.rowButtonOn {
+  color: var(--warn);
+  opacity: 1;
+}
+
+.rowButton:disabled {
+  cursor: default;
+}
+
+/* The local value toggle (SEC-02) when the row has one. */
+.rowButtonLocal {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* A shared value this computer replaces with its local value. */
+.overridden {
+  color: var(--text3);
+  text-decoration: line-through;
+}
+
+/* The local values under the table: name, value, remove, the shared value. */
+.localValues {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+}
+
+.localTitle {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+}
+
+.localRow {
+  display: grid;
+  grid-template-columns: minmax(0, 30%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 var(--space-3);
+}
+
+.localName {
+  overflow: hidden;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.localInput {
+  min-width: 0;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.localInput:focus-visible {
+  border-color: var(--accent);
+}
+
+.localShared {
+  grid-column: 2 / -1;
+  overflow: hidden;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.localNote {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+}
+
+.nameForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3) var(--space-4);
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nameInput {
+  flex: 1;
+  min-width: 0;
+  height: 26px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text);
+  font-size: var(--fs-md2);
+}
+
+.nameInput:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.nameInput[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.error {
+  padding: 0 var(--space-4);
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.note {
+  padding: 0 var(--space-6);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.problem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: var(--space-5) var(--space-3) 0;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.problem ul {
+  margin: 0;
+  padding-left: var(--space-8);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* The fixed precedence of variable scopes (ENV-06), at the bottom of the view. */
+.precedence {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding: var(--space-6) var(--space-4) 0;
+}
+
+.precedenceLabel {
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.precedenceList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  list-style: none;
+}
+
+.precedenceList li:not(:last-child)::after {
+  content: "<";
+  margin-left: var(--space-2);
+  color: var(--text3);
+}
+
+.precedenceList li[data-unavailable] {
+  color: var(--text3);
+}
+
+.precedence .note {
+  padding: 0;
+}
+
+/* The environment colour picker (ENV-08): none, the presets, custom. */
+.colorRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  padding: 0 var(--space-4);
+}
+
+.colorLabel {
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.swatch {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--text) 25%, transparent);
+  border-radius: var(--radius-round);
+  background: var(--swatch, var(--bg2));
+  cursor: pointer;
+}
+
+.swatch:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.swatch[aria-pressed="true"],
+.swatch[data-selected] {
+  box-shadow:
+    0 0 0 2px var(--bg1),
+    0 0 0 3.5px var(--text);
+}
+
+.swatch:focus-visible,
+.swatchCustom:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* No colour: a dashed ring with a slash. */
+.swatchNone {
+  border-style: dashed;
+  border-color: var(--text3);
+  background: transparent;
+}
+
+.swatchNone::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  left: 2px;
+  height: 1px;
+  background: var(--text3);
+  transform: rotate(-45deg);
+}
+
+/* Custom: a plus sign until a custom colour is saved. */
+.swatchCustom:not([data-selected])::after {
+  content: "+";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text2);
+  font-size: var(--fs-sm);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.colorInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Table / JSON switch above a variables table (ENV-07). */
+.modes {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: flex-end;
+}
+
+.modeButton {
+  height: 22px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.modeButton:not(:disabled):hover,
+.modeButton:focus-visible {
+  color: var(--text);
+  background: var(--bg2);
+}
+
+.modeButton[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.modeButton:disabled {
+  opacity: 0.5;
+}
+
+/* The raw JSON editor. */
+.rawEditor {
+  min-height: 160px;
+  max-height: 420px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: auto;
+}
+
+/* The base variables an environment inherits (ENV-05). */
+.baseList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.baseRow {
+  display: grid;
+  grid-template-columns: minmax(0, 30%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 var(--space-3);
+}
+
+.baseValue {
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.baseState {
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_7b3f0e5a9c2d4168",
+  "name": "List admins",
+  "method": "GET",
+  "url": "{{baseUrl}}/admins",
+  "params": [
+    {
+      "name": "page",
+      "value": "1",
+      "disabled": true
+    }
+  ],
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "inherit"
+  }
+}

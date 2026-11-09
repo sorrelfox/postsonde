@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_18d4b6f0a3c95e27",
+  "name": "Upload avatar",
+  "method": "PUT",
+  "url": "{{baseUrl}}/users/{{userId}}/avatar",
+  "body": {
+    "mode": "multipart",
+    "parts": [
+      {
+        "name": "caption",
+        "value": "Profile photo"
+      },
+      {
+        "name": "image",
+        "value": "",
+        "file": "fixtures/avatar.png",
+        "contentType": "image/png"
+      }
+    ]
+  },
+  "auth": {
+    "type": "none"
+  }
+}

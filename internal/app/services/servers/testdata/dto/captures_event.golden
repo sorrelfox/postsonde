@@ -1,0 +1,15 @@
+{
+  "serverId": "srv_00000000000000dd",
+  "captures": [
+    {
+      "seq": 11,
+      "time": "2026-09-16T08:00:09Z",
+      "peer": "127.0.0.1:53126",
+      "method": "POST",
+      "target": "/hooks/github?delivery=1\u0026tag=a%20b\u0026flag",
+      "contentType": "application/json",
+      "size": 19,
+      "truncated": false
+    }
+  ]
+}

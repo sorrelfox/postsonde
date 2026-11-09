@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MsixPackagingToolTemplate
+    xmlns="http://schemas.microsoft.com/msix/packaging/msixpackagingtool/template/2022">
+    <Settings
+        AllowTelemetry="false"
+        ApplyACLsToPackageFiles="true"
+        GenerateCommandLineFile="true"
+        AllowPromptForPassword="false">
+    </Settings>
+    <Installer
+        Path="postsonde"
+        Arguments=""
+        InstallLocation="C:\Program Files\PostSonde">
+    </Installer>
+    <PackageInformation
+        PackageName="PostSonde"
+        PackageDisplayName="PostSonde"
+        PublisherName="CN=Sorrelfox"
+        PublisherDisplayName="Sorrelfox"
+        Version="0.1.0.0"
+        PackageDescription="Local-only desktop API testing tool">
+        <Capabilities>
+            <Capability Name="runFullTrust" />
+            
+        </Capabilities>
+        <Applications>
+            <Application
+                Id="io.github.sorrelfox.PostSonde"
+                Description="Local-only desktop API testing tool"
+                DisplayName="PostSonde"
+                ExecutableName="postsonde"
+                EntryPoint="Windows.FullTrustApplication">
+                
+            </Application>
+        </Applications>
+        <Resources>
+            <Resource Language="en-us" />
+        </Resources>
+        <Dependencies>
+            <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+        </Dependencies>
+        <Properties>
+            <Framework>false</Framework>
+            <DisplayName>PostSonde</DisplayName>
+            <PublisherDisplayName>Sorrelfox</PublisherDisplayName>
+            <Description>Local-only desktop API testing tool</Description>
+            <Logo>Assets\AppIcon.png</Logo>
+        </Properties>
+    </PackageInformation>
+    <SaveLocation PackagePath="postsonde.msix" />
+    <PackageIntegrity>
+        <CertificatePath></CertificatePath>
+    </PackageIntegrity>
+</MsixPackagingToolTemplate>

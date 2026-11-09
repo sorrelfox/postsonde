@@ -1,0 +1,14 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/upload",
+    files=[
+        ("doc", ("upload.txt", open("C:\\tmp\\a&b\\up;load.txt", "rb"), "text/plain")),
+        ("dir", (None, "C:\\tmp\\")),
+    ],
+    allow_redirects=False,
+)
+
+print(response.status_code)
+print(response.text)

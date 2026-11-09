@@ -1,0 +1,3 @@
+wscat -c '{{wsBase}}/live?token={{token}}' \
+  -H 'Authorization: Bearer {{token}}' \
+  -s '{{proto}}'

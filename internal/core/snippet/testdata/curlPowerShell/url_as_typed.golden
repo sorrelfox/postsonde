@@ -1,0 +1,4 @@
+curl.exe 'https://api.test/a/../b/./c?f={x}&g=[1]|"q"' `
+  -g `
+  --path-as-is `
+  -L --max-redirs 10

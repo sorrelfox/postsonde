@@ -1,0 +1,3 @@
+http --raw '' \
+  POST https://api.test/items \
+  Content-Type:text/plain

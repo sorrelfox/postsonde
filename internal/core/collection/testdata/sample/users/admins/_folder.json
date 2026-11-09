@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_5e2c9a7d31b0f486",
+  "name": "Admins",
+  "auth": {
+    "type": "none"
+  }
+}

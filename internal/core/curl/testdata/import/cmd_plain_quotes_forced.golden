@@ -1,0 +1,29 @@
+{
+  "name": "api",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://example.com/api",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"a\":\"b c\"}\u0026{\"x\":1}"
+    },
+    "auth": {
+      "type": "inherit"
+    },
+    "settings": {
+      "verifyTls": false
+    }
+  },
+  "diagnostics": []
+}

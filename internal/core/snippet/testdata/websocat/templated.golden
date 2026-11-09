@@ -1,0 +1,3 @@
+websocat '{{wsBase}}/live?token={{token}}' \
+  -H 'Authorization: Bearer {{token}}' \
+  --protocol '{{proto}}'

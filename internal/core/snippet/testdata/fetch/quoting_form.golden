@@ -1,0 +1,10 @@
+const response = await fetch("https://api.test/q", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+  body: "q=a%26b%3Dc+d%2Be%25f+%22g%22+%27h%27+%C3%A9&path=C%3A%5Cdir%5C&sym=%24x+%60y%60+%5Ez+%25PATH%25",
+});
+
+console.log(response.status);
+console.log(await response.text());

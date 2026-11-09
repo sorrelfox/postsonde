@@ -1,0 +1,10 @@
+.tabBar {
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg0);
+}

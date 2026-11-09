@@ -1,0 +1,168 @@
+[
+  {
+    "connId": "ws_0123456789abcdef",
+    "requestId": "req_feed",
+    "url": "ws://localhost:8080/feed",
+    "seq": 1,
+    "attempt": 1,
+    "state": "open",
+    "at": "2026-09-16T10:00:00.123Z",
+    "handshake": {
+      "url": "ws://localhost:8080/feed",
+      "requestHeaders": [
+        {
+          "name": "Host",
+          "value": "localhost:8080",
+          "enabled": true
+        },
+        {
+          "name": "Sec-WebSocket-Protocol",
+          "value": "chat",
+          "enabled": true
+        }
+      ],
+      "response": {
+        "statusCode": 101,
+        "status": "101 Switching Protocols",
+        "headers": [
+          {
+            "name": "Upgrade",
+            "value": "websocket",
+            "enabled": true
+          }
+        ],
+        "body": "",
+        "bodyTruncated": false
+      },
+      "subprotocol": "chat",
+      "localAddr": "127.0.0.1:50000",
+      "remoteAddr": "127.0.0.1:8080",
+      "tlsVersion": "",
+      "durationMs": 12
+    },
+    "close": null,
+    "error": null,
+    "reconnect": null,
+    "tests": null
+  },
+  {
+    "connId": "ws_0123456789abcdef",
+    "requestId": "req_feed",
+    "seq": 2,
+    "messages": [
+      {
+        "direction": "sent",
+        "opcode": "text",
+        "at": "2026-09-16T10:00:00.123Z",
+        "text": "{\"a\":1}",
+        "data": "",
+        "size": 7
+      },
+      {
+        "direction": "received",
+        "opcode": "binary",
+        "at": "2026-09-16T10:00:00.123Z",
+        "text": "",
+        "data": "AP8=",
+        "size": 2
+      },
+      {
+        "direction": "sent",
+        "opcode": "ping",
+        "at": "2026-09-16T10:00:00.123Z",
+        "text": "hi",
+        "data": "aGk=",
+        "size": 2
+      },
+      {
+        "direction": "received",
+        "opcode": "pong",
+        "at": "2026-09-16T10:00:00.123Z",
+        "text": "hi",
+        "data": "aGk=",
+        "size": 2,
+        "rttMs": 1.5
+      },
+      {
+        "direction": "sent",
+        "opcode": "ping",
+        "at": "2026-09-16T10:00:00.123Z",
+        "text": "",
+        "data": "",
+        "size": 0,
+        "keepalive": true
+      },
+      {
+        "direction": "received",
+        "opcode": "ping",
+        "at": "2026-09-16T10:00:00.123Z",
+        "text": "",
+        "data": "/w==",
+        "size": 1
+      }
+    ]
+  },
+  {
+    "connId": "ws_0123456789abcdef",
+    "requestId": "req_feed",
+    "url": "ws://localhost:8080/feed",
+    "seq": 3,
+    "attempt": 1,
+    "state": "closed",
+    "at": "2026-09-16T10:00:01.123Z",
+    "handshake": null,
+    "close": {
+      "code": 1000,
+      "reason": "bye",
+      "wasClean": true,
+      "initiatedBy": "local",
+      "sent": {
+        "code": 1000,
+        "reason": "bye"
+      },
+      "received": {
+        "code": 1000,
+        "reason": "bye"
+      },
+      "messagesSent": 1,
+      "messagesReceived": 1,
+      "bytesSent": 7,
+      "bytesReceived": 2,
+      "durationMs": 1000
+    },
+    "error": null,
+    "reconnect": null,
+    "tests": null
+  },
+  {
+    "connId": "ws_0123456789abcdef",
+    "requestId": "req_feed",
+    "url": "ws://localhost:8080/feed",
+    "seq": 4,
+    "attempt": 2,
+    "state": "closed",
+    "at": "2026-09-16T10:00:02.123Z",
+    "handshake": null,
+    "close": {
+      "code": 1006,
+      "reason": "",
+      "wasClean": false,
+      "initiatedBy": "none",
+      "sent": null,
+      "received": null,
+      "messagesSent": 1,
+      "messagesReceived": 1,
+      "bytesSent": 7,
+      "bytesReceived": 2,
+      "durationMs": 500
+    },
+    "error": null,
+    "reconnect": {
+      "attempt": 1,
+      "maxAttempts": 5,
+      "delayMs": 1000,
+      "stopped": ""
+    },
+    "tests": null
+  }
+]

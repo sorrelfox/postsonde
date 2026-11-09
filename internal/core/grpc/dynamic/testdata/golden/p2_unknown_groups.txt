@@ -1,0 +1,3 @@
+type: codec.p2.Narrow
+a: 5
+unknown: 131803232a0464656570241435070000003b40ffffffffffffffffff013c3b40feffffffffffffffff013c

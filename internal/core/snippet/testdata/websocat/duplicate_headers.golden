@@ -1,0 +1,6 @@
+websocat ws://localhost:8080/ws \
+  -H 'Cookie: a=1' \
+  -H 'X-A: 1' \
+  -H 'cookie: b=2' \
+  -H 'x-a: 2' \
+  -H X-Empty:

@@ -1,0 +1,205 @@
+/* A run's pane (HTTP-27): summary with Stop, the results, then the latest
+ * response the run carried (ResponseView.module.css). */
+
+.run {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) var(--space-7);
+  border-bottom: 1px solid var(--line);
+}
+
+.summary {
+  flex: 1;
+  min-width: 0;
+}
+
+.headline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+}
+
+.stats {
+  margin: var(--space-1) 0 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--line2);
+  border-top-color: var(--accent);
+  border-radius: var(--radius-round);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stop {
+  flex: none;
+  height: var(--h-control);
+  padding: 0 var(--space-7);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.stop:hover {
+  background: var(--bg3);
+}
+
+.stop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.runError {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3) var(--space-7);
+  border-bottom: 1px solid var(--line);
+  color: var(--bad);
+  font-size: var(--fs-md);
+  overflow-wrap: anywhere;
+}
+
+/* The results, newest first. */
+.results {
+  flex: none;
+  max-height: 32%;
+  min-height: 60px;
+  margin: 0;
+  padding: var(--space-2) 0;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--line);
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.results:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  padding: 2px var(--space-7);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.row[data-shown] {
+  background: var(--bg2);
+}
+
+.index {
+  min-width: 4ch;
+  color: var(--text3);
+  text-align: right;
+}
+
+.time {
+  color: var(--text3);
+}
+
+.status {
+  min-width: 14ch;
+  color: var(--text2);
+}
+
+.status[data-tone="ok"] { color: var(--ok); }
+.status[data-tone="redirect"] { color: var(--m-put); }
+.status[data-tone="client"] { color: var(--warn); }
+.status[data-tone="server"] { color: var(--bad); }
+
+.failed {
+  min-width: 14ch;
+  color: var(--bad);
+}
+
+.duration {
+  min-width: 8ch;
+  text-align: right;
+}
+
+.size {
+  min-width: 8ch;
+  color: var(--text2);
+  text-align: right;
+}
+
+.message {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text2);
+}
+
+.tests[data-tone="ok"] { color: var(--ok); }
+.tests[data-tone="bad"] { color: var(--bad); }
+
+.more {
+  padding: 2px var(--space-7);
+  color: var(--text3);
+}
+
+.response {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.responseOf {
+  flex: none;
+  margin: 0;
+  padding: var(--space-3) var(--space-7) 0;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}

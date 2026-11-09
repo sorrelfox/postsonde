@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package shop.options;
+
+import "google/protobuf/descriptor.proto";
+
+enum Level {
+  LEVEL_UNSPECIFIED = 0;
+  LOW = 1;
+  HIGH = 2;
+}
+
+message AuditPolicy {
+  bool enabled = 1;
+  Level level = 2;
+  repeated string tags = 3;
+}
+
+extend google.protobuf.MethodOptions {
+  AuditPolicy audit = 50001;
+}
+
+extend google.protobuf.FieldOptions {
+  bool sensitive = 50002;
+  int32 max_length = 50003;
+}
+
+extend google.protobuf.FileOptions {
+  string owner = 50004;
+}

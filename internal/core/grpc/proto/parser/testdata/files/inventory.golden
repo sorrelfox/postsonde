@@ -1,0 +1,262 @@
+# tree
+File [0:2808] Name="inventory.proto"
+  Decls[0]: Syntax [125:143] Leading=" Inventory: nested types, maps, oneofs, reserved ranges and names,\n enum aliases, custom options and every literal form.\n"
+    Value: StringLit [134:142] Value="proto3"
+  Decls[1]: Package [145:171] Name=[153:170]"acme.inventory.v2"
+  Decls[2]: Import [173:213] Kind=public
+    Path: StringLit [187:212] Value="acme/common/money.proto"
+  Decls[3]: Import [214:251] Kind=weak
+    Path: StringLit [226:250] Value="acme/legacy/tags.proto"
+  Decls[4]: Import [252:287]
+    Path: StringLit [259:286] Value="google/protobuf/any.proto"
+  Decls[5]: Import [288:330]
+    Path: StringLit [295:329] Value="google/protobuf/descriptor.proto"
+  Decls[6]: Extend [373:476] Leading=" Custom options declared in this file.\n" Extendee=[380:408]"google.protobuf.FieldOptions" RBrace=475
+    Body[0]: Field [413:449] Label=optional LabelLoc=[413:421] Type=[422:428]"string" Name=[429:440]"sensitivity"
+      Number: IntLit [443:448] Raw="50001" Value=50001
+    Body[1]: Field [452:474] Type=[452:458]"Limits" Name=[459:465]"limits"
+      Number: IntLit [468:473] Raw="50002" Value=50002
+  Decls[7]: Extend [478:546] Extendee=[485:516]".google.protobuf.MessageOptions" RBrace=545
+    Body[0]: Field [521:544] Type=[521:525]"bool" Name=[526:535]"cacheable"
+      Number: IntLit [538:543] Raw="50100" Value=50100
+  Decls[8]: Message [548:663] Name=[556:562]"Limits" RBrace=662
+    Body[0]: Field [567:582] Type=[567:573]"double" Name=[574:577]"min"
+      Number: IntLit [580:581] Raw="1" Value=1
+    Body[1]: Field [585:600] Type=[585:591]"double" Name=[592:595]"max"
+      Number: IntLit [598:599] Raw="2" Value=2
+    Body[2]: Field [603:628] Label=repeated LabelLoc=[603:611] Type=[612:618]"string" Name=[619:623]"tags"
+      Number: IntLit [626:627] Raw="3" Value=3
+    Body[3]: Field [631:661] Type=[631:650]"google.protobuf.Any" Name=[651:656]"extra"
+      Number: IntLit [659:660] Raw="4" Value=4
+  Decls[9]: Option [665:722]
+    Name: OptionName [672:702]
+      Parts[0]: OptionNamePart [672:702] Extension=true Name=[673:701]"acme.inventory.v2.file_owner"
+    Value: StringLit [705:721] Value="inventory-team"
+  Decls[10]: Message [724:2437] Name=[732:736]"Item" RBrace=2436
+    Body[0]: Option [741:767]
+      Name: OptionName [748:759]
+        Parts[0]: OptionNamePart [748:759] Extension=true Name=[749:758]"cacheable"
+      Value: IdentLit [762:766] Value="true"
+    Body[1]: Option [770:796]
+      Name: OptionName [777:787]
+        Parts[0]: OptionNamePart [777:787] Name=[777:787]"deprecated"
+      Value: IdentLit [790:795] Value="false"
+    Body[2]: Reserved [800:835]
+      Ranges[0]: Range [809:810]
+        From: IntLit [809:810] Raw="2" Value=2
+      Ranges[1]: Range [812:814]
+        From: IntLit [812:814] Raw="15" Value=15
+      Ranges[2]: Range [816:823]
+        From: IntLit [816:817] Raw="9" Value=9
+        To: IntLit [821:823] Raw="11" Value=11
+      Ranges[3]: Range [825:834] Max=true
+        From: IntLit [825:827] Raw="40" Value=40
+    Body[3]: Reserved [838:873]
+      Names[0]: ReservedName [847:859] Quoted=true Value="sku_legacy"
+      Names[1]: ReservedName [861:872] Quoted=true Value="old_price"
+    Body[4]: Message [908:1121] Leading=" Where an item is stocked.\n" Name=[916:924]"Location" RBrace=1120
+      Body[0]: Field [931:952] Type=[931:937]"string" Name=[938:947]"warehouse"
+        Number: IntLit [950:951] Raw="1" Value=1
+      Body[1]: Field [957:1006] Type=[957:963]"uint32" Name=[964:969]"aisle"
+        Number: IntLit [972:973] Raw="2" Value=2
+        Options: CompactOptions [974:1005]
+          Options[0]: Option [975:1004]
+            Name: OptionName [975:983]
+              Parts[0]: OptionNamePart [975:983] Extension=true Name=[976:982]"limits"
+            Value: MessageLit [986:1004]
+              Fields[0]: MessageLitField [987:993]
+                Name: FieldRef [987:990] Name=[987:990]"min"
+                Value: IntLit [992:993] Raw="1" Value=1
+              Fields[1]: MessageLitField [994:1003]
+                Name: FieldRef [994:997] Name=[994:997]"max"
+                Value: IntLit [999:1003] Raw="0x40" Value=64
+      Body[2]: Message [1032:1100] Leading=" Nested twice.\n" Name=[1040:1043]"Bin" RBrace=1099
+        Body[0]: Field [1052:1067] Type=[1052:1059]"fixed32" Name=[1060:1062]"id"
+          Number: IntLit [1065:1066] Raw="1" Value=1
+        Body[1]: Field [1074:1094] Type=[1074:1082]"sfixed64" Name=[1083:1089]"offset"
+          Number: IntLit [1092:1093] Raw="2" Value=2
+      Body[3]: Field [1105:1117] Type=[1105:1108]"Bin" Name=[1109:1112]"bin"
+        Number: IntLit [1115:1116] Raw="3" Value=3
+    Body[5]: Enum [1125:1383] Name=[1130:1135]"State" RBrace=1382
+      Body[0]: Option [1142:1168]
+        Name: OptionName [1149:1160]
+          Parts[0]: OptionNamePart [1149:1160] Name=[1149:1160]"allow_alias"
+        Value: IdentLit [1163:1167] Value="true"
+      Body[1]: EnumValue [1173:1195] Name=[1173:1190]"STATE_UNSPECIFIED"
+        Number: IntLit [1193:1194] Raw="0" Value=0
+      Body[2]: EnumValue [1200:1213] Name=[1200:1208]"IN_STOCK"
+        Number: IntLit [1211:1212] Raw="1" Value=1
+      Body[3]: EnumValue [1218:1282] Name=[1218:1227]"AVAILABLE"
+        Number: IntLit [1230:1231] Raw="1" Value=1
+        Options: CompactOptions [1232:1281]
+          Options[0]: Option [1233:1280]
+            Name: OptionName [1233:1258]
+              Parts[0]: OptionNamePart [1233:1258] Extension=true Name=[1234:1257]"acme.inventory.v2.label"
+            Value: StringLit [1261:1280] Value="alias of IN_STOCK"
+      Body[4]: EnumValue [1287:1303] Name=[1287:1298]"BACKORDERED"
+        Number: IntLit [1301:1302] Raw="2" Value=2
+      Body[5]: EnumValue [1308:1326] Name=[1308:1320]"DISCONTINUED"
+        Number: IntLit [1323:1325] Negative=true Raw="1" Value=1
+      Body[6]: Reserved [1331:1354]
+        Ranges[0]: Range [1340:1348]
+          From: IntLit [1340:1342] Raw="10" Value=10
+          To: IntLit [1346:1348] Raw="20" Value=20
+        Ranges[1]: Range [1350:1353]
+          From: IntLit [1350:1353] Raw="100" Value=100
+      Body[7]: Reserved [1359:1379]
+        Names[0]: ReservedName [1368:1378] Quoted=true Value="RECALLED"
+    Body[6]: Field [1387:1447] Type=[1387:1393]"string" Name=[1394:1396]"id"
+      Number: IntLit [1399:1400] Raw="1" Value=1
+      Options: CompactOptions [1401:1446]
+        Options[0]: Option [1402:1423]
+          Name: OptionName [1402:1415]
+            Parts[0]: OptionNamePart [1402:1415] Extension=true Name=[1403:1414]"sensitivity"
+          Value: StringLit [1418:1423] Value="low"
+        Options[1]: Option [1425:1445]
+          Name: OptionName [1425:1434]
+            Parts[0]: OptionNamePart [1425:1434] Name=[1425:1434]"json_name"
+          Value: StringLit [1437:1445] Value="itemId"
+    Body[7]: Field [1450:1466] Type=[1450:1455]"State" Name=[1456:1461]"state"
+      Number: IntLit [1464:1465] Raw="3" Value=3
+    Body[8]: MapField [1469:1505] KeyType=[1473:1479]"string" ValType=[1481:1489]"Location" Name=[1491:1500]"locations"
+      Number: IntLit [1503:1504] Raw="4" Value=4
+    Body[9]: MapField [1508:1574] KeyType=[1512:1517]"int64" ValType=[1519:1555]".acme.inventory.v2.Item.Location.Bin" Name=[1557:1569]"bins_by_code"
+      Number: IntLit [1572:1573] Raw="5" Value=5
+    Body[10]: Field [1577:1615] Label=repeated LabelLoc=[1577:1585] Type=[1586:1603]"acme.common.Money" Name=[1604:1610]"prices"
+      Number: IntLit [1613:1614] Raw="6" Value=6
+    Body[11]: Field [1618:1811] Type=[1618:1623]"bytes" Name=[1624:1633]"thumbnail"
+      Number: IntLit [1636:1637] Raw="7" Value=7
+      Options: CompactOptions [1638:1810]
+        Options[0]: Option [1639:1809]
+          Name: OptionName [1639:1647]
+            Parts[0]: OptionNamePart [1639:1647] Extension=true Name=[1640:1646]"limits"
+          Value: MessageLit [1650:1809]
+            Fields[0]: MessageLitField [1656:1668]
+              Name: FieldRef [1656:1659] Name=[1656:1659]"max"
+              Value: FloatLit [1661:1668] Raw="65536.0" Value=65536
+            Fields[1]: MessageLitField [1673:1694]
+              Name: FieldRef [1673:1677] Name=[1673:1677]"tags"
+              Value: ListLit [1679:1694]
+                Elements[0]: StringLit [1680:1685] Value="png"
+                Elements[1]: StringLit [1687:1693] Value="jpeg"
+            Fields[2]: MessageLitField [1699:1711]
+              Name: FieldRef [1699:1703] Name=[1699:1703]"tags"
+              Value: StringLit [1705:1711] Value="webp"
+            Fields[3]: MessageLitField [1716:1805]
+              Name: FieldRef [1716:1721] Name=[1716:1721]"extra"
+              Value: MessageLit [1722:1805]
+                Fields[0]: MessageLitField [1730:1799]
+                  Name: FieldRef [1730:1776] Kind=any URLPrefix="type.googleapis.com" Name=[1751:1775]"acme.inventory.v2.Limits"
+                  Value: MessageLit [1777:1799]
+                    Fields[0]: MessageLitField [1779:1788]
+                      Name: FieldRef [1779:1782] Name=[1779:1782]"min"
+                      Value: IdentLit [1784:1788] Negative=true Value="inf"
+                    Fields[1]: MessageLitField [1789:1797]
+                      Name: FieldRef [1789:1792] Name=[1789:1792]"max"
+                      Value: IdentLit [1794:1797] Value="inf"
+    Body[12]: Oneof [1815:1985] Name=[1821:1833]"availability" RBrace=1984
+      Body[0]: Option [1840:1892]
+        Name: OptionName [1847:1877]
+          Parts[0]: OptionNamePart [1847:1877] Extension=true Name=[1848:1876]"acme.inventory.v2.oneof_hint"
+        Value: StringLit [1880:1891] Value="exclusive"
+      Body[1]: Field [1897:1916] Type=[1897:1902]"int32" Name=[1903:1911]"quantity"
+        Number: IntLit [1914:1915] Raw="8" Value=8
+      Body[2]: Field [1921:1946] Type=[1921:1927]"string" Name=[1928:1940]"restock_date"
+        Number: IntLit [1943:1945] Raw="12" Value=12
+      Body[3]: Field [1951:1981] Type=[1951:1963]"Location.Bin" Name=[1964:1975]"only_in_bin"
+        Number: IntLit [1978:1980] Raw="13" Value=13
+    Body[13]: Oneof [1989:2097] Name=[1995:2002]"pricing" RBrace=2096
+      Body[0]: Field [2009:2058] Type=[2009:2015]"sint32" Name=[2016:2032]"discount_percent"
+        Number: IntLit [2035:2037] Raw="14" Value=14
+        Options: CompactOptions [2038:2057]
+          Options[0]: Option [2039:2056]
+            Name: OptionName [2039:2049]
+              Parts[0]: OptionNamePart [2039:2049] Name=[2039:2049]"deprecated"
+            Value: IdentLit [2052:2056] Value="true"
+      Body[1]: Field [2063:2093] Type=[2063:2069]"sint64" Name=[2070:2087]"flat_price_micros"
+        Number: IntLit [2090:2092] Raw="16" Value=16
+    Body[14]: Field [2101:2185] Label=optional LabelLoc=[2101:2109] Type=[2110:2115]"float" Name=[2116:2125]"weight_kg"
+      Number: IntLit [2128:2130] Raw="17" Value=17
+      Options: CompactOptions [2131:2184]
+        Options[0]: Option [2132:2183]
+          Name: OptionName [2132:2140]
+            Parts[0]: OptionNamePart [2132:2140] Extension=true Name=[2133:2139]"limits"
+          Value: MessageLit [2143:2183]
+            Fields[0]: MessageLitField [2144:2152]
+              Name: FieldRef [2144:2147] Name=[2144:2147]"min"
+              Value: FloatLit [2149:2152] Raw="0.0" Value=0
+            Fields[1]: MessageLitField [2154:2162]
+              Name: FieldRef [2154:2157] Name=[2154:2157]"max"
+              Value: FloatLit [2159:2162] Raw="1e3" Value=1000
+            Fields[2]: MessageLitField [2164:2172]
+              Name: FieldRef [2164:2168] Name=[2164:2168]"tags"
+              Value: ListLit [2170:2172]
+            Fields[3]: MessageLitField [2173:2182]
+              Name: FieldRef [2173:2178] Name=[2173:2178]"extra"
+              Value: MessageLit [2179:2182]
+    Body[15]: Field [2188:2248] Type=[2188:2194]"double" Name=[2195:2200]"score"
+      Number: IntLit [2203:2205] Raw="18" Value=18
+      Options: CompactOptions [2206:2247]
+        Options[0]: Option [2207:2226]
+          Name: OptionName [2207:2219]
+            Parts[0]: OptionNamePart [2207:2215] Extension=true Name=[2208:2214]"limits"
+            Parts[1]: OptionNamePart [2216:2219] Name=[2216:2219]"min"
+          Value: FloatLit [2222:2226] Negative=true Raw="1.5" Value=-1.5
+        Options[1]: Option [2228:2246]
+          Name: OptionName [2228:2240]
+            Parts[0]: OptionNamePart [2228:2236] Extension=true Name=[2229:2235]"limits"
+            Parts[1]: OptionNamePart [2237:2240] Name=[2237:2240]"max"
+          Value: IdentLit [2243:2246] Value="nan"
+    Body[16]: Field [2251:2269] Type=[2251:2257]"uint64" Name=[2258:2261]"big"
+      Number: IntLit [2264:2268] Raw="0x1F" Value=31
+    Body[17]: Field [2272:2296] Type=[2272:2277]"int64" Name=[2278:2289]"octal_field"
+      Number: IntLit [2292:2295] Raw="040" Value=32
+    Body[18]: Field [2299:2367] Type=[2299:2305]"string" Name=[2306:2311]"motto"
+      Number: IntLit [2314:2316] Raw="19" Value=19
+      Options: CompactOptions [2317:2366]
+        Options[0]: Option [2318:2365]
+          Name: OptionName [2318:2331]
+            Parts[0]: OptionNamePart [2318:2331] Extension=true Name=[2319:2330]"sensitivity"
+          Value: StringLit [2334:2365] Value="never give up\t!!"
+    Body[19]: Field [2370:2431] Type=[2370:2376]"string" Name=[2377:2384]"unicode"
+      Number: IntLit [2387:2389] Raw="20" Value=20
+      Options: CompactOptions [2390:2430]
+        Options[0]: Option [2391:2429]
+          Name: OptionName [2391:2404]
+            Parts[0]: OptionNamePart [2391:2404] Extension=true Name=[2392:2403]"sensitivity"
+          Value: StringLit [2407:2429] Value="café 📦"
+    Body[20]: Empty [2434:2435]
+  Decls[11]: Message [2439:2615] Name=[2447:2454]"Catalog" RBrace=2614
+    Body[0]: Field [2459:2483] Label=repeated LabelLoc=[2459:2467] Type=[2468:2472]"Item" Name=[2473:2478]"items"
+      Number: IntLit [2481:2482] Raw="1" Value=1
+    Body[1]: MapField [2486:2514] KeyType=[2490:2496]"string" ValType=[2498:2502]"Item" Name=[2504:2509]"by_id"
+      Number: IntLit [2512:2513] Raw="2" Value=2
+    Body[2]: MapField [2517:2545] KeyType=[2521:2525]"bool" ValType=[2527:2533]"string" Name=[2535:2540]"flags"
+      Number: IntLit [2543:2544] Raw="3" Value=3
+    Body[3]: MapField [2548:2581] KeyType=[2552:2560]"sfixed32" ValType=[2562:2568]"uint64" Name=[2570:2576]"counts"
+      Number: IntLit [2579:2580] Raw="4" Value=4
+    Body[4]: Field [2584:2613] Type=[2584:2594]"Item.State" Name=[2595:2608]"default_state"
+      Number: IntLit [2611:2612] Raw="5" Value=5
+  Decls[12]: Enum [2617:2696] Name=[2622:2628]"Region" RBrace=2695
+    Body[0]: EnumValue [2633:2656] Name=[2633:2651]"REGION_UNSPECIFIED"
+      Number: IntLit [2654:2655] Raw="0" Value=0
+    Body[1]: EnumValue [2659:2668] Name=[2659:2663]"EMEA"
+      Number: IntLit [2666:2667] Raw="1" Value=1
+    Body[2]: EnumValue [2671:2680] Name=[2671:2675]"AMER"
+      Number: IntLit [2678:2679] Raw="2" Value=2
+    Body[3]: EnumValue [2683:2694] Name=[2683:2687]"APAC"
+      Number: IntLit [2690:2693] Raw="0x3" Value=3
+  Decls[13]: Service [2749:2807] Leading=" A service with no methods yet; options only. " Name=[2757:2771]"InventoryAdmin" RBrace=2806
+    Body[0]: Option [2776:2801]
+      Name: OptionName [2783:2793]
+        Parts[0]: OptionNamePart [2783:2793] Name=[2783:2793]"deprecated"
+      Value: IdentLit [2796:2800] Value="true"
+    Body[1]: Empty [2804:2805]
+  Comments[0]: Comment [0:68]
+  Comments[1]: Comment [69:124]
+  Comments[2]: Comment [332:372]
+  Comments[3]: Comment [877:905]
+  Comments[4]: Comment [1011:1027]
+  Comments[5]: Comment [2698:2748] Block=true
+# errors
+# diagnostics

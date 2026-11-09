@@ -1,0 +1,65 @@
+# PostSonde as a Flatpak, on the GNOME runtime, which has GTK 4 and WebKitGTK
+# 6.0: the gtk4 build. It is built in the GNOME SDK from the source tarball
+# (scripts/package-sources.sh: the tree, the frontend's production build and
+# the vendored Go modules) with Go from go.dev, so the build itself needs no
+# network. scripts/package-flatpak.sh fills in the @...@ placeholders (the
+# version, the tarball, and the runtime and Go pins of scripts/pins.env),
+# builds it and makes a bundle; scripts/test-flatpak.sh installs the bundle
+# and starts it offline. docs/packaging.md, Flatpak.
+app-id: io.github.sorrelfox.PostSonde
+runtime: org.gnome.Platform
+runtime-version: '@GNOME_VERSION@'
+sdk: org.gnome.Sdk
+command: postsonde
+# The desktop file and the icons say "postsonde"; Flatpak exports them only
+# under the app ID.
+rename-icon: postsonde
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # An API client: it sends the requests you make, to the servers you name.
+  # Nothing else (docs/privacy.md).
+  - --share=network
+  # Projects are folders anywhere in the home folder.
+  - --filesystem=home
+  # The secrets key in the desktop's keyring, over the Secret Service. Where
+  # that isn't there, PostSonde asks for its master password instead.
+  - --talk-name=org.freedesktop.secrets
+modules:
+  - name: postsonde
+    buildsystem: simple
+    build-options:
+      env:
+        # The production build of the other packages (scripts/ci-build-linux.sh),
+        # from the tarball's vendored modules: no download, no other Go.
+        GOTOOLCHAIN: local
+        GOFLAGS: -mod=vendor
+        GOPROXY: 'off'
+        CGO_ENABLED: '1'
+        CGO_CFLAGS: -O2 -g -Wno-deprecated-declarations
+        GOCACHE: /run/build/postsonde/.cache/go-build
+        GOPATH: /run/build/postsonde/.cache/go
+    build-commands:
+      - go/bin/go version
+      - go/bin/go build -tags production -trimpath -buildvcs=false -ldflags "-w -s -X main.version=@VERSION@" -o /app/bin/postsonde ./cmd/postsonde
+      - install -Dm0644 build/linux/io.github.sorrelfox.PostSonde.desktop /app/share/applications/io.github.sorrelfox.PostSonde.desktop
+      - install -Dm0644 build/linux/io.github.sorrelfox.PostSonde.metainfo.xml /app/share/metainfo/io.github.sorrelfox.PostSonde.metainfo.xml
+      - mkdir -p /app/share/icons && cp -R assets/icons/linux/hicolor /app/share/icons/
+      - install -Dm0644 -t /app/share/licenses/io.github.sorrelfox.PostSonde LICENSE THIRD_PARTY_NOTICES.md
+      - install -Dm0644 frontend/src/assets/fonts/instrument-sans/OFL.txt /app/share/licenses/io.github.sorrelfox.PostSonde/fonts/instrument-sans/OFL.txt
+      - install -Dm0644 frontend/src/assets/fonts/jetbrains-mono/OFL.txt /app/share/licenses/io.github.sorrelfox.PostSonde/fonts/jetbrains-mono/OFL.txt
+    sources:
+      - type: archive
+        path: '@TARBALL@'
+      - type: archive
+        url: https://go.dev/dl/go@GO_VERSION@.linux-amd64.tar.gz
+        sha256: '@GO_SHA256_AMD64@'
+        dest: go
+        only-arches: [x86_64]
+      - type: archive
+        url: https://go.dev/dl/go@GO_VERSION@.linux-arm64.tar.gz
+        sha256: '@GO_SHA256_ARM64@'
+        dest: go
+        only-arches: [aarch64]

@@ -1,0 +1,10 @@
+// TLS verification is off for this request; fetch cannot turn it off (in Node, NODE_TLS_REJECT_UNAUTHORIZED=0 does).
+const response = await fetch("http://api.test/me", {
+  headers: {
+    "Authorization": "Basic " + btoa(String.fromCharCode(...new TextEncoder().encode("jürgen:pässwörd ✓"))),
+  },
+  redirect: "manual",
+});
+
+console.log(response.status);
+console.log(await response.text());

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "id": "01J8Z6Q0XK",
+  "name": "Search users",
+  "method": "GET",
+  "url": "https://api.example.com/users?q=<name>&limit=10",
+  "headers": [
+    {
+      "name": "Accept",
+      "value": "application/json",
+      "enabled": true
+    },
+    {
+      "name": "X-Trace",
+      "value": "a&b",
+      "enabled": false
+    }
+  ],
+  "query": {
+    "Zeta": "z",
+    "after": "",
+    "limit": "10",
+    "q": "<name>"
+  },
+  "body": {
+    "mode": "json",
+    "text": "{\n  \"name\": \"Zoë <admin>\"\n}"
+  },
+  "timeoutSeconds": 2.5,
+  "tags": null
+}

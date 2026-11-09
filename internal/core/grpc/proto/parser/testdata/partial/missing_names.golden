@@ -1,0 +1,26 @@
+# source
+message {
+  int32 = 1;
+  oneof {}
+}
+enum { = 1; }
+service { rpc (A) returns (B); }
+# tree
+File [0:82] Name="p.proto"
+  Decls[0]: Message [0:35] Name=[7:7]"" RBrace=34
+    Body[0]: Field [12:22] Type=[12:17]"int32" Name=[17:17]""
+    Body[1]: Oneof [25:33] Name=[30:30]"" RBrace=32
+  Decls[1]: Enum [36:49] Name=[40:40]"" RBrace=48
+  Decls[2]: Service [50:82] Name=[57:57]"" RBrace=81
+    Body[0]: RPC [60:80] Name=[63:63]"" LBrace=-1 RBrace=-1
+# errors
+1:9 [8:9] unexpected token: expected a message name, found "{"
+2:9 [18:19] unexpected token: expected a field name, found "="
+3:9 [31:32] unexpected token: expected a oneof name, found "{"
+5:6 [41:42] unexpected token: expected an enum name, found "{"
+5:8 [43:44] unexpected token: expected an enum value, reserved or option, found "="
+6:9 [58:59] unexpected token: expected a service name, found "{"
+6:15 [64:65] unexpected token: expected an rpc name, found "("
+# diagnostics
+1:1 [0:0] warning syntax: no syntax specified; the file is treated as proto2 (add syntax = "proto2"; or syntax = "proto3";)
+2:3 [12:12] error label: fields in proto2 files need a label: "required", "optional" or "repeated"

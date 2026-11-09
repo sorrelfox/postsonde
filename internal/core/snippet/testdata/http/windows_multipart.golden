@@ -1,0 +1,14 @@
+POST /upload HTTP/1.1
+Host: api.test
+Content-Type: multipart/form-data; boundary=PostSondeFormBoundary
+
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="doc"; filename="upload.txt"
+Content-Type: text/plain
+
+< C:\tmp\a&b\up;load.txt
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="dir"
+
+C:\tmp\
+--PostSondeFormBoundary--

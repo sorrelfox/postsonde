@@ -1,0 +1,17 @@
+# source
+{ f(a: {b }) }
+# tree
+Document [0:14]
+  Definitions[0]: OperationDefinition [0:14] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:14] LBrace=0 RBrace=13
+      Selections[0]: Field [2:12] Colon=-1
+        Name: Name [2:3] Value="f"
+        Arguments: ArgumentList [3:12] LParen=3 RParen=11
+          Arguments[0]: Argument [4:11] Colon=5
+            Name: Name [4:5] Value="a"
+            Value: ObjectValue [7:11] LBrace=7 RBrace=10
+              Fields[0]: ObjectField [8:10] Colon=-1
+                Name: Name [8:9] Value="b"
+                Value: InvalidValue [9:10] Missing=true
+# errors
+1:11 [10:11] unexpected token: expected ":", found "}"

@@ -1,0 +1,56 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000bb",
+      "seq": 6,
+      "time": "2026-09-16T08:00:04Z",
+      "peer": "127.0.0.1:53124",
+      "connId": 3,
+      "direction": "in",
+      "kind": "message",
+      "summary": "Text message from client 3",
+      "text": "hello",
+      "dataBase64": "",
+      "binary": false,
+      "size": 5,
+      "truncated": false,
+      "http": null,
+      "ws": {
+        "clientId": "3",
+        "opcode": "text",
+        "subprotocol": "",
+        "closeCode": 0,
+        "closeReason": "",
+        "initiatedBy": ""
+      },
+      "tcp": null,
+      "captured": false
+    },
+    {
+      "serverId": "srv_00000000000000bb",
+      "seq": 7,
+      "time": "2026-09-16T08:00:05Z",
+      "peer": "127.0.0.1:53124",
+      "connId": 3,
+      "direction": "system",
+      "kind": "connection_close",
+      "summary": "Disconnected by the server: 4000 “bye”",
+      "text": "",
+      "dataBase64": "",
+      "binary": false,
+      "size": 0,
+      "truncated": false,
+      "http": null,
+      "ws": {
+        "clientId": "3",
+        "opcode": "",
+        "subprotocol": "",
+        "closeCode": 4000,
+        "closeReason": "bye",
+        "initiatedBy": "server"
+      },
+      "tcp": null,
+      "captured": false
+    }
+  ]
+}

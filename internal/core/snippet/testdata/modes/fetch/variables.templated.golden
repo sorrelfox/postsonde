@@ -1,0 +1,13 @@
+const response = await fetch("{{base}}/users/{{id}}?q={{q}}&t={{token}}", {
+  method: "POST",
+  headers: {
+    "X-User": "{{user}}",
+    "X-Token": "{{token}}",
+    "X-Uuid": "{{$uuid}}",
+    "Content-Type": "application/json",
+  },
+  body: "{\"user\":\"{{user}}\",\"token\":\"{{token}}\"}",
+});
+
+console.log(response.status);
+console.log(await response.text());

@@ -1,0 +1,97 @@
+title: Petstore 3.0 1.0.0 (openapi 3.0.3)
+prefix: "/v1" (default "/v1")
+
+route 0 GET /v1/pets id=rt_listpets enabled=true
+  from GET /pets operationId="listPets" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | [
+    |   {
+    |     "id": 1,
+    |     "name": "Rex",
+    |     "petType": "cat",
+    |     "tag": "string",
+    |     "owner": {
+    |       "id": 0,
+    |       "username": "string",
+    |       "pets": [
+    |         {
+    |           "id": 1,
+    |           "name": "Rex",
+    |           "petType": "cat",
+    |           "tag": "string"
+    |         }
+    |       ]
+    |     },
+    |     "huntingSkill": "lazy"
+    |   }
+    | ]
+
+route 1 POST /v1/pets id=rt_createpet enabled=true
+  from POST /pets operationId="createPet" response="201" mediaType="application/json"
+  status 201, delay none
+  body raw json
+    | {
+    |   "id": 1,
+    |   "name": "Rex",
+    |   "petType": "cat",
+    |   "tag": "string",
+    |   "owner": {
+    |     "id": 0,
+    |     "username": "string",
+    |     "pets": []
+    |   }
+    | }
+
+route 2 GET /v1/pets/:petId id=rt_showpetbyid enabled=true
+  from GET /pets/{petId} operationId="showPetById" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "id": 1,
+    |   "name": "Tom",
+    |   "petType": "cat",
+    |   "huntingSkill": "lazy"
+    | }
+
+route 3 DELETE /v1/pets/:petId id=rt_deletepet enabled=true
+  from DELETE /pets/{petId} operationId="deletePet" response="204" mediaType=""
+  status 204, delay none
+  body none 
+
+route 4 POST /v1/pets/:petId/photo id=rt_uploadphoto enabled=true
+  from POST /pets/{petId}/photo operationId="uploadPhoto" response="200" mediaType=""
+  status 200, delay none
+  body none 
+
+route 5 GET /v1/store/inventory id=rt_getinventory enabled=true
+  from GET /store/inventory operationId="getInventory" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "additionalProp1": 0
+    | }
+
+route 6 GET /v1/users/me id=rt_getme enabled=true
+  from GET /users/me operationId="getMe" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "id": 0,
+    |   "username": "string",
+    |   "pets": [
+    |     {
+    |       "id": 1,
+    |       "name": "Rex",
+    |       "petType": "cat",
+    |       "tag": "string"
+    |     }
+    |   ]
+    | }
+
+diagnostics:
+  info mockopenapi.not_mocked route=-1 op="" line=0: Webhooks and callbacks get no routes: the API sends those requests instead of answering them.
+  info mockopenapi.media_type route=0 op="GET /pets" line=38: The body is application/json; the response is also documented as application/xml.
+  info mockopenapi.example_truncated route=0 op="GET /pets" line=38: The generated body stops where the schema refers back to itself.
+  info mockopenapi.example_truncated route=1 op="POST /pets" line=95: The generated body stops where the schema refers back to itself.
+  info mockopenapi.example_truncated route=6 op="GET /users/me" line=222: The generated body stops where the schema refers back to itself.

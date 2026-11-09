@@ -1,0 +1,121 @@
+/* The Examples sub-tab (HTTP-38): the responses saved with the request,
+ * one row each: the name as an input, the status, when it was saved, the
+ * body size, then View and Delete. */
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.empty {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-md);
+}
+
+.table th {
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  color: var(--text3);
+  font-weight: var(--fw-semibold);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  color: var(--text2);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.name {
+  width: 100%;
+  min-width: 140px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+}
+
+.status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.ok {
+  color: var(--ok);
+}
+
+.redirect {
+  color: var(--m-put);
+}
+
+.client {
+  color: var(--warn);
+}
+
+.server {
+  color: var(--bad);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.button {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.name:focus-visible,
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}

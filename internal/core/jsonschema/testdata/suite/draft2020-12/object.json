@@ -1,0 +1,136 @@
+[
+    {
+        "description": "properties",
+        "schema": {"properties": {"foo": {"type": "integer"}, "bar": {"type": "string"}}},
+        "tests": [
+            {"description": "both valid", "data": {"foo": 1, "bar": "baz"}, "valid": true},
+            {"description": "one invalid", "data": {"foo": 1, "bar": {}}, "valid": false},
+            {"description": "missing properties are fine", "data": {}, "valid": true},
+            {"description": "other properties are fine", "data": {"quux": []}, "valid": true},
+            {"description": "non-objects are ignored", "data": [], "valid": true}
+        ]
+    },
+    {
+        "description": "properties with escaped names",
+        "schema": {"properties": {"foo\nbar": {"type": "number"}, "foo\"bar": {"type": "number"}, "a/b": {"type": "number"}}},
+        "tests": [
+            {"description": "valid", "data": {"foo\nbar": 1, "foo\"bar": 1, "a/b": 1}, "valid": true},
+            {"description": "invalid", "data": {"a/b": "x"}, "valid": false}
+        ]
+    },
+    {
+        "description": "properties named like keywords and __proto__",
+        "schema": {"properties": {"__proto__": {"type": "number"}, "type": {"type": "number"}, "$ref": {"type": "number"}}},
+        "tests": [
+            {"description": "valid", "data": {"__proto__": 1, "type": 2, "$ref": 3}, "valid": true},
+            {"description": "invalid $ref member", "data": {"$ref": "x"}, "valid": false}
+        ]
+    },
+    {
+        "description": "required",
+        "schema": {"required": ["foo", "bar"]},
+        "tests": [
+            {"description": "both present", "data": {"foo": 1, "bar": null}, "valid": true},
+            {"description": "one missing", "data": {"foo": 1}, "valid": false},
+            {"description": "non-objects are ignored", "data": "foo", "valid": true}
+        ]
+    },
+    {
+        "description": "required empty",
+        "schema": {"required": []},
+        "tests": [
+            {"description": "an empty object", "data": {}, "valid": true}
+        ]
+    },
+    {
+        "description": "additionalProperties false with properties and patternProperties",
+        "schema": {"properties": {"foo": {}, "bar": {}}, "patternProperties": {"^v": {}}, "additionalProperties": false},
+        "tests": [
+            {"description": "no additional", "data": {"foo": 1}, "valid": true},
+            {"description": "an additional property", "data": {"foo": 1, "quux": 2}, "valid": false},
+            {"description": "a pattern property", "data": {"foo": 1, "vroom": 2}, "valid": true},
+            {"description": "non-objects are ignored", "data": [1, 2], "valid": true}
+        ]
+    },
+    {
+        "description": "additionalProperties with a schema",
+        "schema": {"properties": {"foo": {}}, "additionalProperties": {"type": "boolean"}},
+        "tests": [
+            {"description": "a boolean additional property", "data": {"foo": 1, "bar": true}, "valid": true},
+            {"description": "a number additional property", "data": {"foo": 1, "bar": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "additionalProperties does not look into allOf",
+        "schema": {"allOf": [{"properties": {"foo": {}}}], "additionalProperties": {"type": "boolean"}},
+        "tests": [
+            {"description": "foo is additional here", "data": {"foo": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "patternProperties",
+        "schema": {"patternProperties": {"f.*o": {"type": "integer"}, "^b": {"type": "string"}}},
+        "tests": [
+            {"description": "valid", "data": {"foo": 1, "bar": "x"}, "valid": true},
+            {"description": "a name matching both patterns applies both", "data": {"bfoo": "x"}, "valid": false},
+            {"description": "invalid", "data": {"fooooo": "x"}, "valid": false},
+            {"description": "unmatched names are fine", "data": {"x": []}, "valid": true}
+        ]
+    },
+    {
+        "description": "minProperties and maxProperties",
+        "schema": {"minProperties": 1, "maxProperties": 2},
+        "tests": [
+            {"description": "one", "data": {"a": 1}, "valid": true},
+            {"description": "none", "data": {}, "valid": false},
+            {"description": "three", "data": {"a": 1, "b": 2, "c": 3}, "valid": false},
+            {"description": "non-objects are ignored", "data": "", "valid": true}
+        ]
+    },
+    {
+        "description": "propertyNames",
+        "schema": {"propertyNames": {"maxLength": 3, "pattern": "^[a-z]+$"}},
+        "tests": [
+            {"description": "short lowercase names", "data": {"foo": 1, "ab": 2}, "valid": true},
+            {"description": "a long name", "data": {"fooo": 1}, "valid": false},
+            {"description": "a name with a digit", "data": {"a1": 1}, "valid": false},
+            {"description": "empty object", "data": {}, "valid": true}
+        ]
+    },
+    {
+        "description": "propertyNames false",
+        "schema": {"propertyNames": false},
+        "tests": [
+            {"description": "empty object", "data": {}, "valid": true},
+            {"description": "any property", "data": {"a": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "dependentRequired",
+        "schema": {"dependentRequired": {"bar": ["foo"]}},
+        "tests": [
+            {"description": "neither", "data": {}, "valid": true},
+            {"description": "the dependency only", "data": {"foo": 1}, "valid": true},
+            {"description": "both", "data": {"foo": 1, "bar": 2}, "valid": true},
+            {"description": "bar without foo", "data": {"bar": 2}, "valid": false}
+        ]
+    },
+    {
+        "description": "dependentSchemas",
+        "schema": {"dependentSchemas": {"bar": {"properties": {"foo": {"type": "integer"}}, "required": ["foo"]}}},
+        "tests": [
+            {"description": "no bar", "data": {"foo": "x"}, "valid": true},
+            {"description": "bar with an integer foo", "data": {"bar": 1, "foo": 1}, "valid": true},
+            {"description": "bar with a string foo", "data": {"bar": 1, "foo": "x"}, "valid": false},
+            {"description": "bar without foo", "data": {"bar": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "dependentSchemas false",
+        "schema": {"dependentSchemas": {"bar": false}},
+        "tests": [
+            {"description": "no bar", "data": {"foo": 1}, "valid": true},
+            {"description": "bar", "data": {"bar": 1}, "valid": false}
+        ]
+    }
+]

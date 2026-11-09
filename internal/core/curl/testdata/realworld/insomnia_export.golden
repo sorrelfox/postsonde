@@ -1,0 +1,64 @@
+{
+  "dialect": "posix",
+  "method": "PUT",
+  "methodExplicit": true,
+  "url": "https://api.example.com/v1/items/17",
+  "urls": [
+    {
+      "value": "https://api.example.com/v1/items/17",
+      "start": 23,
+      "end": 64
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "application/json",
+      "kind": "set",
+      "implied": false,
+      "start": 69,
+      "end": 110
+    },
+    {
+      "name": "User-Agent",
+      "value": "insomnia/10.0.0",
+      "kind": "set",
+      "implied": false,
+      "start": 115,
+      "end": 153
+    }
+  ],
+  "data": [
+    {
+      "kind": "data",
+      "option": "--data",
+      "value": "{\"name\":\"Widget\",\"price\":9.5}",
+      "name": "",
+      "file": "",
+      "start": 158,
+      "end": 196
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

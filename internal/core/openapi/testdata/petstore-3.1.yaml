@@ -1,0 +1,293 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
+info:
+  title: Petstore 3.1
+  summary: A pet store that uses OpenAPI 3.1 features.
+  description: |
+    Webhooks, JSON Schema 2020-12 keywords, recursive schemas,
+    $anchor references and path items in components.
+  license:
+    name: MIT
+    identifier: MIT
+  version: 2.0.0
+servers:
+  - url: https://{env}.petstore.example:{port}/v2
+    description: Hosted
+    variables:
+      env:
+        default: api
+        enum: [api, staging]
+      port:
+        default: "443"
+  - url: http://localhost:8080/v2
+tags:
+  - name: pets
+    description: Pets in the store
+  - name: trees
+security:
+  - api_key: []
+  - oauth: [read:pets]
+paths:
+  /pets:
+    get:
+      tags: [pets]
+      summary: List pets
+      operationId: listPets
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - name: tags
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: A page of pets
+          headers:
+            X-Next:
+              $ref: '#/components/headers/X-Next'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+              examples:
+                two:
+                  $ref: '#/components/examples/twoPets'
+        default:
+          $ref: '#/components/responses/Error'
+    post:
+      tags: [pets]
+      summary: Add a pet
+      operationId: createPet
+      requestBody:
+        $ref: '#/components/requestBodies/NewPet'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+              example: {id: 7, name: Rex, tag: null}
+      security: []
+  /pets/{petId}:
+    $ref: '#/components/pathItems/PetById'
+  /trees/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      tags: [trees]
+      operationId: getTree
+      responses:
+        '200':
+          description: A tree
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TreeNode'
+  /subscriptions:
+    post:
+      operationId: subscribe
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                callbackUrl: {type: string, format: uri}
+                events:
+                  type: array
+                  items: {type: string}
+            encoding:
+              events:
+                style: form
+                explode: true
+      callbacks:
+        onEvent:
+          '{$request.body#/callbackUrl}':
+            post:
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/Event'
+              responses:
+                '204':
+                  description: Received
+      responses:
+        '202':
+          description: Subscribed
+webhooks:
+  newPet:
+    post:
+      summary: A pet was added
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '200':
+          description: Acknowledged
+components:
+  schemas:
+    Pet:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+          format: int64
+          exclusiveMinimum: 0
+        name:
+          type: string
+          minLength: 1
+          examples: [Rex, Tom]
+        tag:
+          type: [string, 'null']
+        status:
+          enum: [available, pending, sold]
+          default: available
+        price:
+          $ref: '#money'
+          description: What the pet costs
+        category:
+          $ref: '#/components/schemas/Category'
+      additionalProperties: false
+    NewPet:
+      allOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            id: false
+    Money:
+      $anchor: money
+      type: object
+      properties:
+        amount: {type: number, multipleOf: 0.01}
+        currency: {const: EUR}
+    Category:
+      type: object
+      properties:
+        name: {type: string}
+        parent:
+          $ref: '#/components/schemas/Category/$defs/CategoryRef'
+      $defs:
+        CategoryRef:
+          oneOf:
+            - $ref: '#/components/schemas/Category'
+            - type: 'null'
+    TreeNode:
+      type: object
+      properties:
+        value: {type: string}
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreeNode'
+    Event:
+      type: object
+      prefixItems: [{type: string}]
+      properties:
+        kind: {type: string}
+        pet:
+          $ref: '#/components/schemas/Pet'
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: {type: integer, format: int32}
+        message: {type: string}
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: How many items to return
+      schema:
+        type: integer
+        maximum: 100
+        default: 20
+    petId:
+      name: petId
+      in: path
+      required: true
+      schema:
+        type: integer
+  requestBodies:
+    NewPet:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewPet'
+          examples:
+            rex:
+              summary: A dog
+              value: {name: Rex, tag: dog}
+  responses:
+    Error:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  headers:
+    X-Next:
+      description: Link to the next page
+      schema:
+        type: string
+  examples:
+    twoPets:
+      summary: Two pets
+      value:
+        - {id: 1, name: Rex}
+        - {id: 2, name: Tom}
+  pathItems:
+    PetById:
+      parameters:
+        - $ref: '#/components/parameters/petId'
+      get:
+        tags: [pets]
+        operationId: showPetById
+        responses:
+          '200':
+            description: The pet
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Pet'
+          '404':
+            $ref: '#/components/responses/Error'
+            description: No such pet
+      delete:
+        tags: [pets]
+        operationId: deletePet
+        responses:
+          '204':
+            description: Deleted
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-Key
+      in: header
+    oauth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.petstore.example/authorize
+          tokenUrl: https://auth.petstore.example/token
+          scopes:
+            read:pets: Read pets
+            write:pets: Change pets
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

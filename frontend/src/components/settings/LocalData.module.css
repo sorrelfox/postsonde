@@ -1,0 +1,94 @@
+/* Clear local data (PRV-13): Settings, Privacy, Local data and its
+ * confirmation. The rows reuse SettingsScreen.module.css. */
+
+.size {
+  color: var(--text2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) 0;
+}
+
+.done {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  user-select: text;
+}
+
+.failed {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  user-select: text;
+}
+
+.failed svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.help {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.help p {
+  margin: 0;
+}
+
+.list {
+  margin: 0;
+  padding-left: var(--space-7);
+  color: var(--text);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  color: var(--text);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+}
+
+.input {
+  min-width: 0;
+  height: var(--h-control);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}

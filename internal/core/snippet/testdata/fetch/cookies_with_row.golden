@@ -1,0 +1,8 @@
+const response = await fetch("https://api.test/me", {
+  headers: {
+    "Cookie": "theme=light; sid=abc",
+  },
+});
+
+console.log(response.status);
+console.log(await response.text());

@@ -1,0 +1,7 @@
+type: codec.p3.Optionals
+o_int32: 0
+o_string: ""
+o_bool: false
+o_double: 0
+o_enum: 0
+o_nested: {}

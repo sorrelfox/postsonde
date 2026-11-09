@@ -1,0 +1,36 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String boundary = "PostSonde" + UUID.randomUUID();
+        List<byte[]> form = new ArrayList<>();
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"doc\"; filename=\"upload.txt\"\r\n"
+                + "Content-Type: text/plain\r\n"
+                + "\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(Files.readAllBytes(Path.of("C:\\tmp\\a&b\\up;load.txt")));
+        form.add("\r\n".getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"dir\"\r\n"
+                + "\r\n"
+                + "C:\\tmp\\\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.test/upload"))
+                .POST(HttpRequest.BodyPublishers.ofByteArrays(form))
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

@@ -1,0 +1,83 @@
+{
+  "dialect": "posix",
+  "method": "GET",
+  "methodExplicit": false,
+  "url": "https://example.com/",
+  "urls": [
+    {
+      "value": "https://example.com/",
+      "start": 260,
+      "end": 286
+    },
+    {
+      "value": "https://second.example/",
+      "start": 287,
+      "end": 310
+    }
+  ],
+  "urlQuery": null,
+  "headers": null,
+  "data": null,
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": {
+    "user": "ada",
+    "password": "secret",
+    "hasPassword": true
+  },
+  "authScheme": "digest",
+  "oauth2Bearer": "",
+  "userAgent": "agent/1.0",
+  "referer": "https://ref.example/",
+  "cookies": null,
+  "insecure": true,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": 5,
+  "httpVersion": "2",
+  "maxTime": 2500000000,
+  "connectTimeout": 3000000000,
+  "proxy": "http://proxy.local:3128",
+  "proxyUser": {
+    "user": "bob",
+    "password": "pw",
+    "hasPassword": true
+  },
+  "noProxy": "localhost",
+  "diagnostics": [
+    {
+      "code": "curl.unsupported_option",
+      "severity": "warning",
+      "start": 208,
+      "end": 223,
+      "message": "The option “--cacert” is not imported.",
+      "text": "--cacert ca.pem"
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 224,
+      "end": 235,
+      "message": "The option “-o” does not change the request and is ignored.",
+      "text": "-o out.json"
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 236,
+      "end": 255,
+      "message": "The option “-w” does not change the request and is ignored.",
+      "text": "-w '%{http_code}\\n'"
+    },
+    {
+      "code": "curl.multiple_urls",
+      "severity": "warning",
+      "start": 287,
+      "end": 310,
+      "message": "Only the first URL is imported; this one is ignored.",
+      "text": "https://second.example/"
+    }
+  ]
+}

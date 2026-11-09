@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "kind": "socketio",
+  "id": "req_6b1d0e4f9a2c8d37",
+  "name": "Chat",
+  "url": "{{baseUrl}}/chat?room=lobby",
+  "params": [
+    {
+      "name": "room",
+      "value": "lobby"
+    }
+  ],
+  "headers": [
+    {
+      "name": "X-Client",
+      "value": "postsonde"
+    }
+  ],
+  "path": "/realtime/",
+  "authPayload": "{\"token\": \"{{chatToken}}\"}",
+  "transport": "upgrade",
+  "event": "message",
+  "args": "[\"hello\", {\"to\": \"all\"}]",
+  "ack": true,
+  "savedEmits": [
+    {
+      "name": "Join lobby",
+      "event": "join",
+      "args": "[\"lobby\"]",
+      "ack": true
+    },
+    {
+      "name": "Avatar",
+      "event": "upload",
+      "args": "[{\"$base64\": \"iVBORw0KGgo=\"}]"
+    }
+  ],
+  "listen": [
+    "message",
+    "typing"
+  ],
+  "settings": {
+    "ackTimeoutMs": 5000
+  }
+}

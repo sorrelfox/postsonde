@@ -1,0 +1,3 @@
+http --auth-type=digest '--auth=ann
+// x:••••••' \
+  GET https://api.test/me

@@ -1,0 +1,26 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+var body =
+    "trailing spaces   \n" +
+    "  indented\n" +
+    "\ttabbed\n" +
+    "100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\\n" +
+    "\"\"\"triple\"\"\" \\u0041 \\n */ // # -- ; C:\\dir\\\n" +
+    "\n" +
+    "‘curly’ “double” 日本 😀 \u00a0nbsp \u2028ls\n" +
+    "   ";
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/q");
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(body));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "text/plain");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

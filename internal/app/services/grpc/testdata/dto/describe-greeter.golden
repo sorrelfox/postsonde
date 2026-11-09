@@ -1,0 +1,50 @@
+{
+  "services": [
+    {
+      "name": "Greeter",
+      "fullName": "demo.v1.Greeter",
+      "file": "greeter.proto",
+      "comment": "Greeter says hello.\nTwice, if asked.",
+      "deprecated": false,
+      "methods": [
+        {
+          "name": "SayHello",
+          "fullName": "demo.v1.Greeter.SayHello",
+          "inputType": "demo.v1.HelloRequest",
+          "outputType": "demo.v1.HelloReply",
+          "clientStreaming": false,
+          "serverStreaming": false,
+          "kind": "unary",
+          "deprecated": false,
+          "comment": "SayHello greets one person."
+        },
+        {
+          "name": "Chat",
+          "fullName": "demo.v1.Greeter.Chat",
+          "inputType": "demo.v1.HelloRequest",
+          "outputType": "demo.v1.HelloReply",
+          "clientStreaming": true,
+          "serverStreaming": true,
+          "kind": "bidi",
+          "deprecated": false,
+          "comment": "Chat talks back."
+        },
+        {
+          "name": "Old",
+          "fullName": "demo.v1.Greeter.Old",
+          "inputType": "google.protobuf.Empty",
+          "outputType": "demo.v1.HelloReply",
+          "clientStreaming": false,
+          "serverStreaming": false,
+          "kind": "unary",
+          "deprecated": true,
+          "comment": ""
+        }
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "files": 1,
+  "errors": 0,
+  "cached": false
+}

@@ -1,0 +1,4 @@
+http --multipart \
+  POST https://api.test/upload \
+  'doc@C:\tmp\a&b\up;load.txt;type=text/plain' \
+  'dir=C:\tmp\'

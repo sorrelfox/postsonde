@@ -1,0 +1,10 @@
+const response = await fetch("{{baseUrl}}/items/{{id}}", {
+  method: "DELETE",
+  headers: {
+    "Authorization": "Bearer {{token}}",
+  },
+  signal: AbortSignal.timeout(250),
+});
+
+console.log(response.status);
+console.log(await response.text());

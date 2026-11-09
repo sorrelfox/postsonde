@@ -1,0 +1,17 @@
+using System;
+using System.Net;
+using System.Net.Http;
+
+// Digest auth: the handler answers the server's challenge.
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+    Credentials = new NetworkCredential("ann", "secret"),
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/me");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

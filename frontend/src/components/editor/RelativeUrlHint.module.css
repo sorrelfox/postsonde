@@ -1,0 +1,32 @@
+/* Where a relative URL is sent (COL-08), under the URL bar. */
+.hint {
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: calc(-1 * var(--space-3)) var(--space-7) var(--space-4);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.hint[data-missing] {
+  color: var(--warn);
+}
+
+.arrow {
+  flex: none;
+}
+
+.url {
+  overflow: hidden;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scope {
+  flex: none;
+}

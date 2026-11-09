@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_7d2a64e9b0c1f358",
+  "name": "Weather",
+  "method": "GET",
+  "url": "https://weather.example/v1/today",
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "apikey",
+    "key": "api_key",
+    "in": "query",
+    "localSecrets": [
+      "value"
+    ]
+  }
+}

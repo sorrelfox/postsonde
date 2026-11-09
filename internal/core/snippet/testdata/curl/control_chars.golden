@@ -1,0 +1,4 @@
+curl https://api.test/raw \
+  -H 'Content-Type: text/plain' \
+  --data-raw $'line1\r\nline2\x01\ttab \\ \'q\'' \
+  -L --max-redirs 10

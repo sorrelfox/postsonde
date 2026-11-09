@@ -1,0 +1,192 @@
+/* The message composer under a message log (WS-03, SSRV-01): format
+ * switch, Beautify, the JSON problem or send error, the send buttons, and
+ * the resizable message editor. */
+
+.composer {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-7) var(--space-5);
+  border-top: 1px solid var(--line);
+  background: var(--bg1);
+}
+
+.composerBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.messageFrame {
+  height: 104px;
+  min-height: 56px;
+  max-height: 40vh;
+  resize: vertical;
+  overflow: hidden;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+}
+
+.messageFrame:focus-within {
+  border-color: var(--accent);
+}
+
+.messageFrame[data-invalid] {
+  border-color: var(--bad);
+}
+
+.segmented {
+  flex: none;
+  display: inline-flex;
+  padding: 1px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.segment {
+  height: calc(var(--h-control-sm) - 4px);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.segment:not(:disabled):hover {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"] {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+.segment:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.segment:focus-visible,
+.smallButton:focus-visible,
+.position:focus-visible,
+.send:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.smallButton {
+  flex: none;
+  height: var(--h-control-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.smallButton:not(:disabled):hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.smallButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.composerError {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.composerError svg {
+  flex: none;
+}
+
+.composerError span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.position {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tk-err);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  cursor: pointer;
+}
+
+.position:hover {
+  text-decoration: underline;
+}
+
+.byteCount {
+  flex: none;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  white-space: nowrap;
+}
+
+.kbd {
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.send {
+  flex: none;
+  height: var(--h-control);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 var(--space-6) 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* A second send button (Send to all) next to the primary one. */
+.secondary {
+  padding: 0 var(--space-6);
+  border: 1px solid var(--line2);
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.secondary:not(:disabled):hover {
+  background: var(--bg3);
+}
+
+.send:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

@@ -1,0 +1,16 @@
+const response = await fetch("https://api.test/q", {
+  method: "PATCH",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: `{
+  "path": "C:\\\\dir\\\\",
+  "quote": "say \\"hi\\"",
+  "escape": "\\u00e9\\n",
+  "template": "\${x} \`y\` {{z}}",
+  "text": "héllo ✓"
+}`,
+});
+
+console.log(response.status);
+console.log(await response.text());

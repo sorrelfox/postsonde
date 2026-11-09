@@ -1,0 +1,326 @@
+/* GraphQL editor parts: the schema strip under the URL bar (GQL-10,
+ * GQL-21) and the variable warnings under the Variables editor (GQL-03,
+ * GQL-04). */
+
+.schemaStrip {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+  min-width: 0;
+  padding: 0 var(--space-7) var(--space-5);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.schemaStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.schemaText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schemaDot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-round);
+  background: var(--text3);
+}
+
+.schemaDot[data-tone="ok"] {
+  background: var(--ok);
+}
+
+.schemaDot[data-tone="warn"] {
+  background: var(--warn);
+}
+
+.schemaDot[data-tone="bad"] {
+  background: var(--bad);
+}
+
+.schemaButton {
+  flex: none;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.schemaButton:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.schemaButton:disabled {
+  cursor: default;
+}
+
+/* The file-access notice of the schema file picker (PRV-10), under the
+ * strip. */
+.fileAccess {
+  flex: none;
+  margin: calc(-1 * var(--space-3)) var(--space-7) var(--space-5);
+}
+
+/* The Docs toggle at the strip's end (GQL-14). */
+.docsButton {
+  margin-left: auto;
+}
+
+.docsButton[aria-pressed="true"] {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+/* The sub-tabs and their section, with the docs panel beside them. */
+.workArea {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.schemaButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinning {
+    animation: none;
+  }
+}
+
+.schemaError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--bad);
+}
+
+.schemaError span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* After a fetch, whether the schema changed (GQL-19); after Save SDL…, where it went (GQL-20). */
+.schemaNote {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text3);
+}
+
+.schemaNote[data-tone="changed"] {
+  color: var(--ok);
+}
+
+/* The type system problems of a schema file (GQL-11): usable, but worth a look. */
+.schemaProblems {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--warn);
+}
+
+.schemaProblems span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The problems bar under the query editor (GQL-12). */
+.problemsBar {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-4) var(--space-7);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.problemsBar[data-state="valid"] {
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.problemsBar[data-state="valid"] svg {
+  flex: none;
+  color: var(--ok);
+}
+
+.problemsCount {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  line-height: 20px;
+}
+
+.problemsCount svg {
+  color: var(--bad);
+}
+
+.problemsList {
+  flex: 1;
+  min-width: 0;
+  max-height: 100px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.problemRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+  line-height: 20px;
+  color: var(--text2);
+}
+
+.problemMessage {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.problemRow[data-severity="warning"] .position {
+  color: var(--warn);
+}
+
+.problemRow[data-severity="error"] .position {
+  color: var(--tk-err);
+}
+
+.problems {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 120px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.problem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.problem svg {
+  flex: none;
+  color: var(--warn);
+}
+
+.problem[data-severity="error"] svg {
+  color: var(--bad);
+}
+
+.problem span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.position {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  cursor: pointer;
+}
+
+.position:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.position:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* The Connection tab's note above the connection params (GQL-33). */
+.hint {
+  flex: none;
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+}
+
+.hint code {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+/* The selection depth next to Fill fields (GQL-16, GQL-17). */
+.depth {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}

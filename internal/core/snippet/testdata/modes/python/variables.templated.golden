@@ -1,0 +1,16 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "{{base}}/users/{{id}}?q={{q}}&t={{token}}",
+    headers={
+        "X-User": "{{user}}",
+        "X-Token": "{{token}}",
+        "X-Uuid": "{{$uuid}}",
+        "Content-Type": "application/json",
+    },
+    data='{"user":"{{user}}","token":"{{token}}"}',
+)
+
+print(response.status_code)
+print(response.text)

@@ -1,0 +1,139 @@
+/* The Requests and Response tabs of a webhook receiver (MOCK-08): the kept
+ * requests above the selected one in full (the response view's tabs and
+ * body viewer), the Replay form with the replay's response, and the
+ * response editor. The bar, list rows, buttons and inputs are
+ * WsServer.module.css. */
+
+.listArea {
+  flex: 0 1 auto;
+  max-height: 32%;
+  min-height: 64px;
+  overflow: auto;
+  padding: 0 var(--space-7) var(--space-4);
+}
+
+.method {
+  flex: none;
+  min-width: 44px;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-semibold);
+}
+
+.method[data-method="GET"] { color: var(--m-get); }
+.method[data-method="POST"] { color: var(--m-post); }
+.method[data-method="PUT"] { color: var(--m-put); }
+.method[data-method="PATCH"] { color: var(--m-patch); }
+.method[data-method="DELETE"] { color: var(--m-del); }
+
+.inspector {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.requestLine {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  padding: var(--space-4) var(--space-7) var(--space-2);
+}
+
+.target {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.meta {
+  flex: none;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.replay {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow: auto;
+  padding: var(--space-4) var(--space-7);
+}
+
+.replayBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+
+.replayLabel {
+  flex: none;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.urlInput {
+  flex: 1;
+  min-width: 180px;
+}
+
+.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.primary:not(:disabled):hover {
+  color: var(--accent-ink);
+  filter: brightness(1.08);
+}
+
+.replayResponse {
+  flex: 1;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.headerRows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.headerName {
+  width: 180px;
+}
+
+.headerValue {
+  flex: 1;
+  min-width: 160px;
+}
+
+.bodyInput {
+  min-height: 120px;
+  height: auto;
+  padding: var(--space-3);
+  resize: vertical;
+  line-height: var(--lh-base);
+}

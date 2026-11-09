@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "kind": "grpc",
+  "id": "req_7b3f0e2c9a1d5846",
+  "name": "Get order",
+  "address": "{{grpcHost}}:50051",
+  "proto": {
+    "inherit": true
+  },
+  "service": "shop.v1.Orders",
+  "method": "GetOrder",
+  "message": "{\"id\": \"{{orderId}}\"}",
+  "metadata": [
+    {
+      "name": "x-request-id",
+      "value": "{{$uuid}}"
+    },
+    {
+      "name": "x-debug",
+      "value": "1",
+      "disabled": true
+    }
+  ],
+  "settings": {
+    "tls": true,
+    "deadlineMs": 5000
+  }
+}

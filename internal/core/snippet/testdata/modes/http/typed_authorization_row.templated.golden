@@ -1,0 +1,4 @@
+GET /me HTTP/1.1
+Host: api.test
+Authorization: Bearer ••••••
+Proxy-Authorization: Basic {{token}}

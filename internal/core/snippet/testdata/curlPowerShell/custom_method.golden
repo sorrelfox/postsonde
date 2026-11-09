@@ -1,0 +1,2 @@
+curl.exe -X purge https://api.test/cache `
+  -L --max-redirs 10

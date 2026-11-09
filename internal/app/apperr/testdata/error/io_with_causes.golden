@@ -1,0 +1,11 @@
+{
+  "kind": "io",
+  "code": "",
+  "message": "Could not save the settings.",
+  "hint": "Check that PostSonde can write to its settings folder.",
+  "details": {},
+  "causes": [
+    "open /cfg/settings.json",
+    "permission denied"
+  ]
+}

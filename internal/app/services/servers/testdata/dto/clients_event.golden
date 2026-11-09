@@ -1,0 +1,19 @@
+{
+  "serverId": "srv_00000000000000bb",
+  "clients": [
+    {
+      "id": "3",
+      "connId": 3,
+      "peer": "127.0.0.1:53124",
+      "target": "/ws?room=1",
+      "subprotocol": "chat",
+      "connectedAt": "2026-09-16T08:00:00Z",
+      "origin": "null",
+      "userAgent": "websocat/1.13",
+      "messagesIn": 2,
+      "messagesOut": 1,
+      "bytesIn": 10,
+      "bytesOut": 4
+    }
+  ]
+}

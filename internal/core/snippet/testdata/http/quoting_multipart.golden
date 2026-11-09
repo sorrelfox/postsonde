@@ -1,0 +1,24 @@
+POST /q HTTP/1.1
+Host: api.test
+Content-Type: multipart/form-data; boundary=PostSondeFormBoundary
+
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="we%22ird name"
+
+line1
+line2 "q" 'q' $x %PATH%
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="unicode ✓"
+Content-Type: text/plain; charset=utf-8
+
+héllo 😀
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="a@b:c"
+
+@not-a-file
+--PostSondeFormBoundary
+Content-Disposition: form-data; name="file"; filename="odd name;1.txt"
+Content-Type: text/plain
+
+< <root>/odd name;1.txt
+--PostSondeFormBoundary--

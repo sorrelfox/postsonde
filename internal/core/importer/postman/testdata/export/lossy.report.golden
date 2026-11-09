@@ -1,0 +1,41 @@
+ [collection] info test.note: A note of the caller.
+ [collection] info postman.export_secret: The secret variables "password" and "typed" are exported without a value: secrets stay on this computer. Fill them in Postman.
+ [collection] info postman.export_changed: The collection's header was added to each of its HTTP and GraphQL requests: Postman folders have no headers.
+Inner [folder] warning postman.export_auth: Postman has no .netrc auth: the folder is exported with no auth. Set up the credentials in Postman.
+Inner [folder] info postman.export_changed: The folder's 2 headers were added to each of its HTTP and GraphQL requests: Postman folders have no headers.
+Inner [folder] warning postman.export_dynamic: The dynamic value {{$uuid}} in a header is PostSonde's own and is exported as written: Postman has no such variable.
+Inner / Own tenant [request] warning postman.export_changed: Postman fills only :name path parameters, not {fileId}: write the parameter as :name in Postman.
+Inner / Own tenant [request] info postman.export_changed: A Content-Type: application/yaml header was added: Postman has no YAML body type.
+Inner / Own tenant [request] warning postman.export_changed: Only the active body is exported; the request's other named bodies are not: Postman requests have one body.
+Inner / Own tenant [request] info postman.export_secret: The auth's token is kept on this computer and exported empty. Fill it in Postman, or use a {{variable}}.
+Inner / Own tenant [request] warning postman.export_auth: The request's auth was exported with a change. Postman sends bearer tokens with the prefix Bearer, not "Token".
+Inner / Own tenant [request] warning postman.export_assertions: The request's assertion is not exported: Postman checks responses with test scripts.
+Inner / Own tenant [request] warning postman.export_extractions: The request's 2 extraction rules are not exported: Postman sets variables from responses with test scripts.
+Inner / Own tenant [request] warning postman.export_setting: Postman has no setting for strict URL encoding (RFC 3986), not sending cookies, the timeout and the automatic headers left out (Content-Type); they are not exported.
+Inner / Own tenant [request] warning postman.export_dynamic: The dynamic value {{$timestampMs}} in the URL is PostSonde's own and is exported as written: Postman has no such variable.
+Inner / Own tenant [request] warning postman.export_dynamic: A filter pipe ({{name | filter}}) in the body is exported as written: Postman has no filters. Compute the value in a pre-request script.
+Inner / Typed secret [request] info postman.export_changed: The body sends a file by its path as written; a relative path is relative to the project folder. Choose the file again in Postman if it cannot find it.
+Inner / Typed secret [request] info postman.export_changed: The file body's content type was added as a Content-Type header.
+Inner / Typed secret [request] info postman.export_secret: The auth's password is kept on this computer and exported empty. Fill it in Postman, or use a {{variable}}.
+Inner / Typed secret [request] warning postman.export_changed: The body of the response example "Picture" is binary and not exported: Postman keeps an example's body as text.
+Inner / Typed secret [request] info postman.export_changed: The response example "Big" has only the start of the body, as PostSonde kept it.
+Inner / Typed secret [request] warning postman.export_dynamic: A {{$prompt}} in a header is exported as written: Postman does not ask for values at send time.
+Inner / Turned off [request] warning postman.export_auth: The request's auth is turned off, so it is exported as no auth; its settings are not exported.
+Inner / JWT extras [request] info postman.export_secret: The auth's signing key is kept on this computer and exported empty. Fill it in Postman, or use a {{variable}}.
+Inner / JWT extras [request] warning postman.export_auth: The request's auth was exported with a change. Postman sends the token in the Authorization header, not "X-JWT". The key file is not exported: paste the key in Postman. PostSonde adds the iat and exp claims at send time; Postman does not: add them to the payload, e.g. with {{$timestamp}}.
+Inner / AWS extras [request] info postman.export_secret: The auth's secret key and session token are kept on this computer and exported empty. Fill them in Postman, or use a {{variable}}.
+Inner / AWS extras [request] warning postman.export_auth: The request's auth was exported with a change. Postman signs the body's hash, not UNSIGNED-PAYLOAD. The presigned URL's validity (60 seconds) is not exported.
+Inner / Hawk typed key [request] info postman.export_secret: The auth's Hawk key is kept on this computer and exported empty. Fill it in Postman, or use a {{variable}}.
+Inner / OAuth 2.0 extras [request] info postman.export_secret: The auth's client secret and password are kept on this computer and exported empty. Fill them in Postman, or use a {{variable}}.
+Inner / OAuth 2.0 extras [request] warning postman.export_auth: The request's auth was exported with a change. Postman's collection has no option to send the ID token: it sends the access token. The expected ID token issuer is not exported. Postman sends the token in the Authorization header, not "X-Token".
+Inner / OAuth in body of a GET [request] info postman.export_secret: The auth's consumer secret and token secret are kept on this computer and exported empty. Fill them in Postman, or use a {{variable}}.
+Inner / OAuth in body of a GET [request] warning postman.export_auth: The request's auth was exported with a change. Postman puts the parameters in the URL: the request is not a POST or PUT with a URL-encoded body.
+GraphQL extras [request] info postman.export_secret: The auth's API key is kept on this computer and exported empty. Fill it in Postman, or use a {{variable}}.
+GraphQL extras [request] warning postman.export_changed: Postman's GraphQL body has only the query and the variables: the operation name, the extensions and the uploaded files are not exported.
+GraphQL extras [request] warning postman.export_setting: Postman has no setting for the GraphQL transports and the schema auto-refresh; they are not exported.
+Socket [WebSocket request] (skipped) warning postman.export_skipped: Postman collections (v2.1) cannot hold a WebSocket request; it is not exported.
+Call [gRPC request] (skipped) warning postman.export_skipped: Postman collections (v2.1) cannot hold a gRPC request; it is not exported.
+Raw [TCP connection] (skipped) warning postman.export_skipped: Postman collections (v2.1) cannot hold a TCP connection; it is not exported.
+Chat [Socket.IO request] (skipped) warning postman.export_skipped: Postman collections (v2.1) cannot hold a Socket.IO request; it is not exported.
+Stream [Server-Sent Events request] (skipped) warning postman.export_skipped: Postman collections (v2.1) cannot hold a Server-Sent Events request; it is not exported.
+broken.json [unreadable file] (skipped) warning postman.export_skipped: The file could not be read.

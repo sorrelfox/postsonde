@@ -1,0 +1,36 @@
+/* The SSE server's Subscribers tab (SSRV-04): the event fields above the
+ * shared message composer, and the timers of its Settings tab. The rest
+ * of the layout is WsServer.module.css. */
+
+.eventFields {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-3) var(--space-7) 0;
+  border-top: 1px solid var(--line);
+}
+
+.eventField {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.eventInput {
+  width: 140px;
+}
+
+.retryInput {
+  width: 72px;
+}
+
+.snippet {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}

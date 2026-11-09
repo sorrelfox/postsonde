@@ -1,0 +1,124 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Legacy Orders",
+    "_postman_id": "0b5a9c7e-6d1f-43f0-8e2c-5a4f9d8b7c61",
+    "description": {
+      "content": "Orders API, exported as **v2.0**.",
+      "type": "text/markdown"
+    },
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": {
+      "username": "{{user}}",
+      "password": "legacy-pass-3",
+      "saveHelperData": true,
+      "showPassword": false
+    }
+  },
+  "variable": [
+    {
+      "id": "host",
+      "value": "api.example.com",
+      "type": "string"
+    }
+  ],
+  "protocolProfileBehavior": {
+    "strictSSL": false
+  },
+  "item": [
+    {
+      "name": "Orders",
+      "description": "",
+      "item": [
+        {
+          "name": "Archive",
+          "auth": {
+            "type": "oauth1",
+            "oauth1": {
+              "consumerKey": "archive-key",
+              "consumerSecret": "legacy-oauth1-secret-8",
+              "token": "{{archive_token}}",
+              "tokenSecret": "{{archive_token_secret}}",
+              "signatureMethod": "plaintext",
+              "timestamp": 1700000000,
+              "nonce": "",
+              "version": "1.0",
+              "realm": "",
+              "addParamsToHeader": true,
+              "addEmptyParamsToSign": false
+            }
+          },
+          "item": [
+            {
+              "name": "2019",
+              "item": [
+                {
+                  "name": "List archived orders",
+                  "request": {
+                    "url": {
+                      "protocol": "https",
+                      "host": ["{{host}}"],
+                      "port": "8443",
+                      "path": [{"type": "string", "value": "v1"}, "archive", ":year"],
+                      "query": [{"key": "page", "value": "1"}, {"key": "debug", "value": "1", "disabled": true}],
+                      "variable": [{"id": "year", "value": "2019"}],
+                      "hash": "list"
+                    },
+                    "method": "get",
+                    "header": "Accept: application/json\n//X-Debug: 1\n\nX-Client: {{client}}",
+                    "body": {},
+                    "description": "Orders of 2019."
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Create order",
+          "request": {
+            "url": "https://{{host}}/v1/orders?source=legacy",
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json", "description": ""}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"sku\": \"{{sku}}\", \"ref\": \"{{$guid}}\"}"
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{order_token}}"
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign order",
+          "request": {
+            "url": "https://{{host}}/v1/orders/sign",
+            "method": "POST",
+            "auth": {
+              "type": "hawk",
+              "hawk": {
+                "authId": "id",
+                "authKey": "hawk-key-4"
+              }
+            },
+            "body": {
+              "mode": "file",
+              "file": {}
+            }
+          }
+        }
+      ]
+    },
+    "not an item"
+  ]
+}

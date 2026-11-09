@@ -1,0 +1,24 @@
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+var form = new MultipartFormDataContent();
+var part1 = new ByteArrayContent(Encoding.UTF8.GetBytes("x"));
+part1.Headers.TryAddWithoutValidation("Content-Type", "text/plain; charset=utf-8");
+form.Add(part1, "text");
+var part2 = new StreamContent(File.OpenRead("<root>/data.json"));
+part2.Headers.TryAddWithoutValidation("Content-Type", "application/json; charset=\"utf-8\"");
+form.Add(part2, "file", "data.json");
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/upload");
+request.Content = form;
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

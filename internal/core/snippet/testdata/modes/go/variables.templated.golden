@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+
+func main() {
+	req, err := http.NewRequest("POST", "{{base}}/users/{{id}}?q={{q}}&t={{token}}", strings.NewReader(`{"user":"{{user}}","token":"{{token}}"}`))
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("X-User", "{{user}}")
+	req.Header.Add("X-Token", "{{token}}")
+	req.Header.Add("X-Uuid", "{{$uuid}}")
+	req.Header.Add("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(data))
+}

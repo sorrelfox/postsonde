@@ -1,0 +1,11 @@
+wget https://api.test/q \
+  --method PUT \
+  --header 'Content-Type: text/plain' \
+  --body-data 'trailing   
+	tab first
+   
+"""q"""" \u0041 C:\dir\ ${x} %PATH% '\''a'\''
+
+  last  ' \
+  --max-redirect 10 \
+  -O -

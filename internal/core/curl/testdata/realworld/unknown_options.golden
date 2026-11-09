@@ -1,0 +1,86 @@
+{
+  "dialect": "posix",
+  "method": "GET",
+  "methodExplicit": false,
+  "url": "https://example.com/x",
+  "urls": [
+    {
+      "value": "https://example.com/x",
+      "start": 29,
+      "end": 50
+    }
+  ],
+  "urlQuery": null,
+  "headers": null,
+  "data": null,
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 5,
+      "end": 19,
+      "message": "curl has no option “--frobnicate”; it is ignored, with the word after it taken as its value.",
+      "text": "--frobnicate 7"
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 20,
+      "end": 28,
+      "message": "curl has no option “--wibble”; it is ignored.",
+      "text": "--wibble"
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 51,
+      "end": 58,
+      "message": "curl has no option “--zap”; it is ignored.",
+      "text": "--zap=1"
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 59,
+      "end": 62,
+      "message": "The option “-Z” does not change the request and is ignored.",
+      "text": "-Z9"
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 59,
+      "end": 62,
+      "message": "curl has no option “-9”; it is ignored.",
+      "text": "-Z9"
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 63,
+      "end": 65,
+      "message": "curl has no option “-W”; it is ignored.",
+      "text": "-W"
+    }
+  ]
+}

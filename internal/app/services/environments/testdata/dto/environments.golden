@@ -1,0 +1,67 @@
+{
+  "environments": [
+    {
+      "id": "env_92f0d5b8a61c3e47",
+      "name": "Production",
+      "color": "#d0342c",
+      "fileName": "production.json",
+      "variables": [
+        {
+          "name": "baseUrl",
+          "value": "https://api.acme.example",
+          "description": "",
+          "secret": false,
+          "enabled": true,
+          "localValue": null
+        },
+        {
+          "name": "token",
+          "value": "prd-token",
+          "description": "Personal access token",
+          "secret": true,
+          "enabled": true,
+          "localValue": null
+        },
+        {
+          "name": "old",
+          "value": "1",
+          "description": "",
+          "secret": false,
+          "enabled": false,
+          "localValue": null
+        },
+        {
+          "name": "host",
+          "value": "api.acme.example",
+          "description": "",
+          "secret": false,
+          "enabled": true,
+          "localValue": "localhost:8080"
+        }
+      ],
+      "readOnly": false
+    },
+    {
+      "id": "env_0000000000000001",
+      "name": "Empty",
+      "color": "",
+      "fileName": "empty.json",
+      "variables": [],
+      "readOnly": true
+    }
+  ],
+  "activeId": "env_92f0d5b8a61c3e47",
+  "problems": [
+    {
+      "fileName": "broken.json",
+      "message": "The file is not valid JSON.",
+      "code": "projectfile.parse_failed"
+    },
+    {
+      "fileName": "odd.json",
+      "message": "plain error",
+      "code": ""
+    }
+  ],
+  "readOnly": false
+}

@@ -1,0 +1,11 @@
+http --follow --max-redirects=10 \
+  --raw 'trailing spaces   
+  indented
+	tabbed
+100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\
+"""triple""" \u0041 \n */ // # -- ; C:\dir\
+
+‘curly’ “double” 日本 😀  nbsp  ls
+   ' \
+  POST https://api.test/q \
+  Content-Type:text/plain

@@ -1,0 +1,21 @@
+import requests
+
+response = requests.request(
+    "PATCH",
+    "https://api.test/q",
+    headers={
+        "Content-Type": "application/json",
+    },
+    data=(
+        "{\n"
+        '  "path": "C:\\\\dir\\\\",\n'
+        '  "quote": "say \\"hi\\"",\n'
+        '  "escape": "\\u00e9\\n",\n'
+        '  "template": "${x} `y` {{z}}",\n'
+        '  "text": "héllo ✓"\n'
+        "}"
+    ).encode(),
+)
+
+print(response.status_code)
+print(response.text)

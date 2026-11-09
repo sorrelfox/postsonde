@@ -1,0 +1,484 @@
+/* The WebSocket editor (WS-01…WS-03). It follows the HTTP request editor's
+ * URL bar and sub-tabs and the TCP editor's status line, log and composer:
+ * URL bar, status with close options, handshake sub-tabs (a bounded
+ * section), the message log taking the remaining height, the composer
+ * (messagelog/MessageComposer) at the bottom. */
+
+/* In a very short pane the whole editor scrolls instead of squeezing the log. */
+.editor {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-5) var(--space-7) 0;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.notice svg {
+  flex: none;
+  color: var(--warn);
+}
+
+/* URL bar */
+
+.bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-7) var(--space-3);
+}
+
+.urlGroup {
+  flex: 1;
+  min-width: 0;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  overflow: hidden;
+}
+
+.urlGroup:focus-within {
+  border-color: var(--accent);
+}
+
+.protocol {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-6);
+  border-right: 1px solid var(--line);
+  color: var(--m-ws);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-medium);
+}
+
+/* The single-line CodeMirror URL field; its text styles are in singleLine.ts. */
+.url {
+  flex: 1;
+  min-width: 0;
+}
+
+.connect,
+.disconnect {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: var(--radius-lg);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.connect,
+.disconnect {
+  height: var(--h-control-lg);
+  padding: 0 var(--space-7);
+  font-size: var(--fs-base);
+}
+
+.connect {
+  border: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.disconnect {
+  border: 1px solid var(--line2);
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.disconnect:not(:disabled):hover {
+  background: var(--bg3);
+}
+
+.connect:disabled,
+.disconnect:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.connect:focus-visible,
+.disconnect:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Status line and close options */
+
+.statusRow {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  padding: 0 var(--space-7) var(--space-4);
+}
+
+.status {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 200px;
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-round);
+  background: var(--text3);
+}
+
+.status[data-tone="ok"] .dot {
+  background: var(--ok);
+}
+
+.status[data-tone="busy"] .dot {
+  background: var(--warn);
+}
+
+.status[data-tone="bad"] .dot {
+  background: var(--bad);
+}
+
+.status[data-tone="bad"] .statusText {
+  color: var(--bad);
+}
+
+.statusText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closeOptions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.closeLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.closeCode,
+.closeReason,
+.subprotocolInput,
+.settingInput {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.closeCode {
+  width: 52px;
+}
+
+.closeReason {
+  width: 120px;
+}
+
+.closeCode:focus,
+.closeReason:focus,
+.subprotocolInput:focus,
+.settingInput:focus {
+  border-color: var(--accent);
+}
+
+.closeCode[aria-invalid="true"],
+.subprotocolInput[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.closeReason::placeholder,
+.subprotocolInput::placeholder,
+.settingInput::placeholder {
+  color: var(--text3);
+}
+
+/* Sub-tabs */
+
+.subTabs {
+  flex: none;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-4);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.subTab {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: -1px;
+  padding: 0 var(--space-5);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.subTab:hover {
+  color: var(--text);
+}
+
+.subTab[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--text);
+}
+
+.subTab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.count {
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+/* The handshake options take what they need, up to a third of the pane. */
+.section {
+  flex: none;
+  max-height: 33%;
+  min-height: 96px;
+  overflow: auto;
+  padding: var(--space-5) var(--space-7);
+}
+
+.note {
+  margin: 0 0 var(--space-4);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.note code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  color: var(--text2);
+}
+
+/* Subprotocols */
+
+.subprotocols {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.subprotocolList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.subprotocolRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.subprotocolInput {
+  width: 260px;
+  max-width: 60%;
+}
+
+.rowProblem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.rowProblem svg {
+  flex: none;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileError {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileError svg {
+  flex: none;
+}
+
+.iconButton {
+  flex: none;
+  width: var(--h-control-sm);
+  height: var(--h-control-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+/* Settings */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.settingLabel {
+  min-width: 0;
+}
+
+.settingInput {
+  width: 96px;
+}
+
+.settingHelp {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+/* Log */
+
+.logArea {
+  flex: 1;
+  min-height: 200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.smallButton {
+  flex: none;
+  height: var(--h-control-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.smallButton:not(:disabled):hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.smallButton:focus-visible,
+.iconButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+/* The composer with the saved messages (SavedMessages) beside it, both as
+ * tall as the composer. */
+.composerArea {
+  flex: none;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.composerMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,907 @@
+/*
+ * The project site's one stylesheet.
+ *
+ * Colours are the app's own tokens (frontend/src/styles/tokens.css): its
+ * light theme, and its dark theme when the system prefers dark. The fonts
+ * are the ones the app bundles; the Pages workflow copies them into fonts/
+ * next to this file. The site runs no script and loads nothing from other
+ * sites.
+ */
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/InstrumentSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/InstrumentSans-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/InstrumentSans-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/JetBrainsMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/JetBrainsMono-Medium.woff2") format("woff2");
+}
+
+/* ---- Tokens: the app's light theme, then its dark theme ---- */
+
+:root {
+  color-scheme: light dark;
+
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --chrome: #eef0f3; /* the app's title bar and sidebar */
+  --page: #ffffff;
+  --inset: #f4f5f8;
+  --raised: #e4e7ec;
+  --line: #e1e4ea;
+  --line2: #d2d7df;
+  --text: #161a21;
+  --text2: #4a5262;
+  --text3: #5c6577;
+
+  --accent: #0c7153;
+  --accent-ink: #ffffff;
+  --accent-dim: rgba(15, 143, 105, 0.12);
+
+  /* Request kinds, as the app's tree and tabs colour them. */
+  --m-get: #0c7153;
+  --m-post: #8a5b17;
+  --m-put: #1658ea;
+  --m-patch: #7a38ed;
+  --m-del: #c52020;
+  --m-gql: #a922ba;
+  --m-ws: #1658ea;
+  --m-dir: #4a5262;
+
+  /* Syntax, as the app's editors colour JSON. */
+  --tk-key: #1d4ed8;
+  --tk-str: #9a5b00;
+  --tk-num: #c2410c;
+  --tk-punct: #656d7c;
+
+  --ok: #0c7153;
+  --warn: #8a5b17;
+
+  --shadow: 0 12px 32px rgba(20, 30, 50, 0.18);
+
+  --wrap: 1120px;
+  --gutter: 24px;
+  --measure: 66ch;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --chrome: #0e1013;
+    --page: #14171c;
+    --inset: #0e1013;
+    --raised: #1a1e25;
+    --line: #252b34;
+    --line2: #2f3641;
+    --text: #e7e9ee;
+    --text2: #a7afbd;
+    --text3: #8791a1;
+
+    --accent: #4fd1a5;
+    --accent-ink: #06261c;
+    --accent-dim: rgba(79, 209, 165, 0.14);
+
+    --m-get: #4fd1a5;
+    --m-post: #f2b544;
+    --m-put: #6ea8fe;
+    --m-patch: #c48cff;
+    --m-del: #ff6b6b;
+    --m-gql: #e07be0;
+    --m-ws: #6ea8fe;
+    --m-dir: #a7afbd;
+
+    --tk-key: #82aaff;
+    --tk-str: #ecc48d;
+    --tk-num: #f78c6c;
+    --tk-punct: #848e9f;
+
+    --ok: #4fd1a5;
+    --warn: #f2b544;
+
+    --shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+/* ---- Base ---- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font: 400 1.0625rem/1.6 var(--font-sans);
+  overflow-wrap: break-word;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 1.55rem + 2.8vw, 3.5rem);
+  line-height: 1.07;
+  letter-spacing: -0.028em;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+h3 {
+  font-size: 1.1875rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+p,
+ul,
+ol,
+dl {
+  margin: 0;
+}
+
+p + p {
+  margin-top: 1em;
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--font-mono);
+  /* JetBrains Mono would join -< and >- into arrows: not in file names. */
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+}
+
+code {
+  font-size: 0.875em;
+  background: var(--inset);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.05em 0.35em;
+}
+
+pre code {
+  font-size: inherit;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+
+kbd {
+  font-size: 0.8125em;
+  border: 1px solid var(--line2);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0.05em 0.4em;
+  background: var(--page);
+}
+
+.wrap {
+  max-width: calc(var(--wrap) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose > * + * {
+  margin-top: 1em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.3em;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.quiet {
+  color: var(--text2);
+}
+
+.small {
+  font-size: 0.9375rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: 8px;
+  z-index: 10;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
+}
+
+/* ---- Header: the app's title bar, with its accent line on top ---- */
+
+.top {
+  background: var(--chrome);
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+}
+
+.top-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  min-height: 58px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.brand img {
+  width: 28px;
+  height: 28px;
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  display: inline-block;
+  padding: 6px 0;
+  color: var(--text2);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--text);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+/* ---- Buttons ---- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius);
+  background: var(--page);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.button:hover {
+  border-color: var(--text3);
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.button.primary:hover {
+  filter: brightness(1.08);
+}
+
+/* ---- Status dots, as in the app's status bar ---- */
+
+.state {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--text2);
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warn);
+  transform: translateY(-1px);
+}
+
+.dot.ok {
+  background: var(--ok);
+}
+
+/* ---- Hero ---- */
+
+.hero {
+  padding: 72px 0 48px;
+}
+
+.hero h1 {
+  max-width: 17ch;
+}
+
+.lede {
+  max-width: 58ch;
+  margin-top: 22px;
+  color: var(--text2);
+  font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  line-height: 1.55;
+}
+
+.hero .actions {
+  margin-top: 32px;
+}
+
+.hero .state {
+  margin-top: 22px;
+  font-size: 0.9375rem;
+}
+
+/* ---- Screenshots ---- */
+
+.shot {
+  margin: 0;
+}
+
+.shot img {
+  width: 100%;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.shot figcaption {
+  max-width: var(--measure);
+  margin-top: 14px;
+  color: var(--text3);
+  font-size: 0.9375rem;
+}
+
+/* ---- Sections ---- */
+
+.section {
+  padding-top: 88px;
+}
+
+.section-head {
+  max-width: var(--measure);
+}
+
+.section-head p {
+  margin-top: 14px;
+  color: var(--text2);
+}
+
+.page-end {
+  padding-bottom: 96px;
+}
+
+.section-after {
+  margin-top: 22px;
+}
+
+/* ---- Request kinds, marked as the app's tree marks them ---- */
+
+.kinds {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px 56px;
+  margin-top: 36px;
+}
+
+.kinds dt {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.kinds dd {
+  margin: 4px 0 0 calc(0.8125rem * 4.6 + 12px);
+  color: var(--text2);
+}
+
+.tag {
+  flex: none;
+  min-width: 4.6em;
+  font: 500 0.8125rem/1 var(--font-mono);
+  color: var(--m-dir);
+}
+
+.tag.get {
+  color: var(--m-get);
+}
+
+.tag.post {
+  color: var(--m-post);
+}
+
+.tag.put {
+  color: var(--m-put);
+}
+
+.tag.patch {
+  color: var(--m-patch);
+}
+
+.tag.del {
+  color: var(--m-del);
+}
+
+.tag.gql {
+  color: var(--m-gql);
+}
+
+.tag.ws {
+  color: var(--m-ws);
+}
+
+@media (max-width: 760px) {
+  .kinds {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- A project on disk: its tree and one of its files ---- */
+
+.files {
+  margin: 36px 0 0;
+}
+
+.files-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--inset);
+  overflow: hidden;
+}
+
+.pane + .pane {
+  border-left: 1px solid var(--line2);
+}
+
+.pane-title {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text3);
+  font: 400 0.8125rem/1.5 var(--font-mono);
+}
+
+.tree,
+.tree ul {
+  padding: 0;
+  list-style: none;
+  font: 400 0.8125rem/1.95 var(--font-mono);
+}
+
+.tree {
+  padding: 12px 18px 16px;
+  color: var(--text2);
+}
+
+.tree ul {
+  margin-left: 0.45em;
+  padding-left: 1.1em;
+  border-left: 1px solid var(--line2);
+}
+
+.tree .dir {
+  color: var(--text);
+}
+
+.tree .here {
+  display: inline-block;
+  margin-left: -0.4em;
+  padding: 0 0.4em;
+  border-radius: 3px;
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+/* The file takes the height the tree gives the panel, and scrolls. */
+.pane.code {
+  position: relative;
+  min-height: 24em;
+}
+
+.pane-fill {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.files pre {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 14px 18px 18px;
+  overflow: auto;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--tk-punct);
+  scrollbar-color: var(--line2) var(--inset);
+}
+
+.j-key {
+  color: var(--tk-key);
+}
+
+.j-str {
+  color: var(--tk-str);
+}
+
+.j-num {
+  color: var(--tk-num);
+}
+
+.files figcaption {
+  max-width: var(--measure);
+  margin-top: 14px;
+  color: var(--text3);
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 760px) {
+  .files-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pane + .pane {
+    border-left: 0;
+    border-top: 1px solid var(--line2);
+  }
+
+  .pane.code {
+    min-height: 26em;
+  }
+}
+
+/* ---- Tables ---- */
+
+.table {
+  max-width: 100%;
+  margin-top: 28px;
+  overflow-x: auto;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  scrollbar-color: var(--line2) var(--page);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9688rem;
+}
+
+th,
+td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+thead th {
+  background: var(--inset);
+  color: var(--text3);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+tbody tr:last-child th,
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+td {
+  color: var(--text2);
+}
+
+/* ---- Where it stands ---- */
+
+.platforms {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.platforms li {
+  padding-top: 18px;
+  border-top: 2px solid var(--line2);
+}
+
+.platforms li.checked {
+  border-top-color: var(--ok);
+}
+
+.platforms p {
+  margin-top: 8px;
+  color: var(--text2);
+}
+
+.platforms .state {
+  margin-top: 12px;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .platforms {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Inner pages ---- */
+
+.page-head {
+  padding: 64px 0 8px;
+}
+
+.page-head .lede {
+  margin-top: 18px;
+}
+
+.page-head .actions {
+  margin-top: 28px;
+}
+
+.toc {
+  margin-top: 28px;
+}
+
+.toc ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+}
+
+.chapter {
+  padding-top: 64px;
+}
+
+.chapter h2 {
+  margin-bottom: 16px;
+}
+
+.chapter h3 {
+  margin: 28px 0 8px;
+}
+
+.chapter .shot {
+  margin-top: 32px;
+}
+
+.cmd {
+  max-width: 100%;
+  margin: 12px 0 0;
+  padding: 14px 18px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--inset);
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  scrollbar-color: var(--line2) var(--inset);
+}
+
+.cmd .c {
+  color: var(--text3);
+}
+
+.steps {
+  max-width: var(--measure);
+  padding-left: 1.4em;
+}
+
+.steps > li {
+  padding-left: 0.3em;
+}
+
+.steps > li + li {
+  margin-top: 1.4em;
+}
+
+.steps.tight > li + li {
+  margin-top: 0.6em;
+}
+
+.steps + .prose {
+  margin-top: 24px;
+}
+
+.steps > li::marker {
+  color: var(--text3);
+  font-weight: 600;
+}
+
+.note {
+  max-width: var(--measure);
+  margin-top: 24px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--warn);
+  background: var(--inset);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* ---- Footer ---- */
+
+.foot {
+  margin-top: 96px;
+  padding: 36px 0 48px;
+  background: var(--chrome);
+  border-top: 1px solid var(--line);
+  color: var(--text2);
+  font-size: 0.9375rem;
+}
+
+.foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin-top: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.foot .fine {
+  margin-top: 20px;
+  color: var(--text3);
+  font-size: 0.875rem;
+  max-width: var(--measure);
+}
+
+/* ---- Not found ---- */
+
+.lost {
+  padding: 96px 0 24px;
+}
+
+.lost .state {
+  margin-bottom: 16px;
+}
+
+.lost .actions {
+  margin-top: 32px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

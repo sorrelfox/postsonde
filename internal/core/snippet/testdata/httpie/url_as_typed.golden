@@ -1,0 +1,2 @@
+http --follow --max-redirects=10 --path-as-is \
+  GET 'https://api.test/a/../b/./c?f={x}&g=[1]|"q"'

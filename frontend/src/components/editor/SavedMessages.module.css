@@ -1,0 +1,201 @@
+/* The saved messages of a WebSocket request (WS-07): a column beside the
+ * composer, as tall as it is, with a header (Update, Save) and a list that
+ * scrolls. Each row: send, the name as an input, the format, then Load,
+ * move and delete, which show on hover and focus. */
+
+.saved {
+  flex: none;
+  width: 300px;
+  max-width: 45%;
+  min-height: 0;
+  /* Its content does not size the row: the composer sets the height and
+   * the list scrolls. */
+  contain: size;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: var(--bg1);
+}
+
+.header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-3);
+}
+
+.title {
+  flex: 1;
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+}
+
+.empty {
+  margin: 0;
+  padding: 0 var(--space-5) var(--space-4);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0 var(--space-3) var(--space-3);
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.row:hover,
+.row:focus-within {
+  background: var(--bg2);
+}
+
+.row[data-loaded] .name {
+  color: var(--text);
+  font-weight: var(--fw-medium);
+}
+
+.send {
+  flex: none;
+  width: var(--h-control-sm);
+  height: var(--h-control-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  outline: 0;
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  text-overflow: ellipsis;
+}
+
+.name:not(:read-only):hover {
+  border-color: var(--line2);
+}
+
+.name:focus {
+  border-color: var(--accent);
+  background: var(--bg0);
+  color: var(--text);
+}
+
+.format {
+  flex: none;
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.textButton,
+.iconButton {
+  flex: none;
+  height: var(--h-control-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.textButton {
+  padding: 0 var(--space-3);
+}
+
+.iconButton {
+  width: 20px;
+}
+
+.textButton:not(:disabled):hover,
+.iconButton:not(:disabled):hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.textButton:disabled,
+.iconButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.send:focus-visible,
+.textButton:focus-visible,
+.iconButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* The row's editing actions stay out of the way until the row is pointed
+ * at or focused. */
+.row .textButton,
+.row .iconButton {
+  opacity: 0;
+}
+
+.row:hover .textButton,
+.row:hover .iconButton,
+.row:focus-within .textButton,
+.row:focus-within .iconButton {
+  opacity: 1;
+}
+
+.row:hover .iconButton:disabled,
+.row:focus-within .iconButton:disabled {
+  opacity: 0.4;
+}
+
+.error {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-5) var(--space-4);
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.error svg {
+  flex: none;
+  margin-top: 2px;
+}

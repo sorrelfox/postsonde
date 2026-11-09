@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_e7a2c9046d1b3f85",
+  "name": "Telemetry",
+  "auth": {
+    "type": "inherit"
+  },
+  "server": {
+    "type": "udp",
+    "port": 9125,
+    "udp": {
+      "echo": true,
+      "fixedReply": true,
+      "reply": "06",
+      "replyFormat": "hex"
+    }
+  }
+}

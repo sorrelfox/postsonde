@@ -1,0 +1,9 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/%C3%A4%20%C3%B6/a%5Eb?q=%22x%22%20y",
+)
+
+print(response.status_code)
+print(response.text)

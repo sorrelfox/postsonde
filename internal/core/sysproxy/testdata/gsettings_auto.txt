@@ -1,0 +1,4 @@
+org.gnome.system.proxy autoconfig-url 'http://wpad.corp.example/proxy.pac'
+org.gnome.system.proxy ignore-hosts ['localhost']
+org.gnome.system.proxy mode 'auto'
+org.gnome.system.proxy use-same-proxy true

@@ -1,0 +1,17 @@
+[
+    {
+        "description": "format is an annotation by default",
+        "schema": {"format": "email"},
+        "tests": [
+            {"description": "an invalid email passes", "data": "not an email", "valid": true},
+            {"description": "a number is ignored", "data": 12, "valid": true}
+        ]
+    },
+    {
+        "description": "an unknown format is an annotation",
+        "schema": {"format": "x-custom"},
+        "tests": [
+            {"description": "anything passes", "data": "whatever", "valid": true}
+        ]
+    }
+]

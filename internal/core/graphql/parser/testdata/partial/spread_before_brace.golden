@@ -1,0 +1,10 @@
+# source
+{ ... }
+# tree
+Document [0:7]
+  Definitions[0]: OperationDefinition [0:7] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:7] LBrace=0 RBrace=6
+      Selections[0]: FragmentSpread [2:6] Spread=2
+        Name: Name [5:6] Value=""
+# errors
+1:7 [6:7] unexpected token: expected fragment name, "on" or "{", found "}"

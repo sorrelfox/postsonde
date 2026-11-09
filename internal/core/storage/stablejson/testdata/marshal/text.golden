@@ -1,0 +1,7 @@
+{
+  "html": "<script>if (a && b > c) {}</script>",
+  "unicode": "héllo — 世界 🚀",
+  "escapes": "tab\tnewline\nquote\"backslash\\ctrl\u0001",
+  "lineSep": "a\u2028b\u2029c",
+  "invalidUtf8": "bad�byte"
+}

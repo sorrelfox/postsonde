@@ -1,0 +1,73 @@
+{
+  "servers": [
+    {
+      "id": "srv_0123456789abcdef",
+      "type": "echo_http",
+      "typeLabel": "Echo HTTP",
+      "name": "Echo HTTP",
+      "host": "0.0.0.0",
+      "port": 8080,
+      "allowLan": true,
+      "tls": null,
+      "certificate": null,
+      "state": "running",
+      "addresses": [
+        "0.0.0.0:8080"
+      ],
+      "boundPort": 8080,
+      "scope": "all_interfaces",
+      "warning": {
+        "code": "listen.all_interfaces_exposed",
+        "message": "Listening on all network interfaces (0.0.0.0:8080): any device that can reach this computer can connect, including on public Wi-Fi."
+      },
+      "startedAt": "2026-09-16T08:00:00Z",
+      "stoppedAt": "",
+      "error": null,
+      "events": 12,
+      "config": {
+        "mockHttp": null,
+        "webSocket": null,
+        "webhook": null
+      },
+      "diagnostics": [],
+      "folder": null
+    },
+    {
+      "id": "srv_fedcba9876543210",
+      "type": "echo_http",
+      "typeLabel": "Echo HTTP",
+      "name": "API mock",
+      "host": "",
+      "port": 3000,
+      "allowLan": false,
+      "tls": null,
+      "certificate": null,
+      "state": "failed",
+      "addresses": [],
+      "boundPort": 0,
+      "scope": "",
+      "warning": null,
+      "startedAt": "",
+      "stoppedAt": "2026-09-16T08:01:00Z",
+      "error": {
+        "kind": "network",
+        "code": "listen.address_in_use",
+        "message": "127.0.0.1:3000 is already in use.",
+        "hint": "Another program is using this port. Pick another port, or 0 for any free one.",
+        "details": {
+          "address": "127.0.0.1:3000",
+          "network": "tcp"
+        },
+        "causes": []
+      },
+      "events": 0,
+      "config": {
+        "mockHttp": null,
+        "webSocket": null,
+        "webhook": null
+      },
+      "diagnostics": [],
+      "folder": null
+    }
+  ]
+}

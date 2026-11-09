@@ -1,0 +1,1 @@
+error snippet.nul_byte: The header X-Nul contains a NUL byte, which a shell command cannot carry.

@@ -1,0 +1,9 @@
+wget 'https://api.test/users/7?q=a%20b&t=••••••' \
+  --method POST \
+  --header 'X-User: ann' \
+  --header 'X-Token: ••••••' \
+  --header 'X-Uuid: <uuid>' \
+  --header 'Content-Type: application/json' \
+  --body-data '{"user":"ann","token":"••••••"}' \
+  --max-redirect 10 \
+  -O -

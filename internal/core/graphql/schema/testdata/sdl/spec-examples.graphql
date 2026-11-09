@@ -1,0 +1,170 @@
+# The type system examples of the GraphQL spec (chapter 3, "Type
+# System"), joined into one valid schema: the examples' names are kept,
+# and the types they refer to without defining are added at the end.
+
+"""
+A simple GraphQL schema which is well described.
+"""
+schema {
+  query: Query
+}
+
+"""
+Root type for all your query operations
+"""
+type Query {
+  """
+  Translates a string from a given language into a different language.
+  """
+  translate(
+    "The original language that `text` is provided in."
+    fromLanguage: Language
+
+    "The translated language to be returned."
+    toLanguage: Language
+
+    "The text to be translated."
+    text: String
+  ): String
+  person: Person
+  business: Business
+  search: SearchQuery
+  searchResult: SearchResult
+  story: Story
+  photo(size: Int = 400): Photo
+  distance(from: Point2D, to: Point2D): Float
+  image: Image
+  example: ExampleType
+}
+
+"""
+The set of languages supported by `translate`.
+"""
+enum Language {
+  "English"
+  EN
+
+  "French"
+  FR
+
+  "Chinese"
+  CH
+}
+
+scalar Time
+scalar Url @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
+scalar UUID @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")
+
+extend scalar Time @example
+
+type Person implements NamedEntity & ValuedEntity {
+  name: String
+  age: Int
+  picture: Url
+  relationship: Person
+  value: Int
+}
+
+interface NamedEntity {
+  name: String
+}
+
+interface ValuedEntity {
+  value: Int
+}
+
+type Business implements NamedEntity & ValuedEntity {
+  name: String
+  value: Int
+  employeeCount: Int
+}
+
+interface Node {
+  id: ID!
+}
+
+interface Resource implements Node {
+  id: ID!
+  url: String
+}
+
+interface Image implements Resource & Node {
+  id: ID!
+  url: String
+  thumbnail: String
+}
+
+type Photo implements Image & Resource & Node {
+  id: ID!
+  url: String
+  thumbnail: String
+  height: Int
+  width: Int
+}
+
+type Story {
+  id: ID!
+  title: String
+}
+
+extend type Story {
+  isHiddenLocally: Boolean
+}
+
+union SearchResult = Photo | Person
+
+type SearchQuery {
+  firstSearchResult: SearchResult
+}
+
+extend union SearchResult = Business
+
+enum Direction {
+  NORTH
+  EAST
+  SOUTH
+  WEST
+}
+
+extend enum Direction {
+  UP @deprecated(reason: "Flying is not supported.")
+}
+
+input Point2D {
+  x: Float
+  y: Float
+}
+
+input ExampleInputObject {
+  a: String
+  b: Int!
+}
+
+input Filter @oneOf {
+  byId: ID
+  byName: String
+}
+
+type ExampleType {
+  oldField: String @deprecated
+  anotherField(
+    "Deprecated arguments must be optional."
+    oldArg: String @deprecated(reason: "Use `newArg`.")
+    newArg: String
+  ): String
+  direction: Direction
+  find(filter: Filter, input: ExampleInputObject): Person
+}
+
+directive @example on
+  | FIELD_DEFINITION
+  | ARGUMENT_DEFINITION
+  | SCALAR
+
+directive @delegateField(name: String!) repeatable on OBJECT | INTERFACE
+
+directive @addExternalFields(source: String!) on OBJECT
+
+extend type ExampleType @addExternalFields(source: "profiles") @delegateField(name: "a") @delegateField(name: "b") {
+  shadowed: Int @example
+}

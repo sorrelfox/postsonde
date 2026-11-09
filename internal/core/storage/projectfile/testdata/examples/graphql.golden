@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_e4a7c2019b5d83f6",
+  "name": "User by ID",
+  "url": "{{baseUrl}}/graphql",
+  "query": "query UserById($id: ID!) {\n  user(id: $id) {\n    id\n    name\n  }\n}",
+  "variables": "{\n  \"id\": \"{{userId}}\"\n}",
+  "operationName": "UserById",
+  "auth": {
+    "type": "inherit"
+  }
+}

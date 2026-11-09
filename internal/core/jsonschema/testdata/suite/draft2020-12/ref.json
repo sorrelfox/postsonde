@@ -1,0 +1,152 @@
+[
+    {
+        "description": "root pointer ref",
+        "schema": {"properties": {"foo": {"$ref": "#"}}, "additionalProperties": false},
+        "tests": [
+            {"description": "a match", "data": {"foo": false}, "valid": true},
+            {"description": "a recursive match", "data": {"foo": {"foo": false}}, "valid": true},
+            {"description": "a mismatch", "data": {"bar": false}, "valid": false},
+            {"description": "a recursive mismatch", "data": {"foo": {"bar": false}}, "valid": false}
+        ]
+    },
+    {
+        "description": "relative pointer ref to an object",
+        "schema": {"properties": {"foo": {"type": "integer"}, "bar": {"$ref": "#/properties/foo"}}},
+        "tests": [
+            {"description": "a match", "data": {"bar": 3}, "valid": true},
+            {"description": "a mismatch", "data": {"bar": true}, "valid": false}
+        ]
+    },
+    {
+        "description": "relative pointer ref to an array item",
+        "schema": {"prefixItems": [{"type": "integer"}, {"$ref": "#/prefixItems/0"}]},
+        "tests": [
+            {"description": "a match", "data": [1, 2], "valid": true},
+            {"description": "a mismatch", "data": [1, "foo"], "valid": false}
+        ]
+    },
+    {
+        "description": "escaped pointer ref",
+        "schema": {
+            "$defs": {"tilde~field": {"type": "integer"}, "slash/field": {"type": "integer"}, "percent%field": {"type": "integer"}},
+            "properties": {
+                "tilde": {"$ref": "#/$defs/tilde~0field"},
+                "slash": {"$ref": "#/$defs/slash~1field"},
+                "percent": {"$ref": "#/$defs/percent%25field"}
+            }
+        },
+        "tests": [
+            {"description": "slash invalid", "data": {"slash": "aoeu"}, "valid": false},
+            {"description": "tilde invalid", "data": {"tilde": "aoeu"}, "valid": false},
+            {"description": "percent invalid", "data": {"percent": "aoeu"}, "valid": false},
+            {"description": "all valid", "data": {"slash": 1, "tilde": 2, "percent": 3}, "valid": true}
+        ]
+    },
+    {
+        "description": "nested refs",
+        "schema": {
+            "$defs": {"a": {"type": "integer"}, "b": {"$ref": "#/$defs/a"}, "c": {"$ref": "#/$defs/b"}},
+            "$ref": "#/$defs/c"
+        },
+        "tests": [
+            {"description": "a match", "data": 5, "valid": true},
+            {"description": "a mismatch", "data": "a", "valid": false}
+        ]
+    },
+    {
+        "description": "ref applies alongside sibling keywords in 2020-12",
+        "schema": {
+            "$defs": {"reffed": {"type": "array"}},
+            "properties": {"foo": {"$ref": "#/$defs/reffed", "maxItems": 2}}
+        },
+        "tests": [
+            {"description": "a match", "data": {"foo": []}, "valid": true},
+            {"description": "the sibling fails", "data": {"foo": [1, 2, 3]}, "valid": false},
+            {"description": "the ref fails", "data": {"foo": "string"}, "valid": false}
+        ]
+    },
+    {
+        "description": "recursive tree",
+        "schema": {
+            "$defs": {"node": {"type": "object", "properties": {"value": {"type": "number"}, "children": {"type": "array", "items": {"$ref": "#/$defs/node"}}}, "required": ["value"]}},
+            "$ref": "#/$defs/node"
+        },
+        "tests": [
+            {"description": "a valid tree", "data": {"value": 1, "children": [{"value": 2, "children": []}, {"value": 3}]}, "valid": true},
+            {"description": "a deep invalid node", "data": {"value": 1, "children": [{"value": 2, "children": [{"value": "x"}]}]}, "valid": false},
+            {"description": "a node without a value", "data": {"value": 1, "children": [{}]}, "valid": false}
+        ]
+    },
+    {
+        "description": "$anchor",
+        "schema": {"$ref": "#foo", "$defs": {"A": {"$anchor": "foo", "type": "integer"}}},
+        "tests": [
+            {"description": "a match", "data": 1, "valid": true},
+            {"description": "a mismatch", "data": "a", "valid": false}
+        ]
+    },
+    {
+        "description": "$id resources and relative refs",
+        "schema": {
+            "$id": "https://example.com/root.json",
+            "$defs": {
+                "A": {"$id": "item.json", "type": "integer"},
+                "B": {"$id": "https://example.com/nested/b.json", "$defs": {"C": {"$anchor": "c", "type": "string"}}}
+            },
+            "properties": {
+                "a": {"$ref": "item.json"},
+                "b": {"$ref": "https://example.com/root.json#/$defs/A"},
+                "c": {"$ref": "nested/b.json#c"},
+                "d": {"$ref": "https://example.com/nested/b.json#/$defs/C"}
+            }
+        },
+        "tests": [
+            {"description": "all valid", "data": {"a": 1, "b": 2, "c": "x", "d": "y"}, "valid": true},
+            {"description": "a by relative $id", "data": {"a": "x"}, "valid": false},
+            {"description": "b by absolute pointer", "data": {"b": "x"}, "valid": false},
+            {"description": "c by anchor in another resource", "data": {"c": 1}, "valid": false},
+            {"description": "d by pointer in another resource", "data": {"d": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "refs inside an $id resource resolve against it",
+        "schema": {
+            "$id": "https://example.com/tree",
+            "$defs": {
+                "sub": {
+                    "$id": "https://example.com/sub/",
+                    "$defs": {"leaf": {"type": "boolean"}},
+                    "properties": {"x": {"$ref": "#/$defs/leaf"}}
+                }
+            },
+            "$ref": "https://example.com/sub/"
+        },
+        "tests": [
+            {"description": "a match", "data": {"x": true}, "valid": true},
+            {"description": "a mismatch", "data": {"x": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "a ref to a boolean schema",
+        "schema": {"$defs": {"bool": false}, "$ref": "#/$defs/bool"},
+        "tests": [
+            {"description": "anything fails", "data": "a", "valid": false}
+        ]
+    },
+    {
+        "description": "a ref into an unknown keyword",
+        "schema": {"x-shared": {"positive": {"exclusiveMinimum": 0}}, "$ref": "#/x-shared/positive"},
+        "tests": [
+            {"description": "a match", "data": 1, "valid": true},
+            {"description": "a mismatch", "data": 0, "valid": false}
+        ]
+    },
+    {
+        "description": "refs to definitions still work in 2020-12",
+        "schema": {"definitions": {"n": {"type": "null"}}, "$ref": "#/definitions/n"},
+        "tests": [
+            {"description": "null", "data": null, "valid": true},
+            {"description": "not null", "data": 0, "valid": false}
+        ]
+    }
+]

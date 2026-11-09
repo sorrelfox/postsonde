@@ -1,0 +1,493 @@
+/* The raw TCP editor (TCP-01…03). No mockup screen exists for it; it follows the
+ * HTTP request editor's address bar (34px, 12px/14px padding) and the
+ * message log's dense controls, with a composer docked at the bottom. */
+
+/* In a very short pane the whole editor scrolls instead of squeezing the log. */
+.editor {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-5) var(--space-7) 0;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.notice svg {
+  flex: none;
+  color: var(--warn);
+}
+
+/* Address bar */
+
+.bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-7) var(--space-3);
+}
+
+.addressGroup {
+  flex: 1;
+  min-width: 0;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  overflow: hidden;
+}
+
+.addressGroup:focus-within {
+  border-color: var(--accent);
+}
+
+.protocol {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-6);
+  border-right: 1px solid var(--line);
+  color: var(--m-dir);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-medium);
+}
+
+.address {
+  flex: 1;
+  min-width: 0;
+  padding: 0 var(--space-5);
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+}
+
+/* The TLS switch inside the address field, as in the gRPC editor. */
+.tls {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-2);
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.tls:not(:disabled):hover {
+  background: var(--bg2);
+  color: var(--text2);
+}
+
+.tls[aria-pressed="true"] {
+  border-color: var(--line2);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.tls:disabled {
+  cursor: default;
+}
+
+.tls:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Connection options: verification and framing, one wrapping row. */
+
+.options {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  padding: 0 var(--space-7) var(--space-5);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+/* Notes (COL-07), folded under the options. */
+
+.notes {
+  flex: none;
+  padding: 0 var(--space-7) var(--space-5);
+}
+
+.notesSummary {
+  width: fit-content;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.notesSummary:hover {
+  color: var(--text);
+}
+
+.notesSummary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.notesBody {
+  height: 240px;
+  margin-top: var(--space-3);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.number {
+  width: 96px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.number:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.number[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.number:disabled {
+  opacity: 0.6;
+}
+
+.address::placeholder,
+.number::placeholder,
+.message::placeholder {
+  color: var(--text3);
+}
+
+.connect,
+.disconnect,
+.send {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: var(--radius-lg);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.connect,
+.disconnect {
+  height: var(--h-control-lg);
+  padding: 0 var(--space-7);
+  font-size: var(--fs-base);
+}
+
+.connect,
+.send {
+  border: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.disconnect {
+  border: 1px solid var(--line2);
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.disconnect:not(:disabled):hover {
+  background: var(--bg3);
+}
+
+.connect:disabled,
+.disconnect:disabled,
+.send:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.connect:focus-visible,
+.disconnect:focus-visible,
+.send:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Status line */
+
+.status {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0 var(--space-7) var(--space-5);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-round);
+  background: var(--text3);
+}
+
+.status[data-tone="ok"] .dot {
+  background: var(--ok);
+}
+
+.status[data-tone="busy"] .dot {
+  background: var(--warn);
+}
+
+.status[data-tone="bad"] .dot {
+  background: var(--bad);
+}
+
+.status[data-tone="bad"] .statusText {
+  color: var(--bad);
+}
+
+.statusText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Log */
+
+.logArea {
+  flex: 1;
+  min-height: 220px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.logBar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg1);
+}
+
+.caption {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.segmented {
+  flex: none;
+  display: inline-flex;
+  padding: 1px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.segment {
+  height: calc(var(--h-control-sm) - 4px);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.segment:not(:disabled):hover {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"] {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+.segment:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.segment:focus-visible,
+.smallButton:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.smallButton {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.smallButton:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+/* Composer */
+
+.composer {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-7) var(--space-5);
+  border-top: 1px solid var(--line);
+  background: var(--bg1);
+}
+
+.message {
+  width: 100%;
+  height: 84px;
+  min-height: 48px;
+  max-height: 40vh;
+  resize: vertical;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: var(--lh-code);
+  outline: 0;
+}
+
+/* The border is the focus indicator, as in the address field. */
+.message:focus,
+.message:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.message[aria-invalid="true"],
+.message[aria-invalid="true"]:focus {
+  border-color: var(--bad);
+}
+
+.address:focus-visible {
+  outline: none;
+}
+
+.composerBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.select {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.select:disabled {
+  opacity: 0.6;
+}
+
+.select option {
+  background: var(--bg1);
+  color: var(--text);
+}
+
+.composerError {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.composerError svg {
+  flex: none;
+}
+
+.kbd {
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.send {
+  height: var(--h-control);
+  padding: 0 var(--space-6) 0 var(--space-5);
+  font-size: var(--fs-md2);
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}

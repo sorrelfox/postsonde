@@ -1,0 +1,10 @@
+wget https://api.test/q \
+  --header 'X-Odd!#$%&'\''*+.^_`|~: 100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\' \
+  --header 'X-Unicode: héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛' \
+  --header 'X-Long: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' \
+  --header 'X-Json: {"a":"b\"c","d":[1,2],"e":"C:\\dir\\"}' \
+  --header 'X-Tab: a	b' \
+  --header X-Empty: \
+  --user-agent '' \
+  --max-redirect 10 \
+  -O -

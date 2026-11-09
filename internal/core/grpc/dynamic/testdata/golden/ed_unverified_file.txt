@@ -1,0 +1,4 @@
+type: codec.ednone.Text
+s: "\x80"
+list[0]: "ok"
+list[1]: "\xc0\x80"

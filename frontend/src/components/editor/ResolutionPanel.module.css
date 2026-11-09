@@ -1,0 +1,137 @@
+/* The Variables sub-tab (DBG-08): each {{reference}}, its value, the
+ * scope that wins and every scope that defines it. */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.error {
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.url {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  font-size: var(--fs-sm2);
+}
+
+.urlLabel {
+  flex: none;
+  color: var(--text2);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm2);
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  color: var(--text3);
+  font-weight: var(--fw-semibold);
+}
+
+.table tr[data-focused] {
+  background: var(--accent-dim);
+}
+
+.name {
+  font-weight: normal;
+}
+
+.ref {
+  color: var(--tk-var);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.table tr[data-unresolved] .ref {
+  color: var(--bad);
+}
+
+.kind,
+.via {
+  display: block;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.value,
+.scopeValue {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.empty,
+.generated {
+  color: var(--text3);
+  font-style: italic;
+}
+
+.problem {
+  color: var(--bad);
+}
+
+.from {
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.scopes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scopes li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+}
+
+.scopeName {
+  color: var(--text2);
+}
+
+.scopeState {
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.wins .scopeState {
+  color: var(--accent);
+}
+
+.overridden .scopeValue {
+  color: var(--text3);
+  text-decoration: line-through;
+}

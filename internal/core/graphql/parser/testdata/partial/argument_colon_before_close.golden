@@ -1,0 +1,17 @@
+# source
+{ user(id: ) { name } }
+# tree
+Document [0:23]
+  Definitions[0]: OperationDefinition [0:23] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:23] LBrace=0 RBrace=22
+      Selections[0]: Field [2:21] Colon=-1
+        Name: Name [2:6] Value="user"
+        Arguments: ArgumentList [6:12] LParen=6 RParen=11
+          Arguments[0]: Argument [7:11] Colon=9
+            Name: Name [7:9] Value="id"
+            Value: InvalidValue [10:11] Missing=true
+        SelectionSet: SelectionSet [13:21] LBrace=13 RBrace=20
+          Selections[0]: Field [15:19] Colon=-1
+            Name: Name [15:19] Value="name"
+# errors
+1:12 [11:12] unexpected token: expected value, found ")"

@@ -1,0 +1,35 @@
+# source
+# a schema
+type Query { a: Int, b: Int, # trailing
+  c(x: Int, y: Int): Int }
+
+# the end
+# tree
+Document [0:88]
+  Definitions[0]: TypeDefinition [11:77] Extend=-1 Kind=type Keyword=11 Implements=-1 Equals=-1 LBrace=22 RBrace=76
+    Name: Name [16:21] Value="Query"
+    Fields[0]: FieldDefinition [24:30] Colon=25
+      Name: Name [24:25] Value="a"
+      Type: NamedType [27:30]
+        Name: Name [27:30] Value="Int"
+    Fields[1]: FieldDefinition [32:38] Colon=33
+      Name: Name [32:33] Value="b"
+      Type: NamedType [35:38]
+        Name: Name [35:38] Value="Int"
+    Fields[2]: FieldDefinition [53:75] Colon=70
+      Name: Name [53:54] Value="c"
+      Arguments: ArgumentDefinitionList [54:70] LParen=54 RParen=69
+        Arguments[0]: InputValueDefinition [55:61] Colon=56 Equals=-1
+          Name: Name [55:56] Value="x"
+          Type: NamedType [58:61]
+            Name: Name [58:61] Value="Int"
+        Arguments[1]: InputValueDefinition [63:69] Colon=64 Equals=-1
+          Name: Name [63:64] Value="y"
+          Type: NamedType [66:69]
+            Name: Name [66:69] Value="Int"
+      Type: NamedType [72:75]
+        Name: Name [72:75] Value="Int"
+  Comments[0]: Comment [0:10] Text="# a schema"
+  Comments[1]: Comment [40:50] Text="# trailing"
+  Comments[2]: Comment [79:88] Text="# the end"
+# errors

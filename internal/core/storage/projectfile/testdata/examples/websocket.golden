@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "websocket",
+  "id": "req_4c9e1a7b20d85f36",
+  "name": "Live feed",
+  "url": "wss://{{host}}/feed?room=lobby",
+  "params": [
+    {
+      "name": "room",
+      "value": "lobby"
+    },
+    {
+      "name": "debug",
+      "value": "1",
+      "disabled": true
+    }
+  ],
+  "headers": [
+    {
+      "name": "Origin",
+      "value": "https://app.example.com"
+    }
+  ],
+  "subprotocols": [
+    "graphql-transport-ws",
+    "v2.feed"
+  ],
+  "message": "{\"type\": \"subscribe\", \"channel\": \"prices\"}",
+  "messageFormat": "json",
+  "savedMessages": [
+    {
+      "name": "Subscribe",
+      "text": "{\"type\": \"subscribe\", \"token\": \"{{token}}\"}",
+      "format": "json"
+    },
+    {
+      "name": "Ping",
+      "text": "ping"
+    },
+    {
+      "name": "Hello bytes",
+      "text": "de ad be ef",
+      "format": "hex"
+    },
+    {
+      "name": "Handshake blob",
+      "text": "AAECAw==",
+      "format": "base64"
+    }
+  ],
+  "settings": {
+    "connectTimeoutMs": 10000,
+    "sendCookies": false,
+    "pingIntervalMs": 30000,
+    "pongTimeoutMs": 5000,
+    "autoReconnect": true,
+    "reconnectMaxAttempts": 10,
+    "reconnectDelayMs": 500,
+    "reconnectMaxDelayMs": 60000
+  }
+}

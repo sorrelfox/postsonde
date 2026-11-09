@@ -1,0 +1,13 @@
+{
+  "valid": false,
+  "text": "{ a( }",
+  "error": {
+    "offset": 3,
+    "endOffset": 4,
+    "byteOffset": 3,
+    "line": 1,
+    "column": 4,
+    "message": "\"(\" has no matching \")\""
+  },
+  "errorCount": 2
+}

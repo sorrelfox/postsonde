@@ -1,0 +1,11 @@
+import requests
+from requests.auth import HTTPDigestAuth
+
+response = requests.request(
+    "GET",
+    "https://api.test/me",
+    auth=HTTPDigestAuth("ann", "secret"),
+)
+
+print(response.status_code)
+print(response.text)

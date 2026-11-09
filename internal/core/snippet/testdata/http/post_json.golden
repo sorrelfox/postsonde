@@ -1,0 +1,9 @@
+POST /items HTTP/1.1
+Host: api.test
+Content-Type: application/json
+Content-Length: 45
+
+{
+  "name": "O'Brien",
+  "tags": ["a", "b"]
+}

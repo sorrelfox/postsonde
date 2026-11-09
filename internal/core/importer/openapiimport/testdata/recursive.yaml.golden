@@ -1,0 +1,169 @@
+{
+  "diagnostics": null,
+  "environments": 0,
+  "name": "Recursive schemas",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "paths./nodes.post @10:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.example_truncated",
+            "Severity": "info",
+            "Message": "The generated example stops where the schema refers back to itself.",
+            "At": "paths./nodes.post @10:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/nodes",
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\n  \"name\": \"string\",\n  \"children\": []\n}"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Create a tree"
+      },
+      {
+        "at": "paths./people.post @21:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.example_truncated",
+            "Severity": "info",
+            "Message": "The generated example stops where the schema refers back to itself.",
+            "At": "paths./people.post @21:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/people",
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\n  \"name\": \"Ada\",\n  \"employer\": {\n    \"title\": \"string\",\n    \"staff\": []\n  }\n}"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "createPerson"
+      },
+      {
+        "at": "paths./lists.put @32:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.example_truncated",
+            "Severity": "info",
+            "Message": "The generated example stops where the schema refers back to itself.",
+            "At": "paths./lists.put @32:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "PUT",
+          "url": "{{baseUrl}}/lists",
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\n  \"value\": 3\n}"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "putList"
+      },
+      {
+        "at": "paths./expressions.post @43:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.media_type",
+            "Severity": "info",
+            "Message": "The body is sent as application/xml; the operation also accepts text/plain.",
+            "At": "paths./expressions.post @43:7"
+          },
+          {
+            "Code": "openapi.example_truncated",
+            "Severity": "info",
+            "Message": "The generated example stops where the schema refers back to itself.",
+            "At": "paths./expressions.post @43:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/expressions",
+          "body": {
+            "mode": "raw",
+            "type": "xml",
+            "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sum op=\"add\"/>\n"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "evaluate"
+      },
+      {
+        "at": "paths./deep.post @57:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.example_truncated",
+            "Severity": "info",
+            "Message": "The generated example was cut short at the depth or size limit: complete it by hand if needed.",
+            "At": "paths./deep.post @57:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/deep",
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\n  \"a\": {\n    \"a\": {\n      \"a\": {\n        \"a\": {\n          \"a\": {\n            \"a\": {\n              \"a\": {\n                \"a\": {}\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "deep"
+      }
+    ],
+    "variables": [
+      {
+        "name": "baseUrl",
+        "value": "https://tree.example/api"
+      }
+    ]
+  }
+}

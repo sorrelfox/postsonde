@@ -1,0 +1,798 @@
+# Release builds (docs/ci.md, docs/releasing.md). A tag vX.Y.Z, which must
+# name the release version in build/config.yml (scripts/check-release-tag.sh),
+# builds every package with the scripts `make` runs: the Linux binaries and
+# their .deb packages and AppImages, the source tarball and from it the
+# Fedora RPM and the Flatpak, the macOS disk image and the Windows
+# installers. Each package is installed and started in a clean system,
+# offline where the system allows it. Two builds of the Linux files are
+# compared (reproducible builds), and every binary and package is held to
+# its size budget. Then a draft GitHub Release gets the packages, the source
+# tarball and SHA256SUMS, each file with a build provenance attestation that
+# `gh attestation verify` checks; it is reviewed and published by hand.
+# Nothing is pushed to a registry or a package repository.
+#
+# "Run workflow" (workflow_dispatch) builds and tests without releasing; the
+# packages are then the run's artifacts.
+#
+# Signing is optional: with the repository's signing secrets the macOS app
+# gets a Developer ID signature and is notarized, and the Windows installers
+# are signed; without them the jobs say so and go on, ad hoc on macOS and
+# unsigned on Windows (docs/releasing.md, Signing).
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # The tag check, the desktop metadata, and what the other jobs need: the
+  # images and tool versions of scripts/pins.env, and the version and the
+  # commit time, worked out once from git here. Every build and package job
+  # gets those two as PKG_VERSION and SOURCE_DATE_EPOCH, which
+  # scripts/version.sh and scripts/source-date-epoch.sh take as given: in the
+  # ubuntu, node and fedora images checkout downloads the tree without .git,
+  # and in the golang image git refuses the checkout, which belongs to the
+  # runner's user.
+  setup:
+    name: setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      image-golang: ${{ steps.pins.outputs.image-golang }}
+      image-node: ${{ steps.pins.outputs.image-node }}
+      image-ubuntu-2404: ${{ steps.pins.outputs.image-ubuntu-2404 }}
+      image-ubuntu-2204: ${{ steps.pins.outputs.image-ubuntu-2204 }}
+      go-version: ${{ steps.pins.outputs.go-version }}
+      node-version: ${{ steps.pins.outputs.node-version }}
+      version: ${{ steps.pins.outputs.version }}
+      source-date-epoch: ${{ steps.pins.outputs.source-date-epoch }}
+      short-sha: ${{ steps.pins.outputs.short-sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: The tag names build/config.yml's version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: scripts/check-release-tag.sh "$GITHUB_REF_NAME"
+      - name: Desktop file and metainfo, validated
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq desktop-file-utils appstream
+          desktop-file-validate build/linux/io.github.sorrelfox.PostSonde.desktop
+          appstreamcli validate --no-net build/linux/io.github.sorrelfox.PostSonde.metainfo.xml
+      - name: Pins, version and commit time
+        id: pins
+        run: |
+          . scripts/lib.sh
+          golang="$(pinned_image GOLANG)"
+          node="$(pinned_image NODE)"
+          ubuntu_2404="$(pinned_image UBUNTU_24_04)"
+          ubuntu_2204="$(pinned_image UBUNTU_22_04)"
+          version="$(scripts/version.sh)"
+          sde="$(scripts/source-date-epoch.sh)"
+          short_sha="$(git rev-parse --short HEAD)"
+          {
+            echo "image-golang=$golang"
+            echo "image-node=$node"
+            echo "image-ubuntu-2404=$ubuntu_2404"
+            echo "image-ubuntu-2204=$ubuntu_2204"
+            echo "go-version=$POSTSONDE_PIN_GO_VERSION"
+            echo "node-version=$POSTSONDE_PIN_NODE_VERSION"
+            echo "version=$version"
+            echo "source-date-epoch=$sde"
+            echo "short-sha=$short_sha"
+          } >>"$GITHUB_OUTPUT"
+          echo "PostSonde $version, SOURCE_DATE_EPOCH $sde"
+
+  # The frontend production build, once per run: the Linux and Windows
+  # binaries embed it (`//go:embed all:dist` in frontend/assets.go), and the
+  # source tarball carries it. The macOS build makes its own.
+  frontend-build:
+    name: frontend:build
+    needs: setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-node }}
+    env:
+      npm_config_update_notifier: "false"
+      npm_config_prefer_offline: "true"
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Keep npm's download cache in the workspace
+        run: echo "npm_config_cache=$GITHUB_WORKSPACE/.npm" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: .npm
+          key: npm-${{ hashFiles('frontend/package-lock.json') }}
+      # npm ci && npm run build in frontend/, then `npm run check:dist`: fails
+      # on remote URLs in dist/ or a missing CSP <meta> (docs/privacy.md).
+      - run: scripts/build-frontend.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 1
+          overwrite: true
+
+  # The source tarball: the tree, the frontend build and the vendored Go
+  # modules (scripts/package-sources.sh), from which the RPM and the Flatpak
+  # build offline. Released next to the packages.
+  sources:
+    name: sources
+    needs: [setup, frontend-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-golang }}
+    env:
+      GOTOOLCHAIN: local
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Trust the checkout, keep the module cache in it
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          echo "GOMODCACHE=$GITHUB_WORKSPACE/.cache/go-mod" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: .cache/go-mod
+          key: sources-${{ hashFiles('go.sum') }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: frontend-dist
+          path: frontend/dist
+      # The tarball is made from an export, never from the checkout.
+      - name: Export, then the tarball
+        run: |
+          mkdir -p /tmp/src
+          git archive --format=tar HEAD | tar -x -C /tmp/src
+          cp -a frontend/dist/. /tmp/src/frontend/dist/
+          /tmp/src/scripts/package-sources.sh "$GITHUB_WORKSPACE/out/sources"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: sources
+          path: out/sources/
+          if-no-files-found: error
+          retention-days: 30
+          overwrite: true
+
+  # Linux binaries for both GTK stacks and both architectures. Each job runs
+  # scripts/ci-build-linux.sh on a stock Ubuntu image: it installs the pinned
+  # Go and the stack's dev packages, then builds with the Taskfile's
+  # production flags. The arm64 binaries are cross-compiled on the amd64
+  # runner with Ubuntu's cross gcc and multiarch dev packages (docs/ci.md,
+  # arm64: cross-compiling). GTK4 + WebKitGTK 6.0, the Wails default, needs
+  # Ubuntu 24.04, the first LTS with WebKitGTK 6.0.
+  linux-gtk4:
+    name: linux:gtk4
+    needs: [setup, frontend-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.setup.outputs.image-ubuntu-2404 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+    env:
+      ARCH: ${{ matrix.arch }}
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Keep the Go caches in the workspace
+        run: |
+          echo "GOMODCACHE=$GITHUB_WORKSPACE/.cache/go-mod" >>"$GITHUB_ENV"
+          echo "GOCACHE=$GITHUB_WORKSPACE/.cache/go-build" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/go-mod
+            .cache/go-build
+          key: linux-gtk4-${{ matrix.arch }}-${{ hashFiles('go.sum') }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: frontend-dist
+          path: frontend/dist
+      - run: scripts/ci-build-linux.sh gtk4 "$ARCH"
+      # bin/postsonde-linux-gtk4-<arch>, the only file in bin/.
+      - uses: actions/upload-artifact@v7
+        with:
+          name: postsonde-linux-gtk4-${{ matrix.arch }}-${{ needs.setup.outputs.short-sha }}
+          path: bin/
+          retention-days: 30
+          overwrite: true
+
+  # Legacy GTK3 + WebKit2GTK 4.1 (`-tags gtk3`), on Ubuntu 22.04 for older
+  # distributions. Otherwise the same as linux:gtk4.
+  linux-gtk3:
+    name: linux:gtk3
+    needs: [setup, frontend-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.setup.outputs.image-ubuntu-2204 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+    env:
+      ARCH: ${{ matrix.arch }}
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Keep the Go caches in the workspace
+        run: |
+          echo "GOMODCACHE=$GITHUB_WORKSPACE/.cache/go-mod" >>"$GITHUB_ENV"
+          echo "GOCACHE=$GITHUB_WORKSPACE/.cache/go-build" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/go-mod
+            .cache/go-build
+          key: linux-gtk3-${{ matrix.arch }}-${{ hashFiles('go.sum') }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: frontend-dist
+          path: frontend/dist
+      - run: scripts/ci-build-linux.sh gtk3 "$ARCH"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: postsonde-linux-gtk3-${{ matrix.arch }}-${{ needs.setup.outputs.short-sha }}
+          path: bin/
+          retention-days: 30
+          overwrite: true
+
+  # Windows binaries, amd64 and arm64. Wails v3 on Windows needs no cgo
+  # (WebView2 through pure-Go bindings), so they are cross-compiled on the
+  # Linux runner in the Go image (scripts/build-windows.sh, as `make
+  # windows`), which also checks the PE header.
+  windows-build:
+    name: windows:build
+    needs: [setup, frontend-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-golang }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+    env:
+      ARCH: ${{ matrix.arch }}
+      GOTOOLCHAIN: local
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Keep the Go caches in the workspace
+        run: |
+          echo "GOMODCACHE=$GITHUB_WORKSPACE/.cache/go-mod" >>"$GITHUB_ENV"
+          echo "GOCACHE=$GITHUB_WORKSPACE/.cache/go-build" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/go-mod
+            .cache/go-build
+          key: windows-build-${{ matrix.arch }}-${{ hashFiles('go.sum') }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: frontend-dist
+          path: frontend/dist
+      # The wails3 CLI at the Wails version in go.mod, for `generate syso`;
+      # no cgo needed.
+      - run: |
+          CGO_ENABLED=0 scripts/install-wails3.sh
+          PATH="$(go env GOPATH)/bin:$PATH"
+          scripts/build-windows.sh "$ARCH"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: postsonde-windows-${{ matrix.arch }}-${{ needs.setup.outputs.short-sha }}
+          path: bin/
+          retention-days: 30
+          overwrite: true
+
+  # .deb packages for both stacks and both architectures: `postsonde` (gtk4)
+  # and `postsonde-gtk3`. nfpm, through `wails3 tool package`, writes
+  # packages for any architecture on any host, so one job builds all four.
+  linux-deb:
+    name: linux:deb
+    needs: [setup, linux-gtk4, linux-gtk3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-golang }}
+    env:
+      GOTOOLCHAIN: local
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Keep the Go caches in the workspace
+        run: |
+          echo "GOMODCACHE=$GITHUB_WORKSPACE/.cache/go-mod" >>"$GITHUB_ENV"
+          echo "GOCACHE=$GITHUB_WORKSPACE/.cache/go-build" >>"$GITHUB_ENV"
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .cache/go-mod
+            .cache/go-build
+          key: linux-deb-${{ hashFiles('go.sum') }}
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: postsonde-linux-gtk*
+          path: bin
+          merge-multiple: true
+      # The wails3 CLI at the Wails version in go.mod. Packaging needs no GTK,
+      # so build it without cgo and skip the GTK dev packages.
+      - run: |
+          CGO_ENABLED=0 scripts/install-wails3.sh
+          PATH="$(go env GOPATH)/bin:$PATH"
+          for stack in gtk4 gtk3; do
+            for arch in amd64 arm64; do
+              scripts/package-linux-deb.sh "$stack" "$arch"
+            done
+          done
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-deb
+          path: dist/
+          retention-days: 1
+          overwrite: true
+
+  # AppImage of the gtk3 binary, built on Ubuntu 22.04 for the widest glibc
+  # range. linuxdeploy resolves the libraries to bundle with ldd, so it can't
+  # cross-package: each architecture is packaged on a runner of its own,
+  # GitHub's arm64 runner for arm64.
+  linux-appimage:
+    name: linux:appimage:${{ matrix.arch }}
+    needs: [setup, linux-gtk3]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-ubuntu-2204 }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, runner: ubuntu-24.04 }
+          - { arch: arm64, runner: ubuntu-24.04-arm }
+    env:
+      ARCH: ${{ matrix.arch }}
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: postsonde-linux-gtk3-${{ matrix.arch }}-${{ needs.setup.outputs.short-sha }}
+          path: bin
+      - run: scripts/package-linux-appimage.sh "$ARCH"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-appimage-${{ matrix.arch }}
+          path: dist/
+          retention-days: 1
+          overwrite: true
+
+  # The .debs and the AppImage of each architecture, installed and started in
+  # clean containers with no network (scripts/test-linux-packages.sh), on a
+  # runner of that architecture.
+  linux-test:
+    name: linux:test (${{ matrix.arch }})
+    needs: [setup, linux-deb, linux-appimage]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, runner: ubuntu-24.04, appimage: x86_64 }
+          - { arch: arm64, runner: ubuntu-24.04-arm, appimage: aarch64 }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: linux-{deb,appimage-${{ matrix.arch }}}
+          path: dist
+          merge-multiple: true
+      - name: Install and start, offline
+        run: scripts/test-linux-packages.sh dist/*_${{ matrix.arch }}.deb dist/PostSonde-*-${{ matrix.appimage }}.AppImage
+
+  # The Fedora RPMs, for Fedora 44 and 45 and both architectures, from the
+  # source tarball, each built in a clean container of its release the way a
+  # build service does (scripts/package-linux-rpm.sh), on a runner of its
+  # architecture; then installed and started in another clean one, offline.
+  # Fedora 45 builds with its own golang; Fedora 44's is older than go.mod's
+  # Go, so there the pinned go.dev toolchain builds it.
+  linux-rpm:
+    name: linux:rpm:fc${{ matrix.fedora }}:${{ matrix.arch }}
+    needs: [setup, sources]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        fedora: [44, 45]
+        arch: [amd64, arm64]
+        include:
+          - { arch: amd64, runner: ubuntu-24.04, rpm: x86_64 }
+          - { arch: arm64, runner: ubuntu-24.04-arm, rpm: aarch64 }
+    env:
+      ARCH: ${{ matrix.arch }}
+      FEDORA: ${{ matrix.fedora }}
+      RPM_ARCH: ${{ matrix.rpm }}
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: sources
+          path: out/sources
+      - name: Build
+        run: |
+          image="$(. scripts/lib.sh && pinned_image "FEDORA_$FEDORA")"
+          docker run --rm -v "$PWD:/src" -w /src -e SOURCE_DATE_EPOCH "$image" \
+            scripts/package-linux-rpm.sh "out/sources/postsonde-$PKG_VERSION.tar.xz" out/rpm
+          # One source RPM is released, Fedora 45's from the amd64 job: the
+          # others differ in the dist tag, and Fedora 44's in its Go. (The
+          # container wrote out/rpm as root.)
+          if [ "$FEDORA" != 45 ] || [ "$ARCH" != amd64 ]; then sudo rm out/rpm/*.src.rpm; fi
+      - name: Install and start, offline
+        run: scripts/test-linux-packages.sh "out/rpm/postsonde-$PKG_VERSION-1.fc$FEDORA.$RPM_ARCH.rpm"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-rpm-fc${{ matrix.fedora }}-${{ matrix.arch }}
+          path: out/rpm/*.rpm
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+  # The Flatpak, on the runner itself rather than in a container:
+  # flatpak-builder sandboxes its build with bubblewrap, which needs user
+  # namespaces a container doesn't give. The GNOME SDK comes from Flathub at
+  # its pinned commit (scripts/package-flatpak.sh).
+  linux-flatpak:
+    name: linux:flatpak
+    needs: [setup, sources]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: sources
+          path: out/sources
+      - name: flatpak-builder, Xvfb and D-Bus
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq flatpak flatpak-builder xvfb xauth dbus
+          # bubblewrap needs unprivileged user namespaces, which Ubuntu's
+          # AppArmor restricts by default.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Build in the GNOME SDK, bundle
+        run: scripts/package-flatpak.sh "out/sources/postsonde-$PKG_VERSION.tar.xz" out/flatpak
+      - name: Install and start, offline
+        run: scripts/test-flatpak.sh out/flatpak/PostSonde-*-x86_64.flatpak
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-flatpak
+          path: out/flatpak/*.flatpak
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: linux-flatpak-log
+          path: out/flatpak/build.log
+          if-no-files-found: ignore
+
+  # All Linux packages in one artifact, with SHA256SUMS over them.
+  linux-packages:
+    name: linux:packages
+    needs: [setup, linux-deb, linux-appimage, linux-rpm, linux-flatpak]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    container:
+      image: ${{ needs.setup.outputs.image-ubuntu-2404 }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: linux-{deb,appimage-*,rpm-*,flatpak}
+          path: dist
+          merge-multiple: true
+      - run: scripts/sha256sums.sh dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: postsonde-linux-packages-${{ needs.setup.outputs.short-sha }}
+          path: dist/
+          retention-days: 30
+          overwrite: true
+
+  # The universal (Apple silicon + Intel) app in a disk image, with `make
+  # macos` (scripts/package-macos.sh), then checked and started from the
+  # image (scripts/test-macos.sh). On the Intel image: arm64 macOS runners
+  # are often short of capacity, and lipo joins both slices anyway;
+  # macos:test starts the image's app on Apple silicon too. Go and Node.js
+  # are the versions scripts/pins.env pins; Xcode is the image's (BUILDINFO
+  # records it).
+  macos:
+    name: macos:dmg
+    needs: setup
+    runs-on: macos-15-intel
+    timeout-minutes: 60
+    env:
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v7
+        with:
+          go-version: ${{ needs.setup.outputs.go-version }}
+          cache-dependency-path: go.sum
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ needs.setup.outputs.node-version }}
+      - name: wails3
+        run: scripts/install-wails3.sh
+      - name: Developer ID certificate, into a keychain of this run's own
+        env:
+          CERTIFICATE: ${{ secrets.POSTSONDE_MACOS_CERTIFICATE }}
+          CERTIFICATE_PASSWORD: ${{ secrets.POSTSONDE_MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          if [ -z "$CERTIFICATE" ]; then echo "No POSTSONDE_MACOS_CERTIFICATE: the app is signed ad hoc."; exit 0; fi
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          password="$(openssl rand -hex 24)"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          printf '%s' "$CERTIFICATE" | base64 --decode >"$RUNNER_TEMP/certificate.p12"
+          security import "$RUNNER_TEMP/certificate.p12" -k "$keychain" -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          rm "$RUNNER_TEMP/certificate.p12"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$password" "$keychain" >/dev/null
+          # shellcheck disable=SC2046 # one keychain per word
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | tr -d '"')
+      - name: Build, sign, pack
+        env:
+          POSTSONDE_MACOS_SIGN_IDENTITY: ${{ secrets.POSTSONDE_MACOS_SIGN_IDENTITY }}
+          POSTSONDE_MACOS_NOTARY_APPLE_ID: ${{ secrets.POSTSONDE_MACOS_NOTARY_APPLE_ID }}
+          POSTSONDE_MACOS_NOTARY_TEAM_ID: ${{ secrets.POSTSONDE_MACOS_NOTARY_TEAM_ID }}
+          POSTSONDE_MACOS_NOTARY_PASSWORD: ${{ secrets.POSTSONDE_MACOS_NOTARY_PASSWORD }}
+        run: make macos
+      - name: Check and start from the disk image, offline
+        run: scripts/test-macos.sh dist/macos/PostSonde-*-macos-universal.dmg
+      - uses: actions/upload-artifact@v7
+        with:
+          name: postsonde-macos-${{ needs.setup.outputs.short-sha }}
+          path: |
+            dist/macos/*.dmg
+            dist/macos/BUILDINFO
+          if-no-files-found: error
+          retention-days: 30
+          overwrite: true
+
+  # The disk image's app on Apple silicon: the arm64 slice natively and,
+  # under Rosetta, the Intel one.
+  macos-test:
+    name: macos:test (arm64)
+    needs: [setup, macos]
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: postsonde-macos-${{ needs.setup.outputs.short-sha }}
+          path: dist
+      - name: Check and start from the disk image, offline
+        run: scripts/test-macos.sh dist/PostSonde-*-macos-universal.dmg
+
+  # The NSIS installers of both Windows binaries, with SHA256SUMS over them.
+  # makensis cross-builds too; the script installs Debian's nsis at a pinned
+  # version in the Go image. With the code-signing secret, the app, the
+  # uninstaller and the installer are signed (scripts/sign-windows.sh).
+  windows-installer:
+    name: windows:installer
+    needs: [setup, windows-build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.setup.outputs.image-golang }}
+    env:
+      PKG_VERSION: ${{ needs.setup.outputs.version }}
+      SOURCE_DATE_EPOCH: ${{ needs.setup.outputs.source-date-epoch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: postsonde-windows-{amd64,arm64}-*
+          path: bin
+          merge-multiple: true
+      - name: Code-signing certificate
+        env:
+          CERTIFICATE: ${{ secrets.POSTSONDE_WINDOWS_CERTIFICATE }}
+        run: |
+          if [ -z "$CERTIFICATE" ]; then echo "No POSTSONDE_WINDOWS_CERTIFICATE: the installers stay unsigned."; exit 0; fi
+          printf '%s' "$CERTIFICATE" | base64 --decode >"$RUNNER_TEMP/certificate.pfx"
+          echo "POSTSONDE_WINDOWS_CERTIFICATE=$RUNNER_TEMP/certificate.pfx" >>"$GITHUB_ENV"
+      - name: Pack, sign
+        env:
+          POSTSONDE_WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.POSTSONDE_WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          for arch in amd64 arm64; do
+            scripts/package-windows-installer.sh "$arch"
+          done
+          scripts/sha256sums.sh dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: postsonde-windows-installers-${{ needs.setup.outputs.short-sha }}
+          path: dist/
+          retention-days: 30
+          overwrite: true
+
+  # Each installer installed for the current user, the app started and
+  # uninstalled again (scripts/test-windows.sh), on a runner of its
+  # architecture: windows-11-arm for ARM64.
+  windows-test:
+    name: windows:test (${{ matrix.arch }})
+    needs: [setup, windows-installer]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, runner: windows-latest }
+          - { arch: arm64, runner: windows-11-arm }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: postsonde-windows-installers-${{ needs.setup.outputs.short-sha }}
+          path: dist
+      - name: Install, start, uninstall
+        run: scripts/test-windows.sh dist/PostSonde-*-windows-${{ matrix.arch }}-setup.exe
+
+  # Size budgets (APP-05): fails when a binary or package is bigger than its
+  # budget in scripts/size-budgets.txt, has none, or is missing.
+  # docs/footprint.md.
+  size-budgets:
+    name: size:budgets
+    needs: [setup, linux-gtk4, linux-gtk3, windows-build, linux-packages, windows-installer]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    container:
+      image: ${{ needs.setup.outputs.image-ubuntu-2404 }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: postsonde-{linux-gtk*,windows-amd64-*,windows-arm64-*}
+          path: bin
+          merge-multiple: true
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: postsonde-{linux-packages,windows-installers}-*
+          path: dist
+          merge-multiple: true
+      - run: scripts/check-size.sh bin/postsonde-* dist/*.deb dist/*.AppImage dist/*-setup.exe dist/*.x86_64.rpm dist/*.aarch64.rpm dist/*.flatpak
+
+  # Two builds of the Linux amd64 files from clean exports, compared file by
+  # file (scripts/verify-reproducible.sh, as `make verify-reproducible`).
+  reproducible:
+    name: reproducible
+    needs: setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Two builds, compared
+        env:
+          ARCH: amd64
+        run: scripts/verify-reproducible.sh linux
+
+  release:
+    name: Draft release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [setup, sources, linux-test, linux-packages, macos, macos-test, windows-test, size-budgets, reproducible]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      # For the attestations: a short-lived signing certificate, and the
+      # attestation store.
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Every artifact of the run, each in a folder of its name.
+      - uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+      - name: Files and checksums
+        run: |
+          mkdir files
+          cp -t files artifacts/sources/postsonde-*.tar.xz \
+            artifacts/postsonde-linux-packages-*/*.deb artifacts/postsonde-linux-packages-*/*.rpm \
+            artifacts/postsonde-linux-packages-*/*.AppImage artifacts/postsonde-linux-packages-*/*.flatpak \
+            artifacts/postsonde-macos-*/*.dmg artifacts/postsonde-macos-*/BUILDINFO \
+            artifacts/postsonde-windows-installers-*/*-setup.exe
+          # GitHub renames an asset whose name has a character such as "~",
+          # and SHA256SUMS would then name a file the release doesn't have.
+          for file in files/*~*; do
+            [ -e "$file" ] && mv -- "$file" "${file//\~/.}"
+          done
+          (cd files && sha256sum -- * >SHA256SUMS && cat SHA256SUMS)
+      - name: Build provenance attestations
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            files/*.tar.xz
+            files/*.deb
+            files/*.rpm
+            files/*.AppImage
+            files/*.flatpak
+            files/*.dmg
+            files/BUILDINFO
+            files/*.exe
+      - name: Draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.setup.outputs.version }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" files/* --repo "$GITHUB_REPOSITORY" --draft \
+            --title "PostSonde $VERSION" --notes-file packaging/release-notes.md --generate-notes

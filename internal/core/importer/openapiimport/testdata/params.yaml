@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  title: Parameters and bodies
+  version: "1"
+servers:
+  - url: /v1
+tags:
+  - name: unused
+  - name: things
+    description: Things
+paths:
+  /things/{id}/{labels}/{coords}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: {type: integer, default: 42}
+      - name: labels
+        in: path
+        required: true
+        style: label
+        explode: true
+        schema: {type: array, items: {type: string}}
+        example: [a, b]
+      - name: coords
+        in: path
+        required: true
+        style: matrix
+        schema: {type: object}
+        example: {x: 1, y: 2}
+    get:
+      tags: [things, more]
+      summary: "  Get   a thing  "
+      parameters:
+        - name: expand
+          in: query
+          required: true
+          schema: {type: array, items: {type: string, enum: [owner, tags]}}
+        - name: filter
+          in: query
+          style: deepObject
+          required: true
+          schema: {type: object}
+          example: {color: red, size: L}
+        - name: ids
+          in: query
+          style: pipeDelimited
+          explode: false
+          required: true
+          example: [1, 2]
+          schema: {type: array, items: {type: integer}}
+        - name: q
+          in: query
+          required: true
+          example: 'a&b=c'
+          schema: {type: string}
+        - name: page
+          in: query
+          schema: {type: integer, minimum: 1}
+        - name: since
+          in: query
+          schema: {type: string, format: date-time}
+        - name: X-Request-Id
+          in: header
+          required: true
+          schema: {type: string, format: uuid}
+        - name: Accept
+          in: header
+          schema: {type: string}
+        - name: meta
+          in: query
+          required: true
+          content:
+            application/json:
+              schema: {type: object, properties: {a: {type: integer}}}
+        - name: session
+          in: cookie
+          required: true
+          example: abc
+          schema: {type: string}
+        - name: theme
+          in: cookie
+          schema: {type: string, default: dark}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.things+json:
+              schema: {type: object}
+    put:
+      tags: [things]
+      operationId: replaceThing
+      deprecated: true
+      description: Replaces the thing.
+      servers:
+        - url: https://write.example/v1
+      requestBody:
+        description: The new thing.
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Thing'
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/Thing'
+            examples:
+              ext:
+                externalValue: https://example.com/thing.json
+      responses:
+        '204':
+          description: Replaced
+  /things:
+    post:
+      tags: [things]
+      operationId: createThing
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Thing'
+            encoding:
+              tags:
+                explode: false
+      responses:
+        '201':
+          description: Created
+    patch:
+      operationId: patchThings
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  op: {type: string, enum: [add, remove]}
+                  path: {type: string, format: json-pointer}
+      responses:
+        '200':
+          description: OK
+  /upload:
+    post:
+      operationId: upload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                meta: {$ref: '#/components/schemas/Thing'}
+                note: {type: string}
+                file: {type: string, format: binary}
+                more: {type: array, items: {type: string, format: binary}}
+            encoding:
+              file:
+                contentType: image/png, image/jpeg
+      responses:
+        '204':
+          description: OK
+  /raw:
+    put:
+      operationId: putRaw
+      requestBody:
+        content:
+          application/octet-stream:
+            schema: {type: string, format: binary}
+      responses:
+        '204':
+          description: OK
+    post:
+      operationId: postText
+      requestBody:
+        content:
+          text/plain:
+            schema: {type: string, example: hello}
+      responses:
+        '204':
+          description: OK
+components:
+  schemas:
+    Thing:
+      type: object
+      xml:
+        name: thing
+      required: [name]
+      properties:
+        id: {type: integer, readOnly: true}
+        name: {type: string, minLength: 8, description: The name}
+        price: {type: number, exclusiveMinimum: true, minimum: 0, maximum: 10}
+        count: {type: integer, maximum: -5}
+        tags:
+          type: array
+          xml: {wrapped: true}
+          items: {type: string, xml: {name: tag}}
+        kind: {type: string, nullable: true, enum: [null, big]}
+        email: {type: string, format: email}
+        extra:
+          type: object
+          additionalProperties: {type: boolean}

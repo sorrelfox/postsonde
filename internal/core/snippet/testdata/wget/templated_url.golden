@@ -1,0 +1,6 @@
+wget '{{baseUrl}}/items/{{id}}' \
+  --method DELETE \
+  --header 'Authorization: Bearer {{token}}' \
+  --max-redirect 3 \
+  --timeout 0.25 \
+  -O -

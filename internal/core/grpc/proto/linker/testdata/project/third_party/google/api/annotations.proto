@@ -1,0 +1,14 @@
+// Written for the PostSonde linker tests, in the style of Google API
+// annotations. Not a copy of googleapis.
+
+syntax = "proto3";
+
+package google.api;
+
+import "google/api/http.proto";
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.MethodOptions {
+  // See HttpRule.
+  HttpRule http = 72295728;
+}

@@ -1,0 +1,56 @@
+// proto2 test schema for the protobuf JSON mapping: required fields,
+// defaults, groups, closed enums and extensions. Extension
+// numbers are below the regular fields so that protobuf-go (which writes
+// extensions first) and PostSonde (number order) encode alike.
+syntax = "proto2";
+
+package jsontest2;
+
+enum Closed {
+  ONE = 1;
+  TWO = 2;
+}
+
+message P2 {
+  extensions 1 to 9;
+
+  optional int32 opt_int32 = 10;
+  optional string opt_string = 11 [default = "hello"];
+  optional Closed opt_closed = 12;
+  optional group OptionalGroup = 13 {
+    optional int32 a = 1;
+  }
+  repeated group RepeatedGroup = 14 {
+    optional string b = 1;
+  }
+  optional Inner inner = 15;
+  repeated Inner inners = 16;
+  map<string, Inner> inner_map = 17;
+  optional bytes opt_bytes = 18 [default = "\001"];
+}
+
+message Inner {
+  required int32 req = 1;
+  optional int32 other = 2;
+}
+
+message Holder {
+  optional P2 p2 = 1;
+  required string name = 2;
+}
+
+extend P2 {
+  optional int32 ext_int32 = 1;
+  optional Inner ext_inner = 2;
+  repeated string ext_strings = 3;
+  optional Closed ext_closed = 4;
+}
+
+message Scope {
+  extend P2 {
+    optional string nested_ext = 5;
+    optional group ExtGroup = 6 {
+      optional int32 c = 1;
+    }
+  }
+}

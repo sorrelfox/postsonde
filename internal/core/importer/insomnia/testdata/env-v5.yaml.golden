@@ -1,0 +1,46 @@
+{
+  "diagnostics": null,
+  "environments": [
+    {
+      "at": "environments @6:3",
+      "diagnostics": [
+        {
+          "Code": "insomnia.nested_value",
+          "Severity": "info",
+          "Message": "Values nested in objects or lists became variables with dotted names (a.b, list.0), which the converted {{ _.a.b }} references use.",
+          "At": "environments @6:3"
+        }
+      ],
+      "environment": "Shared",
+      "variables": [
+        {
+          "Name": "region",
+          "Value": "eu",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "endpoints.auth",
+          "Value": "https://auth.example",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    }
+  ],
+  "name": "Shared",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": null,
+    "variables": null
+  }
+}

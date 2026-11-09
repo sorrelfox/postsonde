@@ -1,0 +1,73 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": false,
+  "url": "https://api.example.com/v1/chat/completions",
+  "urls": [
+    {
+      "value": "https://api.example.com/v1/chat/completions",
+      "start": 5,
+      "end": 48
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "application/json",
+      "kind": "set",
+      "implied": false,
+      "start": 53,
+      "end": 88
+    },
+    {
+      "name": "Authorization",
+      "value": "Bearer $OPENAI_API_KEY",
+      "kind": "set",
+      "implied": false,
+      "start": 93,
+      "end": 135
+    }
+  ],
+  "data": [
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "{\n    \"model\": \"model-x\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Say hello!\"}]\n  }",
+      "name": "",
+      "file": "",
+      "start": 140,
+      "end": 234
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.shell_expansion",
+      "severity": "warning",
+      "start": 119,
+      "end": 134,
+      "message": "The shell would expand “$OPENAI_API_KEY”; it is kept as written.",
+      "text": "$OPENAI_API_KEY"
+    }
+  ]
+}

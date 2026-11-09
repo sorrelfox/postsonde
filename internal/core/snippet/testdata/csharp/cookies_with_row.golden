@@ -1,0 +1,16 @@
+using System;
+using System.Net.Http;
+
+var handler = new SocketsHttpHandler
+{
+    UseCookies = false,
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/me");
+request.Headers.TryAddWithoutValidation("Cookie", "theme=light; sid=abc");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

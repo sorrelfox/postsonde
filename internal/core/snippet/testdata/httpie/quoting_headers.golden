@@ -1,0 +1,9 @@
+http --follow --max-redirects=10 \
+  GET https://api.test/q \
+  'X-Odd!#$%&'\''*+.^_`|~:100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\' \
+  'X-Unicode:héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛' \
+  X-Long:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
+  'X-Json:{"a":"b\"c","d":[1,2],"e":"C:\\dir\\"}' \
+  'X-Tab:a	b' \
+  'X-Empty;' \
+  User-Agent:

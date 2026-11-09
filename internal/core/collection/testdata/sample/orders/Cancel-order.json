@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_4f8e2b6a0d1c9375",
+  "name": "Cancel order",
+  "method": "DELETE",
+  "url": "{{baseUrl}}/orders/:id",
+  "pathParams": [
+    {
+      "name": "id",
+      "value": ""
+    }
+  ],
+  "body": {
+    "mode": "urlencoded",
+    "fields": [
+      {
+        "name": "reason",
+        "value": "duplicate"
+      },
+      {
+        "name": "notify",
+        "value": "false",
+        "disabled": true
+      }
+    ]
+  },
+  "auth": {
+    "type": "inherit"
+  }
+}

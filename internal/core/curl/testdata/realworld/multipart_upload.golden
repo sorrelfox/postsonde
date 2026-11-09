@@ -1,0 +1,138 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": true,
+  "url": "https://api.example.com/v1/files",
+  "urls": [
+    {
+      "value": "https://api.example.com/v1/files",
+      "start": 13,
+      "end": 45
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "Authorization",
+      "value": "Bearer abc",
+      "kind": "set",
+      "implied": false,
+      "start": 50,
+      "end": 80
+    }
+  ],
+  "data": null,
+  "get": false,
+  "head": false,
+  "form": [
+    {
+      "kind": "text",
+      "name": "purpose",
+      "value": "fine-tune",
+      "file": "",
+      "contentType": "",
+      "filename": "",
+      "headers": null,
+      "start": 85,
+      "end": 107
+    },
+    {
+      "kind": "file",
+      "name": "file",
+      "value": "",
+      "file": "my data.jsonl",
+      "contentType": "application/jsonl",
+      "filename": "",
+      "headers": null,
+      "start": 112,
+      "end": 159
+    },
+    {
+      "kind": "text",
+      "name": "meta",
+      "value": "{\"a\":1}",
+      "file": "",
+      "contentType": "application/json",
+      "filename": "",
+      "headers": null,
+      "start": 164,
+      "end": 203
+    },
+    {
+      "kind": "file",
+      "name": "avatar",
+      "value": "",
+      "file": "img;1.png",
+      "contentType": "",
+      "filename": "me.png",
+      "headers": null,
+      "start": 208,
+      "end": 248
+    },
+    {
+      "kind": "file_content",
+      "name": "notes",
+      "value": "",
+      "file": "notes.txt",
+      "contentType": "",
+      "filename": "",
+      "headers": null,
+      "start": 253,
+      "end": 274
+    },
+    {
+      "kind": "text",
+      "name": "raw",
+      "value": "@not-a-file;really",
+      "file": "",
+      "contentType": "",
+      "filename": "",
+      "headers": null,
+      "start": 279,
+      "end": 317
+    }
+  ],
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.file_reference",
+      "severity": "info",
+      "start": 112,
+      "end": 159,
+      "message": "curl sends the file “my data.jsonl”; it is kept as a path and not read here.",
+      "text": "-F file=\"@my data.jsonl;type=application/jsonl\""
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "info",
+      "start": 208,
+      "end": 248,
+      "message": "curl sends the file “img;1.png”; it is kept as a path and not read here.",
+      "text": "-F 'avatar=@\"img;1.png\";filename=me.png'"
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "warning",
+      "start": 253,
+      "end": 274,
+      "message": "curl reads this value from the file “notes.txt”; PostSonde does not read it.",
+      "text": "-F \"notes=\u003cnotes.txt\""
+    }
+  ]
+}

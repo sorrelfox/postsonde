@@ -1,0 +1,15 @@
+using System;
+using System.Net.Http;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/graphql?query=%7B%20me%20%7B%20name%20%7D%20%7D");
+request.Headers.TryAddWithoutValidation("Accept", "application/graphql-response+json, application/json;q=0.9");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

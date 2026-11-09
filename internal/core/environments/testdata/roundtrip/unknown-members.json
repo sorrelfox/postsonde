@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "environment",
+  "id": "env_0000000000000a03",
+  "name": "Unknown members",
+  "variables": [
+    {
+      "name": "a",
+      "value": "1",
+      "note": "keep me",
+      "x-order": [3, 1, 2]
+    }
+  ],
+  "owner": "someone",
+  "extra": {"nested": true}
+}

@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package shop.legacyext;
+
+import "legacy/catalog.proto";
+
+// Extends a message from the vendor import root.
+extend legacy.catalog.Item {
+  optional string order_note = 150;
+  repeated int64 order_ids = 151;
+}
+
+message Holder {
+  extend .legacy.catalog.Item {
+    optional Holder holder = 152;
+  }
+  optional legacy.catalog.Item item = 1;
+}

@@ -1,0 +1,127 @@
+openapi: 3.1.0
+info:
+  title: Recursive responses
+  version: "1"
+servers:
+  - url: https://tree.example/api/
+paths:
+  /nodes/{id}:
+    get:
+      operationId: getNode
+      responses:
+        '200':
+          description: A tree node with its children and parent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Node'
+  /people/{id}:
+    get:
+      operationId: getPerson
+      responses:
+        '200':
+          description: A person, who works for a company, which has people
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /lists/{id}:
+    get:
+      operationId: getList
+      responses:
+        '200':
+          description: A linked list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+  /expressions/{id}:
+    get:
+      operationId: getExpression
+      responses:
+        '200':
+          description: An expression tree as XML
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Expr'
+  /deep:
+    get:
+      operationId: deep
+      responses:
+        '200':
+          description: Deeper than the generator goes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/L1'
+components:
+  schemas:
+    Node:
+      type: object
+      properties:
+        name: {type: string}
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+        parent:
+          $ref: '#/components/schemas/Node'
+    Person:
+      type: object
+      properties:
+        name: {type: string, examples: [Ada]}
+        password: {type: string, writeOnly: true}
+        employer:
+          $ref: '#/components/schemas/Company'
+    Company:
+      type: object
+      properties:
+        title: {type: string}
+        ceo:
+          $ref: '#/components/schemas/Person'
+        staff:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+    List:
+      allOf:
+        - type: object
+          properties:
+            value: {type: integer, minimum: 3}
+        - type: object
+          properties:
+            next:
+              $ref: '#/components/schemas/List'
+    Expr:
+      oneOf:
+        - $ref: '#/components/schemas/Sum'
+        - $ref: '#/components/schemas/Const'
+    Sum:
+      type: object
+      xml:
+        name: sum
+      properties:
+        op:
+          const: add
+          xml:
+            attribute: true
+        terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Expr'
+    Const:
+      type: object
+      properties:
+        value: {type: number}
+    L1: {type: object, properties: {a: {$ref: '#/components/schemas/L2'}}}
+    L2: {type: object, properties: {a: {$ref: '#/components/schemas/L3'}}}
+    L3: {type: object, properties: {a: {$ref: '#/components/schemas/L4'}}}
+    L4: {type: object, properties: {a: {$ref: '#/components/schemas/L5'}}}
+    L5: {type: object, properties: {a: {$ref: '#/components/schemas/L6'}}}
+    L6: {type: object, properties: {a: {$ref: '#/components/schemas/L7'}}}
+    L7: {type: object, properties: {a: {$ref: '#/components/schemas/L8'}}}
+    L8: {type: object, properties: {a: {$ref: '#/components/schemas/L9'}}}
+    L9: {type: object, properties: {a: {$ref: '#/components/schemas/L10'}}}
+    L10: {type: object, properties: {a: {$ref: '#/components/schemas/L11'}}}
+    L11: {type: object, properties: {leaf: {type: boolean}}}

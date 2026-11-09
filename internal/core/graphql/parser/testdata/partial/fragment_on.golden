@@ -1,0 +1,11 @@
+# source
+fragment F on
+# tree
+Document [0:13]
+  Definitions[0]: FragmentDefinition [0:13] Keyword=0
+    Name: Name [9:10] Value="F"
+    TypeCondition: TypeCondition [11:13] On=11
+      Type: NamedType [13:13]
+        Name: Name [13:13] Value=""
+# errors
+1:14 [13:13] unexpected token: expected type name, found end of input

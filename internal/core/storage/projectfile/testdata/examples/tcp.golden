@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "kind": "tcp",
+  "id": "req_7d2b5e90c41a6f38",
+  "name": "Echo server",
+  "address": "{{echoHost}}:7000",
+  "sendMode": "hex",
+  "lineEnding": "crlf",
+  "message": "DE AD be ef 0x0a",
+  "framing": {
+    "mode": "length",
+    "prefixBytes": 2,
+    "byteOrder": "little",
+    "maxMessageBytes": 65536
+  },
+  "settings": {
+    "connectTimeoutMs": 5000,
+    "tls": true,
+    "verifyTls": false
+  }
+}

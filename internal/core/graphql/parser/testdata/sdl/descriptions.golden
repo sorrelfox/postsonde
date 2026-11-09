@@ -1,0 +1,84 @@
+# source
+"""
+A simple GraphQL schema which is well described.
+"""
+schema {
+  query: Query
+}
+
+"""
+Root type for all your query operations
+"""
+type Query {
+  """
+  Translates a string from a given language into a different language.
+  """
+  translate(
+    "The original language that `text` is provided in."
+    fromLanguage: Language
+
+    "The translated language to be returned."
+    toLanguage: Language
+
+    "The text to be translated."
+    text: String
+  ): String
+}
+
+"""
+The set of languages supported by `translate`.
+"""
+enum Language {
+  "English"
+  EN
+
+  "French"
+  FR
+
+  "Chinese"
+  CH
+}
+# tree
+Document [0:586]
+  Definitions[0]: SchemaDefinition [0:82] Extend=-1 Keyword=57 LBrace=64 RBrace=81
+    Description: StringValue [0:56] Block=true Value="A simple GraphQL schema which is well described."
+    OperationTypes[0]: RootOperationTypeDefinition [68:80] Operation=query Keyword=68 Colon=73
+      Type: NamedType [75:80]
+        Name: Name [75:80] Value="Query"
+  Definitions[1]: TypeDefinition [84:460] Extend=-1 Kind=type Keyword=132 Implements=-1 Equals=-1 LBrace=143 RBrace=459
+    Description: StringValue [84:131] Block=true Value="Root type for all your query operations"
+    Name: Name [137:142] Value="Query"
+    Fields[0]: FieldDefinition [147:458] Colon=450
+      Description: StringValue [147:227] Block=true Value="Translates a string from a given language into a different language."
+      Name: Name [230:239] Value="translate"
+      Arguments: ArgumentDefinitionList [239:450] LParen=239 RParen=449
+        Arguments[0]: InputValueDefinition [245:323] Colon=313 Equals=-1
+          Description: StringValue [245:296] Block=false Value="The original language that `text` is provided in."
+          Name: Name [301:313] Value="fromLanguage"
+          Type: NamedType [315:323]
+            Name: Name [315:323] Value="Language"
+        Arguments[1]: InputValueDefinition [329:395] Colon=385 Equals=-1
+          Description: StringValue [329:370] Block=false Value="The translated language to be returned."
+          Name: Name [375:385] Value="toLanguage"
+          Type: NamedType [387:395]
+            Name: Name [387:395] Value="Language"
+        Arguments[2]: InputValueDefinition [401:446] Colon=438 Equals=-1
+          Description: StringValue [401:429] Block=false Value="The text to be translated."
+          Name: Name [434:438] Value="text"
+          Type: NamedType [440:446]
+            Name: Name [440:446] Value="String"
+      Type: NamedType [452:458]
+        Name: Name [452:458] Value="String"
+  Definitions[2]: TypeDefinition [462:586] Extend=-1 Kind=enum Keyword=517 Implements=-1 Equals=-1 LBrace=531 RBrace=585
+    Description: StringValue [462:516] Block=true Value="The set of languages supported by `translate`."
+    Name: Name [522:530] Value="Language"
+    EnumValues[0]: EnumValueDefinition [535:549]
+      Description: StringValue [535:544] Block=false Value="English"
+      Name: Name [547:549] Value="EN"
+    EnumValues[1]: EnumValueDefinition [553:566]
+      Description: StringValue [553:561] Block=false Value="French"
+      Name: Name [564:566] Value="FR"
+    EnumValues[2]: EnumValueDefinition [570:584]
+      Description: StringValue [570:579] Block=false Value="Chinese"
+      Name: Name [582:584] Value="CH"
+# errors

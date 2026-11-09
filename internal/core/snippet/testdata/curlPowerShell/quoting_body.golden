@@ -1,0 +1,4 @@
+curl.exe https://api.test/q `
+  -H 'Content-Type: text/plain' `
+  --data-raw "trailing spaces   `n  indented`n`ttabbed`n100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% `$env:PATH `${x} `$(id) ``tick`` {{notAVar}} 'single' ''two'' `"double`" `"`"two`"`" \ \\ \`" end\`n`"`"`"triple`"`"`" \u0041 \n */ // # -- ; C:\dir\`n`n‘curly’ `“double`” 日本 😀 `u{A0}nbsp `u{2028}ls`n   " `
+  -L --max-redirs 10

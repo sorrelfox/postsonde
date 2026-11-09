@@ -1,0 +1,16 @@
+# source
+{ user(bio: """abc) { id } }
+# tree
+Document [0:28]
+  Definitions[0]: OperationDefinition [0:28] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:28] LBrace=0 RBrace=-1
+      Selections[0]: Field [2:28] Colon=-1
+        Name: Name [2:6] Value="user"
+        Arguments: ArgumentList [6:28] LParen=6 RParen=-1
+          Arguments[0]: Argument [7:28] Colon=10
+            Name: Name [7:10] Value="bio"
+            Value: InvalidValue [12:28] Missing=false
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"
+1:7 [6:7] unclosed delimiter: "(" has no matching ")"
+1:13 [12:28] lexical error: unterminated block string

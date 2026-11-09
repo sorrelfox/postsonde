@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "type": "environment",
+  "title": "Staging",
+  "variables": {
+    "baseUrl": "https://staging.shop.example",
+    "count": 5,
+    "debug": false,
+    "user": "ops",
+    "missing": null,
+    "auth": {
+      "token": "stg-token",
+      "scopes": ["read", "write"]
+    }
+  }
+}

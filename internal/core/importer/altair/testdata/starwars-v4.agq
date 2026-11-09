@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "type": "window",
+  "windowName": "Star Wars films",
+  "apiUrl": "https://swapi-graphql.example/graphql",
+  "query": "query AllFilms($first: Int) {\n  allFilms(first: $first) {\n    films {\n      title\n      releaseDate\n    }\n  }\n}\n",
+  "headers": [
+    {
+      "key": "X-Client",
+      "value": "altair"
+    },
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "variables": "{\n  \"first\": 3\n}",
+  "subscriptionUrl": "wss://swapi-graphql.example/graphql",
+  "preRequestScript": "altair.helpers.setEnvironment('ts', Date.now());",
+  "preRequestScriptEnabled": false
+}

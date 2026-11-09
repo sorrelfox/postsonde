@@ -1,0 +1,16 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/items",
+    headers={
+        "Accept": "application/json",
+        "X-Quote": "it's \"quoted\" $HOME `id`",
+        "X-Empty": "",
+        "X-Unicode": "héllo ✓".encode(),
+        "User-Agent": "PostSonde-test",
+    },
+)
+
+print(response.status_code)
+print(response.text)

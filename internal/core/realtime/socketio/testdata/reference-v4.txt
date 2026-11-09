@@ -1,0 +1,67 @@
+# Wire traffic captured on 2026-09-19 from a socket.io 4.8.1 server (engine.io
+# 6.6.4, socket.io-parser 4.2.4, ws 8.17.1, Node 26) on 127.0.0.1, driven by
+# the raw client in capture.js. One frame per line:
+#   <direction> <transport> <data>
+# direction: > client to server, < server to client.
+# transport: polling (an HTTP long-polling body, quoted), ws-text (a
+# WebSocket text message, quoted), ws-binary (a WebSocket binary message,
+# hex). Quoted strings are JSON strings.
+# session: polling
+< polling "0{\"sid\":\"hD5CQF1BkcVawyw2AAAA\",\"upgrades\":[\"websocket\"],\"pingInterval\":300,\"pingTimeout\":2000,\"maxPayload\":1000000}"
+> polling "40"
+< polling "40{\"sid\":\"3hYVjzITmUXQ4frTAAAB\"}"
+> polling "40/admin,{\"token\":\"nope\"}"
+< polling "44/admin,{\"message\":\"Not authorized\",\"data\":{\"reason\":\"bad token\"}}"
+> polling "40/admin,{\"token\":\"123\"}"
+< polling "40/admin,{\"sid\":\"S-7V-_9s4HiODUyvAAAD\"}\u001e42/admin,[\"welcome\",\"admin\"]"
+> polling "42[\"hello\",\"world\",1]\u001e42[\"burst\"]\u001e42/admin,7[\"project:delete\",42]"
+< polling "42[\"tick\",1]\u001e42[\"tick\",2,\"two\",{\"three\":[3]}]\u001e452-[\"bytes\",{\"_placeholder\":true,\"num\":0},{\"nested\":[{\"_placeholder\":true,\"num\":1}]}]\u001ebAQID\u001ebaGk=\u001e42[\"unicode\",\"héllo ✓ 😀\",null,true,1.5,-2]\u001e43/admin,7[{\"deleted\":42}]\u001e2"
+> polling "3"
+> polling "421[\"hello\",{\"a\":[1,2]}]\u001e451-2[\"upload\",{\"name\":\"f.bin\"},{\"_placeholder\":true,\"num\":0}]\u001ebAQIDBA=="
+< polling "431[\"ok\",{\"a\":[1,2]}]\u001e461-2[{\"size\":4,\"meta\":{\"name\":\"f.bin\"}},{\"_placeholder\":true,\"num\":0}]\u001eb3q2+7w=="
+> polling "42[\"ask\"]"
+< polling "420[\"question\",\"ready?\"]\u001e451-1[\"question2\",{\"_placeholder\":true,\"num\":0}]\u001ebCQ=="
+> polling "430[\"fine\"]\u001e461-1[{\"_placeholder\":true,\"num\":0}]\u001ebCgs="
+< polling "2"
+> polling "3"
+> polling "41/admin,\u001e41"
+> polling "1"
+# session: websocket
+< ws-text "0{\"sid\":\"OdqQ8SeJDcdxBRkvAAAE\",\"upgrades\":[],\"pingInterval\":300,\"pingTimeout\":2000,\"maxPayload\":1000000}"
+> ws-text "40"
+< ws-text "40{\"sid\":\"rQIsiWyET_WZ5Xy1AAAF\"}"
+> ws-text "42[\"hello\"]"
+> ws-text "4212[\"hello\",\"again\"]"
+> ws-text "451-3[\"upload\",{\"name\":\"x\"},{\"_placeholder\":true,\"num\":0}]"
+> ws-binary 000102ff
+> ws-text "42[\"burst\"]"
+< ws-text "4312[\"ok\",\"again\"]"
+< ws-text "461-3[{\"size\":4,\"meta\":{\"name\":\"x\"}},{\"_placeholder\":true,\"num\":0}]"
+< ws-binary deadbeef
+< ws-text "42[\"tick\",1]"
+< ws-text "42[\"tick\",2,\"two\",{\"three\":[3]}]"
+< ws-text "452-[\"bytes\",{\"_placeholder\":true,\"num\":0},{\"nested\":[{\"_placeholder\":true,\"num\":1}]}]"
+< ws-binary 010203
+< ws-binary 6869
+< ws-text "42[\"unicode\",\"héllo ✓ 😀\",null,true,1.5,-2]"
+> ws-text "40/nope,"
+< ws-text "44/nope,{\"message\":\"Invalid namespace\"}"
+> ws-text "40/admin,{\"token\":\"123\"}"
+< ws-text "40/admin,{\"sid\":\"_cM9TeadbH74wM3TAAAG\"}"
+< ws-text "42/admin,[\"welcome\",\"admin\"]"
+< ws-text "2"
+> ws-text "42/admin,8[\"project:delete\",\"abc\"]"
+< ws-text "43/admin,8[{\"deleted\":\"abc\"}]"
+> ws-text "3"
+> ws-text "42[\"bye\"]"
+< ws-text "41"
+# session: upgrade
+< polling "0{\"sid\":\"trpQ2bnU-mEK-OOyAAAH\",\"upgrades\":[\"websocket\"],\"pingInterval\":300,\"pingTimeout\":2000,\"maxPayload\":1000000}"
+> polling "40"
+< polling "40{\"sid\":\"BdCybyEtEPCZokCOAAAI\"}"
+> ws-text "2probe"
+< ws-text "3probe"
+< polling "6"
+> ws-text "5"
+> ws-text "42[\"hello\"]"
+> ws-text "1"

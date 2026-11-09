@@ -1,0 +1,21 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8,
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/items");
+request.Headers.TryAddWithoutValidation("Accept", "application/json");
+request.Headers.TryAddWithoutValidation("X-Quote", "it's \"quoted\" $HOME `id`");
+request.Headers.TryAddWithoutValidation("X-Empty", "");
+request.Headers.TryAddWithoutValidation("X-Unicode", "héllo ✓");
+request.Headers.TryAddWithoutValidation("User-Agent", "PostSonde-test");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

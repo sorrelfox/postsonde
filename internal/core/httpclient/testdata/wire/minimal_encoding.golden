@@ -1,0 +1,3 @@
+GET /a%20b/%C3%A9?q=%C3%BC%20v HTTP/1.1\r\n
+Host: ADDR\r\n
+\r\n

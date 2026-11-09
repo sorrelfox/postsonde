@@ -1,0 +1,86 @@
+/* Mockup: a 28px pill in the title bar with the environment's colour dot, a
+ * borderless select and a chevron. */
+.switcher {
+  position: relative;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: 7px;
+  background: var(--bg1);
+  color: var(--text2);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.switcher:hover:not(:has(select:disabled)) {
+  background: var(--bg2);
+}
+
+.switcher:focus-within {
+  border-color: var(--accent);
+}
+
+/* The active environment's colour (ENV-08): a 3px bar on the left and a
+ * light tint of the pill. The text keeps --text on a background mixed from
+ * --bg1 with at most 14% of the colour (22% on hover), so it stays readable
+ * whatever the colour (docs/environments.md, "Colour"). */
+.switcher[data-env-color] {
+  border-color: color-mix(in srgb, var(--env-color) 55%, var(--line2));
+  background: color-mix(in srgb, var(--env-color) 14%, var(--bg1));
+  box-shadow: inset 3px 0 0 var(--env-color);
+}
+
+.switcher[data-env-color]:hover:not(:has(select:disabled)) {
+  background: color-mix(in srgb, var(--env-color) 22%, var(--bg1));
+}
+
+.switcher[data-env-color]:focus-within {
+  border-color: var(--accent);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--text3);
+}
+
+/* The active environment's own colour, or the accent without one. */
+.dotActive {
+  background: var(--env-color, var(--accent));
+}
+
+.select {
+  max-width: 180px;
+  min-width: 0;
+  /* The select reaches under the chevron, so clicking the chevron opens it. */
+  padding: 0 20px 0 0;
+  margin-right: -20px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  appearance: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+.select:disabled {
+  color: var(--text2);
+  cursor: default;
+}
+
+.select:focus-visible {
+  outline: none;
+}
+
+.chevron {
+  flex: none;
+  color: var(--text3);
+  pointer-events: none;
+}

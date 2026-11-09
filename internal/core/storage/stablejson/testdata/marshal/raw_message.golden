@@ -1,0 +1,20 @@
+{
+  "name": "raw",
+  "payload": {
+    "z": 1,
+    "a": [
+      1,
+      2,
+      {}
+    ],
+    "html": "<b>&amp;</b>",
+    "esc": "\u003c"
+  },
+  "missing": null,
+  "byKey": {
+    "first": {
+      "k": "v"
+    },
+    "second": []
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "1",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "GET",
+    "url": "https://api.example.com/users/1",
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 7,
+      "end": 9,
+      "message": "The option “-s” does not change the request and is ignored."
+    },
+    {
+      "code": "curl.trailing_input",
+      "severity": "warning",
+      "start": 42,
+      "end": 53,
+      "message": "Only the first command is imported; the text from here on is ignored."
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+GET /p%7Cq?x=%5B1%5D&y=a%5Eb HTTP/1.1
+Host: api.test

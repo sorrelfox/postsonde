@@ -1,0 +1,2 @@
+http --follow --max-redirects=10 \
+  DELETE https://api.test/items/1

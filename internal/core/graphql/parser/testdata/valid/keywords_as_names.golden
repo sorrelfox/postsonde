@@ -1,0 +1,36 @@
+# source
+{ query mutation subscription fragment on true: null type: schema(input: enum) ... on on { on } ... query }
+# tree
+Document [0:107]
+  Definitions[0]: OperationDefinition [0:107] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:107] LBrace=0 RBrace=106
+      Selections[0]: Field [2:7] Colon=-1
+        Name: Name [2:7] Value="query"
+      Selections[1]: Field [8:16] Colon=-1
+        Name: Name [8:16] Value="mutation"
+      Selections[2]: Field [17:29] Colon=-1
+        Name: Name [17:29] Value="subscription"
+      Selections[3]: Field [30:38] Colon=-1
+        Name: Name [30:38] Value="fragment"
+      Selections[4]: Field [39:41] Colon=-1
+        Name: Name [39:41] Value="on"
+      Selections[5]: Field [42:52] Colon=46
+        Alias: Name [42:46] Value="true"
+        Name: Name [48:52] Value="null"
+      Selections[6]: Field [53:78] Colon=57
+        Alias: Name [53:57] Value="type"
+        Name: Name [59:65] Value="schema"
+        Arguments: ArgumentList [65:78] LParen=65 RParen=77
+          Arguments[0]: Argument [66:77] Colon=71
+            Name: Name [66:71] Value="input"
+            Value: EnumValue [73:77] Value="enum"
+      Selections[7]: InlineFragment [79:95] Spread=79
+        TypeCondition: TypeCondition [83:88] On=83
+          Type: NamedType [86:88]
+            Name: Name [86:88] Value="on"
+        SelectionSet: SelectionSet [89:95] LBrace=89 RBrace=94
+          Selections[0]: Field [91:93] Colon=-1
+            Name: Name [91:93] Value="on"
+      Selections[8]: FragmentSpread [96:105] Spread=96
+        Name: Name [100:105] Value="query"
+# errors

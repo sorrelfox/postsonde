@@ -1,0 +1,139 @@
+/* The command palette (NAV-05): a search field and a list of actions
+ * inside the shared Dialog (common/Dialog), 600px wide. */
+
+.content {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 var(--space-3);
+}
+
+.field {
+  height: var(--h-control);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0 var(--space-8) var(--space-4);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text3);
+}
+
+.field:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+.list {
+  max-height: min(420px, calc(100vh - 220px));
+  overflow-y: auto;
+  margin: 0;
+  padding: 0 var(--space-4);
+  list-style: none;
+}
+
+.option {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.option[aria-selected="true"] {
+  background: var(--bg3);
+}
+
+.option[aria-disabled="true"] {
+  cursor: default;
+}
+
+.option[aria-disabled="true"] .label {
+  color: var(--text3);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.label {
+  flex: none;
+  color: var(--text);
+}
+
+.note {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  text-overflow: ellipsis;
+}
+
+.hit {
+  background: transparent;
+  color: var(--accent);
+  font-weight: var(--fw-semibold);
+}
+
+.keys {
+  flex: none;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.kbd {
+  flex: none;
+  padding: 0 5px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: var(--space-5) var(--space-8);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.footer {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-8) 0;
+  border-top: 1px solid var(--line);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

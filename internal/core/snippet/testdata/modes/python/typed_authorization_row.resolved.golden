@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/me",
+    headers={
+        "Authorization": "Bearer ••••••".encode(),
+        "Proxy-Authorization": "Basic ••••••".encode(),
+    },
+)
+
+print(response.status_code)
+print(response.text)

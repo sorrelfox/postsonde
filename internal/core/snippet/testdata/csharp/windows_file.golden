@@ -1,0 +1,17 @@
+using System;
+using System.IO;
+using System.Net.Http;
+
+var handler = new SocketsHttpHandler
+{
+    AllowAutoRedirect = false,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("PUT"), "https://api.test/blob");
+request.Content = new StreamContent(File.OpenRead(@"C:\Users\Me\My Files\report 100%.json"));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

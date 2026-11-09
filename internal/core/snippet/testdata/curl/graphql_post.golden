@@ -1,0 +1,5 @@
+curl https://api.test/graphql \
+  -H 'Accept: application/graphql-response+json, application/json;q=0.9' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"query":"query Q($id: ID!) {\n  user(id: $id) { name }\n}","variables":{"id":"1"},"operationName":"Q"}' \
+  -L --max-redirs 10

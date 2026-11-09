@@ -1,0 +1,10 @@
+# source
+{}
+# tree
+Document [0:2]
+  Definitions[0]: OperationDefinition [0:2] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:2] LBrace=0 RBrace=1
+      Selections[0]: Field [1:1] Colon=-1
+        Name: Name [1:1] Value=""
+# errors
+1:2 [1:2] unexpected token: expected field, fragment spread or inline fragment, found "}"

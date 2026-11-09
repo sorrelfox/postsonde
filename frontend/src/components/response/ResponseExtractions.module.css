@@ -1,0 +1,41 @@
+/* The response's Variables tab (TEST-05), on the Tests tab's layout
+ * (ResponseTests.module.css): the variable, its scope and flags as tags,
+ * where the value came from and the value, or why it was not set. */
+
+.item[data-outcome="set"] > span:first-child {
+  color: var(--ok);
+}
+
+.item[data-outcome="failed"] > span:first-child {
+  color: var(--bad);
+}
+
+.item[data-outcome="invalid"] > span:first-child {
+  color: var(--warn);
+}
+
+.item[data-outcome="skipped"] > span:first-child {
+  color: var(--text3);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+}
+
+.tag {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.skipped,
+.clipped {
+  color: var(--text3);
+}

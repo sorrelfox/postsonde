@@ -1,0 +1,94 @@
+{
+  "id": "req_grpc",
+  "kind": "grpc",
+  "name": "Get order",
+  "description": "",
+  "method": "GetOrder",
+  "url": "",
+  "params": [],
+  "pathParams": [],
+  "headers": [],
+  "body": {
+    "mode": "",
+    "type": "",
+    "text": "",
+    "fields": [],
+    "parts": [],
+    "path": "",
+    "contentType": "",
+    "extra": ""
+  },
+  "bodyExamples": [],
+  "query": "",
+  "variables": "",
+  "operationName": "",
+  "connectionParams": "",
+  "schemaFile": "",
+  "address": "localhost:50051",
+  "sendMode": "",
+  "lineEnding": "",
+  "message": "{\"id\": \"{{orderId}}\"",
+  "subprotocols": [],
+  "messageFormat": "",
+  "service": "shop.v1.Orders",
+  "proto": {
+    "files": [
+      "proto/shop/v1/orders.proto"
+    ],
+    "importPaths": [
+      "proto",
+      "/opt/include"
+    ],
+    "inherit": false,
+    "extra": "{\"x-set\":1}"
+  },
+  "metadata": [
+    {
+      "name": "x-request-id",
+      "value": "1",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    },
+    {
+      "name": "x-debug",
+      "value": "1",
+      "description": "",
+      "enabled": false,
+      "extra": ""
+    }
+  ],
+  "auth": {
+    "type": "inherit",
+    "username": "",
+    "password": "",
+    "prefix": null,
+    "token": "",
+    "key": "",
+    "value": "",
+    "in": "",
+    "disabled": false,
+    "localSecrets": [],
+    "extra": ""
+  },
+  "settings": {
+    "timeoutMs": null,
+    "followRedirects": null,
+    "maxRedirects": null,
+    "followOriginalMethod": null,
+    "forwardAuthorization": null,
+    "verifyTls": false,
+    "connectTimeoutMs": null,
+    "urlEncoding": "",
+    "httpVersion": "",
+    "sendCookies": null,
+    "storeCookies": null,
+    "tls": true,
+    "deadlineMs": 2500,
+    "transport": "grpc-web-text",
+    "compression": "gzip",
+    "extra": ""
+  },
+  "extra": "{\"x-note\":\"kept\"}",
+  "version": 1
+}

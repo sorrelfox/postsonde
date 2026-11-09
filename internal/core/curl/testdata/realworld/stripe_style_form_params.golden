@@ -1,0 +1,78 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": false,
+  "url": "https://api.example.com/v1/charges",
+  "urls": [
+    {
+      "value": "https://api.example.com/v1/charges",
+      "start": 5,
+      "end": 39
+    }
+  ],
+  "urlQuery": null,
+  "headers": null,
+  "data": [
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "amount=2000",
+      "name": "",
+      "file": "",
+      "start": 68,
+      "end": 82
+    },
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "currency=usd",
+      "name": "",
+      "file": "",
+      "start": 87,
+      "end": 102
+    },
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "metadata[order_id]=6735",
+      "name": "",
+      "file": "",
+      "start": 107,
+      "end": 135
+    },
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "source=tok_visa",
+      "name": "",
+      "file": "",
+      "start": 140,
+      "end": 158
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": {
+    "user": "sk_test_example",
+    "password": "",
+    "hasPassword": true
+  },
+  "authScheme": "basic",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

@@ -1,0 +1,2 @@
+type: codec.p3.Scalars
+f_enum: 99

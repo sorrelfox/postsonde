@@ -1,0 +1,105 @@
+{
+  "name": "example.com",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "GET",
+    "url": "https://example.com/",
+    "headers": [
+      {
+        "name": "User-Agent",
+        "value": "agent/1.0"
+      },
+      {
+        "name": "Referer",
+        "value": "https://ref.example/"
+      }
+    ],
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "digest",
+      "username": "ada",
+      "password": "secret"
+    },
+    "settings": {
+      "timeoutMs": 2500,
+      "verifyTls": false
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.not_imported",
+      "severity": "warning",
+      "start": 5,
+      "end": 12,
+      "message": "A request’s HTTP version is automatic (HTTP/2 when a TLS server offers it), HTTP/1.1 or HTTP/2 only; “--http2” is not imported."
+    },
+    {
+      "code": "curl.not_imported",
+      "severity": "warning",
+      "start": 20,
+      "end": 39,
+      "message": "HTTP requests have no connect timeout of their own; “--connect-timeout” is not imported."
+    },
+    {
+      "code": "curl.not_imported",
+      "severity": "warning",
+      "start": 40,
+      "end": 66,
+      "message": "Proxies are set for the whole app in Settings; “-x” is not imported."
+    },
+    {
+      "code": "curl.not_imported",
+      "severity": "warning",
+      "start": 67,
+      "end": 76,
+      "message": "Proxies are set for the whole app in Settings; “-U” is not imported."
+    },
+    {
+      "code": "curl.not_imported",
+      "severity": "warning",
+      "start": 77,
+      "end": 96,
+      "message": "Proxies are set for the whole app in Settings; “--noproxy” is not imported."
+    },
+    {
+      "code": "curl.not_imported",
+      "severity": "info",
+      "start": 147,
+      "end": 161,
+      "message": "“--max-redirs” only matters with -L, which the command does not use; it is not imported."
+    },
+    {
+      "code": "curl.unsupported_option",
+      "severity": "warning",
+      "start": 208,
+      "end": 223,
+      "message": "The option “--cacert” is not imported."
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 224,
+      "end": 235,
+      "message": "The option “-o” does not change the request and is ignored."
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 236,
+      "end": 255,
+      "message": "The option “-w” does not change the request and is ignored."
+    },
+    {
+      "code": "curl.multiple_urls",
+      "severity": "warning",
+      "start": 287,
+      "end": 310,
+      "message": "Only the first URL is imported; this one is ignored."
+    }
+  ]
+}

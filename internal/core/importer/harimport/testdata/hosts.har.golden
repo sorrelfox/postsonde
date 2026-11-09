@@ -1,0 +1,133 @@
+{
+  "diagnostics": [
+    {
+      "Code": "har.version",
+      "Severity": "info",
+      "Message": "The file names no HAR version; it is read as HAR 1.2.",
+      "At": "log @2:10"
+    }
+  ],
+  "name": "hosts",
+  "root": {
+    "at": "",
+    "diagnostics": null,
+    "folder": "",
+    "items": [
+      {
+        "at": "log.entries[0] @5:7",
+        "diagnostics": null,
+        "folder": "api.alpha.test:8080",
+        "items": [
+          {
+            "at": "log.entries[0] @5:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 200 OK (application/json).",
+              "method": "GET",
+              "url": "http://api.alpha.test:8080/status",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "*/*"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "GET /status"
+          }
+        ]
+      },
+      {
+        "at": "log.entries[1] @25:7",
+        "diagnostics": null,
+        "folder": "beta.test",
+        "items": [
+          {
+            "at": "log.entries[1] @25:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 200 OK (application/json).",
+              "method": "PATCH",
+              "url": "https://beta.test/items/5",
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/merge-patch+json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\"name\":\"Beta\"}"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "PATCH /items/5"
+          },
+          {
+            "at": "log.entries[2] @46:7",
+            "diagnostics": [
+              {
+                "Code": "har.body_skipped",
+                "Severity": "warning",
+                "Message": "The body is binary (Base64 in the file) and was not imported. Send it from a file with the Binary body type.",
+                "At": "log.entries[2] @46:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 204 No Content.",
+              "method": "PUT",
+              "url": "https://beta.test/blobs/7",
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "PUT /blobs/7"
+          }
+        ]
+      },
+      {
+        "at": "log.entries[3] @67:7",
+        "diagnostics": null,
+        "folder": "Other",
+        "items": [
+          {
+            "at": "log.entries[3] @67:7",
+            "code": "har.unsupported",
+            "name": "",
+            "reason": "The entry has no request object.",
+            "skipped": "entry"
+          }
+        ]
+      }
+    ]
+  }
+}

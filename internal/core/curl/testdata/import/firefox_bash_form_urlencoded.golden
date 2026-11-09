@@ -1,0 +1,90 @@
+{
+  "name": "cart",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://shop.example.org/api/cart",
+    "headers": [
+      {
+        "name": "User-Agent",
+        "value": "Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0"
+      },
+      {
+        "name": "Accept",
+        "value": "*/*"
+      },
+      {
+        "name": "Accept-Language",
+        "value": "en-US,en;q=0.5"
+      },
+      {
+        "name": "Content-Type",
+        "value": "application/x-www-form-urlencoded; charset=UTF-8"
+      },
+      {
+        "name": "X-Requested-With",
+        "value": "XMLHttpRequest"
+      },
+      {
+        "name": "Origin",
+        "value": "https://shop.example.org"
+      },
+      {
+        "name": "Connection",
+        "value": "keep-alive"
+      },
+      {
+        "name": "Cookie",
+        "value": "cart=7f3a; consent=yes"
+      },
+      {
+        "name": "Sec-Fetch-Dest",
+        "value": "empty"
+      },
+      {
+        "name": "Sec-Fetch-Mode",
+        "value": "cors"
+      },
+      {
+        "name": "Sec-Fetch-Site",
+        "value": "same-origin"
+      },
+      {
+        "name": "TE",
+        "value": "trailers"
+      }
+    ],
+    "body": {
+      "mode": "urlencoded",
+      "fields": [
+        {
+          "name": "product_id",
+          "value": "42"
+        },
+        {
+          "name": "qty",
+          "value": "1"
+        },
+        {
+          "name": "note",
+          "value": "gift wrap"
+        }
+      ]
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.not_imported",
+      "severity": "info",
+      "start": 41,
+      "end": 53,
+      "message": "PostSonde shows the response as received and does not decompress it, so “--compressed” and the Accept-Encoding header are not imported."
+    }
+  ]
+}

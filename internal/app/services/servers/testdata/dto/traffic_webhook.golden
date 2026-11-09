@@ -1,0 +1,40 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000dd",
+      "seq": 11,
+      "time": "2026-09-16T08:00:09Z",
+      "peer": "127.0.0.1:53126",
+      "connId": 5,
+      "direction": "in",
+      "kind": "request",
+      "summary": "POST /hooks/github?delivery=1",
+      "text": "{\"action\":\"opened\"}",
+      "dataBase64": "",
+      "binary": false,
+      "size": 19,
+      "truncated": false,
+      "http": {
+        "method": "POST",
+        "target": "/hooks/github?delivery=1",
+        "proto": "HTTP/1.1",
+        "status": 0,
+        "headers": [
+          {
+            "name": "Host",
+            "value": "127.0.0.1:4000"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "route": null,
+        "delayMs": 0
+      },
+      "ws": null,
+      "tcp": null,
+      "captured": true
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+wget https://api.test/raw \
+  --method POST \
+  --header 'Content-Type: application/octet-stream' \
+  --body-data $'a\xffb' \
+  --max-redirect 0 \
+  -O -

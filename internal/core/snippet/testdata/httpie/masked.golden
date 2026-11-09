@@ -1,0 +1,6 @@
+http --follow --max-redirects=10 \
+  --raw '{"password":"••••••"}' \
+  POST 'https://api.test/items?key=••••••' \
+  'X-Api-Key:••••••' \
+  'Authorization:Bearer ••••••' \
+  Content-Type:application/json

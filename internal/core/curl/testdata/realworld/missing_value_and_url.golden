@@ -1,0 +1,48 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": true,
+  "url": "",
+  "urls": null,
+  "urlQuery": null,
+  "headers": null,
+  "data": null,
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.missing_url",
+      "severity": "error",
+      "start": 0,
+      "end": 15,
+      "message": "The command has no URL.",
+      "text": "curl -X POST -H"
+    },
+    {
+      "code": "curl.missing_value",
+      "severity": "error",
+      "start": 13,
+      "end": 15,
+      "message": "The option “-H” needs a value.",
+      "text": "-H"
+    }
+  ]
+}

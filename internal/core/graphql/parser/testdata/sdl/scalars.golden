@@ -1,0 +1,21 @@
+# source
+scalar Time
+scalar Url @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
+extend scalar Url @example
+# tree
+Document [0:106]
+  Definitions[0]: TypeDefinition [0:11] Extend=-1 Kind=scalar Keyword=0 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [7:11] Value="Time"
+  Definitions[1]: TypeDefinition [12:79] Extend=-1 Kind=scalar Keyword=12 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [19:22] Value="Url"
+    Directives[0]: Directive [23:79] At=23
+      Name: Name [24:35] Value="specifiedBy"
+      Arguments: ArgumentList [35:79] LParen=35 RParen=78
+        Arguments[0]: Argument [36:78] Colon=39
+          Name: Name [36:39] Value="url"
+          Value: StringValue [41:78] Block=false Value="https://tools.ietf.org/html/rfc3986"
+  Definitions[2]: TypeDefinition [80:106] Extend=80 Kind=scalar Keyword=87 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [94:97] Value="Url"
+    Directives[0]: Directive [98:106] At=98
+      Name: Name [99:106] Value="example"
+# errors

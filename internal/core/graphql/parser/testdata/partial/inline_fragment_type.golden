@@ -1,0 +1,12 @@
+# source
+{ ... on User }
+# tree
+Document [0:15]
+  Definitions[0]: OperationDefinition [0:15] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:15] LBrace=0 RBrace=14
+      Selections[0]: InlineFragment [2:13] Spread=2
+        TypeCondition: TypeCondition [6:13] On=6
+          Type: NamedType [9:13]
+            Name: Name [9:13] Value="User"
+# errors
+1:15 [14:15] unexpected token: expected "{", found "}"

@@ -1,0 +1,27 @@
+# source
+query A {
+  a {
+    b
+
+query B {
+  c
+}
+
+# tree
+Document [0:39]
+  Definitions[0]: OperationDefinition [0:23] Operation=query Keyword=0
+    Name: Name [6:7] Value="A"
+    SelectionSet: SelectionSet [8:23] LBrace=8 RBrace=-1
+      Selections[0]: Field [12:23] Colon=-1
+        Name: Name [12:13] Value="a"
+        SelectionSet: SelectionSet [14:23] LBrace=14 RBrace=-1
+          Selections[0]: Field [20:21] Colon=-1
+            Name: Name [20:21] Value="b"
+  Definitions[1]: OperationDefinition [23:38] Operation=query Keyword=23
+    Name: Name [29:30] Value="B"
+    SelectionSet: SelectionSet [31:38] LBrace=31 RBrace=37
+      Selections[0]: Field [35:36] Colon=-1
+        Name: Name [35:36] Value="c"
+# errors
+1:9 [8:9] unclosed delimiter: "{" has no matching "}"
+2:5 [14:15] unclosed delimiter: "{" has no matching "}"

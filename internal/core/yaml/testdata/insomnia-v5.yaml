@@ -1,0 +1,211 @@
+type: collection.insomnia.rest/5.0
+name: Petstore API
+meta:
+  id: wrk_8a3f1c2d9e4b4f6a8c7d5e3b2a1f0e9d
+  created: 1726412345678
+  modified: 1726498765432
+  description: |-
+    Requests for the Swagger Petstore.
+
+    Uses the **base_url** environment variable.
+collection:
+  - name: Pets
+    meta:
+      id: fld_1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e
+      created: 1726412345700
+      modified: 1726412345700
+      sortKey: -1726412345700
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/pets"
+        name: List pets
+        meta:
+          id: req_0f1e2d3c4b5a69788796a5b4c3d2e1f0
+          created: 1726412345800
+          modified: 1726498765000
+          isPrivate: false
+          description: Returns every pet, 20 per page.
+          sortKey: -1726412345800
+        method: GET
+        parameters:
+          - id: pair_9d8c7b6a5f4e3d2c1b0a
+            name: limit
+            value: "20"
+            disabled: false
+          - id: pair_1a2b3c4d5e6f7a8b9c0d
+            name: tags
+            value: dog,cat
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: ""
+          disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pets"
+        name: Create pet
+        meta:
+          id: req_a1b2c3d4e5f60718293a4b5c6d7e8f90
+          created: 1726412345900
+          modified: 1726498765100
+          isPrivate: false
+          sortKey: -1726412345900
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"name": "Rex",
+            	"tag": "dog",
+            	"age": 3,
+            	"vaccinated": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        scripts:
+          preRequest: >-
+            insomnia.environment.set("requestedAt",
+            new Date().toISOString());
+          afterResponse: |
+            const body = insomnia.response.json();
+            insomnia.test("created", () => {
+              insomnia.expect(insomnia.response.code).to.eql(201);
+            });
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pets/{{ _.pet_id }}"
+        name: Delete pet
+        meta:
+          id: req_ffeeddccbbaa99887766554433221100
+          created: 1726412346000
+          modified: 1726412346000
+          isPrivate: false
+          sortKey: -1726412346000
+        method: DELETE
+        authentication:
+          type: basic
+          useISO88591: false
+          disabled: false
+          username: admin
+          password: "{{ _.password }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - url: "{{ _.base_url }}/graphql"
+    name: Search (GraphQL)
+    meta:
+      id: req_1234567890abcdef1234567890abcdef
+      created: 1726412346100
+      modified: 1726412346100
+      isPrivate: false
+      sortKey: -1726412346100
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"query Search($q: String!) {\n  search(q: $q) { id name }\n}","variables":{"q":"rex"},"operationName":"Search"}'
+    headers:
+      - name: Content-Type
+        value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/upload"
+    name: Upload photo
+    meta:
+      id: req_abcdefabcdefabcdefabcdefabcdefab
+      created: 1726412346200
+      modified: 1726412346200
+      isPrivate: false
+      sortKey: -1726412346200
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - id: pair_aaaa
+          name: file
+          disabled: false
+          type: file
+          fileName: /Users/me/Pictures/rex.jpg
+        - id: pair_bbbb
+          name: caption
+          value: "Rex at the park: day 1"
+          disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_0123456789abcdef0123456789abcdef
+    created: 1726412345678
+    modified: 1726412345678
+  cookies:
+    - key: session
+      value: abc123
+      domain: petstore.example.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+      creation: 2024-09-15T15:12:25.678Z
+      lastAccessed: 2024-09-15T15:12:25.678Z
+      id: "8124970264281312"
+environments:
+  name: Base Environment
+  meta:
+    id: env_0123456789abcdef0123456789abcdef
+    created: 1726412345678
+    modified: 1726498765432
+    isPrivate: false
+  data:
+    base_url: https://petstore.example.com/v1
+    token: ""
+  subEnvironments:
+    - name: Local
+      meta:
+        id: env_fedcba9876543210fedcba9876543210
+        created: 1726412345679
+        modified: 1726498765433
+        isPrivate: false
+        sortKey: 1726412345679
+      data:
+        base_url: http://localhost:8080/v1
+        pet_id: 42
+        debug: true
+        ratio: 0.75
+        nothing: null
+      color: "#7d69cb"

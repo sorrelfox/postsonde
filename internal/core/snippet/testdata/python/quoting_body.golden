@@ -1,0 +1,22 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/q",
+    headers={
+        "Content-Type": "text/plain",
+    },
+    data=(
+        "trailing spaces   \n"
+        "  indented\n"
+        "\ttabbed\n"
+        "100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\\n"
+        '"""triple""" \\u0041 \\n */ // # -- ; C:\\dir\\\n'
+        "\n"
+        "‘curly’ “double” 日本 😀 \xa0nbsp \u2028ls\n"
+        "   "
+    ).encode(),
+)
+
+print(response.status_code)
+print(response.text)

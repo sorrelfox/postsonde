@@ -1,0 +1,27 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String body = "trailing spaces   \n"
+                + "  indented\n"
+                + "\ttabbed\n"
+                + "100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\\n"
+                + "\"\"\"triple\"\"\" \\u0041 \\n */ // # -- ; C:\\dir\\\n"
+                + "\n"
+                + "‘curly’ “double” 日本 😀 \u00a0nbsp \u2028ls\n"
+                + "   ";
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.test/q"))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "text/plain")
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

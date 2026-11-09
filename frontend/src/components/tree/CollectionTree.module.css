@@ -1,0 +1,284 @@
+/* The collection tree. Row metrics follow the mockup's sidebar rows:
+ * 30px high, 6px gap, 8px + 14px per level of indent, items 18px further in. */
+
+.tree {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 var(--space-3) var(--space-6);
+}
+
+.message {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
+  padding: 0 var(--space-3) var(--space-6);
+}
+
+/* Holds every row's slot: its height is rows × 30px, rows sit at index × 30px. */
+.sizer {
+  position: relative;
+  width: 100%;
+}
+
+.row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-right: var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--text2);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.row:hover {
+  background: var(--bg2);
+}
+
+.row.selected {
+  background: var(--sel);
+  color: var(--text);
+}
+
+/* Inset, so the scroll container does not clip the ring of the first and last rows. */
+.row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-md);
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--text3);
+  transition: transform 0.15s;
+}
+
+.chevron.open {
+  transform: rotate(90deg);
+}
+
+.folderIcon {
+  flex: none;
+  color: var(--text3);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row[data-kind="folder"] .name {
+  font-weight: var(--fw-medium);
+}
+
+.topFolder {
+  color: var(--text);
+}
+
+.topFolder .folderIcon {
+  color: var(--accent);
+}
+
+.row.topFolder .name {
+  font-weight: var(--fw-semibold);
+}
+
+/* A folder's saved server while it listens (SRV-04): "WS :8081". */
+.serverBadge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--ok) 14%, transparent);
+  color: var(--ok);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.serverDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-round);
+  background: currentColor;
+}
+
+.count {
+  flex: none;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+.badge {
+  width: 38px;
+  flex: none;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
+  text-align: left;
+}
+
+.badge[data-tone="get"] { color: var(--m-get); }
+.badge[data-tone="post"] { color: var(--m-post); }
+.badge[data-tone="put"] { color: var(--m-put); }
+.badge[data-tone="patch"] { color: var(--m-patch); }
+.badge[data-tone="del"] { color: var(--m-del); }
+.badge[data-tone="gql"] { color: var(--m-gql); }
+.badge[data-tone="ws"] { color: var(--m-ws); }
+.badge[data-tone="dir"] { color: var(--m-dir); }
+.badge[data-tone="warn"] { color: var(--warn); }
+
+/* Inline rename (F2): the name becomes a field in the row, with the reason
+ * a name is refused in a small box under it. */
+.renameField {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.renameInput {
+  width: 100%;
+  min-width: 0;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--bg0);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md2);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.renameInput:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.renameInput[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.renameError {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  right: 0;
+  z-index: 1;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--bad);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  box-shadow: var(--shadow);
+  color: var(--bad);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.warnIcon {
+  flex: none;
+  color: var(--warn);
+}
+
+.invalid .name {
+  color: var(--text3);
+  font-style: italic;
+}
+
+/* Drag and drop (COL-04, move). The row being dragged is dimmed. */
+.row.dragging {
+  opacity: 0.5;
+}
+
+/* A drop now puts the dragged item into the top level, which is sorted by name (COL-05). */
+.tree.dropRoot {
+  box-shadow: inset 0 0 0 1px var(--accent);
+  border-radius: var(--radius-md);
+}
+
+/* The sidebar filter (NAV-06): the matched letters of a name, and a badge matched by method. */
+.hit {
+  background: transparent;
+  color: var(--accent);
+  font-weight: var(--fw-semibold);
+}
+
+.badge[data-hit="true"] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.clearFilter {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A drop now puts the dragged item into this folder. */
+.row.dropInto {
+  background: var(--accent-dim);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* Where a drop between items lands, indented to the level the item would get. */
+.dropLine {
+  position: absolute;
+  right: var(--space-2);
+  height: 2px;
+  margin-top: -1px;
+  border-radius: 1px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.dropLine::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.4
+Name=PostSonde
+GenericName=API Client
+Comment=Local-only desktop API testing tool
+Exec=postsonde
+Icon=postsonde
+Terminal=false
+Categories=Development;Network;
+Keywords=API;HTTP;REST;GraphQL;Request;
+# The app ID, which internal/app sets as the GTK application ID and program
+# name: the Wayland app_id and the X11 WM_CLASS. See docs/packaging.md.
+StartupWMClass=io.github.sorrelfox.PostSonde

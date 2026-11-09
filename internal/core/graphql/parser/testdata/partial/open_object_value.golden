@@ -1,0 +1,21 @@
+# source
+{ f(a: {b: 1, c: ) }
+# tree
+Document [0:20]
+  Definitions[0]: OperationDefinition [0:20] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:20] LBrace=0 RBrace=19
+      Selections[0]: Field [2:18] Colon=-1
+        Name: Name [2:3] Value="f"
+        Arguments: ArgumentList [3:18] LParen=3 RParen=17
+          Arguments[0]: Argument [4:17] Colon=5
+            Name: Name [4:5] Value="a"
+            Value: ObjectValue [7:17] LBrace=7 RBrace=-1
+              Fields[0]: ObjectField [8:12] Colon=9
+                Name: Name [8:9] Value="b"
+                Value: IntValue [11:12] Raw="1"
+              Fields[1]: ObjectField [14:17] Colon=15
+                Name: Name [14:15] Value="c"
+                Value: InvalidValue [16:17] Missing=true
+# errors
+1:8 [7:8] unclosed delimiter: "{" has no matching "}"
+1:18 [17:18] unexpected token: expected value, found ")"

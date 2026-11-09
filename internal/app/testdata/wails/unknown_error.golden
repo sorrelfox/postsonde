@@ -1,0 +1,15 @@
+{
+  "message": "render template: unexpected nil map",
+  "cause": {
+    "kind": "internal",
+    "code": "",
+    "message": "Something went wrong inside PostSonde.",
+    "hint": "",
+    "details": {},
+    "causes": [
+      "render template",
+      "unexpected nil map"
+    ]
+  },
+  "kind": "RuntimeError"
+}

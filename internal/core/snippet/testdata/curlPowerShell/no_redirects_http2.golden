@@ -1,0 +1,3 @@
+curl.exe http://api.test/items `
+  -m 30 `
+  --http2-prior-knowledge

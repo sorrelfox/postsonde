@@ -1,0 +1,58 @@
+{
+  "name": "example.com",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "GET",
+    "url": "https://example.com",
+    "headers": [
+      {
+        "name": "X-Empty",
+        "value": ""
+      },
+      {
+        "name": "x-dup",
+        "value": "1"
+      },
+      {
+        "name": "X-Dup",
+        "value": "2"
+      },
+      {
+        "name": "X-Spaced",
+        "value": "v"
+      }
+    ],
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.not_imported",
+      "severity": "info",
+      "start": 39,
+      "end": 51,
+      "message": "“Accept:” stops curl from sending a header of its own; PostSonde sends no such header unless the body or auth needs it, so it is not imported."
+    },
+    {
+      "code": "curl.invalid_value",
+      "severity": "warning",
+      "start": 80,
+      "end": 90,
+      "message": "A header must be “Name: value”, “Name:” or “Name;”; this one is ignored."
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "warning",
+      "start": 91,
+      "end": 106,
+      "message": "curl reads this value from the file “headers.txt”; PostSonde does not read it."
+    }
+  ]
+}

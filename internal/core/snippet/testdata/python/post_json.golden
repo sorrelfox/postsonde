@@ -1,0 +1,18 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/items",
+    headers={
+        "Content-Type": "application/json",
+    },
+    data=(
+        "{\n"
+        "  \"name\": \"O'Brien\",\n"
+        '  "tags": ["a", "b"]\n'
+        "}"
+    ),
+)
+
+print(response.status_code)
+print(response.text)

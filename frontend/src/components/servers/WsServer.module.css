@@ -1,0 +1,368 @@
+/* The Clients and Settings tabs of a WebSocket server (SSRV-01): the
+ * address clients connect to, the client list with inline disconnect, the
+ * shared message composer at the bottom, and the settings form. The
+ * Connections tab of a TCP server (SSRV-05, TcpServerPane) uses the same
+ * layout. */
+
+.clients {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.connectBar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-5) var(--space-7) var(--space-3);
+}
+
+.connectNote {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.url {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  user-select: all;
+}
+
+.status {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.listArea {
+  flex: 1;
+  min-height: 120px;
+  overflow: auto;
+  padding: 0 var(--space-7) var(--space-5);
+}
+
+.list {
+  margin: 0;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+}
+
+.row:hover {
+  background: var(--bg2);
+}
+
+.row[data-selected],
+.row[data-selected]:hover {
+  background: var(--sel);
+}
+
+.rowLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.rowMain:focus-visible,
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.clientName {
+  flex: none;
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+}
+
+.clientDetails {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.counts,
+.since {
+  flex: none;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  white-space: nowrap;
+}
+
+.button {
+  height: var(--h-control-sm);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.button:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.danger:not(:disabled):hover {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.closeForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-4) var(--space-4);
+}
+
+.closeLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.input {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.input::placeholder {
+  color: var(--text3);
+}
+
+.codeInput {
+  width: 56px;
+}
+
+.reasonInput {
+  width: 160px;
+}
+
+.error {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+/* Settings */
+
+.settings {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  overflow: auto;
+  padding: var(--space-6) var(--space-7);
+}
+
+.settingRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.settingLabel {
+  width: 112px;
+  flex: none;
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.pathInput {
+  flex: 1;
+  min-width: 160px;
+  max-width: 420px;
+}
+
+.sizeInput {
+  width: 112px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.help {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+/* Auto-reply rules (SSRV-02) */
+
+.sectionTitle {
+  margin: var(--space-4) 0 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.rule[data-disabled] .rulePattern,
+.rule[data-disabled] .ruleReply {
+  opacity: 0.6;
+}
+
+.ruleLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ruleNumber {
+  width: 16px;
+  flex: none;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  text-align: right;
+}
+
+.ruleArrow {
+  width: 16px;
+  flex: none;
+  align-self: flex-start;
+  padding-top: var(--space-2);
+  color: var(--text3);
+  text-align: right;
+}
+
+.rulePattern {
+  flex: 1;
+  min-width: 140px;
+}
+
+.ruleReply {
+  flex: 1;
+  min-width: 180px;
+  height: auto;
+  min-height: var(--h-control-sm);
+  padding: var(--space-2) var(--space-3);
+  resize: vertical;
+}
+
+.iconButton {
+  width: var(--h-control-sm);
+  height: var(--h-control-sm);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.iconButton:not(:disabled):hover {
+  border-color: var(--line2);
+  color: var(--text);
+}
+
+.iconButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_6e2a9c0d41b7f538",
+  "name": "Shop",
+  "auth": {
+    "type": "inherit"
+  },
+  "grpc": {
+    "proto": {
+      "files": [
+        "proto/shop/v1/orders.proto"
+      ],
+      "importPaths": [
+        "proto",
+        "/usr/local/include"
+      ]
+    }
+  }
+}

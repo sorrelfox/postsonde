@@ -1,0 +1,4 @@
+curl -X QUERY https://api.test/search \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"q":"x"}' \
+  -L --max-redirs 10

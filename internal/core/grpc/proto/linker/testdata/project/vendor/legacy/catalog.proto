@@ -1,0 +1,24 @@
+// A proto2 library in a third import root, extended from another root.
+
+syntax = "proto2";
+
+package legacy.catalog;
+
+message Item {
+  required string sku = 1;
+  optional int32 quantity = 2 [default = 1];
+  optional Kind kind = 3 [default = PHYSICAL];
+  repeated int32 bins = 4 [packed = true];
+
+  optional group Dimensions = 5 {
+    optional double width = 1 [default = inf];
+    optional double height = 2;
+  }
+
+  enum Kind {
+    PHYSICAL = 1;
+    DIGITAL = 2;
+  }
+
+  extensions 100 to 199;
+}

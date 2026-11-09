@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_93d0b7a2e5c14f68",
+  "name": "Mocks",
+  "auth": {
+    "type": "inherit"
+  },
+  "server": {
+    "type": "mock_http",
+    "name": "Users API mock",
+    "port": 8080,
+    "mock": {
+      "routes": [
+        {
+          "id": "rt_4f1a9c2e7b30",
+          "method": "GET",
+          "path": "/users/:id",
+          "status": 200,
+          "headers": [
+            {
+              "name": "X-Mock",
+              "value": "true"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\"id\": 42, \"name\": \"Zoë\"}"
+          },
+          "responses": [
+            {
+              "name": "admin",
+              "status": 200,
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\"id\": 1, \"role\": \"admin\"}"
+              },
+              "rules": [
+                {
+                  "source": "query",
+                  "name": "role",
+                  "op": "equals",
+                  "value": "admin"
+                },
+                {
+                  "source": "header",
+                  "name": "X-Debug",
+                  "op": "exists"
+                }
+              ]
+            },
+            {
+              "name": "not-found",
+              "status": 404,
+              "body": {
+                "mode": "none"
+              }
+            }
+          ]
+        },
+        {
+          "id": "rt_b62d08e1f5a9",
+          "method": "POST",
+          "path": "/users",
+          "status": 503,
+          "body": {
+            "mode": "none"
+          },
+          "delay": {
+            "mode": "random",
+            "minMs": 100,
+            "maxMs": 900
+          }
+        }
+      ]
+    }
+  }
+}

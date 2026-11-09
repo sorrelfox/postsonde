@@ -1,0 +1,48 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000aa",
+      "seq": 5,
+      "time": "2026-09-16T08:00:03Z",
+      "peer": "127.0.0.1:53123",
+      "connId": 2,
+      "direction": "out",
+      "kind": "response",
+      "summary": "200 OK",
+      "text": "{\"id\": 1}",
+      "dataBase64": "",
+      "binary": false,
+      "size": 9,
+      "truncated": false,
+      "http": {
+        "method": "GET",
+        "target": "/users/7",
+        "proto": "HTTP/1.1",
+        "status": 200,
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "route": {
+          "id": "rt_user",
+          "method": "GET",
+          "pattern": "/users/:id",
+          "params": [
+            {
+              "name": "id",
+              "value": "7"
+            }
+          ],
+          "wildcard": "",
+          "response": ""
+        },
+        "delayMs": 180
+      },
+      "ws": null,
+      "tcp": null,
+      "captured": false
+    }
+  ]
+}

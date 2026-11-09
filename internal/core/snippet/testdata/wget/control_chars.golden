@@ -1,0 +1,6 @@
+wget https://api.test/raw \
+  --method POST \
+  --header 'Content-Type: text/plain' \
+  --body-data $'line1\r\nline2\x01\ttab \\ \'q\'' \
+  --max-redirect 10 \
+  -O -

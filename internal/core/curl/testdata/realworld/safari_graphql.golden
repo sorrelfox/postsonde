@@ -1,0 +1,120 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": true,
+  "url": "https://www.example.com/graphql",
+  "urls": [
+    {
+      "value": "https://www.example.com/graphql",
+      "start": 5,
+      "end": 38
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "application/json",
+      "kind": "set",
+      "implied": false,
+      "start": 53,
+      "end": 88
+    },
+    {
+      "name": "Accept",
+      "value": "application/json",
+      "kind": "set",
+      "implied": false,
+      "start": 91,
+      "end": 120
+    },
+    {
+      "name": "Sec-Fetch-Site",
+      "value": "same-origin",
+      "kind": "set",
+      "implied": false,
+      "start": 123,
+      "end": 155
+    },
+    {
+      "name": "Accept-Language",
+      "value": "en-GB,en;q=0.9",
+      "kind": "set",
+      "implied": false,
+      "start": 158,
+      "end": 194
+    },
+    {
+      "name": "Accept-Encoding",
+      "value": "gzip, deflate, br",
+      "kind": "set",
+      "implied": false,
+      "start": 197,
+      "end": 236
+    },
+    {
+      "name": "Origin",
+      "value": "https://www.example.com",
+      "kind": "set",
+      "implied": false,
+      "start": 239,
+      "end": 275
+    },
+    {
+      "name": "User-Agent",
+      "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+      "kind": "set",
+      "implied": false,
+      "start": 278,
+      "end": 412
+    },
+    {
+      "name": "Content-Length",
+      "value": "55",
+      "kind": "set",
+      "implied": false,
+      "start": 415,
+      "end": 438
+    },
+    {
+      "name": "Connection",
+      "value": "keep-alive",
+      "kind": "set",
+      "implied": false,
+      "start": 441,
+      "end": 468
+    }
+  ],
+  "data": [
+    {
+      "kind": "binary",
+      "option": "--data-binary",
+      "value": "{\"query\":\"query Me { me { id name } }\",\"variables\":{}}",
+      "name": "",
+      "file": "",
+      "start": 471,
+      "end": 541
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

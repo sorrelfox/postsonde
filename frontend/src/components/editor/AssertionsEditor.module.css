@@ -1,0 +1,372 @@
+/* The Tests sub-tab (TEST-01): assertion rows in the key/value table's
+ * style (KeyValueTable.module.css): a bordered, rounded box with an
+ * uppercase header row and 34px rows of enable · target · name or path ·
+ * operator · expected · result and actions, then "Add assertion". */
+
+.tests {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.empty {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.frame {
+  align-self: stretch;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg0);
+}
+
+.table {
+  --as-columns: 28px minmax(96px, 0.8fr) minmax(0, 1.2fr) minmax(96px, 0.8fr) minmax(0, 1.2fr) 88px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--as-columns);
+  align-items: center;
+  height: var(--h-control-lg);
+  padding: 0 var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:not(.head):hover,
+.row:not(.head):focus-within {
+  background: var(--bg2);
+}
+
+/* A row reached from the response's Tests tab. */
+.row[data-highlight] {
+  background: var(--accent-dim);
+}
+
+.head {
+  height: var(--h-control);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.headCell {
+  min-width: 0;
+  padding-left: var(--space-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 0;
+}
+
+.center {
+  justify-content: center;
+}
+
+.disabled .cell:not(.center):not(.actions) {
+  opacity: 0.5;
+}
+
+.toggle {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.toggle:disabled {
+  cursor: default;
+}
+
+.select {
+  width: 100%;
+  min-width: 0;
+  height: var(--h-control-sm);
+  margin: 0 var(--space-2);
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.select:not(:disabled):hover {
+  border-color: var(--line2);
+}
+
+.select:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.input:focus-visible,
+.select:focus-visible {
+  outline-offset: -2px;
+}
+
+.mono .input,
+.mono .mirror {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+}
+
+/* The expected value with {{variables}}: the input's text is transparent
+ * over the chips drawn underneath (as KeyValueTable's value cells). */
+.field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.mirror {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  overflow: hidden;
+  white-space: pre;
+  color: var(--text);
+  pointer-events: none;
+}
+
+.input.overlay {
+  position: relative;
+  color: transparent;
+  caret-color: var(--text);
+}
+
+.actions {
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.iconButton {
+  flex: none;
+  width: 20px;
+  height: var(--h-control-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  opacity: 0;
+}
+
+.row:hover .iconButton,
+.row:focus-within .iconButton {
+  opacity: 1;
+}
+
+.row:hover .iconButton:disabled,
+.row:focus-within .iconButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.iconButton:not(:disabled):hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.delete:not(:disabled):hover,
+.delete:focus-visible {
+  color: var(--bad);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.result {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: auto;
+  margin-left: var(--space-2);
+}
+
+.result[data-outcome="passed"] {
+  color: var(--ok);
+}
+
+.result[data-outcome="failed"] {
+  color: var(--bad);
+}
+
+.result[data-outcome="invalid"] {
+  color: var(--warn);
+}
+
+.add {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.add:hover,
+.add:focus-visible {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+/* "matches schema" rows (TEST-07): the file and inline-editor buttons
+ * after the expected value, always visible, and the inline schema editor
+ * in a full-width row under the row. */
+.schemaButtons {
+  flex: none;
+  display: inline-flex;
+  gap: var(--space-1);
+  padding-right: var(--space-2);
+}
+
+.schemaButtons .iconButton {
+  opacity: 1;
+}
+
+.schemaButtons .iconButton[data-active] {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.schemaRow {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg1);
+}
+
+.schemaRow:last-child {
+  border-bottom: 0;
+}
+
+.schemaCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.schemaEditor {
+  height: 220px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg0);
+  resize: vertical;
+}
+
+.schemaStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--fs-sm2);
+}
+
+.schemaNote {
+  color: var(--text3);
+}
+
+.schemaProblem {
+  color: var(--bad);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.schemaFormat {
+  margin-left: auto;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.schemaFormat:hover,
+.schemaFormat:focus-visible {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A stream's rows (TEST-08) pick the messages too: the scope, the
+ * message number of "Message #", then the target, in one cell. */
+.streamTable {
+  --as-columns: 28px minmax(220px, 1.4fr) minmax(0, 1fr) minmax(96px, 0.7fr) minmax(0, 1fr) 88px;
+}
+
+.targetPick {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.targetPick .select {
+  flex: 1 1 0;
+  margin: 0;
+}
+
+.index {
+  flex: 0 0 52px;
+  width: 52px;
+  padding: 0 var(--space-2);
+}

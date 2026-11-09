@@ -1,0 +1,6 @@
+org.gnome.system.proxy autoconfig-url ''
+org.gnome.system.proxy ignore-hosts ['localhost', '127.0.0.0/8', '::1']
+org.gnome.system.proxy mode 'none'
+org.gnome.system.proxy use-same-proxy true
+org.gnome.system.proxy.http host 'stale.proxy.test'
+org.gnome.system.proxy.http port 3128

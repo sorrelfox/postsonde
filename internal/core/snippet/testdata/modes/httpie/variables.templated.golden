@@ -1,0 +1,7 @@
+http --follow --max-redirects=10 \
+  --raw '{"user":"{{user}}","token":"{{token}}"}' \
+  POST '{{base}}/users/{{id}}?q={{q}}&t={{token}}' \
+  'X-User:{{user}}' \
+  'X-Token:{{token}}' \
+  'X-Uuid:{{$uuid}}' \
+  Content-Type:application/json

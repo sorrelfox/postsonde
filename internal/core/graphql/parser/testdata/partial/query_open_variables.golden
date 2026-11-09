@@ -1,0 +1,10 @@
+# source
+query Q(
+# tree
+Document [0:8]
+  Definitions[0]: OperationDefinition [0:8] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+    VariableDefinitions: VariableDefinitionList [7:8] LParen=7 RParen=-1
+# errors
+1:8 [7:8] unclosed delimiter: "(" has no matching ")"
+1:9 [8:8] unexpected token: expected variable definition, found end of input

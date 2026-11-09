@@ -1,0 +1,2 @@
+curl 'https://api.test/%C3%A4%20%C3%B6/a%5Eb?q=%22x%22%20y' \
+  -L --max-redirs 10

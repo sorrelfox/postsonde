@@ -1,0 +1,277 @@
+# curl command-line options, one per line: "[-s] --long [<arg>]".
+# Generated from `curl --help all` (curl 8.7.1); --proxy and --preproxy
+# marked as taking a value (their help shows no <...>), --help as a plain
+# flag, and options added in curl 8.9 to 8.17 appended at the end. Only
+# the names and whether an option takes a value are used: the parser
+# needs them to know whether the next word is the value of the option.
+--abstract-unix-socket <arg>
+--alt-svc <arg>
+--anyauth
+-a --append
+--aws-sigv4 <arg>
+--basic
+--ca-native
+--cacert <arg>
+--capath <arg>
+-E --cert <arg>
+--cert-status
+--cert-type <arg>
+--ciphers <arg>
+--compressed
+--compressed-ssh
+-K --config <arg>
+--connect-timeout <arg>
+--connect-to <arg>
+-C --continue-at <arg>
+-b --cookie <arg>
+-c --cookie-jar <arg>
+--create-dirs
+--create-file-mode <arg>
+--crlf
+--crlfile <arg>
+--curves <arg>
+-d --data <arg>
+--data-ascii <arg>
+--data-binary <arg>
+--data-raw <arg>
+--data-urlencode <arg>
+--delegation <arg>
+--digest
+-q --disable
+--disable-eprt
+--disable-epsv
+--disallow-username-in-url
+--dns-interface <arg>
+--dns-ipv4-addr <arg>
+--dns-ipv6-addr <arg>
+--dns-servers <arg>
+--doh-cert-status
+--doh-insecure
+--doh-url <arg>
+-D --dump-header <arg>
+--egd-file <arg>
+--engine <arg>
+--etag-compare <arg>
+--etag-save <arg>
+--expect100-timeout <arg>
+-f --fail
+--fail-early
+--fail-with-body
+--false-start
+-F --form <arg>
+--form-escape
+--form-string <arg>
+--ftp-account <arg>
+--ftp-alternative-to-user <arg>
+--ftp-create-dirs
+--ftp-method <arg>
+--ftp-pasv
+-P --ftp-port <arg>
+--ftp-pret
+--ftp-skip-pasv-ip
+--ftp-ssl-ccc
+--ftp-ssl-ccc-mode <arg>
+--ftp-ssl-control
+-G --get
+-g --globoff
+--happy-eyeballs-timeout-ms <arg>
+--haproxy-clientip <arg>
+--haproxy-protocol
+-I --head
+-H --header <arg>
+-h --help
+--hostpubmd5 <arg>
+--hostpubsha256 <arg>
+--hsts <arg>
+--http0.9
+-0 --http1.0
+--http1.1
+--http2
+--http2-prior-knowledge
+--http3
+--http3-only
+--ignore-content-length
+-i --include
+-k --insecure
+--interface <arg>
+--ipfs-gateway <arg>
+-4 --ipv4
+-6 --ipv6
+--json <arg>
+-j --junk-session-cookies
+--keepalive-time <arg>
+--key <arg>
+--key-type <arg>
+--krb <arg>
+--libcurl <arg>
+--limit-rate <arg>
+-l --list-only
+--local-port <arg>
+-L --location
+--location-trusted
+--login-options <arg>
+--mail-auth <arg>
+--mail-from <arg>
+--mail-rcpt <arg>
+--mail-rcpt-allowfails
+-M --manual
+--max-filesize <arg>
+--max-redirs <arg>
+-m --max-time <arg>
+--metalink
+--negotiate
+-n --netrc
+--netrc-file <arg>
+--netrc-optional
+-: --next
+--no-alpn
+-N --no-buffer
+--no-clobber
+--no-keepalive
+--no-npn
+--no-progress-meter
+--no-sessionid
+--noproxy <arg>
+--ntlm
+--ntlm-wb
+--oauth2-bearer <arg>
+-o --output <arg>
+--output-dir <arg>
+-Z --parallel
+--parallel-immediate
+--parallel-max <arg>
+--pass <arg>
+--path-as-is
+--pinnedpubkey <arg>
+--post301
+--post302
+--post303
+--preproxy <arg>
+-# --progress-bar
+--proto <arg>
+--proto-default <arg>
+--proto-redir <arg>
+-x --proxy <arg>
+--proxy-anyauth
+--proxy-basic
+--proxy-ca-native
+--proxy-cacert <arg>
+--proxy-capath <arg>
+--proxy-cert <arg>
+--proxy-cert-type <arg>
+--proxy-ciphers <arg>
+--proxy-crlfile <arg>
+--proxy-digest
+--proxy-header <arg>
+--proxy-http2
+--proxy-insecure
+--proxy-key <arg>
+--proxy-key-type <arg>
+--proxy-negotiate
+--proxy-ntlm
+--proxy-pass <arg>
+--proxy-pinnedpubkey <arg>
+--proxy-service-name <arg>
+--proxy-ssl-allow-beast
+--proxy-ssl-auto-client-cert
+--proxy-tls13-ciphers <arg>
+--proxy-tlsauthtype <arg>
+--proxy-tlspassword <arg>
+--proxy-tlsuser <arg>
+--proxy-tlsv1
+-U --proxy-user <arg>
+--proxy1.0 <arg>
+-p --proxytunnel
+--pubkey <arg>
+-Q --quote <arg>
+--random-file <arg>
+-r --range <arg>
+--rate <arg>
+--raw
+-e --referer <arg>
+-J --remote-header-name
+-O --remote-name
+--remote-name-all
+-R --remote-time
+--remove-on-error
+-X --request <arg>
+--request-target <arg>
+--resolve <arg>
+--retry <arg>
+--retry-all-errors
+--retry-connrefused
+--retry-delay <arg>
+--retry-max-time <arg>
+--sasl-authzid <arg>
+--sasl-ir
+--service-name <arg>
+-S --show-error
+-s --silent
+--socks4 <arg>
+--socks4a <arg>
+--socks5 <arg>
+--socks5-basic
+--socks5-gssapi
+--socks5-gssapi-nec
+--socks5-gssapi-service <arg>
+--socks5-hostname <arg>
+-Y --speed-limit <arg>
+-y --speed-time <arg>
+--ssl
+--ssl-allow-beast
+--ssl-auto-client-cert
+--ssl-no-revoke
+--ssl-reqd
+--ssl-revoke-best-effort
+-2 --sslv2
+-3 --sslv3
+--stderr <arg>
+--styled-output
+--suppress-connect-headers
+--tcp-fastopen
+--tcp-nodelay
+-t --telnet-option <arg>
+--tftp-blksize <arg>
+--tftp-no-options
+-z --time-cond <arg>
+--tls-max <arg>
+--tls13-ciphers <arg>
+--tlsauthtype <arg>
+--tlspassword <arg>
+--tlsuser <arg>
+-1 --tlsv1
+--tlsv1.0
+--tlsv1.1
+--tlsv1.2
+--tlsv1.3
+--tr-encoding
+--trace <arg>
+--trace-ascii <arg>
+--trace-config <arg>
+--trace-ids
+--trace-time
+--unix-socket <arg>
+-T --upload-file <arg>
+--url <arg>
+--url-query <arg>
+-B --use-ascii
+-u --user <arg>
+-A --user-agent <arg>
+--variable <arg>
+-v --verbose
+-V --version
+-w --write-out <arg>
+--xattr
+--ip-tos <arg>
+--vlan-priority <arg>
+--mptcp
+--skip-existing
+--ssl-sessions <arg>
+--tls-earlydata
+--upload-flags <arg>
+--sigalgs <arg>
+--follow
+--out-null
+--parallel-max-host <arg>
+--knownhosts <arg>
+--keepalive-cnt <arg>

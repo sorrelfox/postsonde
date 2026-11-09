@@ -1,0 +1,77 @@
+/* Per-host client certificates (AUTH-30): the add/edit dialog. The rows
+ * reuse SettingsScreen.module.css. */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  color: var(--text);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+}
+
+.help {
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.fileLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: var(--h-control);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--bad);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  user-select: text;
+}
+
+.error svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.buttons {
+  display: flex;
+  gap: var(--space-3);
+}

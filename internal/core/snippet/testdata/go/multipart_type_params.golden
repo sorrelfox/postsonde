@@ -1,0 +1,57 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
+	"net/textproto"
+	"os"
+)
+
+func main() {
+	var body bytes.Buffer
+	form := multipart.NewWriter(&body)
+	part := func(disposition, contentType string) io.Writer {
+		header := textproto.MIMEHeader{"Content-Disposition": {disposition}}
+		if contentType != "" {
+			header.Set("Content-Type", contentType)
+		}
+		w, err := form.CreatePart(header)
+		if err != nil {
+			panic(err)
+		}
+		return w
+	}
+	readFile := func(path string) []byte {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			panic(err)
+		}
+		return data
+	}
+	io.WriteString(part(`form-data; name="text"`, "text/plain; charset=utf-8"), "x")
+	part(`form-data; name="file"; filename="data.json"`, `application/json; charset="utf-8"`).Write(readFile("<root>/data.json"))
+	if err := form.Close(); err != nil {
+		panic(err)
+	}
+	req, err := http.NewRequest("POST", "https://api.test/upload", &body)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Set("Content-Type", form.FormDataContentType())
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(data))
+}

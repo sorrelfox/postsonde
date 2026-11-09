@@ -1,0 +1,11 @@
+curl https://api.test/q \
+  -H 'Content-Type: text/plain' \
+  --data-raw 'trailing spaces   
+  indented
+	tabbed
+100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\
+"""triple""" \u0041 \n */ // # -- ; C:\dir\
+
+‘curly’ “double” 日本 😀  nbsp  ls
+   ' \
+  -L --max-redirs 10

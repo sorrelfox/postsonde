@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "type": "window",
+  "windowName": "Viewer repositories",
+  "apiUrl": "{{baseUrl}}/graphql",
+  "query": "query Viewer($count: Int!) {\n  viewer {\n    login\n    repositories(first: $count) {\n      nodes { name }\n    }\n  }\n}\n\nsubscription Stars {\n  starAdded { repository }\n}\n",
+  "headers": [
+    {
+      "key": "Accept-Language",
+      "value": "en",
+      "enabled": true
+    },
+    {
+      "key": "X-Debug",
+      "value": "{{debug}}",
+      "enabled": false
+    }
+  ],
+  "variables": "{\n  \"count\": {{count}}\n}",
+  "subscriptionUrl": "wss://stream.github-like.example/subscriptions",
+  "subscriptionConnectionParams": "{\n  \"authToken\": \"{{token}}\"\n}",
+  "subscriptionProvider": "websocket",
+  "selectedOperation": "Viewer",
+  "preRequestScript": "",
+  "preRequestScriptEnabled": false,
+  "postRequestScript": "altair.log(altair.response.statusCode);",
+  "postRequestScriptEnabled": true,
+  "authorizationType": "bearer",
+  "authorizationData": {
+    "token": "{{token}}"
+  },
+  "gqlSchema": null
+}

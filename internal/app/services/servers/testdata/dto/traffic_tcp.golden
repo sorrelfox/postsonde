@@ -1,0 +1,73 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000cc",
+      "seq": 8,
+      "time": "2026-09-16T08:00:06Z",
+      "peer": "127.0.0.1:53125",
+      "connId": 4,
+      "direction": "in",
+      "kind": "message",
+      "summary": "5 bytes from connection 4",
+      "text": "ping\n",
+      "dataBase64": "",
+      "binary": false,
+      "size": 5,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": {
+        "initiatedBy": "",
+        "bytesIn": 0,
+        "bytesOut": 0
+      },
+      "captured": false
+    },
+    {
+      "serverId": "srv_00000000000000cc",
+      "seq": 9,
+      "time": "2026-09-16T08:00:07Z",
+      "peer": "127.0.0.1:53125",
+      "connId": 4,
+      "direction": "out",
+      "kind": "message",
+      "summary": "4 bytes to connection 4",
+      "text": "",
+      "dataBase64": "3q2+7w==",
+      "binary": true,
+      "size": 4,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": {
+        "initiatedBy": "",
+        "bytesIn": 0,
+        "bytesOut": 0
+      },
+      "captured": false
+    },
+    {
+      "serverId": "srv_00000000000000cc",
+      "seq": 10,
+      "time": "2026-09-16T08:00:08Z",
+      "peer": "127.0.0.1:53125",
+      "connId": 4,
+      "direction": "system",
+      "kind": "connection_close",
+      "summary": "Closed by the client (5 bytes received, 4 bytes sent)",
+      "text": "",
+      "dataBase64": "",
+      "binary": false,
+      "size": 0,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": {
+        "initiatedBy": "client",
+        "bytesIn": 5,
+        "bytesOut": 4
+      },
+      "captured": false
+    }
+  ]
+}

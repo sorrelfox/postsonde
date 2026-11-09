@@ -1,0 +1,42 @@
+/* The dialog that asks for {{$prompt}} values before a send (DYN-07). */
+
+.help {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.label {
+  overflow-wrap: anywhere;
+}
+
+.input {
+  width: 100%;
+  height: var(--h-control);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}

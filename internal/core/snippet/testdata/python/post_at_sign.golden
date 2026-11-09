@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/items",
+    headers={
+        "Content-Type": "text/plain",
+    },
+    data="@not-a-file",
+)
+
+print(response.status_code)
+print(response.text)

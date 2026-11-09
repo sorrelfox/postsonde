@@ -1,0 +1,12 @@
+{
+  "opId": "op_0123456789abcdef",
+  "seq": 1,
+  "items": [
+    {
+      "index": 0
+    },
+    {
+      "index": 1
+    }
+  ]
+}

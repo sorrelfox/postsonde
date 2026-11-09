@@ -1,0 +1,35 @@
+{
+  "name": "example.com",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://example.com",
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"a\":1}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.body_type",
+      "severity": "info",
+      "start": 25,
+      "end": 36,
+      "message": "The body is JSON but has no Content-Type header; it is imported as JSON, where curl would send it as a form."
+    },
+    {
+      "code": "curl.unterminated_quote",
+      "severity": "error",
+      "start": 28,
+      "end": 36,
+      "message": "The quote that starts here is never closed."
+    }
+  ]
+}

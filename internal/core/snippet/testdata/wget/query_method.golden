@@ -1,0 +1,6 @@
+wget https://api.test/search \
+  --method QUERY \
+  --header 'Content-Type: application/json' \
+  --body-data '{"q":"x"}' \
+  --max-redirect 10 \
+  -O -

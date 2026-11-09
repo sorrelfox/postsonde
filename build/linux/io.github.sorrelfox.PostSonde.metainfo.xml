@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata for software centres (docs/packaging.md). -->
+<component type="desktop-application">
+  <id>io.github.sorrelfox.PostSonde</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <name>PostSonde</name>
+  <summary>Local-only desktop API testing tool</summary>
+  <description>
+    <p>
+      PostSonde sends HTTP and GraphQL requests and shows the responses. It
+      runs entirely on your machine: no account, no cloud sync and no
+      telemetry. The app opens network connections only for the requests
+      you send.
+    </p>
+  </description>
+  <developer id="io.github.sorrelfox">
+    <name>Sorrelfox</name>
+  </developer>
+  <update_contact>348316453+sorrelfox@users.noreply.github.com</update_contact>
+  <url type="homepage">https://github.com/sorrelfox/PostSonde</url>
+  <url type="bugtracker">https://github.com/sorrelfox/PostSonde/issues</url>
+  <url type="vcs-browser">https://github.com/sorrelfox/PostSonde</url>
+  <launchable type="desktop-id">io.github.sorrelfox.PostSonde.desktop</launchable>
+  <provides>
+    <binary>postsonde</binary>
+  </provides>
+  <categories>
+    <category>Development</category>
+    <category>Network</category>
+  </categories>
+  <content_rating type="oars-1.1"/>
+</component>

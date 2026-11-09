@@ -1,0 +1,2 @@
+purge /cache HTTP/1.1
+Host: api.test

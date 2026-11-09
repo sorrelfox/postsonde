@@ -1,0 +1,8 @@
+# source
+query Q
+# tree
+Document [0:7]
+  Definitions[0]: OperationDefinition [0:7] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+# errors
+1:8 [7:7] unexpected token: expected "{", found end of input

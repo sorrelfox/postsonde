@@ -1,0 +1,8 @@
+const response = await fetch("https://api.test/graphql?query=%7B%20me%20%7B%20name%20%7D%20%7D", {
+  headers: {
+    "Accept": "application/graphql-response+json, application/json;q=0.9",
+  },
+});
+
+console.log(response.status);
+console.log(await response.text());

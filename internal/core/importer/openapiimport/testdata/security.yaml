@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  title: Security schemes
+  version: "1"
+servers:
+  - url: https://secure.example
+security:
+  - basicAuth: []
+paths:
+  /basic:
+    get:
+      operationId: inheritsBasic
+      responses: {'200': {description: OK}}
+  /bearer:
+    get:
+      operationId: bearer
+      security: [{bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /digest:
+    get:
+      operationId: digest
+      security: [{digestAuth: []}]
+      responses: {'200': {description: OK}}
+  /key-header:
+    get:
+      operationId: keyHeader
+      security: [{headerKey: []}]
+      parameters:
+        - name: X-API-Key
+          in: header
+          required: true
+          schema: {type: string}
+      responses: {'200': {description: OK}}
+  /key-query:
+    get:
+      operationId: keyQuery
+      security: [{queryKey: []}]
+      parameters:
+        - name: api_key
+          in: query
+          schema: {type: string}
+      responses: {'200': {description: OK}}
+  /key-cookie:
+    get:
+      operationId: keyCookie
+      security: [{cookieKey: []}]
+      responses: {'200': {description: OK}}
+  /oauth:
+    get:
+      operationId: oauth
+      security: [{oauth: [read, write]}]
+      responses: {'200': {description: OK}}
+  /oidc:
+    get:
+      operationId: oidc
+      security: [{oidc: []}]
+      responses: {'200': {description: OK}}
+  /mtls:
+    get:
+      operationId: mtls
+      security: [{mtls: []}]
+      responses: {'200': {description: OK}}
+  /hoba:
+    get:
+      operationId: hoba
+      security: [{hoba: []}]
+      responses: {'200': {description: OK}}
+  /public:
+    get:
+      operationId: public
+      security: []
+      responses: {'200': {description: OK}}
+  /optional:
+    get:
+      operationId: optional
+      security: [{}, {bearerAuth: []}]
+      responses: {'200': {description: OK}}
+  /prefer-direct:
+    get:
+      operationId: preferDirect
+      security: [{oauth: []}, {headerKey: []}]
+      responses: {'200': {description: OK}}
+  /both:
+    get:
+      operationId: both
+      security: [{bearerAuth: [], appKey: [], digestAuth: []}]
+      responses: {'200': {description: OK}}
+components:
+  securitySchemes:
+    basicAuth: {type: http, scheme: basic, description: Company login}
+    bearerAuth: {type: http, scheme: bearer, bearerFormat: JWT}
+    digestAuth: {type: http, scheme: Digest}
+    headerKey: {type: apiKey, in: header, name: X-API-Key}
+    queryKey: {type: apiKey, in: query, name: api_key}
+    cookieKey: {type: apiKey, in: cookie, name: session}
+    appKey: {type: apiKey, in: header, name: X-App-Id}
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.secure.example/token
+          scopes: {read: Read, write: Write}
+    oidc: {type: openIdConnect, openIdConnectUrl: 'https://auth.secure.example/.well-known/openid-configuration'}
+    mtls: {type: mutualTLS}
+    hoba: {type: http, scheme: hoba}

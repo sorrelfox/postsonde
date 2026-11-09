@@ -1,0 +1,116 @@
+/* The data directory (SET-03, APP-04): the Change dialog, the problems in
+ * the settings row and the welcome screen notice. Rows reuse
+ * SettingsScreen.module.css; the dialog follows the NewItemDialog fields. */
+
+.dialogPath {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* A native radio with a label and a line of help. */
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.choice:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+
+.choice input {
+  flex: none;
+  margin: 2px 0 0;
+  accent-color: var(--accent);
+}
+
+.choiceText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.choiceLabel {
+  color: var(--text);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+}
+
+.choiceHelp,
+.note {
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.inlinePath {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.problems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.problem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--warn);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  user-select: text;
+}
+
+.problem svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.hint {
+  color: var(--text3);
+}
+
+/* Welcome screen: shown only when something is wrong or a change waits. */
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-7);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+}
+
+.noticeButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.noticeButtons:empty {
+  display: none;
+}

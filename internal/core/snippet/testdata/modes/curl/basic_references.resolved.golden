@@ -1,0 +1,3 @@
+curl https://api.test/me \
+  -u 'ann:••••••' \
+  -L --max-redirs 10

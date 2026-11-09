@@ -1,0 +1,3 @@
+curl https://api.test/me \
+  --digest -u 'ann
+// x:••••••'

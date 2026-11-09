@@ -1,0 +1,9 @@
+{"_type":"export","__export_format":4,"resources":[
+  {"_id":"wrk_a","parentId":null,"name":"Alpha","description":"First.","_type":"workspace"},
+  {"_id":"wrk_b","parentId":null,"name":"Beta","_type":"workspace"},
+  {"_id":"req_a","parentId":"wrk_a","name":"Ping A","url":"https://a.example/ping","method":"GET","_type":"request"},
+  {"_id":"req_b","parentId":"wrk_b","name":"Ping B","url":"https://b.example/ping","method":"GET","_type":"request"},
+  {"_id":"env_a","parentId":"wrk_a","name":"Base Environment","data":{"host":"a.example"},"_type":"environment"},
+  {"_id":"env_b","parentId":"wrk_b","name":"Base Environment","data":{"host":"b.example"},"_type":"environment"},
+  {"_id":"env_b1","parentId":"env_b","name":"Prod","data":{},"_type":"environment"}
+]}

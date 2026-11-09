@@ -1,0 +1,8 @@
+POST {{base}}/users/{{id}}?q={{q}}&t={{token}} HTTP/1.1
+X-User: {{user}}
+X-Token: {{token}}
+X-Uuid: {{$uuid}}
+Content-Type: application/json
+Content-Length: 39
+
+{"user":"{{user}}","token":"{{token}}"}

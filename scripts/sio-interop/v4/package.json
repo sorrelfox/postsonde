@@ -1,0 +1,8 @@
+{
+  "name": "postsonde-sio-interop-v4",
+  "private": true,
+  "dependencies": {
+    "socket.io": "4.8.4",
+    "socket.io-client": "4.8.4"
+  }
+}

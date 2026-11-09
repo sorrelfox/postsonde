@@ -1,0 +1,188 @@
+{
+  "log": {
+    "version": "1.2",
+    "creator": {
+      "name": "PostSonde",
+      "version": "dev"
+    },
+    "pages": [
+      {
+        "startedDateTime": "2026-09-18T09:30:00.123Z",
+        "id": "page_1",
+        "title": "Uploads",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1
+        }
+      }
+    ],
+    "entries": [
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:00.123Z",
+        "time": 0,
+        "request": {
+          "method": "POST",
+          "url": "https://api.test/upload?key=••••••",
+          "httpVersion": "HTTP/2.0",
+          "cookies": [
+            {
+              "name": "sid",
+              "value": "abc"
+            }
+          ],
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ••••••"
+            },
+            {
+              "name": "X-Trace",
+              "value": "1"
+            },
+            {
+              "name": "Authorization",
+              "value": "Basic ••••••"
+            },
+            {
+              "name": "Cookie",
+              "value": "sid=abc"
+            }
+          ],
+          "queryString": [
+            {
+              "name": "key",
+              "value": "••••••"
+            }
+          ],
+          "postData": {
+            "mimeType": "multipart/form-data",
+            "params": [
+              {
+                "name": "note",
+                "value": "hello"
+              },
+              {
+                "name": "file",
+                "fileName": "report.pdf",
+                "contentType": "application/pdf"
+              }
+            ],
+            "text": ""
+          },
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 0,
+          "statusText": "",
+          "httpVersion": "",
+          "cookies": [],
+          "headers": [],
+          "content": {
+            "size": 0,
+            "mimeType": "x-unknown"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": -1,
+          "comment": "Not sent: exported from the collection."
+        },
+        "cache": {},
+        "timings": {
+          "blocked": -1,
+          "dns": -1,
+          "connect": -1,
+          "send": 0,
+          "wait": 0,
+          "receive": 0,
+          "ssl": -1
+        },
+        "comment": "Upload (masked)"
+      },
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:00.123Z",
+        "time": 0,
+        "request": {
+          "method": "POST",
+          "url": "https://api.test/upload?key=k3y",
+          "httpVersion": "HTTP/2.0",
+          "cookies": [
+            {
+              "name": "sid",
+              "value": "abc"
+            }
+          ],
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer t0ken"
+            },
+            {
+              "name": "X-Trace",
+              "value": "1"
+            },
+            {
+              "name": "Authorization",
+              "value": "Basic YWRhOnBhNTU="
+            },
+            {
+              "name": "Cookie",
+              "value": "sid=abc"
+            }
+          ],
+          "queryString": [
+            {
+              "name": "key",
+              "value": "k3y"
+            }
+          ],
+          "postData": {
+            "mimeType": "multipart/form-data",
+            "params": [
+              {
+                "name": "note",
+                "value": "hello"
+              },
+              {
+                "name": "file",
+                "fileName": "report.pdf",
+                "contentType": "application/pdf"
+              }
+            ],
+            "text": ""
+          },
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 0,
+          "statusText": "",
+          "httpVersion": "",
+          "cookies": [],
+          "headers": [],
+          "content": {
+            "size": 0,
+            "mimeType": "x-unknown"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": -1,
+          "comment": "Not sent: exported from the collection."
+        },
+        "cache": {},
+        "timings": {
+          "blocked": -1,
+          "dns": -1,
+          "connect": -1,
+          "send": 0,
+          "wait": 0,
+          "receive": 0,
+          "ssl": -1
+        },
+        "comment": "Upload (with secrets)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+version: '3'
+
+# Shared tasks, included by the root Taskfile as `common:` and by each
+# platform Taskfile. Trimmed from the Wails v3 template: npm only, desktop
+# only (no server mode, Docker cross-compiling or mobile targets).
+
+tasks:
+  go:mod:tidy:
+    summary: Runs `go mod tidy`
+    internal: true
+    run: once
+    cmds:
+      - go mod tidy
+
+  install:frontend:deps:
+    summary: Installs frontend dependencies from package-lock.json
+    run: once
+    dir: frontend
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - node_modules
+    preconditions:
+      - sh: npm version
+        msg: "npm is required (it ships with Node.js); see docs/architecture.md, Toolchain"
+    cmds:
+      - npm ci
+
+  build:frontend:
+    label: build:frontend (DEV={{.DEV}})
+    summary: Builds the frontend into frontend/dist
+    run: once
+    dir: frontend
+    sources:
+      - "**/*"
+      - exclude: node_modules/**/*
+      - exclude: dist/**/*
+    generates:
+      - dist/**/*
+    deps:
+      - task: install:frontend:deps
+      - task: generate:bindings
+        vars:
+          BUILD_FLAGS:
+            ref: .BUILD_FLAGS
+    cmds:
+      - npm run {{if eq .DEV "true"}}build:dev{{else}}build{{end}} -q
+      # Production builds: no remote URLs in dist/, CSP <meta> present
+      # (docs/privacy.md). Dev builds aren't minified and keep the
+      # libraries' doc comments, full of links, so they aren't checked.
+      # The test is in the command: the Task embedded in wails3 (v3.40)
+      # ignores a command's `if:`, which made `wails3 dev` fail here
+      # (frontend/taskfile_test.go).
+      - '[ "{{.DEV}}" = "true" ] || npm run check:dist -s'
+    env:
+      PRODUCTION: '{{if eq .DEV "true"}}false{{else}}true{{end}}'
+
+  generate:bindings:
+    summary: Generates the TypeScript bindings into frontend/bindings (committed; see docs/bindings.md)
+    run: once
+    deps:
+      - task: go:mod:tidy
+    sources:
+      - "**/*.go"
+      - exclude: frontend/node_modules/**/*
+      - go.mod
+      - go.sum
+    generates:
+      - frontend/bindings/**/*
+    cmds:
+      - wails3 generate bindings -f '{{.BUILD_FLAGS}}' {{.BINDINGS_FLAGS}} {{.MAIN_PKG}}
+
+  sync:icons:
+    summary: Copies the app icons from assets/icons (the source of truth) into build/
+    run: once
+    sources:
+      - assets/icons/png/postsonde-1024.png
+      - assets/icons/postsonde.icns
+      - assets/icons/postsonde.ico
+    generates:
+      - build/appicon.png
+      - build/darwin/icons.icns
+      - build/windows/icon.ico
+    cmds:
+      - cp assets/icons/png/postsonde-1024.png build/appicon.png
+      - cp assets/icons/postsonde.icns build/darwin/icons.icns
+      - cp assets/icons/postsonde.ico build/windows/icon.ico
+
+  dev:frontend:
+    summary: Runs the Vite dev server (used by `wails3 dev`)
+    deps:
+      - task: install:frontend:deps
+    dir: frontend
+    cmds:
+      - npm run dev -- --port {{.VITE_PORT}} --strictPort
+
+  update:build-assets:
+    summary: Regenerates the platform files in build/ from build/config.yml
+    dir: build
+    cmds:
+      - wails3 update build-assets -name "{{.APP_NAME}}" -binaryname "{{.APP_NAME}}" -config config.yml -dir .
+      # The generator also writes mobile targets; PostSonde is desktop only.
+      - rm -rf ios android

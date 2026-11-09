@@ -1,0 +1,26 @@
+{
+  "name": "Imported request",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "GET",
+    "url": "",
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.not_curl",
+      "severity": "error",
+      "start": 0,
+      "end": 4,
+      "message": "This is not a curl command; it must start with “curl”."
+    }
+  ]
+}

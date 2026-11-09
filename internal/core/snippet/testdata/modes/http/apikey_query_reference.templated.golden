@@ -1,0 +1,2 @@
+GET /me?api_key={{token}} HTTP/1.1
+Host: api.test

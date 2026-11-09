@@ -1,0 +1,37 @@
+// An editions file: features instead of labels, identifier reserved names.
+edition = "2023";
+
+package shop.orders;
+
+import option "shop/features.proto";
+
+option features.field_presence = IMPLICIT;
+option features.enum_type = CLOSED;
+
+message Order {
+  string id = 1 [features.field_presence = EXPLICIT];
+  repeated LineItem items = 2 [features.repeated_field_encoding = EXPANDED];
+  Status status = 3;
+  LineItem gift = 4 [features.message_encoding = DELIMITED];
+
+  reserved 5 to 9;
+  reserved legacy_total, coupon;
+
+  message LineItem {
+    string sku = 1;
+    int32 quantity = 2 [features.field_presence = LEGACY_REQUIRED];
+  }
+}
+
+enum Status {
+  option features.enum_type = CLOSED;
+  STATUS_PLACED = 1;
+  STATUS_SHIPPED = 2;
+  reserved STATUS_LOST;
+}
+
+service Orders {
+  rpc Place(Order) returns (Order) {
+    option idempotency_level = IDEMPOTENT;
+  }
+}

@@ -1,0 +1,115 @@
+// Inventory: nested types, maps, oneofs, reserved ranges and names,
+// enum aliases, custom options and every literal form.
+syntax = "proto3";
+
+package acme.inventory.v2;
+
+import public "acme/common/money.proto";
+import weak "acme/legacy/tags.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/descriptor.proto";
+
+// Custom options declared in this file.
+extend google.protobuf.FieldOptions {
+  optional string sensitivity = 50001;
+  Limits limits = 50002;
+}
+
+extend .google.protobuf.MessageOptions {
+  bool cacheable = 50100;
+}
+
+message Limits {
+  double min = 1;
+  double max = 2;
+  repeated string tags = 3;
+  google.protobuf.Any extra = 4;
+}
+
+option (acme.inventory.v2.file_owner) = "inventory-team";
+
+message Item {
+  option (cacheable) = true;
+  option deprecated = false;
+
+  reserved 2, 15, 9 to 11, 40 to max;
+  reserved "sku_legacy", "old_price";
+
+  // Where an item is stocked.
+  message Location {
+    string warehouse = 1;
+    uint32 aisle = 2 [(limits) = {min: 1 max: 0x40}];
+    // Nested twice.
+    message Bin {
+      fixed32 id = 1;
+      sfixed64 offset = 2;
+    }
+    Bin bin = 3;
+  }
+
+  enum State {
+    option allow_alias = true;
+    STATE_UNSPECIFIED = 0;
+    IN_STOCK = 1;
+    AVAILABLE = 1 [(acme.inventory.v2.label) = "alias of IN_STOCK"];
+    BACKORDERED = 2;
+    DISCONTINUED = -1;
+    reserved 10 to 20, 100;
+    reserved "RECALLED";
+  }
+
+  string id = 1 [(sensitivity) = "low", json_name = "itemId"];
+  State state = 3;
+  map<string, Location> locations = 4;
+  map<int64, .acme.inventory.v2.Item.Location.Bin> bins_by_code = 5;
+  repeated acme.common.Money prices = 6;
+  bytes thumbnail = 7 [(limits) = {
+    max: 65536.0
+    tags: ["png", "jpeg"]
+    tags: 'webp'
+    extra {
+      [type.googleapis.com/acme.inventory.v2.Limits] { min: -inf max: inf }
+    }
+  }];
+
+  oneof availability {
+    option (acme.inventory.v2.oneof_hint) = "exclusive";
+    int32 quantity = 8;
+    string restock_date = 12;
+    Location.Bin only_in_bin = 13;
+  }
+
+  oneof pricing {
+    sint32 discount_percent = 14 [deprecated = true];
+    sint64 flat_price_micros = 16;
+  }
+
+  optional float weight_kg = 17 [(limits) = {min: 0.0, max: 1e3; tags: [] extra < >}];
+  double score = 18 [(limits).min = -1.5, (limits).max = nan];
+  uint64 big = 0x1F;
+  int64 octal_field = 040;
+  string motto = 19 [(sensitivity) = "never " 'give ' "up\t\x21\041"];
+  string unicode = 20 [(sensitivity) = "caf\u00e9 \U0001F4E6"];
+  ;
+}
+
+message Catalog {
+  repeated Item items = 1;
+  map<string, Item> by_id = 2;
+  map<bool, string> flags = 3;
+  map<sfixed32, uint64> counts = 4;
+  Item.State default_state = 5;
+}
+
+enum Region {
+  REGION_UNSPECIFIED = 0;
+  EMEA = 1;
+  AMER = 2;
+  APAC = 0x3;
+}
+
+/* A service with no methods yet; options only. */
+service InventoryAdmin {
+  option deprecated = true;
+  ;
+}

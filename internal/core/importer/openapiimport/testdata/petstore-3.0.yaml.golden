@@ -1,0 +1,379 @@
+{
+  "diagnostics": null,
+  "environments": 0,
+  "name": "Petstore 3.0",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "bearer",
+      "token": "{{petstore_auth.token}}"
+    },
+    "description": "A pet store that uses the OpenAPI 3.0 features.\n\n[More about the store](https://petstore.example/docs)",
+    "diagnostics": [
+      {
+        "Code": "openapi.auth_changed",
+        "Severity": "warning",
+        "Message": "PostSonde has no OAuth 2.0 flow: the “petstore_auth” scheme became Bearer auth with {{petstore_auth.token}}. Get an access token with the scopes write:pets read:pets (token URL https://petstore.example/oauth/token) and put it into that variable.",
+        "At": "security @0:0"
+      }
+    ],
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "tags[0] @27:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "Everything about your pets\n\nhttps://petstore.example/docs/pets",
+        "diagnostics": null,
+        "folder": "pets",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./pets.get @38:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets",
+              "params": [
+                {
+                  "name": "limit",
+                  "value": "20",
+                  "description": "How many items to return at one time (max 100)",
+                  "disabled": true
+                },
+                {
+                  "name": "status",
+                  "value": "available",
+                  "disabled": true
+                }
+              ],
+              "headers": [
+                {
+                  "name": "X-Trace-Id",
+                  "value": "{{$uuid}}",
+                  "disabled": true
+                },
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "List all pets"
+          },
+          {
+            "at": "paths./pets.post @95:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.media_type",
+                "Severity": "info",
+                "Message": "The body is sent as application/json; the operation also accepts application/x-www-form-urlencoded.",
+                "At": "paths./pets.post @95:7"
+              },
+              {
+                "Code": "openapi.callback",
+                "Severity": "info",
+                "Message": "The operation's callback (petAdopted) describes a request the API sends, and was not imported.",
+                "At": "paths./pets.post @95:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "The pet to add",
+              "method": "POST",
+              "url": "{{baseUrl}}/pets",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\n  \"name\": \"Rex\",\n  \"petType\": \"dog\"\n}"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Create a pet"
+          },
+          {
+            "at": "paths./pets/{petId}.get @135:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet to retrieve"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Info for a specific pet"
+          },
+          {
+            "at": "paths./pets/{petId}.delete @151:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.parameter_ignored",
+                "Severity": "info",
+                "Message": "The parameter “api_key” was left out: the auth sends it.",
+                "At": "paths./pets/{petId}.delete @151:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "**Deprecated.**",
+              "method": "DELETE",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet to retrieve"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "api_key",
+                "value": "{{api_key.key}}"
+              }
+            },
+            "request": "deletePet"
+          },
+          {
+            "at": "paths./pets/{petId}/photo.post @167:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.cookie_parameter",
+                "Severity": "info",
+                "Message": "The cookie parameter became a Cookie header.",
+                "At": "paths./pets/{petId}/photo.post @167:7"
+              },
+              {
+                "Code": "openapi.media_type",
+                "Severity": "info",
+                "Message": "The body is sent as multipart/form-data; the operation also accepts application/octet-stream.",
+                "At": "paths./pets/{petId}/photo.post @167:7"
+              },
+              {
+                "Code": "openapi.file",
+                "Severity": "info",
+                "Message": "The body has a file part: choose the file to send.",
+                "At": "paths./pets/{petId}/photo.post @167:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{baseUrl}}/pets/{petId}/photo",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": ""
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Cookie",
+                  "value": "session=",
+                  "description": "Cookie parameters of the operation.",
+                  "disabled": true
+                }
+              ],
+              "body": {
+                "mode": "multipart",
+                "parts": [
+                  {
+                    "name": "caption",
+                    "value": "string"
+                  },
+                  {
+                    "name": "photo",
+                    "value": "",
+                    "contentType": "image/png"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "uploadPhoto"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "tags[1] @31:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "store",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./store/inventory.get @206:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/store/inventory",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "api_key",
+                "value": "{{api_key.key}}"
+              }
+            },
+            "request": "getInventory"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "tags[2] @32:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "users",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./users/me.get @222:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.servers",
+                "Severity": "info",
+                "Message": "The operation has its own server, “https://accounts.petstore.example/v1”, which its URL uses instead of baseUrl.",
+                "At": "paths./users/me.get @222:7"
+              },
+              {
+                "Code": "openapi.auth_changed",
+                "Severity": "warning",
+                "Message": "PostSonde has no OpenID Connect flow: the “oidc” scheme became Bearer auth with {{oidc.token}}. Get an access token with the scopes profile (discovery document https://petstore.example/.well-known/openid-configuration) and put it into that variable.",
+                "At": "paths./users/me.get @222:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "https://accounts.petstore.example/v1/users/me",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "bearer",
+                "token": "{{oidc.token}}"
+              }
+            },
+            "request": "getMe"
+          }
+        ],
+        "variables": null
+      }
+    ],
+    "variables": [
+      {
+        "name": "baseUrl",
+        "value": "{{scheme}}://petstore.example/{{basePath}}"
+      },
+      {
+        "name": "scheme",
+        "value": "https",
+        "description": "One of: https, http."
+      },
+      {
+        "name": "basePath",
+        "value": "v1",
+        "description": "API version"
+      },
+      {
+        "name": "petstore_auth.token",
+        "value": "",
+        "secret": true,
+        "description": "An access token for the “petstore_auth” scheme."
+      },
+      {
+        "name": "api_key.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “api_key” scheme."
+      },
+      {
+        "name": "oidc.token",
+        "value": "",
+        "secret": true,
+        "description": "An access token for the “oidc” scheme."
+      }
+    ]
+  }
+}

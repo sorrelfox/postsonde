@@ -1,0 +1,2 @@
+curl.exe -I https://api.test/items `
+  -L --max-redirs 10

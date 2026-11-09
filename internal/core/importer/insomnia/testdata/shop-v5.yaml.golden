@@ -1,0 +1,388 @@
+{
+  "diagnostics": [
+    {
+      "Code": "insomnia.cookies_skipped",
+      "Severity": "info",
+      "Message": "The cookie jar (1 cookie(s)) is not imported: PostSonde keeps the cookies servers set as requests are sent.",
+      "At": "cookieJar @166:3"
+    }
+  ],
+  "environments": [
+    {
+      "at": "environments.subEnvironments[0] @182:7",
+      "diagnostics": [
+        {
+          "Code": "insomnia.base_environment",
+          "Severity": "info",
+          "Message": "The base environment's variables were added to this environment; its own values win.",
+          "At": "environments.subEnvironments[0] @182:7"
+        }
+      ],
+      "environment": "Dev",
+      "variables": [
+        {
+          "Name": "base_url",
+          "Value": "http://localhost:8080",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "lang",
+          "Value": "en",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "product_id",
+          "Value": "7",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "ratio",
+          "Value": "0.5",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "empty",
+          "Value": "",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    },
+    {
+      "at": "environments.subEnvironments[1] @193:7",
+      "diagnostics": [
+        {
+          "Code": "insomnia.base_environment",
+          "Severity": "info",
+          "Message": "The base environment's variables were added to this environment; its own values win.",
+          "At": "environments.subEnvironments[1] @193:7"
+        },
+        {
+          "Code": "insomnia.private_environment",
+          "Severity": "info",
+          "Message": "The environment was private in Insomnia, so its variables were imported as secrets, kept on this machine only.",
+          "At": "environments.subEnvironments[1] @193:7"
+        }
+      ],
+      "environment": "Mine",
+      "variables": [
+        {
+          "Name": "base_url",
+          "Value": "https://api.shop.example",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "lang",
+          "Value": "en",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "token",
+          "Value": "my-own-token",
+          "Description": "",
+          "Secret": true,
+          "Disabled": false
+        }
+      ]
+    }
+  ],
+  "name": "Shop API v5",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "The shop's API, exported from Insomnia 11.",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "collection[0] @9:5",
+        "auth": {
+          "type": "apikey",
+          "key": "X-Api-Key",
+          "value": "{{api_key}}"
+        },
+        "description": "Products and prices.\n\nInsomnia pre-request script (not run by PostSonde):\n\n```js\ninsomnia.environment.set(\"ts\", Date.now());\n```",
+        "diagnostics": [
+          {
+            "Code": "insomnia.script",
+            "Severity": "warning",
+            "Message": "The folder's pre-request script is kept in its description: PostSonde does not run Insomnia scripts.",
+            "At": "collection[0] @9:5"
+          },
+          {
+            "Code": "insomnia.nested_value",
+            "Severity": "info",
+            "Message": "Values nested in objects or lists became variables with dotted names (a.b, list.0), which the converted {{ _.a.b }} references use.",
+            "At": "collection[0] @9:5"
+          }
+        ],
+        "folder": "Catalog",
+        "headers": [
+          {
+            "name": "Accept-Language",
+            "value": "{{lang}}"
+          }
+        ],
+        "items": [
+          {
+            "at": "collection[0].children[0] @32:9",
+            "auth": {
+              "type": "inherit"
+            },
+            "description": "",
+            "diagnostics": null,
+            "folder": "Products",
+            "headers": null,
+            "items": [
+              {
+                "at": "collection[0].children[0].children[0] @37:13",
+                "diagnostics": null,
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "description": "Every product, 50 per page.",
+                  "method": "GET",
+                  "url": "{{base_url}}/products?per_page={{limits.page}}",
+                  "params": [
+                    {
+                      "name": "per_page",
+                      "value": "{{limits.page}}"
+                    },
+                    {
+                      "name": "currency",
+                      "value": "{{currency}}",
+                      "disabled": true
+                    }
+                  ],
+                  "headers": [
+                    {
+                      "name": "Accept",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": {
+                    "mode": "none"
+                  },
+                  "auth": {
+                    "type": "inherit"
+                  },
+                  "settings": {
+                    "followRedirects": true,
+                    "sendCookies": false
+                  }
+                },
+                "request": "List products"
+              },
+              {
+                "at": "collection[0].children[0].children[1] @62:13",
+                "diagnostics": [
+                  {
+                    "Code": "insomnia.script",
+                    "Severity": "warning",
+                    "Message": "The request's after-response script is kept in its description: PostSonde does not run Insomnia scripts.",
+                    "At": "collection[0].children[0].children[1] @62:13"
+                  },
+                  {
+                    "Code": "insomnia.auth_unsupported",
+                    "Severity": "warning",
+                    "Message": "PostSonde has no AWS IAM auth: the request sends no auth. Set up the credentials by hand, e.g. as a header.",
+                    "At": "collection[0].children[0].children[1] @62:13"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "description": "Insomnia after-response script (not run by PostSonde):\n\n```js\ninsomnia.test(\"ok\", () => insomnia.expect(insomnia.response.code).to.eql(200));\n```",
+                  "method": "PATCH",
+                  "url": "{{base_url}}/products/{{product_id}}/price",
+                  "headers": [
+                    {
+                      "name": "Content-Type",
+                      "value": "application/xml"
+                    }
+                  ],
+                  "body": {
+                    "mode": "raw",
+                    "type": "xml",
+                    "text": "<price currency=\"{{currency}}\">{{price}}</price>"
+                  },
+                  "auth": {
+                    "type": "none"
+                  }
+                },
+                "request": "Set price"
+              },
+              {
+                "at": "collection[0].children[0].children[2] @91:13",
+                "diagnostics": [
+                  {
+                    "Code": "insomnia.auth_changed",
+                    "Severity": "warning",
+                    "Message": "The OAuth 1.0 auth was imported with a change. It sent oauth_version \"1.0a\"; PostSonde sends 1.0.",
+                    "At": "collection[0].children[0].children[2] @91:13"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "method": "POST",
+                  "url": "{{base_url}}/products/sync",
+                  "body": {
+                    "mode": "none"
+                  },
+                  "auth": {
+                    "type": "oauth1",
+                    "consumerKey": "sync",
+                    "consumerSecret": "-----BEGIN PRIVATE KEY-----\nrsa-sync-key\n-----END PRIVATE KEY-----",
+                    "accessToken": "{{sync_token}}",
+                    "signatureMethod": "RSA-SHA1",
+                    "disabled": true
+                  }
+                },
+                "request": "Sync products"
+              }
+            ],
+            "variables": null
+          }
+        ],
+        "variables": [
+          {
+            "name": "currency",
+            "value": "EUR"
+          },
+          {
+            "name": "limits.page",
+            "value": "50"
+          }
+        ]
+      },
+      {
+        "at": "collection[1] @111:5",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{base_url}}/graphql",
+          "query": "{ product(id: \"{{product_id}}\") { name } }",
+          "auth": {
+            "type": "bearer",
+            "token": "{{token}}"
+          }
+        },
+        "request": "Product query"
+      },
+      {
+        "at": "collection[2] @124:5",
+        "diagnostics": [
+          {
+            "Code": "insomnia.proto_skipped",
+            "Severity": "warning",
+            "Message": "The request used the Buf reflection API, which PostSonde does not use: add the .proto files to the request's proto setup.",
+            "At": "collection[2] @124:5"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "grpc",
+          "id": "req_x",
+          "name": "",
+          "address": "{{grpc_host}}:50051",
+          "service": "shop.v1.Stock",
+          "method": "Watch",
+          "message": "{\"sku\": \"{{sku}}\"}",
+          "metadata": [
+            {
+              "name": "authorization",
+              "value": "Bearer {{token}}"
+            }
+          ]
+        },
+        "request": "Stock"
+      },
+      {
+        "at": "collection[3] @139:5",
+        "diagnostics": [
+          {
+            "Code": "insomnia.auth_unsupported",
+            "Severity": "warning",
+            "Message": "The WebSocket request's Basic auth was not imported: PostSonde's WebSocket requests have no auth settings. Add an Authorization header instead.",
+            "At": "collection[3] @139:5"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "websocket",
+          "id": "req_x",
+          "name": "",
+          "url": "ws://{{ws_host}}/stock?format=json",
+          "params": [
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ],
+          "headers": [
+            {
+              "name": "X-Client",
+              "value": "postsonde"
+            }
+          ]
+        },
+        "request": "Stock updates"
+      },
+      {
+        "at": "collection[4] @151:5",
+        "code": "insomnia.unsupported",
+        "name": "Chat",
+        "reason": "PostSonde does not import Insomnia socket.io requests.",
+        "skipped": "socket.io request"
+      },
+      {
+        "at": "collection[5] @156:5",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "{{base_url}}/exports/stock.csv",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "netrc",
+            "disabled": true
+          }
+        },
+        "request": "Stock export"
+      }
+    ],
+    "variables": null
+  }
+}

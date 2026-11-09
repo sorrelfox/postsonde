@@ -1,0 +1,3 @@
+http --follow --max-redirects=10 \
+  GET 'https://api.test/graphql?query=%7B%20me%20%7B%20name%20%7D%20%7D' \
+  'Accept:application/graphql-response+json, application/json;q=0.9'

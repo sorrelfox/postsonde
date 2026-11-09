@@ -1,0 +1,12 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/me",
+    headers={
+        "Cookie": "sid=abc; theme=dark",
+    },
+)
+
+print(response.status_code)
+print(response.text)

@@ -1,0 +1,6 @@
+POST /q HTTP/1.1
+Host: api.test
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 96
+
+q=a%26b%3Dc+d%2Be%25f+%22g%22+%27h%27+%C3%A9&path=C%3A%5Cdir%5C&sym=%24x+%60y%60+%5Ez+%25PATH%25

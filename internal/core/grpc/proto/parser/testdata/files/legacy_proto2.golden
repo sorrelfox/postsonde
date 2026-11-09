@@ -1,0 +1,143 @@
+# tree
+File [0:1447] Name="legacy_proto2.proto"
+  Decls[0]: Syntax [131:149] Leading=" proto2 constructs found in real imports such as descriptor.proto:\n labels, defaults, groups, extension ranges and extensions.\n"
+    Value: StringLit [140:148] Value="proto2"
+  Decls[1]: Package [151:166] Name=[159:165]"legacy"
+  Decls[2]: Option [168:196]
+    Name: OptionName [175:187]
+      Parts[0]: OptionNamePart [175:187] Name=[175:187]"optimize_for"
+    Value: IdentLit [190:195] Value="SPEED"
+  Decls[3]: Message [198:1054] Name=[206:214]"Envelope" RBrace=1053
+    Body[0]: Field [219:242] Label=required LabelLoc=[219:227] Type=[228:234]"string" Name=[235:237]"id"
+      Number: IntLit [240:241] Raw="1" Value=1
+    Body[1]: Field [245:286] Label=optional LabelLoc=[245:253] Type=[254:259]"int32" Name=[260:267]"retries"
+      Number: IntLit [270:271] Raw="2" Value=2
+      Options: CompactOptions [272:285]
+        Options[0]: Option [273:284]
+          Name: OptionName [273:280]
+            Parts[0]: OptionNamePart [273:280] Name=[273:280]"default"
+          Value: IntLit [283:284] Raw="3" Value=3
+    Body[2]: Field [289:332] Label=optional LabelLoc=[289:297] Type=[298:304]"double" Name=[305:310]"ratio"
+      Number: IntLit [313:314] Raw="3" Value=3
+      Options: CompactOptions [315:331]
+        Options[0]: Option [316:330]
+          Name: OptionName [316:323]
+            Parts[0]: OptionNamePart [316:323] Name=[316:323]"default"
+          Value: IdentLit [326:330] Negative=true Value="inf"
+    Body[3]: Field [335:379] Label=optional LabelLoc=[335:343] Type=[344:349]"float" Name=[350:355]"scale"
+      Number: IntLit [358:359] Raw="4" Value=4
+      Options: CompactOptions [360:378]
+        Options[0]: Option [361:377]
+          Name: OptionName [361:368]
+            Parts[0]: OptionNamePart [361:368] Name=[361:368]"default"
+          Value: FloatLit [371:377] Raw="1.5e-3" Value=0.0015
+    Body[4]: Field [382:433] Label=optional LabelLoc=[382:390] Type=[391:397]"string" Name=[398:406]"greeting"
+      Number: IntLit [409:410] Raw="5" Value=5
+      Options: CompactOptions [411:432]
+        Options[0]: Option [412:431]
+          Name: OptionName [412:419]
+            Parts[0]: OptionNamePart [412:419] Name=[412:419]"default"
+          Value: StringLit [422:431] Value="hello\n"
+    Body[5]: Field [436:492] Label=optional LabelLoc=[436:444] Type=[445:450]"bytes" Name=[451:456]"magic"
+      Number: IntLit [459:460] Raw="6" Value=6
+      Options: CompactOptions [461:491]
+        Options[0]: Option [462:490]
+          Name: OptionName [462:469]
+            Parts[0]: OptionNamePart [462:469] Name=[462:469]"default"
+          Value: StringLit [472:490] Value="ޭ\xbe\xef"
+    Body[6]: Field [495:537] Label=optional LabelLoc=[495:503] Type=[504:508]"Kind" Name=[509:513]"kind"
+      Number: IntLit [516:517] Raw="7" Value=7
+      Options: CompactOptions [518:536]
+        Options[0]: Option [519:535]
+          Name: OptionName [519:526]
+            Parts[0]: OptionNamePart [519:526] Name=[519:526]"default"
+          Value: IdentLit [529:535] Value="KIND_B"
+    Body[7]: Field [540:583] Label=repeated LabelLoc=[540:548] Type=[549:554]"int32" Name=[555:562]"samples"
+      Number: IntLit [565:566] Raw="8" Value=8
+      Options: CompactOptions [567:582]
+        Options[0]: Option [568:581]
+          Name: OptionName [568:574]
+            Parts[0]: OptionNamePart [568:574] Name=[568:574]"packed"
+          Value: IdentLit [577:581] Value="true"
+    Body[8]: Field [586:648] Label=optional LabelLoc=[586:594] Type=[595:600]"int64" Name=[601:610]"min_value"
+      Number: IntLit [613:614] Raw="9" Value=9
+      Options: CompactOptions [615:647]
+        Options[0]: Option [616:646]
+          Name: OptionName [616:623]
+            Parts[0]: OptionNamePart [616:623] Name=[616:623]"default"
+          Value: IntLit [626:646] Negative=true Raw="9223372036854775808" Value=9223372036854775808
+    Body[9]: Field [651:715] Label=optional LabelLoc=[651:659] Type=[660:666]"uint64" Name=[667:676]"max_value"
+      Number: IntLit [679:681] Raw="10" Value=10
+      Options: CompactOptions [682:714]
+        Options[0]: Option [683:713]
+          Name: OptionName [683:690]
+            Parts[0]: OptionNamePart [683:690] Name=[683:690]"default"
+          Value: IntLit [693:713] Raw="18446744073709551615" Value=18446744073709551615
+    Body[10]: Enum [719:766] Name=[724:728]"Kind" RBrace=765
+      Body[0]: EnumValue [735:746] Name=[735:741]"KIND_A"
+        Number: IntLit [744:745] Raw="1" Value=1
+      Body[1]: EnumValue [751:762] Name=[751:757]"KIND_B"
+        Number: IntLit [760:761] Raw="2" Value=2
+    Body[11]: Group [770:865] Label=repeated LabelLoc=[770:778] Name=[785:795]"Attachment" RBrace=864
+      Number: IntLit [798:800] Raw="11" Value=11
+      Body[0]: Field [807:832] Label=required LabelLoc=[807:815] Type=[816:822]"string" Name=[823:827]"name"
+        Number: IntLit [830:831] Raw="1" Value=1
+      Body[1]: Field [837:861] Label=optional LabelLoc=[837:845] Type=[846:851]"bytes" Name=[852:856]"data"
+        Number: IntLit [859:860] Raw="2" Value=2
+    Body[12]: Extensions [869:891]
+      Ranges[0]: Range [880:890]
+        From: IntLit [880:883] Raw="100" Value=100
+        To: IntLit [887:890] Raw="199" Value=199
+    Body[13]: Extensions [894:1009]
+      Ranges[0]: Range [905:916] Max=true
+        From: IntLit [905:909] Raw="1000" Value=1000
+      Options: CompactOptions [917:1008]
+        Options[0]: Option [918:1007]
+          Name: OptionName [918:929]
+            Parts[0]: OptionNamePart [918:929] Name=[918:929]"declaration"
+          Value: MessageLit [932:1007]
+            Fields[0]: MessageLitField [938:950]
+              Name: FieldRef [938:944] Name=[938:944]"number"
+              Value: IntLit [946:950] Raw="1000" Value=1000
+            Fields[1]: MessageLitField [955:984]
+              Name: FieldRef [955:964] Name=[955:964]"full_name"
+              Value: StringLit [966:984] Value=".legacy.trace_id"
+            Fields[2]: MessageLitField [989:1003]
+              Name: FieldRef [989:993] Name=[989:993]"type"
+              Value: StringLit [995:1003] Value="string"
+    Body[14]: Reserved [1013:1031]
+      Ranges[0]: Range [1022:1030]
+        From: IntLit [1022:1024] Raw="20" Value=20
+        To: IntLit [1028:1030] Raw="29" Value=29
+    Body[15]: Reserved [1034:1052]
+      Names[0]: ReservedName [1043:1051] Quoted=true Value="old_id"
+  Decls[4]: Extend [1056:1173] Extendee=[1063:1071]"Envelope" RBrace=1172
+    Body[0]: Field [1076:1108] Label=optional LabelLoc=[1076:1084] Type=[1085:1091]"string" Name=[1092:1100]"trace_id"
+      Number: IntLit [1103:1107] Raw="1000" Value=1000
+    Body[1]: Group [1111:1171] Label=repeated LabelLoc=[1111:1119] Name=[1126:1129]"Hop" RBrace=1170
+      Number: IntLit [1132:1135] Raw="100" Value=100
+      Body[0]: Field [1142:1167] Label=optional LabelLoc=[1142:1150] Type=[1151:1157]"string" Name=[1158:1162]"host"
+        Number: IntLit [1165:1166] Raw="1" Value=1
+  Decls[5]: Message [1175:1361] Name=[1183:1192]"Container" RBrace=1360
+    Body[0]: Extend [1197:1258] Extendee=[1204:1212]"Envelope" RBrace=1257
+      Body[0]: Field [1219:1254] Label=optional LabelLoc=[1219:1227] Type=[1228:1237]"Container" Name=[1238:1247]"container"
+        Number: IntLit [1250:1253] Raw="101" Value=101
+    Body[1]: Oneof [1261:1359] Name=[1267:1274]"payload" RBrace=1358
+      Body[0]: Field [1281:1297] Type=[1281:1287]"string" Name=[1288:1292]"text"
+        Number: IntLit [1295:1296] Raw="1" Value=1
+      Body[1]: Group [1302:1355] Name=[1308:1312]"Blob" RBrace=1354
+        Number: IntLit [1315:1316] Raw="2" Value=2
+        Body[0]: Field [1325:1349] Label=optional LabelLoc=[1325:1333] Type=[1334:1339]"bytes" Name=[1340:1344]"data"
+          Number: IntLit [1347:1348] Raw="1" Value=1
+  Decls[6]: Message [1363:1446] Name=[1371:1378]"WireSet" RBrace=1445
+    Body[0]: Option [1383:1421]
+      Name: OptionName [1390:1413]
+        Parts[0]: OptionNamePart [1390:1413] Name=[1390:1413]"message_set_wire_format"
+      Value: IdentLit [1416:1420] Value="true"
+    Body[1]: Extensions [1424:1444]
+      Ranges[0]: Range [1435:1443] Max=true
+        From: IntLit [1435:1436] Raw="4" Value=4
+  Comments[0]: Comment [0:68]
+  Comments[1]: Comment [69:130]
+# errors
+# diagnostics

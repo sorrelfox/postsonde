@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  --raw $'line1\r\nline2\x01\ttab \\ \'q\'' \
+  POST https://api.test/raw \
+  Content-Type:text/plain

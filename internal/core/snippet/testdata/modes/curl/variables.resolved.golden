@@ -1,0 +1,7 @@
+curl 'https://api.test/users/7?q=a%20b&t=••••••' \
+  -H 'X-User: ann' \
+  -H 'X-Token: ••••••' \
+  -H 'X-Uuid: <uuid>' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"user":"ann","token":"••••••"}' \
+  -L --max-redirs 10

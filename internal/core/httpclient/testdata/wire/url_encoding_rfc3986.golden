@@ -1,0 +1,3 @@
+GET /p%20a/%7Bx%7D/%22q%22/%3Ct%3E/%60%5E%7C%5B%5D%5C/%25zz/%41/%C3%A9?a=%221%22&b=%3C2%3E&c='3'&d=%7B4%7D&e%5B%5D=5&f=%7C%5E%60&g=%25zz&h=?/:@%20%C3%A9 HTTP/1.1\r\n
+Host: ADDR\r\n
+\r\n

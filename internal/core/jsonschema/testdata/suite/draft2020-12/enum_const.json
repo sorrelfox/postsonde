@@ -1,0 +1,60 @@
+[
+    {
+        "description": "simple enum",
+        "schema": {"enum": [1, 2, 3]},
+        "tests": [
+            {"description": "one of the values", "data": 1, "valid": true},
+            {"description": "a float equal to one of the values", "data": 2.0, "valid": true},
+            {"description": "something else", "data": 4, "valid": false},
+            {"description": "a string of a value", "data": "1", "valid": false}
+        ]
+    },
+    {
+        "description": "heterogeneous enum",
+        "schema": {"enum": [6, "foo", [], true, {"foo": 12}, null]},
+        "tests": [
+            {"description": "an object in the enum", "data": {"foo": 12}, "valid": true},
+            {"description": "an object with an extra member", "data": {"foo": 12, "bar": 1}, "valid": false},
+            {"description": "an empty array", "data": [], "valid": true},
+            {"description": "null", "data": null, "valid": true},
+            {"description": "false is not true", "data": false, "valid": false},
+            {"description": "a different string", "data": "bar", "valid": false}
+        ]
+    },
+    {
+        "description": "enum does not confuse false with 0 or true with 1",
+        "schema": {"enum": [false, true]},
+        "tests": [
+            {"description": "false", "data": false, "valid": true},
+            {"description": "0", "data": 0, "valid": false},
+            {"description": "1", "data": 1, "valid": false}
+        ]
+    },
+    {
+        "description": "const with an object, member order ignored",
+        "schema": {"const": {"a": 1, "b": [1, 2]}},
+        "tests": [
+            {"description": "same object", "data": {"a": 1, "b": [1, 2]}, "valid": true},
+            {"description": "same object, other order", "data": {"b": [1, 2.0], "a": 1.0}, "valid": true},
+            {"description": "array in another order", "data": {"a": 1, "b": [2, 1]}, "valid": false},
+            {"description": "another value", "data": 1, "valid": false}
+        ]
+    },
+    {
+        "description": "const null",
+        "schema": {"const": null},
+        "tests": [
+            {"description": "null", "data": null, "valid": true},
+            {"description": "zero", "data": 0, "valid": false},
+            {"description": "empty string", "data": "", "valid": false}
+        ]
+    },
+    {
+        "description": "const with big numbers compares exactly",
+        "schema": {"const": 9007199254740993},
+        "tests": [
+            {"description": "the same number", "data": 9007199254740993, "valid": true},
+            {"description": "the neighbour a float64 cannot tell apart", "data": 9007199254740992, "valid": false}
+        ]
+    }
+]

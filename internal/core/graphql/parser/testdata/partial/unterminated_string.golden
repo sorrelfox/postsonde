@@ -1,0 +1,18 @@
+# source
+{ user(name: "zu
+) { id } }
+# tree
+Document [0:27]
+  Definitions[0]: OperationDefinition [0:27] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:27] LBrace=0 RBrace=26
+      Selections[0]: Field [2:25] Colon=-1
+        Name: Name [2:6] Value="user"
+        Arguments: ArgumentList [6:18] LParen=6 RParen=17
+          Arguments[0]: Argument [7:16] Colon=11
+            Name: Name [7:11] Value="name"
+            Value: InvalidValue [13:16] Missing=false
+        SelectionSet: SelectionSet [19:25] LBrace=19 RBrace=24
+          Selections[0]: Field [21:23] Colon=-1
+            Name: Name [21:23] Value="id"
+# errors
+1:14 [13:16] lexical error: unterminated string

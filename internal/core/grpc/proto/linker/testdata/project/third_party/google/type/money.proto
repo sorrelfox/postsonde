@@ -1,0 +1,15 @@
+// Written for the PostSonde linker tests, in the style of the Google common
+// types. Not a copy of googleapis.
+
+syntax = "proto3";
+
+package google.type;
+
+// Money is an amount in a currency.
+message Money {
+  // ISO 4217 code.
+  string currency_code = 1;
+  int64 units = 2;
+  // Nano units, from -999,999,999 to +999,999,999.
+  int32 nanos = 3;
+}

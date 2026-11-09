@@ -1,0 +1,134 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Countries",
+  "root": {
+    "at": " @[1,1]",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "Countries",
+    "headers": null,
+    "items": [
+      {
+        "at": "collections[1] @[34,5]",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Continents",
+        "headers": null,
+        "items": [
+          {
+            "at": "collections[0] @[21,5]",
+            "auth": {
+              "type": "inherit"
+            },
+            "description": "",
+            "diagnostics": null,
+            "folder": "Cities",
+            "headers": null,
+            "items": [
+              {
+                "at": "collections[0].queries[0] @[26,9]",
+                "diagnostics": null,
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "graphql",
+                  "id": "req_x",
+                  "name": "",
+                  "url": "https://countries.example/graphql",
+                  "query": "query City($id: ID!) { city(id: $id) { name } }",
+                  "variables": "{\"id\": \"{{cityId}}\"}",
+                  "auth": {
+                    "type": "inherit"
+                  }
+                },
+                "request": "City"
+              }
+            ],
+            "variables": null
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "collections[2] @[40,5]",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": [
+          {
+            "Code": "altair.orphan",
+            "Severity": "warning",
+            "Message": "The sub-collection's parent (parentPath) is not in the file; it is placed in the collection that lists it.",
+            "At": "collections[2] @[40,5]"
+          }
+        ],
+        "folder": "Lost",
+        "headers": null,
+        "items": null,
+        "variables": null
+      },
+      {
+        "at": "collections[3] @[46,5]",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": [
+          {
+            "Code": "altair.orphan",
+            "Severity": "warning",
+            "Message": "The sub-collection's parentPath makes a loop of parents; it is placed in the collection that lists it.",
+            "At": "collections[3] @[46,5]"
+          }
+        ],
+        "folder": "Loop A",
+        "headers": null,
+        "items": [
+          {
+            "at": "collections[4] @[52,5]",
+            "auth": {
+              "type": "inherit"
+            },
+            "description": "",
+            "diagnostics": null,
+            "folder": "Loop B",
+            "headers": null,
+            "items": null,
+            "variables": null
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "queries[0] @[7,5]",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "url": "https://countries.example/graphql",
+          "query": "{ countries { code name } }",
+          "headers": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "All countries"
+      }
+    ],
+    "variables": null
+  }
+}

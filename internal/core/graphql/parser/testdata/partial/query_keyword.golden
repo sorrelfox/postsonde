@@ -1,0 +1,7 @@
+# source
+query
+# tree
+Document [0:5]
+  Definitions[0]: OperationDefinition [0:5] Operation=query Keyword=0
+# errors
+1:6 [5:5] unexpected token: expected "{", found end of input

@@ -1,0 +1,306 @@
+{
+  "method": "HEAD",
+  "url": "https://example.com/a",
+  "finalUrl": "https://example.com/b",
+  "redirects": 1,
+  "proto": "HTTP/1.1",
+  "protocol": "HTTP/1.1",
+  "statusCode": 200,
+  "status": "200 OK",
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "application/problem+json; charset=utf-8"
+    },
+    {
+      "name": "Set-Cookie",
+      "value": "a=1"
+    },
+    {
+      "name": "Set-Cookie",
+      "value": "b=2"
+    }
+  ],
+  "cookies": [
+    {
+      "raw": "a=1",
+      "name": "a",
+      "value": "1",
+      "domain": "",
+      "path": "",
+      "expires": "",
+      "maxAge": 0,
+      "hasMaxAge": false,
+      "secure": false,
+      "httpOnly": false,
+      "sameSite": "",
+      "error": "",
+      "notes": [],
+      "jar": "",
+      "jarReason": "",
+      "jarMessage": ""
+    },
+    {
+      "raw": "b=2",
+      "name": "b",
+      "value": "2",
+      "domain": "",
+      "path": "",
+      "expires": "",
+      "maxAge": 0,
+      "hasMaxAge": false,
+      "secure": false,
+      "httpOnly": false,
+      "sameSite": "",
+      "error": "",
+      "notes": [],
+      "jar": "",
+      "jarReason": "",
+      "jarMessage": ""
+    }
+  ],
+  "contentType": "application/problem+json; charset=utf-8",
+  "body": "{\"title\":\"ok\"}",
+  "bodyLanguage": "json",
+  "bodyPretty": "{\n  \"title\": \"ok\"\n}",
+  "prettyState": "formatted",
+  "prettyError": "",
+  "charset": "UTF-8",
+  "charsetSource": "header",
+  "bodyHex": false,
+  "bodyNote": "",
+  "previewType": "",
+  "bodyBinary": false,
+  "bodyClipped": false,
+  "bodyShown": 14,
+  "bodyTruncated": false,
+  "bodyLimit": 0,
+  "size": 14,
+  "bodySize": 14,
+  "contentEncoding": "",
+  "bodyId": "",
+  "historyId": "",
+  "fileName": "b.json",
+  "headerSize": 108,
+  "durationMs": 1234,
+  "timeoutMs": 30000,
+  "timeoutSource": "settings",
+  "insecureTls": false,
+  "insecureTlsSource": "",
+  "warnings": [
+    {
+      "code": "request.body_omitted",
+      "message": "The body was not sent: HEAD requests cannot have one."
+    }
+  ],
+  "timeline": {
+    "hops": [
+      {
+        "kind": "redirect",
+        "request": {
+          "method": "HEAD",
+          "url": "https://example.com/a",
+          "proto": "HTTP/1.1",
+          "target": "/a",
+          "headers": [
+            {
+              "name": "Host",
+              "value": "example.com"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ••••••"
+            }
+          ],
+          "head": "HEAD /a HTTP/1.1\r\nHost: example.com\r\nAuthorization: Bearer ••••••\r\n\r\n",
+          "body": "",
+          "bodyHex": false,
+          "bodyShown": 0,
+          "bodyClipped": false,
+          "bodySize": 0,
+          "bodyChunked": false
+        },
+        "startMs": 0,
+        "responseProto": "HTTP/1.1",
+        "statusCode": 302,
+        "status": "302 Found",
+        "responseHead": "HTTP/1.1 302 Found\r\nLocation: /b\r\n\r\n",
+        "timing": {
+          "totalMs": 10,
+          "phases": [
+            {
+              "phase": "dns",
+              "observed": true,
+              "startMs": 0.1,
+              "durationMs": 1,
+              "skipped": ""
+            },
+            {
+              "phase": "connect",
+              "observed": true,
+              "startMs": 1.1,
+              "durationMs": 2,
+              "skipped": ""
+            },
+            {
+              "phase": "tls",
+              "observed": false,
+              "startMs": 0,
+              "durationMs": 0,
+              "skipped": "no_tls"
+            },
+            {
+              "phase": "request_write",
+              "observed": true,
+              "startMs": 3.2,
+              "durationMs": 0.25,
+              "skipped": ""
+            },
+            {
+              "phase": "wait",
+              "observed": true,
+              "startMs": 3.45,
+              "durationMs": 3,
+              "skipped": ""
+            },
+            {
+              "phase": "download",
+              "observed": false,
+              "startMs": 0,
+              "durationMs": 0,
+              "skipped": "not_final"
+            }
+          ]
+        },
+        "conn": {
+          "reused": false,
+          "wasIdle": false,
+          "idleMs": 0,
+          "localAddr": "192.0.2.10:50000",
+          "remoteAddr": "93.184.216.34:80",
+          "protocol": "HTTP/1.1",
+          "via": "",
+          "proxy": null,
+          "tls": null
+        }
+      },
+      {
+        "kind": "final",
+        "request": {
+          "method": "HEAD",
+          "url": "https://example.com/b",
+          "proto": "HTTP/1.1",
+          "target": "/b",
+          "headers": [
+            {
+              "name": "Host",
+              "value": "example.com"
+            }
+          ],
+          "head": "HEAD /b HTTP/1.1\r\nHost: example.com\r\n\r\n",
+          "body": "",
+          "bodyHex": false,
+          "bodyShown": 0,
+          "bodyClipped": false,
+          "bodySize": 0,
+          "bodyChunked": false
+        },
+        "startMs": 10,
+        "responseProto": "HTTP/1.1",
+        "statusCode": 200,
+        "status": "200 OK",
+        "responseHead": "HTTP/1.1 200 OK\r\nContent-Type: application/problem+json; charset=utf-8\r\nSet-Cookie: a=1\r\nSet-Cookie: b=2\r\n\r\n",
+        "timing": {
+          "totalMs": 1224,
+          "phases": [
+            {
+              "phase": "dns",
+              "observed": false,
+              "startMs": 0,
+              "durationMs": 0,
+              "skipped": "no_lookup"
+            },
+            {
+              "phase": "connect",
+              "observed": true,
+              "startMs": 0.05,
+              "durationMs": 2,
+              "skipped": ""
+            },
+            {
+              "phase": "tls",
+              "observed": true,
+              "startMs": 2.05,
+              "durationMs": 5,
+              "skipped": ""
+            },
+            {
+              "phase": "request_write",
+              "observed": true,
+              "startMs": 7.1,
+              "durationMs": 0.1,
+              "skipped": ""
+            },
+            {
+              "phase": "wait",
+              "observed": true,
+              "startMs": 7.2,
+              "durationMs": 20,
+              "skipped": ""
+            },
+            {
+              "phase": "download",
+              "observed": true,
+              "startMs": 27.2,
+              "durationMs": 1,
+              "skipped": ""
+            }
+          ]
+        },
+        "conn": {
+          "reused": false,
+          "wasIdle": false,
+          "idleMs": 0,
+          "localAddr": "192.0.2.10:50001",
+          "remoteAddr": "93.184.216.34:443",
+          "protocol": "h2",
+          "via": "",
+          "proxy": null,
+          "tls": {
+            "version": "TLS 1.3",
+            "cipherSuite": "TLS_AES_128_GCM_SHA256",
+            "serverName": "example.com",
+            "alpn": "h2",
+            "resumed": false,
+            "certificates": [
+              {
+                "subject": "CN=example.com",
+                "issuer": "CN=Test CA,O=Test",
+                "notBefore": "2026-01-01T00:00:00Z",
+                "notAfter": "2027-01-01T00:00:00Z",
+                "dnsNames": [
+                  "example.com",
+                  "www.example.com"
+                ],
+                "ipAddresses": [],
+                "validity": "",
+                "selfSigned": false
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "events": [
+      {
+        "atMs": 2,
+        "name": "get_conn",
+        "detail": "example.com:443"
+      }
+    ],
+    "masked": true
+  },
+  "tests": [],
+  "extractions": [],
+  "incremental": null
+}

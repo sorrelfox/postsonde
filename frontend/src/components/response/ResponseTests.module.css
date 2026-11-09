@@ -1,0 +1,261 @@
+/* The response's Tests tab (TEST-06): the counts, then one row per
+ * assertion: a pass / fail / invalid mark, the assertion (a link to its
+ * row), the message and the expected and actual values. */
+
+.tests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.empty p {
+  margin: 0;
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.summary strong {
+  font-weight: var(--fw-semibold);
+}
+
+.summary[data-tone="ok"] strong {
+  color: var(--ok);
+}
+
+.summary[data-tone="bad"] strong {
+  color: var(--bad);
+}
+
+.summary[data-tone="warn"] strong {
+  color: var(--warn);
+}
+
+.failed {
+  color: var(--bad);
+}
+
+.invalid {
+  color: var(--warn);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg0);
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+.mark {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border-radius: var(--radius-round);
+}
+
+.item[data-outcome="passed"] .mark {
+  color: var(--ok);
+}
+
+.item[data-outcome="failed"] .mark {
+  color: var(--bad);
+}
+
+.item[data-outcome="invalid"] .mark {
+  color: var(--warn);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.title {
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+button.title {
+  cursor: pointer;
+}
+
+button.title:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+button.title:focus-visible,
+.linkButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.message {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  overflow-wrap: anywhere;
+}
+
+.values {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+  margin: 0;
+  font-size: var(--fs-sm2);
+}
+
+.values dt {
+  color: var(--text3);
+}
+
+.values dd {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The errors of a failed "matches schema" assertion (TEST-07): the
+ * value's JSONPath, the message, the schema keyword's location. */
+.schemaErrors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm2);
+  color: var(--text2);
+  overflow-wrap: anywhere;
+}
+
+.schemaPath {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.schemaKeyword {
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.code {
+  margin: 0;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+/* A stream's results (TEST-08, StreamTests): when they were checked and
+ * "Check now" above them. */
+.stream {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.streamBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.streamNote {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.checkNow {
+  height: var(--h-control-sm);
+  margin-left: auto;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.checkNow:not(:disabled):hover {
+  background: var(--bg3);
+}
+
+.checkNow:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.streamError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-md);
+}

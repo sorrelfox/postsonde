@@ -1,0 +1,32 @@
+{
+  "entries": [
+    {
+      "id": "trash_0123456789abcdef",
+      "nodeId": "req_me",
+      "kind": "request",
+      "fileKind": "graphql",
+      "name": "Me",
+      "path": "users/me.json",
+      "parentId": "fld_users",
+      "index": 2,
+      "deletedAt": "2026-09-16T08:30:00Z"
+    },
+    {
+      "id": "trash_fedcba9876543210",
+      "nodeId": "fld_users",
+      "kind": "folder",
+      "fileKind": "folder",
+      "name": "Users",
+      "path": "users",
+      "parentId": null,
+      "index": 0,
+      "deletedAt": ""
+    }
+  ],
+  "event": {
+    "workspaceId": "ws_0123456789abcdef",
+    "op": "delete",
+    "nodeId": "req_me",
+    "trashId": "trash_0123456789abcdef"
+  }
+}

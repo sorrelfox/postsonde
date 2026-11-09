@@ -1,0 +1,88 @@
+{
+  "id": "req_sse",
+  "kind": "sse",
+  "name": "Prices",
+  "description": "",
+  "method": "GET",
+  "url": "http://localhost:8080/prices?symbol={{symbol}}",
+  "params": [
+    {
+      "name": "symbol",
+      "value": "{{symbol}}",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    }
+  ],
+  "pathParams": [],
+  "headers": [
+    {
+      "name": "Accept",
+      "value": "text/event-stream",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    }
+  ],
+  "body": {
+    "mode": "",
+    "type": "",
+    "text": "",
+    "fields": [],
+    "parts": [],
+    "path": "",
+    "contentType": "",
+    "extra": ""
+  },
+  "bodyExamples": [],
+  "query": "",
+  "variables": "",
+  "operationName": "",
+  "connectionParams": "",
+  "schemaFile": "",
+  "address": "",
+  "sendMode": "",
+  "lineEnding": "",
+  "message": "",
+  "subprotocols": [],
+  "messageFormat": "",
+  "service": "",
+  "proto": {
+    "files": [],
+    "importPaths": [],
+    "inherit": false,
+    "extra": ""
+  },
+  "metadata": [],
+  "auth": {
+    "type": "inherit",
+    "username": "",
+    "password": "",
+    "prefix": null,
+    "token": "",
+    "key": "",
+    "value": "",
+    "in": "",
+    "disabled": false,
+    "localSecrets": [],
+    "extra": ""
+  },
+  "settings": {
+    "timeoutMs": 5000,
+    "followRedirects": null,
+    "maxRedirects": null,
+    "followOriginalMethod": null,
+    "forwardAuthorization": null,
+    "verifyTls": null,
+    "connectTimeoutMs": null,
+    "urlEncoding": "",
+    "httpVersion": "",
+    "sendCookies": null,
+    "storeCookies": null,
+    "tls": null,
+    "deadlineMs": null,
+    "extra": ""
+  },
+  "extra": "{\"x-note\":\"kept\"}",
+  "version": 1
+}

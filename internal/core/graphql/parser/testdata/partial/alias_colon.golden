@@ -1,0 +1,11 @@
+# source
+{ pic: }
+# tree
+Document [0:8]
+  Definitions[0]: OperationDefinition [0:8] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:8] LBrace=0 RBrace=7
+      Selections[0]: Field [2:7] Colon=5
+        Alias: Name [2:5] Value="pic"
+        Name: Name [6:7] Value=""
+# errors
+1:8 [7:8] unexpected token: expected field name, found "}"

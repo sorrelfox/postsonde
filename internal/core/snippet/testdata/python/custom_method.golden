@@ -1,0 +1,9 @@
+import requests
+
+response = requests.request(
+    "purge",
+    "https://api.test/cache",
+)
+
+print(response.status_code)
+print(response.text)

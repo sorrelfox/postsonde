@@ -1,0 +1,69 @@
+[
+    {
+        "description": "integer type matches integers",
+        "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "integer"},
+        "tests": [
+            {"description": "an integer is an integer", "data": 1, "valid": true},
+            {"description": "a float with zero fractional part is an integer", "data": 1.0, "valid": true},
+            {"description": "a float is not an integer", "data": 1.1, "valid": false},
+            {"description": "a big integer is an integer", "data": 123456789012345678901234567890, "valid": true},
+            {"description": "an exponent form integer is an integer", "data": 1e2, "valid": true},
+            {"description": "a string is not an integer", "data": "foo", "valid": false},
+            {"description": "a string holding an integer is not an integer", "data": "1", "valid": false},
+            {"description": "an object is not an integer", "data": {}, "valid": false},
+            {"description": "an array is not an integer", "data": [], "valid": false},
+            {"description": "a boolean is not an integer", "data": true, "valid": false},
+            {"description": "null is not an integer", "data": null, "valid": false}
+        ]
+    },
+    {
+        "description": "number type matches numbers",
+        "schema": {"type": "number"},
+        "tests": [
+            {"description": "an integer is a number", "data": 1, "valid": true},
+            {"description": "a float is a number", "data": 1.1, "valid": true},
+            {"description": "a string is not a number", "data": "1", "valid": false},
+            {"description": "null is not a number", "data": null, "valid": false}
+        ]
+    },
+    {
+        "description": "string type matches strings",
+        "schema": {"type": "string"},
+        "tests": [
+            {"description": "a string is a string", "data": "foo", "valid": true},
+            {"description": "an empty string is a string", "data": "", "valid": true},
+            {"description": "a number is not a string", "data": 1, "valid": false},
+            {"description": "a boolean is not a string", "data": false, "valid": false}
+        ]
+    },
+    {
+        "description": "object, array, boolean and null types",
+        "schema": {"type": ["object", "array", "boolean", "null"]},
+        "tests": [
+            {"description": "an object", "data": {"a": 1}, "valid": true},
+            {"description": "an array", "data": [1], "valid": true},
+            {"description": "a boolean", "data": false, "valid": true},
+            {"description": "null", "data": null, "valid": true},
+            {"description": "a number", "data": 0, "valid": false},
+            {"description": "a string", "data": "", "valid": false}
+        ]
+    },
+    {
+        "description": "type as array with one item",
+        "schema": {"type": ["string"]},
+        "tests": [
+            {"description": "string is valid", "data": "foo", "valid": true},
+            {"description": "number is invalid", "data": 123, "valid": false}
+        ]
+    },
+    {
+        "description": "boolean type does not match 0 or 1",
+        "schema": {"type": "boolean"},
+        "tests": [
+            {"description": "true", "data": true, "valid": true},
+            {"description": "zero", "data": 0, "valid": false},
+            {"description": "one", "data": 1, "valid": false},
+            {"description": "empty string", "data": "", "valid": false}
+        ]
+    }
+]

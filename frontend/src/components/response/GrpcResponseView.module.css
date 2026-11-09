@@ -1,0 +1,218 @@
+/* The response pane of a gRPC request (GRPC-11, GRPC-12, GRPC-19,
+ * GRPC-20): the status line, tabs, tables and sections come from
+ * ResponseView.module.css; these are the gRPC parts. */
+
+.panel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status line: the code next to the status name, and the status message. */
+
+.code {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-regular);
+}
+
+.message {
+  min-width: 0;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+.cancel {
+  height: 24px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg2);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.cancel:hover:not(:disabled) {
+  background: var(--bg3);
+}
+
+.cancel:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.cancel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* A running call's status dot pulses. */
+.busy {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .busy {
+    animation: none;
+  }
+}
+
+/* The Messages section holds the log or the message editor, which scroll themselves. */
+.messages {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.log {
+  flex: 1;
+  min-height: 0;
+}
+
+.raw {
+  margin: var(--space-4) var(--space-7);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: var(--lh-code);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.empty {
+  margin: var(--space-5) var(--space-7);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+/* Status tab (GRPC-20) */
+
+.statusPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-7) var(--space-6);
+}
+
+.statusHead {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+.statusName {
+  color: var(--bad);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-semibold);
+}
+
+.statusHead[data-ok] .statusName {
+  color: var(--ok);
+}
+
+.statusCode {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.statusMessage {
+  min-width: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.statusNote {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+  overflow-wrap: anywhere;
+}
+
+.statusDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.statusDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+}
+
+.statusDetailHead {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.statusDetailType {
+  color: var(--tk-type);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-semibold);
+}
+
+.statusDetailUrl {
+  min-width: 0;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  overflow-wrap: anywhere;
+}
+
+.statusJson {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: var(--lh-code);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.binaryTag {
+  margin-left: var(--space-3);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-size: var(--fs-mono-xs);
+}
+

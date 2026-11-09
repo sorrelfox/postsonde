@@ -1,0 +1,58 @@
+# The project site, https://sorrelfox.github.io/postsonde/: site/ plus the
+# app's icon, fonts and screenshots, published by GitHub Pages whenever one
+# of them changes on dev.
+#
+# It deploys from dev because dev is the repository's default branch. The
+# github-pages environment that GitHub creates for Pages usually lets only
+# the default branch deploy, so a deployment from another branch would be
+# rejected. If the default branch changes, change the branch below too.
+#
+# To preview it, run the "Put the site together" commands from the
+# repository root, then serve _site/ (for example with
+# `python3 -m http.server -d _site`) and open /.
+name: Pages
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - site/**
+      - docs/screenshots/**
+      - assets/icons/postsonde-small.svg
+      - assets/icons/png/postsonde-32.png
+      - frontend/src/assets/fonts/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Put the site together
+        run: |
+          fonts=frontend/src/assets/fonts
+          mkdir -p _site/screenshots _site/fonts
+          cp -R site/. _site/
+          cp docs/screenshots/*.png _site/screenshots/
+          cp assets/icons/postsonde-small.svg _site/favicon.svg
+          cp assets/icons/png/postsonde-32.png _site/favicon-32.png
+          cp "$fonts"/instrument-sans/*.woff2 "$fonts"/jetbrains-mono/*.woff2 _site/fonts/
+          cp "$fonts"/instrument-sans/OFL.txt _site/fonts/OFL-InstrumentSans.txt
+          cp "$fonts"/jetbrains-mono/OFL.txt _site/fonts/OFL-JetBrainsMono.txt
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+      - id: deployment
+        uses: actions/deploy-pages@v5

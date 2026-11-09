@@ -1,0 +1,9 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://{{host}}/items/{{id}}",
+)
+
+print(response.status_code)
+print(response.text)

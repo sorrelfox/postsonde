@@ -1,0 +1,15 @@
+# source
+{ a ) ] : b } }
+# tree
+Document [0:15]
+  Definitions[0]: OperationDefinition [0:13] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:13] LBrace=0 RBrace=12
+      Selections[0]: Field [2:3] Colon=-1
+        Name: Name [2:3] Value="a"
+      Selections[1]: Field [10:11] Colon=-1
+        Name: Name [10:11] Value="b"
+# errors
+1:5 [4:5] unexpected token: expected field, fragment spread or inline fragment, found ")"
+1:7 [6:7] unexpected token: expected field, fragment spread or inline fragment, found "]"
+1:9 [8:9] unexpected token: expected field, fragment spread or inline fragment, found ":"
+1:15 [14:15] unexpected token: expected query, mutation, subscription, fragment or "{", found "}"

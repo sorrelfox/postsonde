@@ -1,0 +1,3 @@
+wget 'https://api.test/p%7Cq?x=%5B1%5D&y=a%5Eb' \
+  --max-redirect 10 \
+  -O -

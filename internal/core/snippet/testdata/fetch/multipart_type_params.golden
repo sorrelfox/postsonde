@@ -1,0 +1,13 @@
+import { openAsBlob } from "node:fs";
+
+const form = new FormData();
+form.append("text", "x");
+form.append("file", await openAsBlob("<root>/data.json", { type: "application/json; charset=\"utf-8\"" }), "data.json");
+
+const response = await fetch("https://api.test/upload", {
+  method: "POST",
+  body: form,
+});
+
+console.log(response.status);
+console.log(await response.text());

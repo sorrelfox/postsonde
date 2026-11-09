@@ -1,0 +1,9 @@
+curl https://api.test/q ^
+  -H "X-Odd!#$"%"&'*+.^_`|~: 100"%" ^caret^ &amp| <tag> (paren) !bang! "%"PATH"%" "%""%" $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' ""double"" """"two"""" \ \\ \\"" end\\" ^
+  -H "X-Unicode: héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛" ^
+  -H "X-Long: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef" ^
+  -H "X-Json: {""a"":""b\\""c"",""d"":[1,2],""e"":""C:\\dir\\\\""}" ^
+  -H "X-Tab: a	b" ^
+  -H "X-Empty;" ^
+  -H User-Agent: ^
+  -L --max-redirs 10

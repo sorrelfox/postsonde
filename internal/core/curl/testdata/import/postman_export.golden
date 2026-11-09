@@ -1,0 +1,39 @@
+{
+  "name": "users",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/v2/users?limit=10",
+    "params": [
+      {
+        "name": "limit",
+        "value": "10"
+      }
+    ],
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      },
+      {
+        "name": "Authorization",
+        "value": "Bearer {{token}}"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\n    \"name\": \"Ada\",\n    \"email\": \"ada@example.com\"\n}"
+    },
+    "auth": {
+      "type": "inherit"
+    },
+    "settings": {
+      "followRedirects": true
+    }
+  },
+  "diagnostics": []
+}

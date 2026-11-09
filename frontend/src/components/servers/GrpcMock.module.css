@@ -1,0 +1,119 @@
+/* The Methods tab of a gRPC mock server (SSRV-07): the .proto files, the
+ * methods they define with whether each has a canned response, and the
+ * selected method's response. The rest of the layout is WsServer.module.css. */
+
+.pathList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pathRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.diagnostics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.diagnostics code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.service {
+  margin: var(--space-2) 0 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.kind {
+  flex: none;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.mocked {
+  flex: none;
+  color: var(--ok);
+  font-size: var(--fs-sm2);
+}
+
+.unmocked {
+  flex: none;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.editorTitle {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.messageFrame {
+  height: 180px;
+}
+
+.messageHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.statusMessage {
+  flex: 1;
+  min-width: 160px;
+  max-width: 420px;
+}

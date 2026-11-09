@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Header>
+    <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" soap:mustUnderstand="1">
+      <wsse:UsernameToken wsu:Id="token-1" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+        <wsse:Username>svc-orders</wsse:Username>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring xml:lang="en">Order 1042 could not be processed</faultstring>
+      <detail>
+        <ns1:OrderFault xmlns:ns1="urn:example:orders">
+          <ns1:code>E-STOCK</ns1:code>
+          <ns1:sku>ABC-123</ns1:sku>
+          <ns1:sku>XYZ-9</ns1:sku>
+        </ns1:OrderFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>

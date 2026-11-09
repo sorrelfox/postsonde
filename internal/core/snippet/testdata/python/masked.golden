@@ -1,0 +1,15 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/items?key=••••••",
+    headers={
+        "X-Api-Key": "••••••".encode(),
+        "Authorization": "Bearer ••••••".encode(),
+        "Content-Type": "application/json",
+    },
+    data='{"password":"••••••"}'.encode(),
+)
+
+print(response.status_code)
+print(response.text)

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_c93e1a7b40f2d856",
+  "name": "Create user",
+  "description": "Creates a user in an organisation. Needs the `users:write` scope.",
+  "method": "POST",
+  "url": "{{baseUrl}}/orgs/:org/users?notify=true",
+  "params": [
+    {
+      "name": "notify",
+      "value": "true"
+    },
+    {
+      "name": "dryRun",
+      "value": "true",
+      "description": "Validate only",
+      "disabled": true
+    }
+  ],
+  "pathParams": [
+    {
+      "name": "org",
+      "value": "acme"
+    }
+  ],
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "name": "X-Request-Id",
+      "value": "{{$uuid}}",
+      "disabled": true
+    }
+  ],
+  "body": {
+    "mode": "raw",
+    "type": "json",
+    "text": "{\n  \"name\": \"Zoë <admin>\",\n  \"email\": \"zoe@example.com\"\n}"
+  },
+  "auth": {
+    "type": "inherit"
+  },
+  "settings": {
+    "timeoutMs": 30000,
+    "followRedirects": false
+  },
+  "assertions": [
+    {
+      "target": "status",
+      "op": "equals",
+      "expected": "201"
+    },
+    {
+      "target": "jsonpath",
+      "expr": "$.id",
+      "op": "is_type",
+      "expected": "string"
+    },
+    {
+      "target": "header",
+      "expr": "Location",
+      "op": "contains",
+      "expected": "/users/"
+    },
+    {
+      "target": "time",
+      "op": "lt",
+      "expected": "{{maxLatency}}",
+      "disabled": true
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+curl.exe -X DELETE https://api.test/items/1 `
+  -L --max-redirs 10

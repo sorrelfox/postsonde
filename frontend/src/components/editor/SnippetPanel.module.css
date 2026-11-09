@@ -1,0 +1,146 @@
+/* The Code sub-tab (GEN-12): language, mode, Show secrets and Copy, a
+ * status line, then the code, filling the section. */
+
+.panel {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.toolbar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.fieldLabel {
+  white-space: nowrap;
+}
+
+.select {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text);
+  font: inherit;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.segmented {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.segment,
+.action {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.segment:hover,
+.action:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"],
+.action[aria-pressed="true"] {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.action[aria-pressed="true"] {
+  color: var(--warn);
+}
+
+.action:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.segment:focus-visible,
+.action:focus-visible,
+.code:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.status {
+  flex: none;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.status[data-revealed="true"] {
+  color: var(--warn);
+}
+
+.code {
+  flex: 1;
+  min-height: 120px;
+  margin: 0;
+  padding: var(--space-4);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  white-space: pre;
+  user-select: text;
+}
+
+.code[aria-busy="true"] {
+  opacity: 0.7;
+}
+
+.note,
+.error {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.error {
+  color: var(--bad);
+}

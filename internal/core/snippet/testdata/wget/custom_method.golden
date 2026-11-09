@@ -1,0 +1,4 @@
+wget https://api.test/cache \
+  --method purge \
+  --max-redirect 10 \
+  -O -

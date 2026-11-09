@@ -1,0 +1,4 @@
+curl http://api.test/me \
+  -u 'jürgen:pässwörd ✓' \
+  -k \
+  --http2-prior-knowledge

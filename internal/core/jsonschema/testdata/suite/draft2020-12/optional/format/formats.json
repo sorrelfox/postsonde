@@ -1,0 +1,199 @@
+[
+    {
+        "description": "date-time",
+        "schema": {"format": "date-time"},
+        "tests": [
+            {"description": "UTC", "data": "1963-06-19T08:30:06.283185Z", "valid": true},
+            {"description": "with an offset", "data": "1963-06-19T08:30:06+01:00", "valid": true},
+            {"description": "lowercase t and z", "data": "1963-06-19t08:30:06z", "valid": true},
+            {"description": "a leap second at 23:59:60 UTC", "data": "1998-12-31T23:59:60Z", "valid": true},
+            {"description": "a leap second with an offset", "data": "1998-12-31T15:59:60.123-08:00", "valid": true},
+            {"description": "a leap second at another time", "data": "1998-12-31T22:59:60Z", "valid": false},
+            {"description": "no offset", "data": "1963-06-19T08:30:06", "valid": false},
+            {"description": "February 30", "data": "1990-02-30T00:00:00Z", "valid": false},
+            {"description": "February 29 of a leap year", "data": "2000-02-29T00:00:00Z", "valid": true},
+            {"description": "February 29 of a century", "data": "1900-02-29T00:00:00Z", "valid": false},
+            {"description": "a space instead of T", "data": "1963-06-19 08:30:06Z", "valid": false},
+            {"description": "non-strings are ignored", "data": 12, "valid": true}
+        ]
+    },
+    {
+        "description": "date",
+        "schema": {"format": "date"},
+        "tests": [
+            {"description": "a date", "data": "2020-01-31", "valid": true},
+            {"description": "April 31", "data": "2020-04-31", "valid": false},
+            {"description": "month 13", "data": "2020-13-01", "valid": false},
+            {"description": "one-digit day", "data": "2020-01-1", "valid": false},
+            {"description": "a date-time", "data": "2020-01-01T00:00:00Z", "valid": false}
+        ]
+    },
+    {
+        "description": "time",
+        "schema": {"format": "time"},
+        "tests": [
+            {"description": "a time with an offset", "data": "08:30:06Z", "valid": true},
+            {"description": "no offset", "data": "08:30:06", "valid": false},
+            {"description": "hour 24", "data": "24:00:00Z", "valid": false},
+            {"description": "an offset hour 24", "data": "08:30:06+24:00", "valid": false}
+        ]
+    },
+    {
+        "description": "duration",
+        "schema": {"format": "duration"},
+        "tests": [
+            {"description": "a full duration", "data": "P4Y1M2DT12H30M5S", "valid": true},
+            {"description": "weeks", "data": "P2W", "valid": true},
+            {"description": "time only", "data": "PT1H", "valid": true},
+            {"description": "no component", "data": "P", "valid": false},
+            {"description": "T without a time component", "data": "P1DT", "valid": false},
+            {"description": "weeks mixed with days", "data": "P1W1D", "valid": false},
+            {"description": "no P", "data": "1D", "valid": false}
+        ]
+    },
+    {
+        "description": "email",
+        "schema": {"format": "email"},
+        "tests": [
+            {"description": "an email", "data": "joe.bloggs@example.com", "valid": true},
+            {"description": "a tag", "data": "joe+tag@example.com", "valid": true},
+            {"description": "an IPv4 literal", "data": "joe@[127.0.0.1]", "valid": true},
+            {"description": "an IPv6 literal", "data": "joe@[IPv6:::1]", "valid": true},
+            {"description": "no @", "data": "2962", "valid": false},
+            {"description": "two dots", "data": "joe..bloggs@example.com", "valid": false},
+            {"description": "a leading dot", "data": ".joe@example.com", "valid": false},
+            {"description": "a display name", "data": "Joe <joe@example.com>", "valid": false},
+            {"description": "an invalid domain", "data": "joe@-example.com", "valid": false},
+            {"description": "non-ASCII", "data": "é@example.com", "valid": false}
+        ]
+    },
+    {
+        "description": "idn-email",
+        "schema": {"format": "idn-email"},
+        "tests": [
+            {"description": "non-ASCII", "data": "실례@실례.테스트", "valid": true},
+            {"description": "no @", "data": "2962", "valid": false}
+        ]
+    },
+    {
+        "description": "hostname",
+        "schema": {"format": "hostname"},
+        "tests": [
+            {"description": "a host name", "data": "www.example.com", "valid": true},
+            {"description": "a punycode label", "data": "xn--4gbwdl.xn--wgbh1c", "valid": true},
+            {"description": "a leading hyphen", "data": "-a.example.com", "valid": false},
+            {"description": "a trailing hyphen", "data": "a-.example.com", "valid": false},
+            {"description": "an underscore", "data": "not_valid.com", "valid": false},
+            {"description": "a label of 64 characters", "data": "a1234567890123456789012345678901234567890123456789012345678901234.com", "valid": false},
+            {"description": "an empty label", "data": "a..com", "valid": false},
+            {"description": "hyphens at positions 3 and 4 without xn", "data": "ab--cd.com", "valid": false}
+        ]
+    },
+    {
+        "description": "idn-hostname",
+        "schema": {"format": "idn-hostname"},
+        "tests": [
+            {"description": "a Unicode host name", "data": "실례.테스트", "valid": true},
+            {"description": "a space", "data": "a b.com", "valid": false}
+        ]
+    },
+    {
+        "description": "ipv4",
+        "schema": {"format": "ipv4"},
+        "tests": [
+            {"description": "an address", "data": "192.168.0.1", "valid": true},
+            {"description": "an octet over 255", "data": "256.256.256.256", "valid": false},
+            {"description": "a leading zero", "data": "087.10.0.1", "valid": false},
+            {"description": "three octets", "data": "127.0.0", "valid": false},
+            {"description": "an IPv6 address", "data": "::1", "valid": false}
+        ]
+    },
+    {
+        "description": "ipv6",
+        "schema": {"format": "ipv6"},
+        "tests": [
+            {"description": "loopback", "data": "::1", "valid": true},
+            {"description": "a full address", "data": "2001:0db8:0000:0000:0000:ff00:0042:8329", "valid": true},
+            {"description": "an IPv4 suffix", "data": "::ffff:192.168.0.1", "valid": true},
+            {"description": "a zone", "data": "fe80::1%eth0", "valid": false},
+            {"description": "an IPv4 address", "data": "127.0.0.1", "valid": false},
+            {"description": "two ::", "data": "1::2::3", "valid": false}
+        ]
+    },
+    {
+        "description": "uri",
+        "schema": {"format": "uri"},
+        "tests": [
+            {"description": "a URL", "data": "http://example.com/a?b=c#d", "valid": true},
+            {"description": "a URN", "data": "urn:isbn:0451450523", "valid": true},
+            {"description": "a mailto", "data": "mailto:joe@example.com", "valid": true},
+            {"description": "a relative reference", "data": "/abc", "valid": false},
+            {"description": "a space", "data": "http://example.com/a b", "valid": false},
+            {"description": "a bad escape", "data": "http://example.com/%zz", "valid": false},
+            {"description": "non-ASCII", "data": "http://example.com/é", "valid": false}
+        ]
+    },
+    {
+        "description": "uri-reference",
+        "schema": {"format": "uri-reference"},
+        "tests": [
+            {"description": "a relative reference", "data": "/abc", "valid": true},
+            {"description": "a fragment", "data": "#frag", "valid": true},
+            {"description": "a backslash", "data": "\\\\WINDOWS\\fileshare", "valid": false}
+        ]
+    },
+    {
+        "description": "iri",
+        "schema": {"format": "iri"},
+        "tests": [
+            {"description": "non-ASCII", "data": "http://ƒøø.ßår/?∂éœ=πîx#πîüx", "valid": true},
+            {"description": "relative", "data": "/é", "valid": false}
+        ]
+    },
+    {
+        "description": "uuid",
+        "schema": {"format": "uuid"},
+        "tests": [
+            {"description": "a UUID", "data": "2eb8aa08-aa98-11ea-b4aa-73b441d16380", "valid": true},
+            {"description": "upper case", "data": "2EB8AA08-AA98-11EA-B4AA-73B441D16380", "valid": true},
+            {"description": "no dashes", "data": "2eb8aa08aa9811eab4aa73b441d16380", "valid": false},
+            {"description": "a wrong group length", "data": "2eb8aa08-aa98-11ea-b4aa-73b441d1638", "valid": false}
+        ]
+    },
+    {
+        "description": "regex",
+        "schema": {"format": "regex"},
+        "tests": [
+            {"description": "a regular expression", "data": "^[a-z]+$", "valid": true},
+            {"description": "an unclosed group", "data": "^(abc$", "valid": false}
+        ]
+    },
+    {
+        "description": "json-pointer",
+        "schema": {"format": "json-pointer"},
+        "tests": [
+            {"description": "a pointer", "data": "/foo/0/a~1b", "valid": true},
+            {"description": "the empty pointer", "data": "", "valid": true},
+            {"description": "no leading slash", "data": "foo", "valid": false},
+            {"description": "a bad escape", "data": "/foo~2", "valid": false}
+        ]
+    },
+    {
+        "description": "relative-json-pointer",
+        "schema": {"format": "relative-json-pointer"},
+        "tests": [
+            {"description": "up and down", "data": "1/foo", "valid": true},
+            {"description": "a name", "data": "0#", "valid": true},
+            {"description": "a leading zero", "data": "01/a", "valid": false},
+            {"description": "no number", "data": "/a", "valid": false}
+        ]
+    },
+    {
+        "description": "uri-template",
+        "schema": {"format": "uri-template"},
+        "tests": [
+            {"description": "a template", "data": "http://example.com/dictionary/{term:1}/{term}", "valid": true},
+            {"description": "an unclosed brace", "data": "http://example.com/dictionary/{term:1}/{term", "valid": false}
+        ]
+    }
+]

@@ -1,0 +1,60 @@
+{
+  "name": "orders",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/v1/orders?page=2\u0026sort=desc",
+    "params": [
+      {
+        "name": "page",
+        "value": "2"
+      },
+      {
+        "name": "sort",
+        "value": "desc"
+      }
+    ],
+    "headers": [
+      {
+        "name": "accept",
+        "value": "application/json, text/plain, */*"
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "sec-ch-ua",
+        "value": "\"Chromium\";v=\"128\""
+      },
+      {
+        "name": "user-agent",
+        "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+      },
+      {
+        "name": "Cookie",
+        "value": "session=abc123; theme=dark"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"note\":\"100%\",\"env\":\"%PATH%\",\"path\":\"C:\\\\tmp\",\"text\":\"a\nb\"}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.not_imported",
+      "severity": "info",
+      "start": 467,
+      "end": 479,
+      "message": "PostSonde shows the response as received and does not decompress it, so “--compressed” is not imported."
+    }
+  ]
+}

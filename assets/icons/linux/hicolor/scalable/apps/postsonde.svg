@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- PostSonde master icon. Signal mark (dot + two wave arcs each side)
+       from the title bar, on a rounded square in the app's dark palette.
+       Accent #4fd1a5, backgrounds #1a1e25 -> #0e1013, edge #2f3641. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f242c"/>
+      <stop offset="1" stop-color="#0e1013"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="512" cy="512" r="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4fd1a5" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#4fd1a5" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="0" y="0" width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <rect x="8" y="8" width="1008" height="1008" rx="220" fill="none" stroke="#2f3641" stroke-width="16"/>
+  <circle cx="512" cy="512" r="360" fill="url(#glow)"/>
+  <g fill="none" stroke="#4fd1a5" stroke-width="56" stroke-linecap="round">
+    <path d="M376.24 647.76A192 192 0 0 1 376.24 376.24"/>
+    <path d="M647.76 376.24A192 192 0 0 1 647.76 647.76"/>
+    <path d="M308.35 715.65A288 288 0 0 1 308.35 308.35"/>
+    <path d="M715.65 308.35A288 288 0 0 1 715.65 715.65"/>
+  </g>
+  <circle cx="512" cy="512" r="64" fill="#4fd1a5"/>
+</svg>

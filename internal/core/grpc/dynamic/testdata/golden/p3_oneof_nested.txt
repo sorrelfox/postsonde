@@ -1,0 +1,4 @@
+type: codec.p3.Oneofs
+o_nested: {}
+o_nested.a: 3
+o_nested.b: "n"

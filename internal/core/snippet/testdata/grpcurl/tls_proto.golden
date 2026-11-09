@@ -1,0 +1,13 @@
+grpcurl -insecure \
+  -import-path /work/protos \
+  -import-path /work/third_party \
+  -import-path '/elsewhere/my protos' \
+  -proto shop/v1/orders.proto \
+  -proto extra.proto \
+  -proto more.proto \
+  -d '{
+  "page": 2
+}' \
+  -connect-timeout 3 \
+  -max-time 1.5 \
+  api.test:8443 shop.v1.Orders/List

@@ -1,0 +1,10 @@
+type: codec.p3.Scalars
+f_int32: 1
+f_int64: 300
+f_uint32: 127
+f_uint64: 128
+f_sint32: -1
+f_sint64: 1
+f_sfixed32: -2147483648
+f_sfixed64: 9223372036854775807
+f_string: "a"

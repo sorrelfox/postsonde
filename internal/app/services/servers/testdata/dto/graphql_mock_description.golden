@@ -1,0 +1,58 @@
+{
+  "source": "text",
+  "format": "sdl",
+  "types": 3,
+  "queryFields": 2,
+  "mutationFields": 0,
+  "subscriptionFields": 0,
+  "targets": [
+    {
+      "target": "Query.product",
+      "type": "Product",
+      "args": [
+        "id"
+      ],
+      "root": true
+    },
+    {
+      "target": "Query.products",
+      "type": "[Product!]!",
+      "args": [
+        "first"
+      ],
+      "root": true
+    },
+    {
+      "target": "Product.id",
+      "type": "ID!",
+      "args": [],
+      "root": false
+    },
+    {
+      "target": "Product.name",
+      "type": "String!",
+      "args": [],
+      "root": false
+    },
+    {
+      "target": "Product.price",
+      "type": "Float",
+      "args": [],
+      "root": false
+    },
+    {
+      "target": "DateTime",
+      "type": "SCALAR",
+      "args": [],
+      "root": false
+    }
+  ],
+  "problems": [
+    {
+      "overrideIndex": 0,
+      "field": "target",
+      "message": "Override 1 (Product.nope): the type Product has no field \"nope\"."
+    }
+  ],
+  "sdl": "type Query {\n  product(id: ID!): Product\n  products(first: Int): [Product!]!\n}\n\ntype Product {\n  id: ID!\n  name: String!\n  price: Float\n}\n\nscalar DateTime\n"
+}

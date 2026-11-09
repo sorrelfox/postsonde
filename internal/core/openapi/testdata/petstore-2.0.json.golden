@@ -1,0 +1,217 @@
+openapi 3.0.3 (3.0) dialect=""
+swagger: "2.0"
+info "Petstore 2.0" version "1.0.0"
+  description: "A pet store that uses the Swagger 2.0 features."
+  termsOfService: "https://petstore.example/terms"
+  contact {Name:Pet API team URL: Email:api@petstore.example}
+  license {Name:Apache 2.0 Identifier: URL:https://www.apache.org/licenses/LICENSE-2.0.html}
+server "https://petstore.example/v2" "" -> "https://petstore.example/v2" @17:11 #/host
+server "http://petstore.example/v2" "" -> "http://petstore.example/v2" @17:11 #/host
+security petstore_auth[write:pets,read:pets]
+tag "pets" "Everything about your pets" @35:5 #/tags/0
+tag "store" "" @39:5 #/tags/1
+tag "users" "" @42:5 #/tags/2
+externalDocs {Description:More about the store URL:https://petstore.example/docs}
+x-generator: "hand-written"
+components.schemas.Pet type=object required=name,petType @516:12 #/definitions/Pet
+  discriminator petType []
+  xml {Name:Pet Namespace: Prefix: Attribute:false Wrapped:false}
+  property id type=integer format=int64 readOnly=true @524:15 #/definitions/Pet/properties/id
+  property name type=string @529:17 #/definitions/Pet/properties/name
+    example: "Rex"
+  property petType type=string @533:20 #/definitions/Pet/properties/petType
+  property category type=object recursive=true @588:17 #/definitions/Category
+    property id type=integer format=int64 @591:15 #/definitions/Category/properties/id
+    property name type=string @595:17 #/definitions/Category/properties/name
+    property parent see #/definitions/Category
+  property tags type=array @539:17 #/definitions/Pet/properties/tags
+    xml {Name: Namespace: Prefix: Attribute:false Wrapped:true}
+    items type=object @603:12 #/definitions/Tag
+      property id type=integer format=int64 @606:15 #/definitions/Tag/properties/id
+      property name type=string|null nullable=true @610:17 #/definitions/Tag/properties/name
+  property status type=string @548:19 #/definitions/Pet/properties/status
+    description: "pet status in the store"
+    enum[] "available"
+    enum[] "pending"
+    enum[] "sold"
+  property owner type=string @623:21 #/definitions/User/properties/username
+components.schemas.Cat  @565:12 #/definitions/Cat
+  description: "A cat"
+  allOf[] see #/definitions/Pet
+  allOf[] type=object @571:9 #/definitions/Cat/allOf/1
+    property huntingSkill type=string @574:29 #/definitions/Cat/allOf/1/properties/huntingSkill
+      default: "lazy"
+      enum[] "clueless"
+      enum[] "lazy"
+      enum[] "adventurous"
+      enum[] "aggressive"
+components.schemas.Category see #/definitions/Category
+components.schemas.Tag see #/definitions/Tag
+components.schemas.User type=object @616:13 #/definitions/User
+  property id type=integer format=int64 @619:15 #/definitions/User/properties/id
+  property username see #/definitions/User/properties/username
+  property email type=string format=email @626:18 #/definitions/User/properties/email
+  property password type=string format=password @630:21 #/definitions/User/properties/password
+components.schemas.ApiResponse type=object @636:20 #/definitions/ApiResponse
+  property code type=integer format=int32 @639:17 #/definitions/ApiResponse/properties/code
+  property type type=string @643:17 #/definitions/ApiResponse/properties/type
+  property message type=string @646:20 #/definitions/ApiResponse/properties/message
+components.schemas.Error type=object required=code,message @651:14 #/definitions/Error
+  property code type=integer format=int32 @658:17 #/definitions/Error/properties/code
+  property message type=string @662:20 #/definitions/Error/properties/message
+components.parameters.PetId path petId required=true style=(simple) explode=-(false) @437:14 #/parameters/PetId
+  description: "The id of the pet"
+  schema type=integer format=int64 @437:14 #/parameters/PetId
+components.parameters.TraceId header X-Trace-Id required=false style=(simple) explode=-(false) @445:16 #/parameters/TraceId
+  schema type=string format=uuid @445:16 #/parameters/TraceId
+components.requestBodies.UserBody required=true @451:17 #/parameters/UserBody
+  content application/json @451:17 #/parameters/UserBody
+    schema see #/definitions/User
+  content application/xml @451:17 #/parameters/UserBody
+    schema see #/definitions/User
+components.responses.NotFound "The pet was not found" @461:17 #/responses/NotFound
+  content application/json @461:17 #/responses/NotFound
+    schema see #/definitions/Error
+components.responses.Error "Unexpected error" @467:14 #/responses/Error
+  content application/json @467:14 #/responses/Error
+    schema see #/definitions/Error
+components.securitySchemes.petstore_auth type=oauth2 name="" in="" scheme="" bearerFormat="" oidc="" @475:22 #/securityDefinitions/petstore_auth
+  flow implicit auth="https://petstore.example/oauth/authorize" token="" refresh="" scopes=[{write:pets modify pets in your account} {read:pets read your pets}]
+components.securitySchemes.password_auth type=oauth2 name="" in="" scheme="" bearerFormat="" oidc="" @484:22 #/securityDefinitions/password_auth
+  flow password auth="" token="https://petstore.example/oauth/token" refresh="" scopes=[]
+components.securitySchemes.client_auth type=oauth2 name="" in="" scheme="" bearerFormat="" oidc="" @490:20 #/securityDefinitions/client_auth
+  flow clientCredentials auth="" token="https://petstore.example/oauth/token" refresh="" scopes=[{admin everything}]
+components.securitySchemes.code_auth type=oauth2 name="" in="" scheme="" bearerFormat="" oidc="" @498:18 #/securityDefinitions/code_auth
+  flow authorizationCode auth="https://petstore.example/oauth/authorize" token="https://petstore.example/oauth/token" refresh="" scopes=[]
+components.securitySchemes.api_key type=apiKey name="api_key" in="header" scheme="" bearerFormat="" oidc="" @505:16 #/securityDefinitions/api_key
+components.securitySchemes.basic_auth type=http name="" in="" scheme="basic" bearerFormat="" oidc="" @510:19 #/securityDefinitions/basic_auth
+path /pets @55:14 #/paths/~1pets
+  GET /pets id="listPets" tags=["pets"] deprecated=false @56:14 #/paths/~1pets/get
+    summary: "List all pets"
+    param query limit required=false style=(form) explode=-(true) @63:11 #/paths/~1pets/get/parameters/0
+      description: "How many items to return at one time (max 100)"
+      example: 20
+      schema type=integer format=int32 minimum=1 exclusiveMaximum=100 @63:11 #/paths/~1pets/get/parameters/0
+    param query status required=false style=form(form) explode=true(true) @74:11 #/paths/~1pets/get/parameters/1
+      schema type=array @74:11 #/paths/~1pets/get/parameters/1
+        items type=string @78:22 #/paths/~1pets/get/parameters/1/items
+          enum[] "available"
+          enum[] "pending"
+          enum[] "sold"
+    param query tags required=false style=form(form) explode=false(false) @88:11 #/paths/~1pets/get/parameters/2
+      schema type=array @88:11 #/paths/~1pets/get/parameters/2
+        items type=string @92:22 #/paths/~1pets/get/parameters/2/items
+    param header X-Trace-Id see #/parameters/TraceId
+    response 200 "A paged array of pets" @101:18 #/paths/~1pets/get/responses/200
+      header x-next required=false "A link to the next page of responses" @104:25 #/paths/~1pets/get/responses/200/headers/x-next
+        schema type=string @104:25 #/paths/~1pets/get/responses/200/headers/x-next
+      header X-Rate-Limit required=false "" @108:31 #/paths/~1pets/get/responses/200/headers/X-Rate-Limit
+        schema type=integer format=int32 @108:31 #/paths/~1pets/get/responses/200/headers/X-Rate-Limit
+      content application/json @101:18 #/paths/~1pets/get/responses/200
+        schema type=array @113:23 #/paths/~1pets/get/responses/200/schema
+          items see #/definitions/Pet
+        example: [{"id":1,"name":"Rex","petType":"dog"}]
+    response default see #/responses/Error
+  POST /pets id="createPet" tags=["pets"] deprecated=false @134:15 #/paths/~1pets/post
+    summary: "Create a pet"
+    security 2
+      petstore_auth[write:pets]
+      api_key[]
+    requestBody required=true @141:11 #/paths/~1pets/post/parameters/0
+      description: "The pet to add"
+      content application/json @141:11 #/paths/~1pets/post/parameters/0
+        schema see #/definitions/Pet
+      content application/xml @141:11 #/paths/~1pets/post/parameters/0
+        schema see #/definitions/Pet
+    response 201 "Created" @152:18 #/paths/~1pets/post/responses/201
+      content application/json @152:18 #/paths/~1pets/post/responses/201
+        schema see #/definitions/Pet
+    response 405 "Invalid input" @158:18 #/paths/~1pets/post/responses/405
+path /pets/{petId} @174:22 #/paths/~1pets~1{petId}
+  param path petId see #/parameters/PetId
+  GET /pets/{petId} id="showPetById" tags=["pets"] deprecated=false @180:14 #/paths/~1pets~1{petId}/get
+    summary: "Info for a specific pet"
+    param path petId see #/parameters/PetId
+    response 200 "The pet" @191:18 #/paths/~1pets~1{petId}/get/responses/200
+      content application/json @191:18 #/paths/~1pets~1{petId}/get/responses/200
+        schema see #/definitions/Pet
+      content application/xml @191:18 #/paths/~1pets~1{petId}/get/responses/200
+        schema see #/definitions/Pet
+    response 404 see #/responses/NotFound
+  POST /pets/{petId} id="updatePetWithForm" tags=["pets"] deprecated=false @202:15 #/paths/~1pets~1{petId}/post
+    summary: "Update a pet with form data"
+    param path petId see #/parameters/PetId
+    requestBody required=true @212:11 #/paths/~1pets~1{petId}/post/parameters/0
+      content application/x-www-form-urlencoded @212:11 #/paths/~1pets~1{petId}/post/parameters/0
+        schema type=object required=status @212:11 #/paths/~1pets~1{petId}/post/parameters/0
+          property name type=string @212:11 #/paths/~1pets~1{petId}/post/parameters/0
+            description: "Updated name of the pet"
+          property status type=string @218:11 #/paths/~1pets~1{petId}/post/parameters/1
+            description: "Updated status of the pet"
+          property nicknames type=array @225:11 #/paths/~1pets~1{petId}/post/parameters/2
+            items type=string @229:22 #/paths/~1pets~1{petId}/post/parameters/2/items
+        encoding nicknames contentType="" style="" explode=false
+    response 405 "Invalid input" @235:18 #/paths/~1pets~1{petId}/post/responses/405
+  DELETE /pets/{petId} id="deletePet" tags=["pets"] deprecated=true @240:17 #/paths/~1pets~1{petId}/delete
+    summary: "Deletes a pet"
+    param path petId see #/parameters/PetId
+    param header api_key required=false style=(simple) explode=-(false) @248:11 #/paths/~1pets~1{petId}/delete/parameters/0
+      schema type=string @248:11 #/paths/~1pets~1{petId}/delete/parameters/0
+    param header ids required=false style=simple(simple) explode=false(false) @253:11 #/paths/~1pets~1{petId}/delete/parameters/1
+      schema type=array @253:11 #/paths/~1pets~1{petId}/delete/parameters/1
+        items type=integer @257:22 #/paths/~1pets~1{petId}/delete/parameters/1/items
+    response 400 "Invalid pet value" @263:18 #/paths/~1pets~1{petId}/delete/responses/400
+path /pets/{petId}/uploadImage @269:34 #/paths/~1pets~1{petId}~1uploadImage
+  POST /pets/{petId}/uploadImage id="uploadFile" tags=["pets"] deprecated=false @270:15 #/paths/~1pets~1{petId}~1uploadImage/post
+    summary: "Uploads an image"
+    param path petId see #/parameters/PetId
+    requestBody required=true @283:11 #/paths/~1pets~1{petId}~1uploadImage/post/parameters/1
+      content multipart/form-data @283:11 #/paths/~1pets~1{petId}~1uploadImage/post/parameters/1
+        schema type=object required=file @283:11 #/paths/~1pets~1{petId}~1uploadImage/post/parameters/1
+          property additionalMetadata type=string @283:11 #/paths/~1pets~1{petId}~1uploadImage/post/parameters/1
+            description: "Additional data to pass to server"
+          property file type=string format=binary @289:11 #/paths/~1pets~1{petId}~1uploadImage/post/parameters/2
+            description: "file to upload"
+    response 200 "successful operation" @298:18 #/paths/~1pets~1{petId}~1uploadImage/post/responses/200
+      content application/json @298:18 #/paths/~1pets~1{petId}~1uploadImage/post/responses/200
+        schema see #/definitions/ApiResponse
+path /pets/{petId}/photo @307:28 #/paths/~1pets~1{petId}~1photo
+  GET /pets/{petId}/photo id="getPhoto" tags=["pets"] deprecated=false @308:14 #/paths/~1pets~1{petId}~1photo/get
+    summary: "Download the pet's photo"
+    param path petId see #/parameters/PetId
+    response 200 "The photo" @323:18 #/paths/~1pets~1{petId}~1photo/get/responses/200
+      content image/png @323:18 #/paths/~1pets~1{petId}~1photo/get/responses/200
+        schema type=string format=binary @325:23 #/paths/~1pets~1{petId}~1photo/get/responses/200/schema
+path /store/inventory @332:25 #/paths/~1store~1inventory
+  GET /store/inventory id="getInventory" tags=["store"] deprecated=false @333:14 #/paths/~1store~1inventory/get
+    summary: "Returns pet inventories by status"
+    security 1
+      api_key[]
+    server "https://petstore.example/v2" "" -> "https://petstore.example/v2" @339:20 #/paths/~1store~1inventory/get/schemes
+    param query fields required=false style=pipeDelimited(pipeDelimited) explode=false(false) @343:11 #/paths/~1store~1inventory/get/parameters/0
+      schema type=array @343:11 #/paths/~1store~1inventory/get/parameters/0
+        items type=string @347:22 #/paths/~1store~1inventory/get/parameters/0/items
+    response 200 "successful operation" @354:18 #/paths/~1store~1inventory/get/responses/200
+      content application/json @354:18 #/paths/~1store~1inventory/get/responses/200
+        schema type=object @356:23 #/paths/~1store~1inventory/get/responses/200/schema
+          additionalProperties type=integer format=int32 @358:39 #/paths/~1store~1inventory/get/responses/200/schema/additionalProperties
+path /users/login @372:21 #/paths/~1users~1login
+  GET /users/login id="loginUser" tags=["users"] deprecated=false @373:14 #/paths/~1users~1login/get
+    summary: "Logs user into the system"
+    security 1
+      basic_auth[]
+    param query username required=true style=(form) explode=-(true) @380:11 #/paths/~1users~1login/get/parameters/0
+      schema type=string @380:11 #/paths/~1users~1login/get/parameters/0
+    param query password required=true style=(form) explode=-(true) @386:11 #/paths/~1users~1login/get/parameters/1
+      schema type=string format=password @386:11 #/paths/~1users~1login/get/parameters/1
+    response 200 "successful operation" @395:18 #/paths/~1users~1login/get/responses/200
+      header X-Expires-After required=false "" @398:34 #/paths/~1users~1login/get/responses/200/headers/X-Expires-After
+        schema type=string format=date-time @398:34 #/paths/~1users~1login/get/responses/200/headers/X-Expires-After
+      content application/json @395:18 #/paths/~1users~1login/get/responses/200
+        schema type=string @403:23 #/paths/~1users~1login/get/responses/200/schema
+path /users @415:15 #/paths/~1users
+  POST /users id="createUser" tags=["users"] deprecated=false @416:15 #/paths/~1users/post
+    summary: "Create user"
+    requestBody see #/parameters/UserBody
+    response default "successful operation" @428:22 #/paths/~1users/post/responses/default
+    x-internal: false

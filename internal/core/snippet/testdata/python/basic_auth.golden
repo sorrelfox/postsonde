@@ -1,0 +1,10 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/me",
+    auth=("ann", "p@ss:w'rd"),
+)
+
+print(response.status_code)
+print(response.text)

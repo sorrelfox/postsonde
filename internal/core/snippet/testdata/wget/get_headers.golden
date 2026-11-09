@@ -1,0 +1,8 @@
+wget https://api.test/items \
+  --header 'Accept: application/json' \
+  --header 'X-Quote: it'\''s "quoted" $HOME `id`' \
+  --header X-Empty: \
+  --header 'X-Unicode: héllo ✓' \
+  --user-agent PostSonde-test \
+  --max-redirect 10 \
+  -O -

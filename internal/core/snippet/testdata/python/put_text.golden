@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "PUT",
+    "https://api.test/items/1",
+    headers={
+        "Content-Type": "text/plain",
+    },
+    data="plain text",
+)
+
+print(response.status_code)
+print(response.text)

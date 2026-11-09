@@ -1,0 +1,8 @@
+curl https://api.test/items \
+  -H 'Content-Type: application/json' \
+  --data-raw '{}' \
+  -k \
+  --location-trusted --max-redirs 5 \
+  --post301 --post302 --post303 \
+  -m 1.5 \
+  --http1.1

@@ -1,0 +1,85 @@
+/* The Rename dialog and the delete-folder confirmation (COL-04): a
+ * bordered box on --bg0 for the file path change and for the list of what
+ * is deleted, 26px list rows with the tree's 38px mono method badges. */
+
+.pathBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.pathNote {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.path {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.arrow {
+  color: var(--text3);
+}
+
+.message {
+  margin: 0;
+  color: var(--text2);
+  line-height: var(--lh-base);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--space-2) 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.item {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.itemName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more {
+  color: var(--text3);
+}
+
+.badge {
+  width: 38px;
+  flex: none;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-medium);
+}
+
+.badge[data-tone="get"] { color: var(--m-get); }
+.badge[data-tone="post"] { color: var(--m-post); }
+.badge[data-tone="put"] { color: var(--m-put); }
+.badge[data-tone="patch"] { color: var(--m-patch); }
+.badge[data-tone="del"] { color: var(--m-del); }
+.badge[data-tone="gql"] { color: var(--m-gql); }
+.badge[data-tone="ws"] { color: var(--m-ws); }
+.badge[data-tone="dir"] { color: var(--m-dir); }
+.badge[data-tone="warn"] { color: var(--warn); }

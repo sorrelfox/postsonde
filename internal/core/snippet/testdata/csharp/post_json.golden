@@ -1,0 +1,22 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+var body =
+    "{\n" +
+    "  \"name\": \"O'Brien\",\n" +
+    "  \"tags\": [\"a\", \"b\"]\n" +
+    "}";
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/items");
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(body));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

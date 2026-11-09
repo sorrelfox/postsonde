@@ -1,0 +1,10 @@
+type: codec.p2.Extendable
+plain: 1
+[codec.p2.ext_int32]: -7
+[codec.p2.ext_strings][0]: "x"
+[codec.p2.ext_strings][1]: "yz"
+[codec.p2.ext_msg]: {}
+[codec.p2.ext_msg].d_string: "s"
+[codec.p2.ext_msg].req: 5
+[codec.p2.ext_packed][0]: -1
+[codec.p2.ext_packed][1]: 1

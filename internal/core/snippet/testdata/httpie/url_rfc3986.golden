@@ -1,0 +1,2 @@
+http --follow --max-redirects=10 \
+  GET 'https://api.test/p%7Cq?x=%5B1%5D&y=a%5Eb'

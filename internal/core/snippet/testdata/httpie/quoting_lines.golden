@@ -1,0 +1,9 @@
+http --follow --max-redirects=10 \
+  --raw 'trailing   
+	tab first
+   
+"""q"""" \u0041 C:\dir\ ${x} %PATH% '\''a'\''
+
+  last  ' \
+  PUT https://api.test/q \
+  Content-Type:text/plain

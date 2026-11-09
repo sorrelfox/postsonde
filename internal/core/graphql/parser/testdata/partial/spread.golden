@@ -1,0 +1,11 @@
+# source
+{ ...
+# tree
+Document [0:5]
+  Definitions[0]: OperationDefinition [0:5] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:5] LBrace=0 RBrace=-1
+      Selections[0]: FragmentSpread [2:5] Spread=2
+        Name: Name [5:5] Value=""
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"
+1:6 [5:5] unexpected token: expected fragment name, "on" or "{", found end of input

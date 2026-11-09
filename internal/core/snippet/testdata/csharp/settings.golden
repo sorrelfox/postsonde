@@ -1,0 +1,26 @@
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Security;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    SslOptions = new SslClientAuthenticationOptions
+    {
+        RemoteCertificateValidationCallback = (_, _, _, _) => true,
+    },
+    MaxAutomaticRedirections = 5,
+};
+using var client = new HttpClient(handler);
+client.Timeout = TimeSpan.FromMilliseconds(1500);
+
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/items");
+request.Version = HttpVersion.Version11;
+request.VersionPolicy = HttpVersionPolicy.RequestVersionExact;
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes("{}"));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

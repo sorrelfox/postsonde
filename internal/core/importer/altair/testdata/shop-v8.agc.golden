@@ -1,0 +1,256 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Shop API",
+  "root": {
+    "at": " @[1,1]",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "GraphQL API of the shop.\n\nAltair pre-request script (not run by PostSonde):\n\n```js\naltair.helpers.setEnvironment('requestId', altair.helpers.uuid());\n```",
+    "diagnostics": [
+      {
+        "Code": "altair.script",
+        "Severity": "warning",
+        "Message": "The collection's pre-request script is kept in its description: PostSonde does not run Altair scripts.",
+        "At": " @[1,1]"
+      }
+    ],
+    "folder": "Shop API",
+    "headers": null,
+    "items": [
+      {
+        "at": "collections[0] @[32,5]",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Orders",
+        "headers": null,
+        "items": [
+          {
+            "at": "collections[0].collections[0] @[98,9]",
+            "auth": {
+              "type": "inherit"
+            },
+            "description": "",
+            "diagnostics": null,
+            "folder": "Returns",
+            "headers": null,
+            "items": [
+              {
+                "at": "collections[0].collections[0].queries[0] @[103,13]",
+                "diagnostics": [
+                  {
+                    "Code": "altair.auth_unsupported",
+                    "Severity": "warning",
+                    "Message": "The request's OAuth 2.0 authorization is not imported: PostSonde has no such auth. Set up Bearer auth with a token instead.",
+                    "At": "collections[0].collections[0].queries[0] @[103,13]"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "graphql",
+                  "id": "req_x",
+                  "name": "",
+                  "method": "GET",
+                  "url": "{{baseUrl}}/graphql",
+                  "query": "query ReturnReasons {\n  returnReasons\n}\n",
+                  "auth": {
+                    "type": "none"
+                  }
+                },
+                "request": "ReturnReasons"
+              },
+              {
+                "at": "collections[0].collections[0].queries[1] @[119,13]",
+                "diagnostics": [
+                  {
+                    "Code": "altair.method",
+                    "Severity": "warning",
+                    "Message": "The request used the PUT method; PostSonde sends GraphQL requests with POST or GET, so it is sent with POST.",
+                    "At": "collections[0].collections[0].queries[1] @[119,13]"
+                  },
+                  {
+                    "Code": "altair.transport",
+                    "Severity": "warning",
+                    "Message": "Altair sent the request's queries with the Action Cable handler; PostSonde sends them over HTTP.",
+                    "At": "collections[0].collections[0].queries[1] @[119,13]"
+                  },
+                  {
+                    "Code": "altair.files",
+                    "Severity": "info",
+                    "Message": "The request's file variables are imported without their files, which Altair does not export: choose each file in the request's Files tab.",
+                    "At": "collections[0].collections[0].queries[1] @[119,13]"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "graphql",
+                  "id": "req_x",
+                  "name": "",
+                  "url": "{{baseUrl}}/graphql",
+                  "query": "mutation UploadLabel($file: Upload!, $docs: [Upload!]!) {\n  uploadLabel(file: $file, attachments: $docs)\n}\n",
+                  "variables": "{\n  \"file\": null,\n  \"docs\": []\n}",
+                  "files": [
+                    {
+                      "name": "variables.file",
+                      "value": ""
+                    },
+                    {
+                      "name": "variables.docs.0",
+                      "value": ""
+                    },
+                    {
+                      "name": "variables.docs.1",
+                      "value": ""
+                    }
+                  ],
+                  "auth": {
+                    "type": "inherit"
+                  }
+                },
+                "request": "Upload label"
+              }
+            ],
+            "variables": null
+          },
+          {
+            "at": "collections[0].queries[0] @[38,9]",
+            "diagnostics": [
+              {
+                "Code": "altair.subscription_url",
+                "Severity": "warning",
+                "Message": "The request's subscription URL is not its endpoint with ws:// or wss://, which PostSonde uses for subscriptions. It is kept in the description; make a separate request with it as the endpoint to run subscriptions there.",
+                "At": "collections[0].queries[0] @[38,9]"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "graphql",
+              "id": "req_x",
+              "name": "",
+              "description": "Altair subscription URL: <{{wsUrl}}/graphql>",
+              "url": "{{baseUrl}}/graphql",
+              "query": "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    total\n  }\n}\n",
+              "variables": "{\n  \"input\": {\n    \"sku\": \"{{sku}}\",\n    \"quantity\": 2\n  }\n}",
+              "extensions": "{\n  \"persistedQuery\": {\n    \"version\": 1,\n    \"sha256Hash\": \"abc123\"\n  }\n}",
+              "headers": [
+                {
+                  "name": "X-Request-Id",
+                  "value": "{{requestId}}"
+                },
+                {
+                  "name": "X-Trace",
+                  "value": "on",
+                  "disabled": true
+                }
+              ],
+              "auth": {
+                "type": "basic",
+                "username": "{{user}}",
+                "password": "hunter2"
+              }
+            },
+            "request": "Create order"
+          },
+          {
+            "at": "collections[0].queries[1] @[76,9]",
+            "diagnostics": [
+              {
+                "Code": "altair.subscription_url",
+                "Severity": "warning",
+                "Message": "The request's subscription URL is not its endpoint with ws:// or wss://, which PostSonde uses for subscriptions. It is kept in the description; make a separate request with it as the endpoint to run subscriptions there.",
+                "At": "collections[0].queries[1] @[76,9]"
+              },
+              {
+                "Code": "altair.transport",
+                "Severity": "warning",
+                "Message": "Altair ran the request's subscriptions with the AWS AppSync handler, which PostSonde does not have; PostSonde runs subscriptions over WebSocket with graphql-transport-ws.",
+                "At": "collections[0].queries[1] @[76,9]"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "graphql",
+              "id": "req_x",
+              "name": "",
+              "description": "Altair subscription URL: <wss://realtime.shop.example/graphql>",
+              "url": "{{baseUrl}}/graphql",
+              "query": "subscription OrderUpdates {\n  orderUpdated { id status }\n}\n",
+              "connectionParams": "{\n  \"Authorization\": \"Bearer {{token}}\"\n}",
+              "auth": {
+                "type": "apikey",
+                "key": "X-Api-Key",
+                "value": "sk-live-order-feed"
+              }
+            },
+            "request": "Order updates"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "collections[1] @[150,5]",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Customers",
+        "headers": null,
+        "items": [
+          {
+            "at": "collections[1].queries[0] @[155,9]",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "graphql",
+              "id": "req_x",
+              "name": "",
+              "url": "{{baseUrl}}/graphql",
+              "query": "query Customer($id: ID!) {\n  customer(id: $id) { name email }\n}\n",
+              "variables": "{ \"id\": \"{{customerId}}\" }",
+              "headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Bearer {{token}}"
+                }
+              ],
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Customer"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "queries[0] @[8,5]",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "url": "{{baseUrl}}/graphql",
+          "query": "{ health }",
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Health"
+      },
+      {
+        "at": "queries[1] @[21,5]",
+        "code": "altair.unsupported",
+        "name": "",
+        "reason": "The query is not a JSON object.",
+        "skipped": "query"
+      }
+    ],
+    "variables": null
+  }
+}

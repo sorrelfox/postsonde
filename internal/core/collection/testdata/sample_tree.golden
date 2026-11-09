@@ -1,0 +1,16 @@
+root ws_7c1e4b9a2f3d5e60 kind=workspace name="Acme API" path=""
+  folder fld_0b8d2e61c4a9f375 kind=folder name="Users" path="users"
+    request req_e4a7c2019b5d83f6 kind=graphql name="User by ID" path="users/user-by-id.json"
+    folder fld_5e2c9a7d31b0f486 kind=folder name="Admins" path="users/admins"
+      request req_7b3f0e5a9c2d4168 kind=http name="List admins" path="users/admins/list-admins.json"
+      folder fld_a14d8f02e6c95b37 kind=folder name="On call" path="users/admins/on-call"
+        request req_c2e9b4170f8a6d53 kind=http name="Page the on-call admin" path="users/admins/on-call/page-on-call.json"
+    request req_c93e1a7b40f2d856 kind=http name="Create user" path="users/create-user.json"
+    request req_1 kind=http name="Hand edited" path="users/hand-edited.json"
+    request req_18d4b6f0a3c95e27 kind=http name="Upload avatar" path="users/upload-avatar.json"
+  request req_5a0f93c7e2b14d68 kind=http name="Health check" path="health.json"
+  unknown req_e0b1c2d3a4f56789 kind=gemini name="Echo" path="gemini-echo.json" readOnly=unknown_kind
+  folder fld_3c7a1e9d5b2f0864 kind=folder name="Orders" path="orders"
+    request req_9d0a6c3e1f7b2584 kind=graphql name="List orders" path="orders/all-orders.json"
+    request req_4f8e2b6a0d1c9375 kind=http name="Cancel order" path="orders/Cancel-order.json"
+problems:

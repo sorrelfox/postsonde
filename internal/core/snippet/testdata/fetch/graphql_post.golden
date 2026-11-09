@@ -1,0 +1,11 @@
+const response = await fetch("https://api.test/graphql", {
+  method: "POST",
+  headers: {
+    "Accept": "application/graphql-response+json, application/json;q=0.9",
+    "Content-Type": "application/json",
+  },
+  body: "{\"query\":\"query Q($id: ID!) {\\n  user(id: $id) { name }\\n}\",\"variables\":{\"id\":\"1\"},\"operationName\":\"Q\"}",
+});
+
+console.log(response.status);
+console.log(await response.text());

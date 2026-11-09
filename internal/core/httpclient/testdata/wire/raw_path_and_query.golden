@@ -1,0 +1,3 @@
+GET /a%2Fb/c%7e/%zz/{x}/;p=1?q=1&q=2&e=%20&plus=a+b&u=%2f HTTP/1.1\r\n
+Host: ADDR\r\n
+\r\n

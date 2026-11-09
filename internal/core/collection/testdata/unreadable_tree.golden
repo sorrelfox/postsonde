@@ -1,0 +1,11 @@
+root ws_1 kind=workspace name="" path=""
+  folder fld_35c83b069d502b29 name="locked" path="locked" readOnly=invalid
+  request req_ok kind=http name="ok" path="ok.json"
+  invalid req_1ff1e717ff77344f name="secret" path="secret.json" readOnly=invalid
+problems:
+  locked node=fld_35c83b069d502b29 kind=permission_denied code=collection.read_dir_failed
+    path=<root>/locked
+  locked/_folder.json node=fld_35c83b069d502b29 kind=permission_denied code=projectfile.read_failed
+    path=<root>/locked/_folder.json
+  secret.json node=req_1ff1e717ff77344f kind=permission_denied code=projectfile.read_failed
+    path=<root>/secret.json

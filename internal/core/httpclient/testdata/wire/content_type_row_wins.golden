@@ -1,0 +1,6 @@
+POST / HTTP/1.1\r\n
+Host: ADDR\r\n
+Content-Length: 1\r\n
+content-type: application/x-custom\r\n
+\r\n
+x

@@ -1,0 +1,16 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/upload",
+    files=[
+        ("title", (None, 'a;b,c "q"')),
+        ("meta", (None, '{"k":1}', "application/json")),
+        ("at", (None, "@literal")),
+        ("file", ("data.json", open("<root>/data.json", "rb"), "application/json")),
+        ("odd", ("odd name;1.txt", open("<root>/odd name;1.txt", "rb"), "text/x-odd")),
+    ],
+)
+
+print(response.status_code)
+print(response.text)

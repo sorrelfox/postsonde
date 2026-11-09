@@ -1,0 +1,2 @@
+DELETE /items/1 HTTP/1.1
+Host: api.test

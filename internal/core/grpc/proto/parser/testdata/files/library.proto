@@ -1,0 +1,175 @@
+// A Google-API-style resource service: HTTP annotations, field behaviors,
+// resource descriptors, pagination and long-running operations.
+// Written for PostSonde's parser tests; not an actual Google API.
+
+syntax = "proto3";
+
+package example.library.v1;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Example.Library.V1";
+option go_package = "example.com/library/apiv1/librarypb;librarypb";
+option java_multiple_files = true;
+option java_outer_classname = "LibraryProto";
+option java_package = "com.example.library.v1";
+option objc_class_prefix = "ELB";
+option (google.api.resource_definition) = {
+  type: "library.example.com/Publisher"
+  pattern: "publishers/{publisher}"
+};
+
+// Manages shelves and books in a library.
+service LibraryService {
+  option (google.api.default_host) = "library.example.com";
+  option (google.api.oauth_scopes) =
+      "https://www.googleapis.com/auth/cloud-platform,"
+      "https://www.googleapis.com/auth/library.readonly";
+
+  // Creates a shelf, and returns the new Shelf.
+  rpc CreateShelf(CreateShelfRequest) returns (Shelf) {
+    option (google.api.http) = {
+      post: "/v1/shelves"
+      body: "shelf"
+    };
+    option (google.api.method_signature) = "shelf";
+  }
+
+  // Gets a shelf. Returns NOT_FOUND if the shelf does not exist.
+  rpc GetShelf(GetShelfRequest) returns (Shelf) {
+    option (google.api.http) = {
+      get: "/v1/{name=shelves/*}"
+      additional_bindings { get: "/v1/{name=publishers/*/shelves/*}" }
+    };
+    option (google.api.method_signature) = "name";
+  }
+
+  // Lists shelves. The order is unspecified but deterministic.
+  rpc ListShelves(ListShelvesRequest) returns (ListShelvesResponse) {
+    option (google.api.http) = {get: "/v1/shelves"};
+  }
+
+  // Deletes a shelf.
+  rpc DeleteShelf(DeleteShelfRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = { delete: "/v1/{name=shelves/*}" };
+    option (google.api.method_signature) = "name";
+  }
+
+  // Updates a book; fields not in the mask are left unchanged.
+  rpc UpdateBook(UpdateBookRequest) returns (Book) {
+    option (google.api.http) = {
+      patch: "/v1/{book.name=shelves/*/books/*}"
+      body: "book"
+    };
+    option (google.api.method_signature) = "book,update_mask";
+  }
+
+  // Moves a book to another shelf. This can take a while.
+  rpc MoveBook(MoveBookRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/{name=shelves/*/books/*}:move"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "Book"
+      metadata_type: "MoveBookMetadata"
+    };
+  }
+}
+
+// A shelf resource.
+message Shelf {
+  option (google.api.resource) = {
+    type: "library.example.com/Shelf"
+    pattern: "shelves/{shelf}"
+    pattern: "publishers/{publisher}/shelves/{shelf}"
+    style: DECLARATION_FRIENDLY
+  };
+
+  // The resource name of the shelf.
+  // Format: `shelves/{shelf_id}`
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+
+  // The theme of the shelf.
+  string theme = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Output only. When the shelf was created.
+  google.protobuf.Timestamp create_time = 3
+      [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// A single book.
+message Book {
+  option (google.api.resource) = {
+    type: "library.example.com/Book"
+    pattern: "shelves/{shelf}/books/{book}"
+  };
+
+  // How a book can be read.
+  enum Format {
+    // Not specified.
+    FORMAT_UNSPECIFIED = 0;
+    HARDCOVER = 1;
+    PAPERBACK = 2;
+    EBOOK = 3 [deprecated = true];
+  }
+
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string author = 2;
+  string title = 3;
+  bool read = 4;
+  repeated Format formats = 5;
+  optional int32 page_count = 6;
+  map<string, string> labels = 7;
+}
+
+message CreateShelfRequest {
+  Shelf shelf = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetShelfRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "library.example.com/Shelf"
+  ];
+}
+
+message ListShelvesRequest {
+  // Maximum number of shelves to return; the server may return fewer.
+  int32 page_size = 1 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListShelvesResponse {
+  repeated Shelf shelves = 1;
+  string next_page_token = 2;
+}
+
+message DeleteShelfRequest {
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {type: "library.example.com/Shelf"}
+  ];
+}
+
+message UpdateBookRequest {
+  Book book = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message MoveBookRequest {
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string other_shelf_name = 2 [json_name = "otherShelf"];
+}
+
+message MoveBookMetadata {
+  google.protobuf.Timestamp start_time = 1;
+  float progress_percent = 2;
+}

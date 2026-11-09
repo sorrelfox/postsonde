@@ -1,0 +1,9 @@
+POST /users/7?q=a%20b&t=•••••• HTTP/1.1
+Host: api.test
+X-User: ann
+X-Token: ••••••
+X-Uuid: <uuid>
+Content-Type: application/json
+Content-Length: 43
+
+{"user":"ann","token":"••••••"}

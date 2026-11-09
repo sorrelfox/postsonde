@@ -1,0 +1,59 @@
+{
+  "diagnostics": null,
+  "environments": [
+    {
+      "at": "resources[2] @26:5",
+      "diagnostics": null,
+      "environment": "Base Environment",
+      "variables": [
+        {
+          "Name": "base_url",
+          "Value": "https://ops.example",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    }
+  ],
+  "name": "Ops",
+  "root": {
+    "at": "resources[1] @20:5",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "Operations endpoints.",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "resources[0] @6:5",
+        "diagnostics": [
+          {
+            "Code": "insomnia.auth_unsupported",
+            "Severity": "warning",
+            "Message": "PostSonde has no NTLM auth: the request sends no auth. Set up the credentials by hand, e.g. as a header.",
+            "At": "resources[0] @6:5"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "HEAD",
+          "url": "{{base_url}}/health",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "none"
+          }
+        },
+        "request": "Health"
+      }
+    ],
+    "variables": null
+  }
+}

@@ -1,0 +1,3 @@
+wget https://api.test/items/7 \
+  --max-redirect 10 \
+  -O -

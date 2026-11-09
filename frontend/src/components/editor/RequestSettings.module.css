@@ -1,0 +1,138 @@
+/* The Settings sub-tab of the HTTP and GraphQL request editors: timeout
+ * (HTTP-21), redirects (HTTP-22) and TLS verification (HTTP-23). */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: 560px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.check:has(input:disabled) {
+  color: var(--text3);
+}
+
+.checkHelp {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.select {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.select:focus {
+  border-color: var(--accent);
+  outline: 0;
+}
+
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+}
+
+.warning svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--warn);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.label {
+  min-width: 72px;
+}
+
+.input {
+  width: 160px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  outline: 0;
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input:disabled {
+  color: var(--text3);
+}
+
+.input::placeholder {
+  color: var(--text3);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.unit {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.help,
+.error {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.5;
+}
+
+.help {
+  color: var(--text3);
+}
+
+.error {
+  color: var(--bad);
+}

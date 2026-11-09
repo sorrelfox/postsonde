@@ -1,0 +1,64 @@
+// A route guide in the style of the classic gRPC streaming example: one
+// method of each call type. Written for PostSonde's parser tests.
+syntax = "proto3";
+
+option go_package = "example.com/routeguide";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.routeguide";
+option java_outer_classname = "RouteGuideProto";
+
+package routeguide;
+
+// Interface exported by the server.
+service RouteGuide {
+  // A simple RPC.
+  //
+  // Obtains the feature at a given position.
+  rpc GetFeature(Point) returns (Feature) {}
+
+  // A server-to-client streaming RPC.
+  rpc ListFeatures(Rectangle) returns (stream Feature) {}
+
+  // A client-to-server streaming RPC.
+  rpc RecordRoute(stream Point) returns (RouteSummary) {}
+
+  // A bidirectional streaming RPC.
+  rpc RouteChat(stream RouteNote) returns (stream RouteNote) {}
+}
+
+// Points are represented as latitude-longitude pairs in the E7
+// representation (degrees multiplied by 10**7 and rounded to the nearest
+// integer).
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+// A latitude-longitude rectangle, represented as two diagonally opposite
+// points "lo" and "hi".
+message Rectangle {
+  Point lo = 1; // One corner of the rectangle.
+  Point hi = 2; // The other corner of the rectangle.
+}
+
+message Feature {
+  string name = 1;
+  Point location = 2;
+}
+
+message RouteNote {
+  Point location = 1;
+  string message = 2;
+}
+
+/* A RouteSummary is received in response to a RecordRoute rpc.
+ *
+ * It contains the number of individual points received, the number of
+ * detected features, and the total distance covered. */
+message RouteSummary {
+  int32 point_count = 1;
+  int32 feature_count = 2;
+  int32 distance = 3;
+  // The duration of the traversal in seconds.
+  int32 elapsed_time = 4;
+};

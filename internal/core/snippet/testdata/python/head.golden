@@ -1,0 +1,9 @@
+import requests
+
+response = requests.request(
+    "HEAD",
+    "https://api.test/items",
+)
+
+print(response.status_code)
+print(response.text)

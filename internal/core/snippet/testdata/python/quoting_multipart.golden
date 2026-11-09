@@ -1,0 +1,15 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/q",
+    files=[
+        ('we"ird name', (None, "line1\nline2 \"q\" 'q' $x %PATH%")),
+        ("unicode ✓", (None, "héllo 😀", "text/plain; charset=utf-8")),
+        ("a@b:c", (None, "@not-a-file")),
+        ("file", ("odd name;1.txt", open("<root>/odd name;1.txt", "rb"), "text/plain")),
+    ],
+)
+
+print(response.status_code)
+print(response.text)

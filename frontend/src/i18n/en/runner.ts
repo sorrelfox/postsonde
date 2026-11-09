@@ -1,0 +1,167 @@
+// English messages of src/components/runner/ (namespace "runner"): t("runner.<id>").
+// The folder runner (RUN-01, RUN-03). See docs/frontend.md#localization.
+import type { Messages } from "../messages";
+
+export default {
+  // FolderRunPanel: the options and Run / Stop
+  intro:
+    "Sends the chosen requests of this folder and its subfolders in the order below and checks their assertions. WebSocket, Socket.IO, gRPC and TCP requests and GraphQL subscriptions are not sent.",
+  options: "Run options",
+  iterations: "Iterations",
+  "iterations.invalid": "Enter a whole number from 1 to {max}.",
+  delay: "Delay",
+  "delay.unit": "seconds between requests",
+  "delay.invalid": "Enter a number of seconds from 0 to {max}.",
+  start: "Run folder",
+  stop: "Stop",
+  stopping: "Stopping…",
+  stopOnFailure: "Stop at the first failure",
+  "stopOnFailure.hint": "End the run after the first request whose assertions fail or that cannot be sent.",
+
+  // RunRequestList: the requests of the run, chosen and ordered for the session
+  "requests.title": "Requests",
+  "requests.chosen": "{chosen} of {total} chosen",
+  "requests.all": "Select all",
+  "requests.none": "Select none",
+  "requests.reset": "Reset order",
+  "requests.resetDone": "Every request is in the run again, in the folder's order.",
+  "requests.hint":
+    "Alt+↑ and Alt+↓ move the focused request. The choice and the order last for this session and do not change the folder.",
+  "requests.moved": "Moved {name} to position {position} of {count}.",
+  "requests.moveUp": "Move up",
+  "requests.moveDown": "Move down",
+  "requests.loading": "Loading the folder's requests…",
+  "requests.loadFailed": "The folder's requests could not be loaded: {message}",
+  "requests.empty": "This folder has no requests.",
+  "requests.noneChosen": "Choose at least one request to run.",
+  // RunDataFile: the data file of data-driven runs (RUN-05)
+  "data.title": "Data file",
+  "data.choose": "Choose data file…",
+  "data.chooseOther": "Choose another…",
+  "data.remove": "Remove",
+  "data.hint":
+    "Run once per row of a CSV file with a header row, or of a JSON array of objects. Each row's values are variables of its iteration. The file is kept for this session and not saved in the folder.",
+  "data.summary": "{name} · {format} · {rows} · {columns}",
+  "data.format.csv": "CSV",
+  "data.format.json": "JSON",
+  "data.rows": { one: "{count} row", other: "{count} rows" },
+  "data.columns": { one: "{count} column", other: "{count} columns" },
+  "data.delimiter": "Delimiter",
+  "data.delimiter.detect": "Detect",
+  "data.delimiter.comma": "Comma (,)",
+  "data.delimiter.semicolon": "Semicolon (;)",
+  "data.delimiter.tab": "Tab",
+  "data.delimiter.pipe": "Pipe (|)",
+  "data.reading": "Reading the data file…",
+  "data.previewLabel": "First rows of the data file",
+  "data.preview": { one: "The file's only row", other: "First {shown} of {count} rows" },
+  "data.iterations": "One iteration per row of the data file.",
+  "data.unreadable": "Choose a data file that can be read, or remove it.",
+
+  // Where each request of the run is (RUN-06)
+  "live.done": "{outcome} · {time}",
+  "live.sending": "Sending…",
+  "live.waiting": "Waiting…",
+  "live.queued": "Queued",
+  "live.notRun": "Not run",
+
+  // The run's state
+  "status.starting": "Starting the run…",
+  "status.running": "Running: {done} of {total} done",
+  "status.waiting": "Waiting before the next request: {done} of {total} done",
+  "status.ok": { one: "Run finished: {count} result", other: "Run finished: {count} results" },
+  "status.cancelled": "Run stopped after {done} of {total}",
+  "status.stopped": "Run stopped at a failure after {done} of {total}",
+  "status.stopping": "Stopping the run…",
+  iterationOf: "Iteration {n} of {total}",
+  progress: "Run progress",
+  "progress.value": "{done} of {total} done",
+  "status.error": "The run could not go on",
+  "status.failedToStart": "The run could not start",
+  "count.passed": "{count} passed",
+  "count.failed": "{count} failed",
+  "count.error": { one: "{count} error", other: "{count} errors" },
+  "count.skipped": "{count} skipped",
+  announce: "{status}. {counts}",
+
+  // The results
+  results: "Run results",
+  iteration: "Iteration {n}",
+  hidden: { one: "{count} earlier result not listed", other: "{count} earlier results not listed" },
+  "outcome.passed": "Passed",
+  "outcome.failed": "Failed",
+  "outcome.error": "Error",
+  "outcome.skipped": "Skipped",
+  "skip.kind": "Not run: a run sends HTTP, GraphQL and SSE requests only.",
+  "skip.subscription": "Not run: GraphQL subscriptions and operations over WebSocket are not part of a run.",
+  "skip.unknown": "Not run: this version does not know this kind of request.",
+  "skip.invalid": "Not run: the file could not be loaded.",
+  "tests.passed": { one: "{count} test passed", other: "{count} tests passed" },
+  "tests.failed": "{failed} of {total} tests failed",
+  "tests.none": "No tests",
+  "extractionFailed": "Variable {variable} was not set: {message}",
+  events: { one: "{count} event", other: "{count} events" },
+
+  // RunSummary: the summary of a run that ended (RUN-07)
+  "summary.title": "Summary",
+  "summary.results": "Results",
+  "summary.errors": "Errors",
+  "summary.runTime": "Run time",
+  "summary.requestTime": "Time in requests",
+  "summary.average": "Average request",
+  "summary.fastest": "Fastest",
+  "summary.slowest": "Slowest",
+  "summary.slowestValue": "{name}, {time}",
+  "summary.nameInIteration": "{name} (iteration {n})",
+  "summary.failures": { one: "{count} failure", other: "{count} failures" },
+  "summary.noFailures": "No request failed.",
+  "summary.moreFailures": { one: "{count} more failure is not listed here.", other: "{count} more failures are not listed here." },
+
+  // RunReportActions: a run saved as a report (RUN-08)
+  "report.label": "Save report",
+  "report.junit": "JUnit XML",
+  "report.json": "JSON",
+  "report.html": "HTML",
+  "report.saving": "Saving the report…",
+  "report.saved": "Report saved to {path}.",
+
+  // RunHistory: the past runs of the folder (RUN-09)
+  "history.title": "Past runs",
+  "history.count": { one: "{count} run", other: "{count} runs" },
+  "history.hint":
+    "The last 50 runs of the project are kept on this computer, not in the project, with secrets masked and without their responses.",
+  "history.loading": "Loading the past runs…",
+  "history.empty": "No past runs of this folder yet.",
+  "history.status.ok": "Finished",
+  "history.status.stopped": "Stopped at a failure",
+  "history.status.cancelled": "Stopped",
+  "history.data": "Data file {name}, {rows}",
+  "history.openButton": "Open",
+  "history.deleteButton": "Delete",
+  "history.open": "Open the run of {when}",
+  "history.delete": "Delete the run of {when}",
+
+  // A past run shown in the panel
+  "past.title": "Past run of {when}",
+  "past.close": "Back to the latest run",
+  "past.noResponses": "Responses are not kept in the run history: each result has its outcome, status, time and assertions.",
+  "past.omitted": {
+    one: "{count} later result is not kept in the history.",
+    other: "{count} later results are not kept in the history.",
+  },
+
+  // RunResultDialog: one result's request and response
+  "result.openTitle": "Show its request and response",
+  "result.title": "Result of {name}",
+  "result.titleInIteration": "Result of {name}, iteration {n}",
+  "result.openRequest": "Open request",
+  "result.requestGone": "The request is no longer in the project.",
+  "result.sent": "Sent",
+  "result.timelineHint": "The headers and body as sent are under Timeline.",
+  "result.stream": {
+    one: "Event stream answered {status}; {count} event received. Its events are not kept.",
+    other: "Event stream answered {status}; {count} events received. Its events are not kept.",
+  },
+  "result.loading": "Loading the response…",
+  "result.notKept": "The response of a past run is not kept in the run history.",
+} as const satisfies Messages;

@@ -1,0 +1,52 @@
+# Wails project configuration for PostSonde.
+#
+# `info` feeds the generated platform files (Info.plist, info.json, the
+# Windows manifest, the Linux .desktop/nfpm files). After changing it, run
+# `wails3 task common:update:build-assets` and review the diff: it rewrites
+# those files, including edits made to them by hand.
+version: '3'
+
+info:
+  companyName: "Sorrelfox"
+  productName: "PostSonde"
+  productIdentifier: "io.github.sorrelfox.PostSonde"
+  description: "Local-only desktop API testing tool"
+  copyright: "(c) 2026, PostSonde"
+  comments: "PostSonde"
+  # The release version. A release tag vX.Y.Z must name it: the release
+  # workflow checks (scripts/check-release-tag.sh, docs/releasing.md), so
+  # bump it in the commit you tag. The binaries and packages take their
+  # version from git (scripts/version.sh): X.Y.Z on that tag,
+  # 0.0.0~git<commit> anywhere else.
+  version: "0.0.1"
+
+# Dev mode configuration (`wails3 dev` from the repo root).
+dev_mode:
+  root_path: .
+  log_level: warn
+  debounce: 1000
+  ignore:
+    dir:
+      - .git
+      - node_modules
+      - frontend
+      - bin
+      - docs
+      - assets
+    file:
+      - .DS_Store
+      - .gitignore
+      - .gitkeep
+      - "*_test.go"
+    watched_extension:
+      - "*.go"
+    git_ignore: true
+  executes:
+    - cmd: wails3 build DEV=true
+      type: blocking
+    - cmd: wails3 task common:dev:frontend
+      type: background
+    - cmd: wails3 task run
+      type: primary
+
+fileAssociations:

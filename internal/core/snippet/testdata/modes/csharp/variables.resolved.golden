@@ -1,0 +1,21 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8,
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/users/7?q=a%20b&t=••••••");
+request.Headers.TryAddWithoutValidation("X-User", "ann");
+request.Headers.TryAddWithoutValidation("X-Token", "••••••");
+request.Headers.TryAddWithoutValidation("X-Uuid", "<uuid>");
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes("{\"user\":\"ann\",\"token\":\"••••••\"}"));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

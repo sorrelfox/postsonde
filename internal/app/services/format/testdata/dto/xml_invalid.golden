@@ -1,0 +1,9 @@
+{
+  "valid": false,
+  "text": "\u003ca\u003e\u003cb\u003e\u003c/a\u003e",
+  "error": {
+    "line": 1,
+    "column": 7,
+    "message": "element \u003cb\u003e closed by \u003c/a\u003e"
+  }
+}

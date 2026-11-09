@@ -1,0 +1,103 @@
+openapi 3.0.3 (3.0) dialect=""
+info "Swagger Petstore" version "1.0.11"
+  description: "This is a sample Pet Store server based on the OpenAPI 3.0 specification.  You can find out more about Swagger at [https://swagger.io](https://swagger.io).\n\nSome useful links:\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)"
+  termsOfService: "http://swagger.io/terms/"
+  contact {Name: URL: Email:apiteam@swagger.io}
+  license {Name:Apache 2.0 Identifier: URL:http://www.apache.org/licenses/LICENSE-2.0.html}
+server "https://petstore3.swagger.io/api/v3" "" -> "https://petstore3.swagger.io/api/v3" @26:5 #/servers/0
+tag "pet" "Everything about your Pets" @28:5 #/tags/0
+tag "store" "Access to Petstore orders" @33:5 #/tags/1
+externalDocs {Description:Find out more about Swagger URL:http://swagger.io}
+components.schemas.Category type=object @151:7 #/components/schemas/Category
+  xml {Name:category Namespace: Prefix: Attribute:false Wrapped:false}
+  property id type=integer format=int64 @154:11 #/components/schemas/Category/properties/id
+    example: 1
+  property name type=string @158:11 #/components/schemas/Category/properties/name
+    example: "Dogs"
+components.schemas.Tag type=object @163:7 #/components/schemas/Tag
+  xml {Name:tag Namespace: Prefix: Attribute:false Wrapped:false}
+  property id see #/components/schemas/Category/properties/id
+  property name see #/components/schemas/Category/properties/name
+components.schemas.Pet type=object required=name,photoUrls @167:7 #/components/schemas/Pet
+  xml {Name:pet Namespace: Prefix: Attribute:false Wrapped:false}
+  property id type=integer format=int64 @173:11 #/components/schemas/Pet/properties/id
+    example: 10
+  property name type=string @177:11 #/components/schemas/Pet/properties/name
+    example: "doggie"
+  property category see #/components/schemas/Category
+  property photoUrls type=array @182:11 #/components/schemas/Pet/properties/photoUrls
+    xml {Name: Namespace: Prefix: Attribute:false Wrapped:true}
+    items type=string @186:13 #/components/schemas/Pet/properties/photoUrls/items
+      xml {Name:photoUrl Namespace: Prefix: Attribute:false Wrapped:false}
+  property status type=string @190:11 #/components/schemas/Pet/properties/status
+    description: "pet status in the store"
+    enum[] "available"
+    enum[] "pending"
+    enum[] "sold"
+  property weight type=number multipleOf=0.01 minimum=0.5 maximum=1.5e2 @194:11 #/components/schemas/Pet/properties/weight
+  property nickname type=string|null nullable=true pattern=^[a-z'-]+$ @199:11 #/components/schemas/Pet/properties/nickname
+    default: null
+components.schemas.Error type=object required=code,message @206:7 #/components/schemas/Error
+  property code type=integer format=int32 @208:15 #/components/schemas/Error/properties/code
+  property message type=string @209:18 #/components/schemas/Error/properties/message
+components.securitySchemes.petstore_auth type=oauth2 name="" in="" scheme="" bearerFormat="" oidc="" @213:7 #/components/securitySchemes/petstore_auth
+  flow implicit auth="https://petstore3.swagger.io/oauth/authorize" token="" refresh="" scopes=[{write:pets modify pets in your account} {read:pets read your pets}]
+components.securitySchemes.api_key type=apiKey name="api_key" in="header" scheme="" bearerFormat="" oidc="" @221:7 #/components/securitySchemes/api_key
+path /pet @37:5 #/paths/~1pet
+  PUT /pet id="updatePet" tags=["pet"] deprecated=false @38:7 #/paths/~1pet/put
+    summary: "Update an existing pet"
+    description: "Update an existing pet by Id"
+    security 1
+      petstore_auth[write:pets,read:pets]
+    requestBody required=true @44:9 #/paths/~1pet/put/requestBody
+      description: "Update an existent pet in the store"
+      content application/json @47:13 #/paths/~1pet/put/requestBody/content/application~1json
+        schema see #/components/schemas/Pet
+      content application/xml @50:13 #/paths/~1pet/put/requestBody/content/application~1xml
+        schema see #/components/schemas/Pet
+    response 200 "Successful operation" @55:11 #/paths/~1pet/put/responses/200
+      content application/json @58:15 #/paths/~1pet/put/responses/200/content/application~1json
+        schema see #/components/schemas/Pet
+    response 400 "Invalid ID supplied" @61:11 #/paths/~1pet/put/responses/400
+    response 404 "Pet not found" @63:11 #/paths/~1pet/put/responses/404
+    response 422 "Validation exception" @65:11 #/paths/~1pet/put/responses/422
+path /pet/findByStatus @71:5 #/paths/~1pet~1findByStatus
+  GET /pet/findByStatus id="findPetsByStatus" tags=["pet"] deprecated=false @72:7 #/paths/~1pet~1findByStatus/get
+    summary: "Finds Pets by status"
+    description: "Multiple status values can be provided with comma separated strings"
+    security 1
+      petstore_auth[write:pets,read:pets]
+    param query status required=false style=(form) explode=true(true) @78:11 #/paths/~1pet~1findByStatus/get/parameters/0
+      description: "Status values that need to be considered for filter"
+      schema type=string @84:13 #/paths/~1pet~1findByStatus/get/parameters/0/schema
+        default: "available"
+        enum[] "available"
+        enum[] "pending"
+        enum[] "sold"
+    response 200 "successful operation" @92:11 #/paths/~1pet~1findByStatus/get/responses/200
+      content application/json @95:15 #/paths/~1pet~1findByStatus/get/responses/200/content/application~1json
+        schema type=array @96:17 #/paths/~1pet~1findByStatus/get/responses/200/content/application~1json/schema
+          items see #/components/schemas/Pet
+    response 400 "Invalid status value" @100:11 #/paths/~1pet~1findByStatus/get/responses/400
+path /pet/{petId} @103:5 #/paths/~1pet~1{petId}
+  GET /pet/{petId} id="getPetById" tags=["pet"] deprecated=false @104:7 #/paths/~1pet~1{petId}/get
+    summary: "Find pet by ID"
+    security 2
+      api_key[]
+      petstore_auth[write:pets,read:pets]
+    param path petId required=true style=(simple) explode=-(false) @109:11 #/paths/~1pet~1{petId}/get/parameters/0
+      description: "ID of pet to return"
+      schema type=integer format=int64 @114:13 #/paths/~1pet~1{petId}/get/parameters/0/schema
+    response 200 "successful operation" @118:11 #/paths/~1pet~1{petId}/get/responses/200
+      content application/json @121:15 #/paths/~1pet~1{petId}/get/responses/200/content/application~1json
+        schema see #/components/schemas/Pet
+    response default "Unexpected error" @123:11 #/paths/~1pet~1{petId}/get/responses/default
+      content application/json @126:15 #/paths/~1pet~1{petId}/get/responses/default/content/application~1json
+        schema see #/components/schemas/Error
+  DELETE /pet/{petId} id="deletePet" tags=["pet"] deprecated=false @134:7 #/paths/~1pet~1{petId}/delete
+    summary: "Deletes a pet"
+    param header api_key required=false style=(simple) explode=-(false) @138:11 #/paths/~1pet~1{petId}/delete/parameters/0
+      schema type=string @142:13 #/paths/~1pet~1{petId}/delete/parameters/0/schema
+    param path petId see #/paths/~1pet~1{petId}/get/parameters/0
+    response 400 "Invalid pet value" @146:11 #/paths/~1pet~1{petId}/delete/responses/400
+    response default see #/paths/~1pet~1{petId}/get/responses/default

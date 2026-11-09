@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package shop.v1;
+
+import public "shop/v1/common.proto";
+import "shop/v1/options.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+
+option java_package = "com.example.shop.v1";
+option optimize_for = SPEED;
+option deprecated = false;
+
+message Order {
+  option (table_id) = -42;
+
+  message Line {
+    string sku = 1 [(label) = "SKU", (rule) = { pattern: "^[A-Z]+$" max_len: 12 tags: ["a", "b"] }];
+    uint32 quantity = 2;
+    Money price = 3;
+  }
+
+  enum Kind {
+    KIND_UNSPECIFIED = 0;
+    KIND_RETAIL = 1 [(weight) = 0.5];
+    KIND_WHOLESALE = 2 [(weight) = -inf];
+  }
+
+  string id = 1;
+  repeated Line lines = 2;
+  map<string, string> labels = 3;
+  map<int64, Line> lines_by_number = 4;
+  Status status = 5;
+  Kind kind = 6;
+  optional string note = 7;
+  oneof payment {
+    string card_token = 8;
+    Money credit = 9;
+    Kind fallback = 10;
+  }
+  repeated int32 flags = 11 [packed = false];
+  repeated double scores = 12;
+  Audit audit = 13 [deprecated = true, (rule) = { nested { pattern: "x" } weights { key: "w" value: 3 } blob: "\x00\xff" ratio: 1e-3 }];
+  google.protobuf.Duration ttl = 14;
+  bytes raw = 15 [json_name = "RAW_data"];
+  sint64 delta = 16;
+  fixed32 crc = 17;
+  optional Kind maybe_kind = 18;
+
+  reserved 100 to 199, 1000 to max;
+  reserved "old_field", "legacy";
+}
+
+message GetOrderRequest {
+  string id = 1;
+}
+
+service OrderService {
+  option (host) = "orders.example.com";
+  option deprecated = true;
+
+  rpc GetOrder(GetOrderRequest) returns (Order) {
+    option (scopes) = "orders.read";
+    option (scopes) = "admin";
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  rpc WatchOrders(GetOrderRequest) returns (stream Order);
+  rpc ImportOrders(stream Order) returns (google.protobuf.Empty) {
+    option (idempotent) = false;
+  }
+  rpc Chat(stream Order.Line) returns (stream Order.Line);
+}

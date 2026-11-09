@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package shop.v1;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "example.com/shop/v1;shopv1";
+option java_multiple_files = true;
+
+// Rule is the value of an aggregate custom option.
+message Rule {
+  string pattern = 1;
+  int32 max_len = 2;
+  repeated string tags = 3;
+  Rule nested = 4;
+  map<string, int32> weights = 5;
+  bytes blob = 6;
+  double ratio = 7;
+}
+
+extend google.protobuf.FieldOptions {
+  string label = 50001;
+  Rule rule = 50002;
+}
+
+extend google.protobuf.MethodOptions {
+  repeated string scopes = 50003;
+  bool idempotent = 50004;
+}
+
+extend google.protobuf.MessageOptions {
+  int64 table_id = 50005;
+}
+
+extend google.protobuf.ServiceOptions {
+  string host = 50006;
+}
+
+extend google.protobuf.EnumValueOptions {
+  float weight = 50007;
+}

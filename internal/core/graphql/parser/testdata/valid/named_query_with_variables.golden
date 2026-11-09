@@ -1,0 +1,39 @@
+# source
+query getZuckProfile($devicePicSize: Int = 60) {
+  user(id: 4) {
+    id
+    name
+    profilePic(size: $devicePicSize)
+  }
+}
+# tree
+Document [0:123]
+  Definitions[0]: OperationDefinition [0:123] Operation=query Keyword=0
+    Name: Name [6:20] Value="getZuckProfile"
+    VariableDefinitions: VariableDefinitionList [20:46] LParen=20 RParen=45
+      Definitions[0]: VariableDefinition [21:45] Colon=35 Equals=41
+        Variable: Variable [21:35] Dollar=21
+          Name: Name [22:35] Value="devicePicSize"
+        Type: NamedType [37:40]
+          Name: Name [37:40] Value="Int"
+        DefaultValue: IntValue [43:45] Raw="60"
+    SelectionSet: SelectionSet [47:123] LBrace=47 RBrace=122
+      Selections[0]: Field [51:121] Colon=-1
+        Name: Name [51:55] Value="user"
+        Arguments: ArgumentList [55:62] LParen=55 RParen=61
+          Arguments[0]: Argument [56:61] Colon=58
+            Name: Name [56:58] Value="id"
+            Value: IntValue [60:61] Raw="4"
+        SelectionSet: SelectionSet [63:121] LBrace=63 RBrace=120
+          Selections[0]: Field [69:71] Colon=-1
+            Name: Name [69:71] Value="id"
+          Selections[1]: Field [76:80] Colon=-1
+            Name: Name [76:80] Value="name"
+          Selections[2]: Field [85:117] Colon=-1
+            Name: Name [85:95] Value="profilePic"
+            Arguments: ArgumentList [95:117] LParen=95 RParen=116
+              Arguments[0]: Argument [96:116] Colon=100
+                Name: Name [96:100] Value="size"
+                Value: Variable [102:116] Dollar=102
+                  Name: Name [103:116] Value="devicePicSize"
+# errors

@@ -1,0 +1,51 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Pets design",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "collection[0] @6:5",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "https://pets.example/pets",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "List pets"
+      },
+      {
+        "at": "spec @12:3",
+        "code": "insomnia.unsupported",
+        "name": "Pets design",
+        "reason": "The API spec is not imported with the collection: save it as a file and import it with the OpenAPI format.",
+        "skipped": "API spec"
+      },
+      {
+        "at": "testSuites[0] @21:5",
+        "code": "insomnia.unsupported",
+        "name": "Pets suite",
+        "reason": "PostSonde does not import Insomnia test suites.",
+        "skipped": "test suite"
+      }
+    ],
+    "variables": null
+  }
+}

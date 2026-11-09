@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "ui": {
+    "theme": "light",
+    "sidebarCollapsed": false,
+    "splitRatio": 0.35,
+    "responsePosition": "beside",
+    "splitRatioBelow": 0.5,
+    "locale": "system",
+    "fontSize": 14,
+    "panels": {
+      "b": 2,
+      "a": 1
+    }
+  },
+  "network": {
+    "defaultTimeoutMs": 0,
+    "verifyTls": true,
+    "maxResponseBodyMb": 512,
+    "proxyMode": "system"
+  },
+  "editor": {
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 12,
+    "tabSize": 2,
+    "wordWrap": false,
+    "lineNumbers": true,
+    "matchBrackets": true
+  },
+  "alpha": "<kept & unescaped>",
+  "zeta": {
+    "b": 1,
+    "a": [
+      true,
+      null
+    ]
+  }
+}

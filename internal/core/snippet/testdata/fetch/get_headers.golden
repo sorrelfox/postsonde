@@ -1,0 +1,12 @@
+const response = await fetch("https://api.test/items", {
+  headers: {
+    "Accept": "application/json",
+    "X-Quote": "it's \"quoted\" $HOME `id`",
+    "X-Empty": "",
+    "X-Unicode": String.fromCharCode(...new TextEncoder().encode("héllo ✓")),
+    "User-Agent": "PostSonde-test",
+  },
+});
+
+console.log(response.status);
+console.log(await response.text());

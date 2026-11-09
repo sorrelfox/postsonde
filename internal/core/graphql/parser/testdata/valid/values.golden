@@ -1,0 +1,74 @@
+# source
+{
+  f(
+    int: -12, zero: 0, float: 1.5e-3, str: "a\né", block: """
+      two
+        lines
+    """,
+    yes: true, no: false, nothing: null, enum: RED, variable: $v,
+    list: [1, "two", [3], []], object: {a: 1, b: {c: [null]}}, empty: {}
+  )
+}
+# tree
+Document [0:247]
+  Definitions[0]: OperationDefinition [0:247] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:247] LBrace=0 RBrace=246
+      Selections[0]: Field [4:245] Colon=-1
+        Name: Name [4:5] Value="f"
+        Arguments: ArgumentList [5:245] LParen=5 RParen=244
+          Arguments[0]: Argument [11:19] Colon=14
+            Name: Name [11:14] Value="int"
+            Value: IntValue [16:19] Raw="-12"
+          Arguments[1]: Argument [21:28] Colon=25
+            Name: Name [21:25] Value="zero"
+            Value: IntValue [27:28] Raw="0"
+          Arguments[2]: Argument [30:43] Colon=35
+            Name: Name [30:35] Value="float"
+            Value: FloatValue [37:43] Raw="1.5e-3"
+          Arguments[3]: Argument [45:57] Colon=48
+            Name: Name [45:48] Value="str"
+            Value: StringValue [50:57] Block=false Value="a\né"
+          Arguments[4]: Argument [59:101] Colon=64
+            Name: Name [59:64] Value="block"
+            Value: StringValue [66:101] Block=true Value="two\n  lines"
+          Arguments[5]: Argument [107:116] Colon=110
+            Name: Name [107:110] Value="yes"
+            Value: BooleanValue [112:116] Value=true
+          Arguments[6]: Argument [118:127] Colon=120
+            Name: Name [118:120] Value="no"
+            Value: BooleanValue [122:127] Value=false
+          Arguments[7]: Argument [129:142] Colon=136
+            Name: Name [129:136] Value="nothing"
+            Value: NullValue [138:142]
+          Arguments[8]: Argument [144:153] Colon=148
+            Name: Name [144:148] Value="enum"
+            Value: EnumValue [150:153] Value="RED"
+          Arguments[9]: Argument [155:167] Colon=163
+            Name: Name [155:163] Value="variable"
+            Value: Variable [165:167] Dollar=165
+              Name: Name [166:167] Value="v"
+          Arguments[10]: Argument [173:198] Colon=177
+            Name: Name [173:177] Value="list"
+            Value: ListValue [179:198] LBracket=179 RBracket=197
+              Values[0]: IntValue [180:181] Raw="1"
+              Values[1]: StringValue [183:188] Block=false Value="two"
+              Values[2]: ListValue [190:193] LBracket=190 RBracket=192
+                Values[0]: IntValue [191:192] Raw="3"
+              Values[3]: ListValue [195:197] LBracket=195 RBracket=196
+          Arguments[11]: Argument [200:230] Colon=206
+            Name: Name [200:206] Value="object"
+            Value: ObjectValue [208:230] LBrace=208 RBrace=229
+              Fields[0]: ObjectField [209:213] Colon=210
+                Name: Name [209:210] Value="a"
+                Value: IntValue [212:213] Raw="1"
+              Fields[1]: ObjectField [215:229] Colon=216
+                Name: Name [215:216] Value="b"
+                Value: ObjectValue [218:229] LBrace=218 RBrace=228
+                  Fields[0]: ObjectField [219:228] Colon=220
+                    Name: Name [219:220] Value="c"
+                    Value: ListValue [222:228] LBracket=222 RBracket=227
+                      Values[0]: NullValue [223:227]
+          Arguments[12]: Argument [232:241] Colon=237
+            Name: Name [232:237] Value="empty"
+            Value: ObjectValue [239:241] LBrace=239 RBrace=240
+# errors

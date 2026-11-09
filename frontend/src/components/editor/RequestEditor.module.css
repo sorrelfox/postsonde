@@ -1,0 +1,384 @@
+/* The HTTP request editor, after the mockup's request pane: a 34px URL
+ * bar (method, URL, Send) with 12px/14px padding, 36px sub-tabs with an
+ * accent underline and count pills, then the section, 10px/14px in. */
+
+.editor {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-5) var(--space-7) 0;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.notice svg {
+  flex: none;
+  color: var(--warn);
+}
+
+/* URL bar */
+
+.urlBar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-7) var(--space-5);
+}
+
+.urlGroup {
+  flex: 1;
+  min-width: 0;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  overflow: hidden;
+}
+
+.urlGroup:focus-within {
+  border-color: var(--accent);
+}
+
+.method {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-medium);
+  color: var(--m-dir);
+  cursor: pointer;
+}
+
+.method[data-tone="get"] { color: var(--m-get); }
+.method[data-tone="post"] { color: var(--m-post); }
+.method[data-tone="put"] { color: var(--m-put); }
+.method[data-tone="patch"] { color: var(--m-patch); }
+.method[data-tone="del"] { color: var(--m-del); }
+
+.method[data-disabled] {
+  cursor: default;
+}
+
+.methodSelect {
+  appearance: none;
+  height: 100%;
+  margin: 0;
+  padding: 0 26px 0 var(--space-6);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: inherit;
+  outline: none;
+}
+
+/* Read-only: keep the method's colour instead of the browser's grey. */
+.methodSelect:disabled {
+  color: inherit;
+  opacity: 1;
+}
+
+.methodSelect:focus-visible {
+  background: var(--bg2);
+}
+
+.methodSelect option {
+  background: var(--bg1);
+  color: var(--text);
+}
+
+.methodChevron {
+  position: absolute;
+  right: var(--space-5);
+  pointer-events: none;
+  color: var(--text3);
+}
+
+/* "Custom…" (HTTP-02): the select becomes a text field of the same metrics. */
+.methodInput {
+  height: 100%;
+  margin: 0;
+  padding: 0 var(--space-6);
+  border: 0;
+  background: var(--bg2);
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.methodInput::placeholder {
+  color: var(--text3);
+}
+
+.method[data-invalid] {
+  color: var(--bad);
+}
+
+/* The case warning or the custom method's problem, before the method. */
+.methodHint {
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding-left: var(--space-5);
+  color: var(--warn);
+}
+
+.method[data-invalid] .methodHint {
+  color: var(--bad);
+}
+
+.methodHint + .methodSelect,
+.methodHint + .methodInput {
+  padding-left: var(--space-3);
+}
+
+/* Params tab: the query and path tables, each under a heading once path variables exist (HTTP-05). */
+.paramsHeading {
+  margin: 0 0 var(--space-3);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.paramsHeading:not(:first-child) {
+  margin-top: var(--space-7);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The warning badge while TLS verification is off (HTTP-23), at the end
+ * of the URL field; it opens the Settings sub-tab. */
+.tlsBadge {
+  flex: none;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 22px;
+  margin-right: var(--space-3);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--warn);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tlsBadge:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* The single-line CodeMirror URL field; its text styles are in singleLine.ts. */
+.url {
+  flex: 1;
+  min-width: 0;
+}
+
+.send {
+  flex: none;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 var(--space-7) 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.send:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Send with the arrow of the Repeat dialog (HTTP-27) as one split button. */
+.sendGroup {
+  flex: none;
+  display: flex;
+  align-items: stretch;
+}
+
+.sendGroup .send {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sendMore {
+  flex: none;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-left: 1px solid var(--accent-ink);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.sendMore:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Sub-tabs */
+
+.subTabs {
+  flex: none;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.subTab {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: -1px;
+  padding: 0 var(--space-5);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+}
+
+.subTab:hover {
+  color: var(--text);
+}
+
+.subTab[aria-selected="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--text);
+}
+
+.subTab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.count {
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+/* Section */
+
+.section {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-5) var(--space-7);
+}
+
+.linkButton {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+/* While a send runs, Send becomes Cancel (HTTP-20). */
+.cancel {
+  flex: none;
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-7);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.cancel:hover {
+  background: var(--bg3);
+}
+
+.cancel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Copy as cURL (GEN-01): an icon button before Send. */
+.copyCurl {
+  flex: none;
+  width: var(--h-control-lg);
+  height: var(--h-control-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+}
+
+.copyCurl:hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.copyCurl:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

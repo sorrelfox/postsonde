@@ -1,0 +1,14 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/graphql",
+    headers={
+        "Accept": "application/graphql-response+json, application/json;q=0.9",
+        "Content-Type": "application/json",
+    },
+    data='{"query":"query Q($id: ID!) {\\n  user(id: $id) { name }\\n}","variables":{"id":"1"},"operationName":"Q"}',
+)
+
+print(response.status_code)
+print(response.text)

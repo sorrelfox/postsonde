@@ -1,0 +1,2 @@
+http --auth-type=digest '--auth=ann:secret' --follow --max-redirects=10 \
+  GET https://api.test/me

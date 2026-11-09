@@ -1,0 +1,2 @@
+curl.exe 'https://api.test/items?page=2&q=a%20b' `
+  -L --max-redirs 10

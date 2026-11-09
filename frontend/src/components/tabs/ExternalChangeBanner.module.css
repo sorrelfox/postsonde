@@ -1,0 +1,105 @@
+/* The notice above an editor whose file changed outside PostSonde (STO-05). */
+
+.banner {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: var(--space-5) var(--space-7) 0;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.banner > svg {
+  flex: none;
+  color: var(--warn);
+}
+
+.text {
+  flex: 1 1 240px;
+  margin: 0;
+  min-width: 0;
+}
+
+.actions {
+  flex: none;
+  display: flex;
+  gap: var(--space-3);
+}
+
+.button,
+.primary {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.button:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.button:disabled,
+.primary:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.legend {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.legend [data-kind="removed"] {
+  color: var(--bad);
+}
+
+.legend [data-kind="added"] {
+  color: var(--ok);
+}
+
+.diff {
+  margin: 0;
+  max-height: 60vh;
+  overflow: auto;
+  padding: var(--space-4) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.5;
+}
+
+.line {
+  display: block;
+  padding: 0 var(--space-5);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.line[data-kind="removed"] {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+}
+
+.line[data-kind="added"] {
+  background: color-mix(in srgb, var(--ok) 14%, transparent);
+}

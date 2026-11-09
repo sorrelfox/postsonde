@@ -1,0 +1,6 @@
+wget https://api.test/blob \
+  --method PUT \
+  --header 'Content-Type: application/json' \
+  --body-file 'C:\Users\Me\My Files\report 100%.json' \
+  --max-redirect 0 \
+  -O -

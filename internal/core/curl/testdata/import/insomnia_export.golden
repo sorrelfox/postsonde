@@ -1,0 +1,30 @@
+{
+  "name": "17",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "PUT",
+    "url": "https://api.example.com/v1/items/17",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      },
+      {
+        "name": "User-Agent",
+        "value": "insomnia/10.0.0"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"name\":\"Widget\",\"price\":9.5}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": []
+}

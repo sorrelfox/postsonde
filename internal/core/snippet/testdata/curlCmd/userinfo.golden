@@ -1,0 +1,3 @@
+curl https://api.test/me ^
+  -u bob:pw ^
+  -L --max-redirs 10

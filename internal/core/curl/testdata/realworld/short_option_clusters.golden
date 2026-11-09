@@ -1,0 +1,93 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": true,
+  "url": "https://localhost:8443/api",
+  "urls": [
+    {
+      "value": "https://localhost:8443/api",
+      "start": 56,
+      "end": 82
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "X-Trace",
+      "value": "1",
+      "kind": "set",
+      "implied": false,
+      "start": 16,
+      "end": 27
+    }
+  ],
+  "data": [
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "",
+      "name": "",
+      "file": "payload.json",
+      "start": 28,
+      "end": 43
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": {
+    "user": "admin",
+    "password": "",
+    "hasPassword": false
+  },
+  "authScheme": "basic",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": true,
+  "compressed": false,
+  "followRedirects": true,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 5000000000,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 5,
+      "end": 15,
+      "message": "The option “-s” does not change the request and is ignored.",
+      "text": "-sSLkXPOST"
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 5,
+      "end": 15,
+      "message": "The option “-S” does not change the request and is ignored.",
+      "text": "-sSLkXPOST"
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "warning",
+      "start": 28,
+      "end": 43,
+      "message": "curl reads this value from the file “payload.json”; PostSonde does not read it.",
+      "text": "-d@payload.json"
+    },
+    {
+      "code": "curl.password_missing",
+      "severity": "warning",
+      "start": 44,
+      "end": 51,
+      "message": "There is no password after the user name; curl would ask for it.",
+      "text": "-uadmin"
+    }
+  ]
+}

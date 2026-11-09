@@ -1,0 +1,86 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000f6",
+      "seq": 21,
+      "time": "2026-09-16T08:00:17Z",
+      "peer": "127.0.0.1:53131",
+      "connId": 9,
+      "direction": "in",
+      "kind": "request",
+      "summary": "query Product (POST /graphql)",
+      "text": "{\"query\":\"query Product($id: ID!) { product(id: $id) { name } }\",\"variables\":{\"id\":\"1\"}}",
+      "dataBase64": "",
+      "binary": false,
+      "size": 86,
+      "truncated": false,
+      "http": {
+        "method": "POST",
+        "target": "/graphql",
+        "proto": "HTTP/1.1",
+        "status": 0,
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "route": null,
+        "delayMs": 0
+      },
+      "ws": null,
+      "tcp": null,
+      "graphql": {
+        "request": 1,
+        "operation": "Product",
+        "operationType": "query",
+        "variables": "{\"id\":\"1\"}",
+        "introspection": false,
+        "errors": 0,
+        "hasData": false
+      },
+      "captured": false
+    },
+    {
+      "serverId": "srv_00000000000000f6",
+      "seq": 22,
+      "time": "2026-09-16T08:00:17Z",
+      "peer": "127.0.0.1:53131",
+      "connId": 9,
+      "direction": "out",
+      "kind": "response",
+      "summary": "200 OK: data",
+      "text": "{\"data\":{\"product\":{\"name\":\"Teapot\"}}}",
+      "dataBase64": "",
+      "binary": false,
+      "size": 38,
+      "truncated": false,
+      "http": {
+        "method": "POST",
+        "target": "/graphql",
+        "proto": "HTTP/1.1",
+        "status": 200,
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/graphql-response+json; charset=utf-8"
+          }
+        ],
+        "route": null,
+        "delayMs": 0
+      },
+      "ws": null,
+      "tcp": null,
+      "graphql": {
+        "request": 1,
+        "operation": "Product",
+        "operationType": "query",
+        "variables": "{\"id\":\"1\"}",
+        "introspection": false,
+        "errors": 0,
+        "hasData": true
+      },
+      "captured": false
+    }
+  ]
+}

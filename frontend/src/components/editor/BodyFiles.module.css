@@ -1,0 +1,201 @@
+/* Multipart parts and the binary file body (HTTP-14, HTTP-15): file chips
+ * with a Choose… button, the part kind and Content-Type controls at the end
+ * of a part's value cell, and the file body's form. */
+
+.chip {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.compact {
+  flex: 1;
+  gap: var(--space-3);
+}
+
+.file {
+  min-width: 0;
+  height: var(--h-control-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.compact .file {
+  flex: 0 1 auto;
+  height: 20px;
+  padding: 0 var(--space-3);
+}
+
+.compact .name {
+  min-width: 4ch;
+}
+
+/* In a narrow table cell the name wins over the size (still in the tooltip). */
+@container (max-width: 220px) {
+  .compact .size {
+    display: none;
+  }
+}
+
+.file svg {
+  flex: none;
+  color: var(--text3);
+}
+
+.chip[data-missing] .file {
+  border-color: var(--warn);
+}
+
+.file .warn {
+  color: var(--warn);
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.size {
+  flex: none;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.chip[data-missing] .size {
+  color: var(--warn);
+}
+
+.empty {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.choose,
+.kind {
+  flex: none;
+  height: 20px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.fileBody .choose {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  font-size: var(--fs-md);
+}
+
+.choose:hover:not(:disabled),
+.kind:hover:not(:disabled) {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.choose:disabled,
+.kind:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.choose:focus-visible,
+.kind:focus-visible,
+.partType:focus-visible,
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.kind {
+  padding: 0 var(--space-1);
+  background: var(--bg1);
+}
+
+.partType {
+  width: 112px;
+  height: 20px;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.partType:hover,
+.partType:focus {
+  border-color: var(--line2);
+  background: var(--bg1);
+}
+
+.parts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fileBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.input {
+  width: 260px;
+  max-width: 100%;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.hint {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.failure {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.failure svg {
+  flex: none;
+  color: var(--bad);
+}

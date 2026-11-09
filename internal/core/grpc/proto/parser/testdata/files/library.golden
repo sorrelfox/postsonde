@@ -1,0 +1,354 @@
+# tree
+File [0:5195] Name="library.proto"
+  Decls[0]: Syntax [208:226] Detached=[" A Google-API-style resource service: HTTP annotations, field behaviors,\n resource descriptors, pagination and long-running operations.\n Written for PostSonde's parser tests; not an actual Google API.\n"]
+    Value: StringLit [217:225] Value="proto3"
+  Decls[1]: Package [228:255] Name=[236:254]"example.library.v1"
+  Decls[2]: Import [257:295]
+    Path: StringLit [264:294] Value="google/api/annotations.proto"
+  Decls[3]: Import [296:329]
+    Path: StringLit [303:328] Value="google/api/client.proto"
+  Decls[4]: Import [330:371]
+    Path: StringLit [337:370] Value="google/api/field_behavior.proto"
+  Decls[5]: Import [372:407]
+    Path: StringLit [379:406] Value="google/api/resource.proto"
+  Decls[6]: Import [408:453]
+    Path: StringLit [415:452] Value="google/longrunning/operations.proto"
+  Decls[7]: Import [454:491]
+    Path: StringLit [461:490] Value="google/protobuf/empty.proto"
+  Decls[8]: Import [492:534]
+    Path: StringLit [499:533] Value="google/protobuf/field_mask.proto"
+  Decls[9]: Import [535:576]
+    Path: StringLit [542:575] Value="google/protobuf/timestamp.proto"
+  Decls[10]: Option [578:625]
+    Name: OptionName [585:601]
+      Parts[0]: OptionNamePart [585:601] Name=[585:601]"csharp_namespace"
+    Value: StringLit [604:624] Value="Example.Library.V1"
+  Decls[11]: Option [626:694]
+    Name: OptionName [633:643]
+      Parts[0]: OptionNamePart [633:643] Name=[633:643]"go_package"
+    Value: StringLit [646:693] Value="example.com/library/apiv1/librarypb;librarypb"
+  Decls[12]: Option [695:729]
+    Name: OptionName [702:721]
+      Parts[0]: OptionNamePart [702:721] Name=[702:721]"java_multiple_files"
+    Value: IdentLit [724:728] Value="true"
+  Decls[13]: Option [730:775]
+    Name: OptionName [737:757]
+      Parts[0]: OptionNamePart [737:757] Name=[737:757]"java_outer_classname"
+    Value: StringLit [760:774] Value="LibraryProto"
+  Decls[14]: Option [776:823]
+    Name: OptionName [783:795]
+      Parts[0]: OptionNamePart [783:795] Name=[783:795]"java_package"
+    Value: StringLit [798:822] Value="com.example.library.v1"
+  Decls[15]: Option [824:857]
+    Name: OptionName [831:848]
+      Parts[0]: OptionNamePart [831:848] Name=[831:848]"objc_class_prefix"
+    Value: StringLit [851:856] Value="ELB"
+  Decls[16]: Option [858:980]
+    Name: OptionName [865:897]
+      Parts[0]: OptionNamePart [865:897] Extension=true Name=[866:896]"google.api.resource_definition"
+    Value: MessageLit [900:979]
+      Fields[0]: MessageLitField [904:941]
+        Name: FieldRef [904:908] Name=[904:908]"type"
+        Value: StringLit [910:941] Value="library.example.com/Publisher"
+      Fields[1]: MessageLitField [944:977]
+        Name: FieldRef [944:951] Name=[944:951]"pattern"
+        Value: StringLit [953:977] Value="publishers/{publisher}"
+  Decls[17]: Service [1025:2896] Leading=" Manages shelves and books in a library.\n" Name=[1033:1047]"LibraryService" RBrace=2895
+    Body[0]: Option [1052:1109]
+      Name: OptionName [1059:1084]
+        Parts[0]: OptionNamePart [1059:1084] Extension=true Name=[1060:1083]"google.api.default_host"
+      Value: StringLit [1087:1108] Value="library.example.com"
+    Body[1]: Option [1112:1260]
+      Name: OptionName [1119:1144]
+        Parts[0]: OptionNamePart [1119:1144] Extension=true Name=[1120:1143]"google.api.oauth_scopes"
+      Value: StringLit [1153:1259] Value="https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/library.readonly"
+    Body[2]: RPC [1313:1508] Leading=" Creates a shelf, and returns the new Shelf.\n" Name=[1317:1328]"CreateShelf" LBrace=1365 RBrace=1507
+      Input: RPCType [1328:1348] Type=[1329:1347]"CreateShelfRequest"
+      Output: RPCType [1357:1364] Type=[1358:1363]"Shelf"
+      Body[0]: Option [1371:1452]
+        Name: OptionName [1378:1395]
+          Parts[0]: OptionNamePart [1378:1395] Extension=true Name=[1379:1394]"google.api.http"
+        Value: MessageLit [1398:1451]
+          Fields[0]: MessageLitField [1406:1425]
+            Name: FieldRef [1406:1410] Name=[1406:1410]"post"
+            Value: StringLit [1412:1425] Value="/v1/shelves"
+          Fields[1]: MessageLitField [1432:1445]
+            Name: FieldRef [1432:1436] Name=[1432:1436]"body"
+            Value: StringLit [1438:1445] Value="shelf"
+      Body[1]: Option [1457:1504]
+        Name: OptionName [1464:1493]
+          Parts[0]: OptionNamePart [1464:1493] Extension=true Name=[1465:1492]"google.api.method_signature"
+        Value: StringLit [1496:1503] Value="shelf"
+    Body[3]: RPC [1578:1825] Leading=" Gets a shelf. Returns NOT_FOUND if the shelf does not exist.\n" Name=[1582:1590]"GetShelf" LBrace=1624 RBrace=1824
+      Input: RPCType [1590:1607] Type=[1591:1606]"GetShelfRequest"
+      Output: RPCType [1616:1623] Type=[1617:1622]"Shelf"
+      Body[0]: Option [1630:1770]
+        Name: OptionName [1637:1654]
+          Parts[0]: OptionNamePart [1637:1654] Extension=true Name=[1638:1653]"google.api.http"
+        Value: MessageLit [1657:1769]
+          Fields[0]: MessageLitField [1665:1692]
+            Name: FieldRef [1665:1668] Name=[1665:1668]"get"
+            Value: StringLit [1670:1692] Value="/v1/{name=shelves/*}"
+          Fields[1]: MessageLitField [1699:1763]
+            Name: FieldRef [1699:1718] Name=[1699:1718]"additional_bindings"
+            Value: MessageLit [1719:1763]
+              Fields[0]: MessageLitField [1721:1761]
+                Name: FieldRef [1721:1724] Name=[1721:1724]"get"
+                Value: StringLit [1726:1761] Value="/v1/{name=publishers/*/shelves/*}"
+      Body[1]: Option [1775:1821]
+        Name: OptionName [1782:1811]
+          Parts[0]: OptionNamePart [1782:1811] Extension=true Name=[1783:1810]"google.api.method_signature"
+        Value: StringLit [1814:1820] Value="name"
+    Body[4]: RPC [1893:2017] Leading=" Lists shelves. The order is unspecified but deterministic.\n" Name=[1897:1908]"ListShelves" LBrace=1959 RBrace=2016
+      Input: RPCType [1908:1928] Type=[1909:1927]"ListShelvesRequest"
+      Output: RPCType [1937:1958] Type=[1938:1957]"ListShelvesResponse"
+      Body[0]: Option [1965:2013]
+        Name: OptionName [1972:1989]
+          Parts[0]: OptionNamePart [1972:1989] Extension=true Name=[1973:1988]"google.api.http"
+        Value: MessageLit [1992:2012]
+          Fields[0]: MessageLitField [1993:2011]
+            Name: FieldRef [1993:1996] Name=[1993:1996]"get"
+            Value: StringLit [1998:2011] Value="/v1/shelves"
+    Body[5]: RPC [2043:2234] Leading=" Deletes a shelf.\n" Name=[2047:2058]"DeleteShelf" LBrace=2111 RBrace=2233
+      Input: RPCType [2058:2078] Type=[2059:2077]"DeleteShelfRequest"
+      Output: RPCType [2087:2110] Type=[2088:2109]"google.protobuf.Empty"
+      Body[0]: Option [2117:2179]
+        Name: OptionName [2124:2141]
+          Parts[0]: OptionNamePart [2124:2141] Extension=true Name=[2125:2140]"google.api.http"
+        Value: MessageLit [2144:2178]
+          Fields[0]: MessageLitField [2146:2176]
+            Name: FieldRef [2146:2152] Name=[2146:2152]"delete"
+            Value: StringLit [2154:2176] Value="/v1/{name=shelves/*}"
+      Body[1]: Option [2184:2230]
+        Name: OptionName [2191:2220]
+          Parts[0]: OptionNamePart [2191:2220] Extension=true Name=[2192:2219]"google.api.method_signature"
+        Value: StringLit [2223:2229] Value="name"
+    Body[6]: RPC [2302:2527] Leading=" Updates a book; fields not in the mask are left unchanged.\n" Name=[2306:2316]"UpdateBook" LBrace=2351 RBrace=2526
+      Input: RPCType [2316:2335] Type=[2317:2334]"UpdateBookRequest"
+      Output: RPCType [2344:2350] Type=[2345:2349]"Book"
+      Body[0]: Option [2357:2460]
+        Name: OptionName [2364:2381]
+          Parts[0]: OptionNamePart [2364:2381] Extension=true Name=[2365:2380]"google.api.http"
+        Value: MessageLit [2384:2459]
+          Fields[0]: MessageLitField [2392:2434]
+            Name: FieldRef [2392:2397] Name=[2392:2397]"patch"
+            Value: StringLit [2399:2434] Value="/v1/{book.name=shelves/*/books/*}"
+          Fields[1]: MessageLitField [2441:2453]
+            Name: FieldRef [2441:2445] Name=[2441:2445]"body"
+            Value: StringLit [2447:2453] Value="book"
+      Body[1]: Option [2465:2523]
+        Name: OptionName [2472:2501]
+          Parts[0]: OptionNamePart [2472:2501] Extension=true Name=[2473:2500]"google.api.method_signature"
+        Value: StringLit [2504:2522] Value="book,update_mask"
+    Body[7]: RPC [2590:2894] Leading=" Moves a book to another shelf. This can take a while.\n" Name=[2594:2602]"MoveBook" LBrace=2659 RBrace=2893
+      Input: RPCType [2602:2619] Type=[2603:2618]"MoveBookRequest"
+      Output: RPCType [2628:2658] Type=[2629:2657]"google.longrunning.Operation"
+      Body[0]: Option [2665:2764]
+        Name: OptionName [2672:2689]
+          Parts[0]: OptionNamePart [2672:2689] Extension=true Name=[2673:2688]"google.api.http"
+        Value: MessageLit [2692:2763]
+          Fields[0]: MessageLitField [2700:2741]
+            Name: FieldRef [2700:2704] Name=[2700:2704]"post"
+            Value: StringLit [2706:2741] Value="/v1/{name=shelves/*/books/*}:move"
+          Fields[1]: MessageLitField [2748:2757]
+            Name: FieldRef [2748:2752] Name=[2748:2752]"body"
+            Value: StringLit [2754:2757] Value="*"
+      Body[1]: Option [2769:2890]
+        Name: OptionName [2776:2811]
+          Parts[0]: OptionNamePart [2776:2811] Extension=true Name=[2777:2810]"google.longrunning.operation_info"
+        Value: MessageLit [2814:2889]
+          Fields[0]: MessageLitField [2822:2843]
+            Name: FieldRef [2822:2835] Name=[2822:2835]"response_type"
+            Value: StringLit [2837:2843] Value="Book"
+          Fields[1]: MessageLitField [2850:2883]
+            Name: FieldRef [2850:2863] Name=[2850:2863]"metadata_type"
+            Value: StringLit [2865:2883] Value="MoveBookMetadata"
+  Decls[18]: Message [2919:3498] Leading=" A shelf resource.\n" Name=[2927:2932]"Shelf" RBrace=3497
+    Body[0]: Option [2937:3129]
+      Name: OptionName [2944:2965]
+        Parts[0]: OptionNamePart [2944:2965] Extension=true Name=[2945:2964]"google.api.resource"
+      Value: MessageLit [2968:3128]
+        Fields[0]: MessageLitField [2974:3007]
+          Name: FieldRef [2974:2978] Name=[2974:2978]"type"
+          Value: StringLit [2980:3007] Value="library.example.com/Shelf"
+        Fields[1]: MessageLitField [3012:3038]
+          Name: FieldRef [3012:3019] Name=[3012:3019]"pattern"
+          Value: StringLit [3021:3038] Value="shelves/{shelf}"
+        Fields[2]: MessageLitField [3043:3092]
+          Name: FieldRef [3043:3050] Name=[3043:3050]"pattern"
+          Value: StringLit [3052:3092] Value="publishers/{publisher}/shelves/{shelf}"
+        Fields[3]: MessageLitField [3097:3124]
+          Name: FieldRef [3097:3102] Name=[3097:3102]"style"
+          Value: IdentLit [3104:3124] Value="DECLARATION_FRIENDLY"
+    Body[1]: Field [3204:3263] Leading=" The resource name of the shelf.\n Format: `shelves/{shelf_id}`\n" Type=[3204:3210]"string" Name=[3211:3215]"name"
+      Number: IntLit [3218:3219] Raw="1" Value=1
+      Options: CompactOptions [3220:3262]
+        Options[0]: Option [3221:3261]
+          Name: OptionName [3221:3248]
+            Parts[0]: OptionNamePart [3221:3248] Extension=true Name=[3222:3247]"google.api.field_behavior"
+          Value: IdentLit [3251:3261] Value="IDENTIFIER"
+    Body[2]: Field [3296:3354] Leading=" The theme of the shelf.\n" Type=[3296:3302]"string" Name=[3303:3308]"theme"
+      Number: IntLit [3311:3312] Raw="2" Value=2
+      Options: CompactOptions [3313:3353]
+        Options[0]: Option [3314:3352]
+          Name: OptionName [3314:3341]
+            Parts[0]: OptionNamePart [3314:3341] Extension=true Name=[3315:3340]"google.api.field_behavior"
+          Value: IdentLit [3344:3352] Value="REQUIRED"
+    Body[3]: Field [3404:3496] Leading=" Output only. When the shelf was created.\n" Type=[3404:3429]"google.protobuf.Timestamp" Name=[3430:3441]"create_time"
+      Number: IntLit [3444:3445] Raw="3" Value=3
+      Options: CompactOptions [3452:3495]
+        Options[0]: Option [3453:3494]
+          Name: OptionName [3453:3480]
+            Parts[0]: OptionNamePart [3453:3480] Extension=true Name=[3454:3479]"google.api.field_behavior"
+          Value: IdentLit [3483:3494] Value="OUTPUT_ONLY"
+  Decls[19]: Message [3518:4047] Leading=" A single book.\n" Name=[3526:3530]"Book" RBrace=4046
+    Body[0]: Option [3535:3653]
+      Name: OptionName [3542:3563]
+        Parts[0]: OptionNamePart [3542:3563] Extension=true Name=[3543:3562]"google.api.resource"
+      Value: MessageLit [3566:3652]
+        Fields[0]: MessageLitField [3572:3604]
+          Name: FieldRef [3572:3576] Name=[3572:3576]"type"
+          Value: StringLit [3578:3604] Value="library.example.com/Book"
+        Fields[1]: MessageLitField [3609:3648]
+          Name: FieldRef [3609:3616] Name=[3609:3616]"pattern"
+          Value: StringLit [3618:3648] Value="shelves/{shelf}/books/{book}"
+    Body[1]: Enum [3686:3826] Leading=" How a book can be read.\n" Name=[3691:3697]"Format" RBrace=3825
+      Body[0]: EnumValue [3726:3749] Leading=" Not specified.\n" Name=[3726:3744]"FORMAT_UNSPECIFIED"
+        Number: IntLit [3747:3748] Raw="0" Value=0
+      Body[1]: EnumValue [3754:3768] Name=[3754:3763]"HARDCOVER"
+        Number: IntLit [3766:3767] Raw="1" Value=1
+      Body[2]: EnumValue [3773:3787] Name=[3773:3782]"PAPERBACK"
+        Number: IntLit [3785:3786] Raw="2" Value=2
+      Body[3]: EnumValue [3792:3822] Name=[3792:3797]"EBOOK"
+        Number: IntLit [3800:3801] Raw="3" Value=3
+        Options: CompactOptions [3802:3821]
+          Options[0]: Option [3803:3820]
+            Name: OptionName [3803:3813]
+              Parts[0]: OptionNamePart [3803:3813] Name=[3803:3813]"deprecated"
+            Value: IdentLit [3816:3820] Value="true"
+    Body[2]: Field [3830:3889] Type=[3830:3836]"string" Name=[3837:3841]"name"
+      Number: IntLit [3844:3845] Raw="1" Value=1
+      Options: CompactOptions [3846:3888]
+        Options[0]: Option [3847:3887]
+          Name: OptionName [3847:3874]
+            Parts[0]: OptionNamePart [3847:3874] Extension=true Name=[3848:3873]"google.api.field_behavior"
+          Value: IdentLit [3877:3887] Value="IDENTIFIER"
+    Body[3]: Field [3892:3910] Type=[3892:3898]"string" Name=[3899:3905]"author"
+      Number: IntLit [3908:3909] Raw="2" Value=2
+    Body[4]: Field [3913:3930] Type=[3913:3919]"string" Name=[3920:3925]"title"
+      Number: IntLit [3928:3929] Raw="3" Value=3
+    Body[5]: Field [3933:3947] Type=[3933:3937]"bool" Name=[3938:3942]"read"
+      Number: IntLit [3945:3946] Raw="4" Value=4
+    Body[6]: Field [3950:3978] Label=repeated LabelLoc=[3950:3958] Type=[3959:3965]"Format" Name=[3966:3973]"formats"
+      Number: IntLit [3976:3977] Raw="5" Value=5
+    Body[7]: Field [3981:4011] Label=optional LabelLoc=[3981:3989] Type=[3990:3995]"int32" Name=[3996:4006]"page_count"
+      Number: IntLit [4009:4010] Raw="6" Value=6
+    Body[8]: MapField [4014:4045] KeyType=[4018:4024]"string" ValType=[4026:4032]"string" Name=[4034:4040]"labels"
+      Number: IntLit [4043:4044] Raw="7" Value=7
+  Decls[20]: Message [4049:4139] Name=[4057:4075]"CreateShelfRequest" RBrace=4138
+    Body[0]: Field [4080:4137] Type=[4080:4085]"Shelf" Name=[4086:4091]"shelf"
+      Number: IntLit [4094:4095] Raw="1" Value=1
+      Options: CompactOptions [4096:4136]
+        Options[0]: Option [4097:4135]
+          Name: OptionName [4097:4124]
+            Parts[0]: OptionNamePart [4097:4124] Extension=true Name=[4098:4123]"google.api.field_behavior"
+          Value: IdentLit [4127:4135] Value="REQUIRED"
+  Decls[21]: Message [4141:4308] Name=[4149:4164]"GetShelfRequest" RBrace=4307
+    Body[0]: Field [4169:4306] Type=[4169:4175]"string" Name=[4176:4180]"name"
+      Number: IntLit [4183:4184] Raw="1" Value=1
+      Options: CompactOptions [4185:4305]
+        Options[0]: Option [4191:4229]
+          Name: OptionName [4191:4218]
+            Parts[0]: OptionNamePart [4191:4218] Extension=true Name=[4192:4217]"google.api.field_behavior"
+          Value: IdentLit [4221:4229] Value="REQUIRED"
+        Options[1]: Option [4235:4301]
+          Name: OptionName [4235:4271]
+            Parts[0]: OptionNamePart [4235:4266] Extension=true Name=[4236:4265]"google.api.resource_reference"
+            Parts[1]: OptionNamePart [4267:4271] Name=[4267:4271]"type"
+          Value: StringLit [4274:4301] Value="library.example.com/Shelf"
+  Decls[22]: Message [4310:4541] Name=[4318:4336]"ListShelvesRequest" RBrace=4540
+    Body[0]: Field [4412:4473] Leading=" Maximum number of shelves to return; the server may return fewer.\n" Type=[4412:4417]"int32" Name=[4418:4427]"page_size"
+      Number: IntLit [4430:4431] Raw="1" Value=1
+      Options: CompactOptions [4432:4472]
+        Options[0]: Option [4433:4471]
+          Name: OptionName [4433:4460]
+            Parts[0]: OptionNamePart [4433:4460] Extension=true Name=[4434:4459]"google.api.field_behavior"
+          Value: IdentLit [4463:4471] Value="OPTIONAL"
+    Body[1]: Field [4476:4539] Type=[4476:4482]"string" Name=[4483:4493]"page_token"
+      Number: IntLit [4496:4497] Raw="2" Value=2
+      Options: CompactOptions [4498:4538]
+        Options[0]: Option [4499:4537]
+          Name: OptionName [4499:4526]
+            Parts[0]: OptionNamePart [4499:4526] Extension=true Name=[4500:4525]"google.api.field_behavior"
+          Value: IdentLit [4529:4537] Value="OPTIONAL"
+  Decls[23]: Message [4543:4634] Name=[4551:4570]"ListShelvesResponse" RBrace=4633
+    Body[0]: Field [4575:4602] Label=repeated LabelLoc=[4575:4583] Type=[4584:4589]"Shelf" Name=[4590:4597]"shelves"
+      Number: IntLit [4600:4601] Raw="1" Value=1
+    Body[1]: Field [4605:4632] Type=[4605:4611]"string" Name=[4612:4627]"next_page_token"
+      Number: IntLit [4630:4631] Raw="2" Value=2
+  Decls[24]: Message [4636:4809] Name=[4644:4662]"DeleteShelfRequest" RBrace=4808
+    Body[0]: Field [4667:4807] Type=[4667:4673]"string" Name=[4674:4678]"name"
+      Number: IntLit [4681:4682] Raw="1" Value=1
+      Options: CompactOptions [4683:4806]
+        Options[0]: Option [4689:4727]
+          Name: OptionName [4689:4716]
+            Parts[0]: OptionNamePart [4689:4716] Extension=true Name=[4690:4715]"google.api.field_behavior"
+          Value: IdentLit [4719:4727] Value="REQUIRED"
+        Options[1]: Option [4733:4802]
+          Name: OptionName [4733:4764]
+            Parts[0]: OptionNamePart [4733:4764] Extension=true Name=[4734:4763]"google.api.resource_reference"
+          Value: MessageLit [4767:4802]
+            Fields[0]: MessageLitField [4768:4801]
+              Name: FieldRef [4768:4772] Name=[4768:4772]"type"
+              Value: StringLit [4774:4801] Value="library.example.com/Shelf"
+  Decls[25]: Message [4811:4943] Name=[4819:4836]"UpdateBookRequest" RBrace=4942
+    Body[0]: Field [4841:4896] Type=[4841:4845]"Book" Name=[4846:4850]"book"
+      Number: IntLit [4853:4854] Raw="1" Value=1
+      Options: CompactOptions [4855:4895]
+        Options[0]: Option [4856:4894]
+          Name: OptionName [4856:4883]
+            Parts[0]: OptionNamePart [4856:4883] Extension=true Name=[4857:4882]"google.api.field_behavior"
+          Value: IdentLit [4886:4894] Value="REQUIRED"
+    Body[1]: Field [4899:4941] Type=[4899:4924]"google.protobuf.FieldMask" Name=[4925:4936]"update_mask"
+      Number: IntLit [4939:4940] Raw="2" Value=2
+  Decls[26]: Message [4945:5090] Name=[4953:4968]"MoveBookRequest" RBrace=5089
+    Body[0]: Field [4973:5030] Type=[4973:4979]"string" Name=[4980:4984]"name"
+      Number: IntLit [4987:4988] Raw="1" Value=1
+      Options: CompactOptions [4989:5029]
+        Options[0]: Option [4990:5028]
+          Name: OptionName [4990:5017]
+            Parts[0]: OptionNamePart [4990:5017] Extension=true Name=[4991:5016]"google.api.field_behavior"
+          Value: IdentLit [5020:5028] Value="REQUIRED"
+    Body[1]: Field [5033:5088] Type=[5033:5039]"string" Name=[5040:5056]"other_shelf_name"
+      Number: IntLit [5059:5060] Raw="2" Value=2
+      Options: CompactOptions [5061:5087]
+        Options[0]: Option [5062:5086]
+          Name: OptionName [5062:5071]
+            Parts[0]: OptionNamePart [5062:5071] Name=[5062:5071]"json_name"
+          Value: StringLit [5074:5086] Value="otherShelf"
+  Decls[27]: Message [5092:5194] Name=[5100:5116]"MoveBookMetadata" RBrace=5193
+    Body[0]: Field [5121:5162] Type=[5121:5146]"google.protobuf.Timestamp" Name=[5147:5157]"start_time"
+      Number: IntLit [5160:5161] Raw="1" Value=1
+    Body[1]: Field [5165:5192] Type=[5165:5170]"float" Name=[5171:5187]"progress_percent"
+      Number: IntLit [5190:5191] Raw="2" Value=2
+  Comments[0]: Comment [0:74]
+  Comments[1]: Comment [75:139]
+  Comments[2]: Comment [140:206]
+  Comments[3]: Comment [982:1024]
+  Comments[4]: Comment [1264:1310]
+  Comments[5]: Comment [1512:1575]
+  Comments[6]: Comment [1829:1890]
+  Comments[7]: Comment [2021:2040]
+  Comments[8]: Comment [2238:2299]
+  Comments[9]: Comment [2531:2587]
+  Comments[10]: Comment [2898:2918]
+  Comments[11]: Comment [3133:3167]
+  Comments[12]: Comment [3170:3201]
+  Comments[13]: Comment [3267:3293]
+  Comments[14]: Comment [3358:3401]
+  Comments[15]: Comment [3500:3517]
+  Comments[16]: Comment [3657:3683]
+  Comments[17]: Comment [3704:3721]
+  Comments[18]: Comment [4341:4409]
+# errors
+# diagnostics

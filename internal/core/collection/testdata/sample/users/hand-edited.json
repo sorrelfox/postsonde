@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_1",
+  "name": "Hand edited",
+  "method": "GET",
+  "url": "https://example.com/?q=<a&b>",
+  "headers": [
+    {
+      "name": "Accept",
+      "value": "*/*",
+      "origin": "import"
+    }
+  ],
+  "body": {
+    "mode": "graphql-multipart",
+    "map": {},
+    "operations": {
+      "query": "{ a }"
+    }
+  },
+  "auth": {
+    "type": "bearer",
+    "prefix": "Token"
+  },
+  "settings": {
+    "timeoutMs": 0,
+    "retries": 3
+  },
+  "aNote": "kept",
+  "zFuture": {
+    "b": 1,
+    "a": [
+      true
+    ]
+  }
+}

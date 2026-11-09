@@ -1,0 +1,69 @@
+version: '3'
+
+# Entry point for the Wails CLI: `wails3 build`, `wails3 package` and
+# `wails3 dev` run the tasks below. Platform tasks live in build/<os>/.
+
+vars:
+  APP_NAME: "postsonde"
+  BIN_DIR: "bin"
+  # Main package; the Wails template builds "." but ours lives in cmd/.
+  MAIN_PKG: "./cmd/postsonde"
+  # Stamped into main.version: `wails3 build VERSION=v0.1.0` or VERSION=... env.
+  VERSION: '{{.VERSION | default "dev"}}'
+  PACKAGE_MANAGER: '{{.PACKAGE_MANAGER | default "npm"}}'
+  VITE_PORT: '{{.WAILS_VITE_PORT | default 9245}}'
+  # Target OS for build/package/run. Defaults to the host OS; the tasks below
+  # dispatch to the matching platform Taskfile.
+  GOOS: '{{.GOOS | default OS}}'
+  # `wails3 generate bindings` flags: TypeScript, models as interfaces, wipe
+  # frontend/bindings first so removed services disappear. See docs/bindings.md.
+  BINDINGS_FLAGS: "-clean=true -ts -i"
+
+includes:
+  common: ./build/Taskfile.yml
+  windows: ./build/windows/Taskfile.yml
+  darwin: ./build/darwin/Taskfile.yml
+  linux: ./build/linux/Taskfile.yml
+
+tasks:
+  build:
+    summary: Builds the application
+    cmds:
+      - task: "{{.GOOS}}:build"
+
+  package:
+    summary: Packages a production build of the application
+    cmds:
+      - task: "{{.GOOS}}:package"
+
+  run:
+    summary: Runs the application
+    cmds:
+      - task: "{{.GOOS}}:run"
+
+  dev:
+    summary: Runs the application in development mode
+    cmds:
+      - wails3 dev -config ./build/config.yml -port {{.VITE_PORT}}
+
+  sync:icons:
+    summary: Copies the app icons from assets/icons into build/
+    cmds:
+      - task: common:sync:icons
+
+  bindings:
+    summary: Regenerates the committed TypeScript bindings in frontend/bindings
+    cmds:
+      - wails3 generate bindings {{.BINDINGS_FLAGS}} -silent {{.MAIN_PKG}}
+
+  bindings:check:
+    summary: Fails if frontend/bindings is out of date with the Go services (for CI)
+    cmds:
+      - task: bindings
+      # Compares with the git index, so staged bindings count as up to date.
+      - cmd: |
+          if ! git diff --quiet -- frontend/bindings || [ -n "$(git ls-files --others --exclude-standard -- frontend/bindings)" ]; then
+            echo "frontend/bindings is out of date; run 'wails3 task bindings' and commit the result:" >&2
+            git status --short -- frontend/bindings >&2
+            exit 1
+          fi

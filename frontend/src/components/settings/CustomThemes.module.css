@@ -1,0 +1,41 @@
+/* The custom theme row (UI-05): the select above its two buttons. */
+.controls {
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.buttons {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.problems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-md);
+}
+
+.file {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.problemList {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-7);
+  color: var(--text3);
+  line-height: 1.45;
+}
+
+.problemList li[data-severity="error"] {
+  color: var(--bad);
+}
+
+.problemList li[data-severity="warning"] {
+  color: var(--warn);
+}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- The production build puts the Content-Security-Policy <meta> from
+         csp.json first in <head> (vite.config.ts); docs/privacy.md. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PostSonde</title>
+    <!-- Sets data-theme before first paint. A file rather than an inline
+         script, because the CSP allows only script-src 'self'. -->
+    <script src="/theme-init.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>PostSonde: a desktop client for HTTP, GraphQL, gRPC and socket APIs</title>
+<meta name="description" content="PostSonde is a free, open-source desktop API client for Linux, macOS and Windows: HTTP, GraphQL, gRPC, WebSocket, Socket.IO, SSE, TCP and UDP, local mock servers, declarative tests and a folder runner. No account, no cloud, and projects are folders of plain JSON files.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#eef0f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://sorrelfox.github.io/postsonde/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="preload" href="fonts/InstrumentSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/InstrumentSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PostSonde">
+<meta property="og:title" content="PostSonde: a desktop client for HTTP, GraphQL, gRPC and socket APIs">
+<meta property="og:description" content="Send and test requests, and run local servers to test clients against. No account, no cloud, no traffic of its own, and projects are folders of plain JSON files.">
+<meta property="og:url" content="https://sorrelfox.github.io/postsonde/">
+<meta property="og:image" content="https://sorrelfox.github.io/postsonde/screenshots/request-dark.png">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="PostSonde with a GET request and its assertions on the left and the JSON response on the right">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "PostSonde",
+  "description": "A desktop client for testing HTTP, GraphQL, gRPC and socket APIs, with no account and no cloud.",
+  "url": "https://sorrelfox.github.io/postsonde/",
+  "codeRepository": "https://github.com/sorrelfox/postsonde",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "license": "https://opensource.org/license/mit",
+  "screenshot": "https://sorrelfox.github.io/postsonde/screenshots/request-dark.png",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="./"><img src="favicon.svg" alt="" width="28" height="28"><span>PostSonde</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="download.html">Download</a></li>
+        <li><a href="https://github.com/sorrelfox/postsonde">Source code</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" aria-labelledby="title">
+  <div class="wrap">
+    <h1 id="title">A desktop client for HTTP, GraphQL, gRPC and socket APIs</h1>
+    <p class="lede">PostSonde sends and tests requests, and runs local servers for the clients you are testing. There is no account and no cloud. It connects only when you send something, and a project is a folder of plain JSON files.</p>
+    <p class="actions">
+      <a class="button primary" href="download.html#build">Build it from source</a>
+      <a class="button" href="https://github.com/sorrelfox/postsonde">PostSonde on GitHub</a>
+    </p>
+    <p class="state"><span class="dot" aria-hidden="true"></span><span>No release yet. The first packages for Linux, macOS and Windows are being prepared.</span></p>
+  </div>
+</section>
+
+<div class="wrap">
+  <figure class="shot">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="screenshots/request-light.png">
+      <img src="screenshots/request-dark.png" width="1440" height="900" fetchpriority="high" alt="PostSonde with a project open. The sidebar lists its requests in two folders. The open GET request has four assertions, and the response pane beside it shows 200 OK, 30 ms, 1.1 KB, four of four tests passed, and the JSON body.">
+    </picture>
+    <figcaption>A request with four assertions, sent to a test server on the same computer. All four passed.</figcaption>
+  </figure>
+</div>
+
+<section class="section" aria-labelledby="kinds-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="kinds-title">Requests of every kind</h2>
+      <p>Each kind of request has an editor of its own. All of them share the environments, variables, auth, proxy settings and history.</p>
+    </div>
+    <dl class="kinds">
+      <div>
+        <dt><span class="tag get" aria-hidden="true">HTTP</span>REST and plain HTTP</dt>
+        <dd>Any method, parameters, headers, and JSON, XML, form, multipart or file bodies. Filter the response with JSONPath or XPath, and see each phase of the exchange in its timeline.</dd>
+      </div>
+      <div>
+        <dt><span class="tag gql" aria-hidden="true">GQL</span>GraphQL</dt>
+        <dd>A schema from introspection or an SDL file drives validation, autocomplete and a docs explorer. Subscriptions run over WebSocket or SSE.</dd>
+      </div>
+      <div>
+        <dt><span class="tag" aria-hidden="true">GRPC</span>gRPC</dt>
+        <dd>Services from <code>.proto</code> files or server reflection. Unary calls and all three kinds of streaming, with messages edited as JSON.</dd>
+      </div>
+      <div>
+        <dt><span class="tag ws" aria-hidden="true">WS</span>WebSocket</dt>
+        <dd>Text and binary messages, saved messages to send again, and a log of both directions.</dd>
+      </div>
+      <div>
+        <dt><span class="tag ws" aria-hidden="true">SIO</span>Socket.IO</dt>
+        <dd>Events with acknowledgements, over WebSocket or long-polling, for servers from v2 to v4.</dd>
+      </div>
+      <div>
+        <dt><span class="tag ws" aria-hidden="true">SSE</span>Server-Sent Events</dt>
+        <dd>Events as they arrive, with optional reconnects that resume from the last event ID.</dd>
+      </div>
+      <div>
+        <dt><span class="tag" aria-hidden="true">TCP</span>Raw TCP</dt>
+        <dd>Plain or TLS connections, messages split by line or by a length prefix, and input as text or hex.</dd>
+      </div>
+      <div>
+        <dt><span class="tag" aria-hidden="true">UDP</span>UDP datagrams</dt>
+        <dd>Datagrams to any host, sent directly or through a SOCKS5 proxy.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="servers-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="servers-title">Servers to test against</h2>
+      <p>PostSonde can also take the other end. A mock HTTP server answers from routes you write, generate from an OpenAPI document or copy from a response you received. A webhook receiver keeps every request that arrives, to inspect and send again, and an echo server answers each request with a description of it. For clients of other protocols there are WebSocket, Socket.IO, SSE, TCP, UDP, gRPC and GraphQL servers. They all listen on 127.0.0.1 unless you choose another address.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="files-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="files-title">A project is a folder of files</h2>
+      <p>Every request is one JSON file, and every folder is a directory with a <code>_folder.json</code>, next to one file per environment. The format is documented field by field, so the files can be read, reviewed and edited by hand, and kept in git next to the code they test.</p>
+    </div>
+    <figure class="files">
+      <div class="files-panel">
+        <div class="pane">
+          <p class="pane-title">sounding-api/</p>
+          <ul class="tree" aria-label="Files of the project in the screenshot">
+            <li><span class="dir">environments/</span>
+              <ul>
+                <li>local.json</li>
+                <li>staging.json</li>
+              </ul>
+            </li>
+            <li><span class="dir">schema/</span>
+              <ul>
+                <li>sounding.graphql</li>
+              </ul>
+            </li>
+            <li><span class="dir">soundings/</span>
+              <ul>
+                <li>_folder.json</li>
+                <li>launch-events.json</li>
+                <li><span class="here">latest-sounding.json</span></li>
+                <li>live-telemetry.json</li>
+                <li>schedule-launch.json</li>
+                <li>sounding-summary.json</li>
+              </ul>
+            </li>
+            <li><span class="dir">stations/</span>
+              <ul>
+                <li>_folder.json</li>
+                <li>list-stations.json</li>
+                <li>station-by-id.json</li>
+              </ul>
+            </li>
+            <li>health.json</li>
+            <li>postsonde.json</li>
+          </ul>
+        </div>
+        <div class="pane code">
+          <div class="pane-fill">
+          <p class="pane-title">soundings/latest-sounding.json</p>
+          <pre tabindex="0" aria-label="Contents of latest-sounding.json"><code>{
+  <span class="j-key">"schemaVersion"</span>: <span class="j-num">1</span>,
+  <span class="j-key">"kind"</span>: <span class="j-str">"http"</span>,
+  <span class="j-key">"id"</span>: <span class="j-str">"req_latest_sounding"</span>,
+  <span class="j-key">"name"</span>: <span class="j-str">"Latest sounding"</span>,
+  <span class="j-key">"description"</span>: <span class="j-str">"The newest complete sounding of a station, with its levels."</span>,
+  <span class="j-key">"method"</span>: <span class="j-str">"GET"</span>,
+  <span class="j-key">"url"</span>: <span class="j-str">"{{baseUrl}}/stations/:id/latest"</span>,
+  <span class="j-key">"pathParams"</span>: [
+    {
+      <span class="j-key">"name"</span>: <span class="j-str">"id"</span>,
+      <span class="j-key">"value"</span>: <span class="j-str">"{{stationId}}"</span>
+    }
+  ],
+  <span class="j-key">"headers"</span>: [
+    {
+      <span class="j-key">"name"</span>: <span class="j-str">"X-Request-Id"</span>,
+      <span class="j-key">"value"</span>: <span class="j-str">"{{$uuid}}"</span>
+    }
+  ],
+  <span class="j-key">"body"</span>: {
+    <span class="j-key">"mode"</span>: <span class="j-str">"none"</span>
+  },
+  <span class="j-key">"auth"</span>: {
+    <span class="j-key">"type"</span>: <span class="j-str">"inherit"</span>
+  },
+  <span class="j-key">"assertions"</span>: [
+    {
+      <span class="j-key">"target"</span>: <span class="j-str">"status"</span>,
+      <span class="j-key">"op"</span>: <span class="j-str">"equals"</span>,
+      <span class="j-key">"expected"</span>: <span class="j-str">"200"</span>
+    },
+    {
+      <span class="j-key">"target"</span>: <span class="j-str">"jsonpath"</span>,
+      <span class="j-key">"expr"</span>: <span class="j-str">"$.station.id"</span>,
+      <span class="j-key">"op"</span>: <span class="j-str">"equals"</span>,
+      <span class="j-key">"expected"</span>: <span class="j-str">"{{stationId}}"</span>
+    },
+    {
+      <span class="j-key">"target"</span>: <span class="j-str">"jsonpath"</span>,
+      <span class="j-key">"expr"</span>: <span class="j-str">"$.levels"</span>,
+      <span class="j-key">"op"</span>: <span class="j-str">"exists"</span>
+    },
+    {
+      <span class="j-key">"target"</span>: <span class="j-str">"time"</span>,
+      <span class="j-key">"op"</span>: <span class="j-str">"lt"</span>,
+      <span class="j-key">"expected"</span>: <span class="j-str">"500"</span>
+    }
+  ]
+}</code></pre>
+          </div>
+        </div>
+      </div>
+      <figcaption>The project from the screenshot above, as it is on disk. The request's assertions are part of its file.</figcaption>
+    </figure>
+    <p class="prose quiet section-after">History, cookies, OAuth tokens and secret values never go into the project folder. They stay in PostSonde's data directory on your computer, which you can encrypt with a master password.</p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="privacy-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="privacy-title">It connects when you send</h2>
+      <p>PostSonde has no telemetry, no crash reports, no update checks and no account. Its interface is built into the app, with no web fonts or remote images, and a Content Security Policy blocks anything else. These are the connections it makes:</p>
+    </div>
+    <div class="table" role="region" aria-label="Network traffic PostSonde makes" tabindex="0">
+      <table>
+        <thead>
+          <tr><th scope="col">What goes out</th><th scope="col">When</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Your requests and connections</th><td>When you send or connect, run a folder, or replay a request that a local webhook server received</td></tr>
+          <tr><th scope="row">DNS lookups of the hosts in them</th><td>When the request goes out. Through a SOCKS5h or HTTP proxy, the proxy resolves the name instead.</td></tr>
+          <tr><th scope="row">OAuth 2.0 token requests</th><td>When a send needs a token, or when you ask for a new one</td></tr>
+          <tr><th scope="row">GraphQL schema introspection</th><td>When you fetch or refresh a schema</td></tr>
+          <tr><th scope="row">A proxy connection test</th><td>When you click Test in the proxy settings</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose quiet section-after">Local servers only listen; they never open connections of their own. <a href="https://github.com/sorrelfox/postsonde/blob/HEAD/PRIVACY.md">PRIVACY.md</a> has the complete list, and how to check it yourself with an outbound firewall or <code>strace</code>.</p>
+  </div>
+</section>
+
+<section class="section page-end" aria-labelledby="status-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="status-title">Where it stands</h2>
+      <p>PostSonde has not had a release yet. What this site describes is in the code, and you can <a href="download.html#build">build it from source</a> today. The first packages are being prepared.</p>
+    </div>
+    <ul class="platforms">
+      <li class="checked">
+        <h3>Linux</h3>
+        <p>A GTK 4 build, and a GTK 3 build for Ubuntu 22.04 and Debian 12, for x86-64 and ARM64.</p>
+        <p class="state"><span class="dot ok" aria-hidden="true"></span><span>Developed and tested on Fedora 44 with KDE Plasma</span></p>
+      </li>
+      <li>
+        <h3>macOS 13 or later</h3>
+        <p>One app for Apple silicon and Intel Macs, in a disk image.</p>
+        <p class="state"><span class="dot" aria-hidden="true"></span><span>Builds, but not tried on a real Mac yet</span></p>
+      </li>
+      <li>
+        <h3>Windows 10 and 11</h3>
+        <p>An installer for x64 and one for ARM64. No administrator rights needed.</p>
+        <p class="state"><span class="dot" aria-hidden="true"></span><span>Builds, but not tried on a real PC yet</span></p>
+      </li>
+    </ul>
+    <p class="prose quiet section-after">If you try it on a Mac or a Windows PC, a note in the <a href="https://github.com/sorrelfox/postsonde/issues">issue tracker</a> helps, whether it works or not.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>PostSonde is free software under the <a href="https://github.com/sorrelfox/postsonde/blob/HEAD/LICENSE">MIT License</a>.</p>
+    <ul class="foot-links">
+      <li><a href="https://github.com/sorrelfox/postsonde">Source code</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/releases">Releases</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/issues">Issues</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/blob/HEAD/PRIVACY.md">Privacy</a></li>
+    </ul>
+    <p class="fine">This site sets no cookies and loads nothing from other sites. It is set in Instrument Sans and JetBrains Mono, the app's own typefaces, under the SIL Open Font License 1.1 (<a href="fonts/OFL-InstrumentSans.txt">Instrument Sans</a>, <a href="fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a>).</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,5 @@
+wget https://api.test/me \
+  --user ann \
+  --password '••••••' \
+  --max-redirect 10 \
+  -O -

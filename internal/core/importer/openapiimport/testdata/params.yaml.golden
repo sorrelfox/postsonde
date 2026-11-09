@@ -1,0 +1,377 @@
+{
+  "diagnostics": null,
+  "environments": 0,
+  "name": "Parameters and bodies",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": [
+      {
+        "Code": "openapi.relative_server",
+        "Severity": "warning",
+        "Message": "The server URL “/v1” is relative to where the document is served: put the API's scheme and host in front of it in the collection's baseUrl variable.",
+        "At": "servers[0] @6:5"
+      }
+    ],
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "tags[1] @9:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "Things",
+        "diagnostics": null,
+        "folder": "things",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./things/{id}/{labels}/{coords}.get @32:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.cookie_parameter",
+                "Severity": "info",
+                "Message": "The cookie parameters became a Cookie header.",
+                "At": "paths./things/{id}/{labels}/{coords}.get @32:7"
+              },
+              {
+                "Code": "openapi.parameter_ignored",
+                "Severity": "info",
+                "Message": "The header parameter “Accept” was left out, as the specification says: the request's body, response type and auth set it.",
+                "At": "paths./things/{id}/{labels}/{coords}.get @32:7"
+              },
+              {
+                "Code": "openapi.tags",
+                "Severity": "info",
+                "Message": "The operation is also tagged “more”; it is in the folder of its first tag.",
+                "At": "paths./things/{id}/{labels}/{coords}.get @32:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/things/{id}/{labels}/{coords}?expand=owner&filter[color]=red&filter[size]=L&ids=1|2&q=a%26b=c&meta={\"a\":0}",
+              "params": [
+                {
+                  "name": "expand",
+                  "value": "owner"
+                },
+                {
+                  "name": "filter[color]",
+                  "value": "red"
+                },
+                {
+                  "name": "filter[size]",
+                  "value": "L"
+                },
+                {
+                  "name": "ids",
+                  "value": "1|2"
+                },
+                {
+                  "name": "q",
+                  "value": "a&b=c"
+                },
+                {
+                  "name": "page",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "name": "since",
+                  "value": "{{$isoTimestamp}}",
+                  "disabled": true
+                },
+                {
+                  "name": "meta",
+                  "value": "{\"a\":0}"
+                }
+              ],
+              "pathParams": [
+                {
+                  "name": "id",
+                  "value": "42"
+                },
+                {
+                  "name": "labels",
+                  "value": ".a.b"
+                },
+                {
+                  "name": "coords",
+                  "value": ";coords=x,1,y,2"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "X-Request-Id",
+                  "value": "{{$uuid}}"
+                },
+                {
+                  "name": "Cookie",
+                  "value": "session=abc; theme=dark",
+                  "description": "Cookie parameters of the operation."
+                },
+                {
+                  "name": "Accept",
+                  "value": "application/vnd.things+json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Get a thing"
+          },
+          {
+            "at": "paths./things/{id}/{labels}/{coords}.put @91:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.servers",
+                "Severity": "info",
+                "Message": "The operation has its own server, “https://write.example/v1”, which its URL uses instead of baseUrl.",
+                "At": "paths./things/{id}/{labels}/{coords}.put @91:7"
+              },
+              {
+                "Code": "openapi.media_type",
+                "Severity": "info",
+                "Message": "The body is sent as application/merge-patch+json; the operation also accepts application/xml.",
+                "At": "paths./things/{id}/{labels}/{coords}.put @91:7"
+              },
+              {
+                "Code": "openapi.example",
+                "Severity": "info",
+                "Message": "The document's examples of the body are external files, which are not read; the body was generated from the schema.",
+                "At": "paths./things/{id}/{labels}/{coords}.put @91:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "**Deprecated.**\n\nReplaces the thing.\n\nThe new thing.",
+              "method": "PUT",
+              "url": "https://write.example/v1/things/{id}/{labels}/{coords}",
+              "pathParams": [
+                {
+                  "name": "id",
+                  "value": "42"
+                },
+                {
+                  "name": "labels",
+                  "value": ".a.b"
+                },
+                {
+                  "name": "coords",
+                  "value": ";coords=x,1,y,2"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/merge-patch+json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\n  \"name\": \"stringxx\",\n  \"price\": 1,\n  \"count\": -5,\n  \"tags\": [\n    \"string\"\n  ],\n  \"kind\": \"big\",\n  \"email\": \"user@example.com\",\n  \"extra\": {\n    \"additionalProp1\": true\n  }\n}"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "replaceThing"
+          },
+          {
+            "at": "paths./things.post @114:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{baseUrl}}/things",
+              "body": {
+                "mode": "urlencoded",
+                "fields": [
+                  {
+                    "name": "name",
+                    "value": "stringxx",
+                    "description": "The name"
+                  },
+                  {
+                    "name": "price",
+                    "value": "1"
+                  },
+                  {
+                    "name": "count",
+                    "value": "-5"
+                  },
+                  {
+                    "name": "tags",
+                    "value": "string"
+                  },
+                  {
+                    "name": "kind",
+                    "value": "big"
+                  },
+                  {
+                    "name": "email",
+                    "value": "user@example.com"
+                  },
+                  {
+                    "name": "extra",
+                    "value": "{\"additionalProp1\":true}"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "createThing"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "paths./things.patch @128:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "PATCH",
+          "url": "{{baseUrl}}/things",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json-patch+json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "[\n  {\n    \"op\": \"add\",\n    \"path\": \"/example\"\n  }\n]"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "patchThings"
+      },
+      {
+        "at": "paths./upload.post @144:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.file",
+            "Severity": "info",
+            "Message": "The body has file parts: choose the files to send.",
+            "At": "paths./upload.post @144:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/upload",
+          "body": {
+            "mode": "multipart",
+            "parts": [
+              {
+                "name": "meta",
+                "value": "{\"name\":\"stringxx\",\"price\":1,\"count\":-5,\"tags\":[\"string\"],\"kind\":\"big\",\"email\":\"user@example.com\",\"extra\":{\"additionalProp1\":true}}",
+                "contentType": "application/json"
+              },
+              {
+                "name": "note",
+                "value": "string"
+              },
+              {
+                "name": "file",
+                "value": "",
+                "contentType": "image/png"
+              },
+              {
+                "name": "more",
+                "value": ""
+              }
+            ]
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "upload"
+      },
+      {
+        "at": "paths./raw.put @163:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.file",
+            "Severity": "info",
+            "Message": "The body is a file: choose the file to send.",
+            "At": "paths./raw.put @163:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "PUT",
+          "url": "{{baseUrl}}/raw",
+          "body": {
+            "mode": "file"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "putRaw"
+      },
+      {
+        "at": "paths./raw.post @172:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/raw",
+          "body": {
+            "mode": "raw",
+            "type": "text",
+            "text": "hello"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "postText"
+      }
+    ],
+    "variables": [
+      {
+        "name": "baseUrl",
+        "value": "/v1"
+      }
+    ]
+  }
+}

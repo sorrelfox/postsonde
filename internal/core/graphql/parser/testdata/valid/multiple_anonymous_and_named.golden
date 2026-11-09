@@ -1,0 +1,24 @@
+# source
+{ a } query B { b } mutation C { c } subscription D { d }
+# tree
+Document [0:57]
+  Definitions[0]: OperationDefinition [0:5] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:5] LBrace=0 RBrace=4
+      Selections[0]: Field [2:3] Colon=-1
+        Name: Name [2:3] Value="a"
+  Definitions[1]: OperationDefinition [6:19] Operation=query Keyword=6
+    Name: Name [12:13] Value="B"
+    SelectionSet: SelectionSet [14:19] LBrace=14 RBrace=18
+      Selections[0]: Field [16:17] Colon=-1
+        Name: Name [16:17] Value="b"
+  Definitions[2]: OperationDefinition [20:36] Operation=mutation Keyword=20
+    Name: Name [29:30] Value="C"
+    SelectionSet: SelectionSet [31:36] LBrace=31 RBrace=35
+      Selections[0]: Field [33:34] Colon=-1
+        Name: Name [33:34] Value="c"
+  Definitions[3]: OperationDefinition [37:57] Operation=subscription Keyword=37
+    Name: Name [50:51] Value="D"
+    SelectionSet: SelectionSet [52:57] LBrace=52 RBrace=56
+      Selections[0]: Field [54:55] Colon=-1
+        Name: Name [54:55] Value="d"
+# errors

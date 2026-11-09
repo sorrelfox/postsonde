@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_4d1b7e9a0c6f2835",
+  "name": "Get user",
+  "method": "GET",
+  "url": "{{baseUrl}}/users/:id",
+  "pathParams": [
+    {
+      "name": "id",
+      "value": "{{userId}}"
+    }
+  ],
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "inherit"
+  },
+  "responseExamples": [
+    {
+      "name": "200 OK",
+      "savedAt": "2026-09-23T10:15:02Z",
+      "request": {
+        "method": "GET",
+        "url": "https://api.acme.example/users/42",
+        "headers": [
+          {
+            "name": "Host",
+            "value": "api.acme.example"
+          },
+          {
+            "name": "Accept",
+            "value": "application/json"
+          },
+          {
+            "name": "Authorization",
+            "value": "Bearer ••••••"
+          }
+        ]
+      },
+      "statusCode": 200,
+      "statusText": "OK",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Etag",
+          "value": "\"u42-7\""
+        }
+      ],
+      "body": "{\"id\":\"42\",\"name\":\"Zoë\"}"
+    },
+    {
+      "name": "Not found",
+      "savedAt": "2026-09-23T10:16:40Z",
+      "statusCode": 404,
+      "statusText": "Not Found",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/problem+json"
+        }
+      ],
+      "body": "{\"title\":\"No such user\"}"
+    }
+  ]
+}

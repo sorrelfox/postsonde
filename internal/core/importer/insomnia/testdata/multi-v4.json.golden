@@ -1,0 +1,118 @@
+{
+  "diagnostics": null,
+  "environments": [
+    {
+      "at": "resources[4] @6:3",
+      "diagnostics": null,
+      "environment": "Alpha / Base Environment",
+      "variables": [
+        {
+          "Name": "host",
+          "Value": "a.example",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    },
+    {
+      "at": "resources[6] @8:3",
+      "diagnostics": [
+        {
+          "Code": "insomnia.base_environment",
+          "Severity": "info",
+          "Message": "The base environment's variables were added to this environment; its own values win.",
+          "At": "resources[6] @8:3"
+        }
+      ],
+      "environment": "Beta / Prod",
+      "variables": [
+        {
+          "Name": "host",
+          "Value": "b.example",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    }
+  ],
+  "name": "multi-v4",
+  "root": {
+    "at": "",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "resources[0] @2:3",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "First.",
+        "diagnostics": null,
+        "folder": "Alpha",
+        "headers": null,
+        "items": [
+          {
+            "at": "resources[2] @4:3",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "https://a.example/ping",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Ping A"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "resources[1] @3:3",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Beta",
+        "headers": null,
+        "items": [
+          {
+            "at": "resources[3] @5:3",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "https://b.example/ping",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Ping B"
+          }
+        ],
+        "variables": null
+      }
+    ],
+    "variables": null
+  }
+}

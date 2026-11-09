@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "sse",
+  "id": "req_2d8f5a1c7e03b964",
+  "name": "Price stream",
+  "url": "{{baseUrl}}/prices/stream?symbols=ACME",
+  "params": [
+    {
+      "name": "symbols",
+      "value": "ACME"
+    }
+  ],
+  "headers": [
+    {
+      "name": "Accept",
+      "value": "text/event-stream"
+    }
+  ],
+  "auth": {
+    "type": "inherit"
+  },
+  "settings": {
+    "timeoutMs": 10000,
+    "reconnect": {
+      "enabled": true,
+      "maxAttempts": 10
+    }
+  }
+}

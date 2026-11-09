@@ -1,0 +1,10 @@
+{
+  "kind": "cancelled",
+  "code": "",
+  "message": "The wait was cancelled after 1200 ms.",
+  "hint": "",
+  "details": {},
+  "causes": [
+    "context canceled"
+  ]
+}

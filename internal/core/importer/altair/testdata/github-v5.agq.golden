@@ -1,0 +1,69 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Viewer repositories",
+  "root": {
+    "at": "",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "Viewer repositories",
+    "headers": null,
+    "items": [
+      {
+        "at": " @[1,1]",
+        "diagnostics": [
+          {
+            "Code": "altair.subscription_url",
+            "Severity": "warning",
+            "Message": "The request's subscription URL is not its endpoint with ws:// or wss://, which PostSonde uses for subscriptions. It is kept in the description; make a separate request with it as the endpoint to run subscriptions there.",
+            "At": " @[1,1]"
+          },
+          {
+            "Code": "altair.transport",
+            "Severity": "info",
+            "Message": "Altair ran the request's subscriptions with the legacy subscriptions-transport-ws protocol; PostSonde uses graphql-transport-ws, which the server must support.",
+            "At": " @[1,1]"
+          },
+          {
+            "Code": "altair.script",
+            "Severity": "warning",
+            "Message": "The request's post-request script is kept in its description: PostSonde does not run Altair scripts.",
+            "At": " @[1,1]"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "description": "Altair subscription URL: <wss://stream.github-like.example/subscriptions>\n\nAltair post-request script (not run by PostSonde):\n\n```js\naltair.log(altair.response.statusCode);\n```",
+          "url": "{{baseUrl}}/graphql",
+          "query": "query Viewer($count: Int!) {\n  viewer {\n    login\n    repositories(first: $count) {\n      nodes { name }\n    }\n  }\n}\n\nsubscription Stars {\n  starAdded { repository }\n}\n",
+          "variables": "{\n  \"count\": {{count}}\n}",
+          "operationName": "Viewer",
+          "connectionParams": "{\n  \"authToken\": \"{{token}}\"\n}",
+          "headers": [
+            {
+              "name": "Accept-Language",
+              "value": "en"
+            },
+            {
+              "name": "X-Debug",
+              "value": "{{debug}}",
+              "disabled": true
+            }
+          ],
+          "auth": {
+            "type": "bearer",
+            "token": "{{token}}"
+          }
+        },
+        "request": "Viewer repositories"
+      }
+    ],
+    "variables": null
+  }
+}

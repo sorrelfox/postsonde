@@ -1,0 +1,82 @@
+{
+  "format": "multipart",
+  "receiving": false,
+  "parts": [
+    {
+      "index": 0,
+      "atMs": 0,
+      "text": "{\n  \"data\": {\n    \"a\": {}\n  },\n  \"pending\": [\n    {\n      \"id\": \"0\",\n      \"path\": [\n        \"a\"\n      ],\n      \"label\": \"L\"\n    }\n  ],\n  \"hasNext\": true\n}",
+      "clipped": false,
+      "size": 80,
+      "entries": [
+        {
+          "kind": "initial",
+          "path": "",
+          "label": "",
+          "id": "",
+          "items": 0,
+          "errors": 0,
+          "problem": ""
+        },
+        {
+          "kind": "pending",
+          "path": "a",
+          "label": "L",
+          "id": "0",
+          "items": 0,
+          "errors": 0,
+          "problem": ""
+        }
+      ],
+      "hasNext": true,
+      "problem": ""
+    },
+    {
+      "index": 1,
+      "atMs": 12.5,
+      "text": "{\n  \"incremental\": [\n    {\n      \"id\": \"0\",\n      \"data\": {\n        \"b\": 1\n      }\n    }\n  ],\n  \"completed\": [\n    {\n      \"id\": \"0\"\n    }\n  ],\n  \"hasNext\": false\n}",
+      "clipped": false,
+      "size": 84,
+      "entries": [
+        {
+          "kind": "defer",
+          "path": "a",
+          "label": "L",
+          "id": "0",
+          "items": 0,
+          "errors": 0,
+          "problem": ""
+        },
+        {
+          "kind": "completed",
+          "path": "a",
+          "label": "L",
+          "id": "0",
+          "items": 0,
+          "errors": 0,
+          "problem": ""
+        }
+      ],
+      "hasNext": false,
+      "problem": ""
+    },
+    {
+      "index": 2,
+      "atMs": 25,
+      "text": "not json",
+      "clipped": false,
+      "size": 8,
+      "entries": [],
+      "hasNext": null,
+      "problem": "The part is not valid JSON, so it was not merged."
+    }
+  ],
+  "partCount": 3,
+  "merged": "{\n  \"data\": {\n    \"a\": {\n      \"b\": 1\n    }\n  }\n}",
+  "mergedTooLarge": false,
+  "mergedSize": 49,
+  "hasNext": false,
+  "completed": true,
+  "pending": 0,
+  "errors": 0
+}

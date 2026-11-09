@@ -1,0 +1,268 @@
+{
+  "diagnostics": [
+    {
+      "Code": "har.filtered",
+      "Severity": "info",
+      "Message": "Left out 2 static resources (images, scripts, styles, fonts, media) and 1 CORS preflight request.",
+      "At": "log.entries @0:0"
+    }
+  ],
+  "name": "firefox",
+  "root": {
+    "at": "",
+    "diagnostics": null,
+    "folder": "",
+    "items": [
+      {
+        "at": "log.pages[0] @13:7",
+        "diagnostics": null,
+        "folder": "Checkout – Example Shop",
+        "items": [
+          {
+            "at": "log.entries[0] @27:7",
+            "diagnostics": [
+              {
+                "Code": "har.cookies_dropped",
+                "Severity": "warning",
+                "Message": "The browser's cookies (sid, cart) were not imported: they are its session, not part of the request. PostSonde's cookie jar keeps the cookies servers set when you send.",
+                "At": "log.entries[0] @27:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 200 OK (text/html).",
+              "method": "GET",
+              "url": "https://shop.example.com/checkout",
+              "headers": [
+                {
+                  "name": "User-Agent",
+                  "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:143.0) Gecko/20100101 Firefox/143.0"
+                },
+                {
+                  "name": "Accept",
+                  "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+                },
+                {
+                  "name": "Accept-Language",
+                  "value": "de,en-US;q=0.7,en;q=0.3"
+                },
+                {
+                  "name": "Upgrade-Insecure-Requests",
+                  "value": "1"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "GET /checkout"
+          },
+          {
+            "at": "log.entries[4] @119:7",
+            "diagnostics": [
+              {
+                "Code": "har.auth",
+                "Severity": "info",
+                "Message": "The Authorization header (Token token) became the request's auth; its secret is kept on this machine only, not in the project's files.",
+                "At": "log.entries[4] @119:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 201 Created (application/json).",
+              "method": "POST",
+              "url": "https://api.shop.example.com/v1/orders",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "name": "Idempotency-Key",
+                  "value": "0d3c61f2-9a55-4c21-8f0e-2f1b1c9b7e11"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\"cartId\":77,\"payment\":{\"method\":\"card\",\"save\":false}}"
+              },
+              "auth": {
+                "type": "bearer",
+                "prefix": "Token",
+                "token": "ff-token-5d6e"
+              }
+            },
+            "request": "POST /v1/orders"
+          },
+          {
+            "at": "log.entries[5] @155:7",
+            "diagnostics": [
+              {
+                "Code": "har.auth",
+                "Severity": "info",
+                "Message": "The Authorization header (Token token) became the request's auth; its secret is kept on this machine only, not in the project's files.",
+                "At": "log.entries[5] @155:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 204 No Content.",
+              "method": "PUT",
+              "url": "https://api.shop.example.com/v1/orders/9001/address?notify=1",
+              "params": [
+                {
+                  "name": "notify",
+                  "value": "1"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/x-www-form-urlencoded; charset=UTF-8"
+                }
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "fields": [
+                  {
+                    "name": "street",
+                    "value": "Main St 1"
+                  },
+                  {
+                    "name": "city",
+                    "value": "Zürich"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "bearer",
+                "prefix": "Token",
+                "token": "ff-token-5d6e"
+              }
+            },
+            "request": "PUT /v1/orders/9001/address"
+          }
+        ]
+      },
+      {
+        "at": "log.pages[1] @19:7",
+        "diagnostics": null,
+        "folder": "My account",
+        "items": [
+          {
+            "at": "log.entries[6] @187:7",
+            "diagnostics": [
+              {
+                "Code": "har.auth",
+                "Severity": "info",
+                "Message": "The X-API-Key header became the request's auth; its secret is kept on this machine only, not in the project's files.",
+                "At": "log.entries[6] @187:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 200 OK (application/json).",
+              "method": "GET",
+              "url": "https://api.shop.example.com/v1/me?fields=name,email",
+              "params": [
+                {
+                  "name": "fields",
+                  "value": "name,email"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "X-API-Key",
+                "value": "ff-api-key-91c2"
+              }
+            },
+            "request": "GET /v1/me"
+          },
+          {
+            "at": "log.entries[7] @211:7",
+            "diagnostics": [
+              {
+                "Code": "har.auth",
+                "Severity": "info",
+                "Message": "The X-API-Key header became the request's auth; its secret is kept on this machine only, not in the project's files.",
+                "At": "log.entries[7] @211:7"
+              },
+              {
+                "Code": "har.file_part",
+                "Severity": "info",
+                "Message": "1 part uploads a file the recording names but does not hold; choose the file on this machine before sending.",
+                "At": "log.entries[7] @211:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "Recorded response: 201 Created (application/json).",
+              "method": "POST",
+              "url": "https://api.shop.example.com/v1/me/documents",
+              "body": {
+                "mode": "multipart",
+                "parts": [
+                  {
+                    "name": "kind",
+                    "value": "invoice"
+                  },
+                  {
+                    "name": "file",
+                    "value": "",
+                    "file": "invoice-2026-09.pdf",
+                    "contentType": "application/pdf"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "X-API-Key",
+                "value": "ff-api-key-91c2"
+              }
+            },
+            "request": "POST /v1/me/documents"
+          },
+          {
+            "at": "log.entries[8] @243:7",
+            "code": "har.unsupported",
+            "name": "GET blob: URL",
+            "reason": "A blob: URL is not fetched over the network, so there is no request to import.",
+            "skipped": "request"
+          }
+        ]
+      }
+    ]
+  }
+}

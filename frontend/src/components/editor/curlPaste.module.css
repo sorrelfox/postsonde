@@ -1,0 +1,11 @@
+/* The warnings listed in the toast after a cURL paste (IMP-01). */
+
+.warnings {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-6);
+  color: var(--text2);
+}
+
+.warnings li + li {
+  margin-top: var(--space-1);
+}

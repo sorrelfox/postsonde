@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; font-src 'self'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Download: PostSonde</title>
+<meta name="description" content="PostSonde has no release yet. How to build it from source today, which files a release will have for Linux, macOS and Windows, how to check and install them, and what to expect the first time you open it.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#eef0f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1013" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://sorrelfox.github.io/postsonde/download.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="preload" href="fonts/InstrumentSans-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/InstrumentSans-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PostSonde">
+<meta property="og:title" content="Download PostSonde">
+<meta property="og:description" content="No release yet: build PostSonde from source, and see which packages the first release will have.">
+<meta property="og:url" content="https://sorrelfox.github.io/postsonde/download.html">
+<meta property="og:image" content="https://sorrelfox.github.io/postsonde/screenshots/request-dark.png">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="PostSonde with a GET request and its assertions on the left and the JSON response on the right">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="./"><img src="favicon.svg" alt="" width="28" height="28"><span>PostSonde</span></a>
+    <nav class="site-nav" aria-label="Site">
+      <ul>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="download.html" aria-current="page">Download</a></li>
+        <li><a href="https://github.com/sorrelfox/postsonde">Source code</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="page-head" aria-labelledby="title">
+  <div class="wrap">
+    <h1 id="title">Download</h1>
+    <p class="lede">There is no release yet. Releases will be published on GitHub, with checksums and a signed build attestation for every file. Until the first one is out, you can build PostSonde from source.</p>
+    <p class="actions">
+      <a class="button primary" href="#build">Build it from source</a>
+      <a class="button" href="https://github.com/sorrelfox/postsonde/releases">Releases on GitHub</a>
+    </p>
+    <p class="note">Linux is where PostSonde is developed and tested. The macOS app and the Windows installer build, but neither has been tried on a real Mac or PC yet.</p>
+  </div>
+</section>
+
+<div class="wrap">
+
+<section class="chapter" id="build" aria-labelledby="build-title">
+  <h2 id="build-title">Build it from source</h2>
+  <ol class="steps">
+    <li>
+      <p>Install Go 1.27, Node.js 26 with npm, and git. Then install the Wails CLI, at the version PostSonde uses:</p>
+<pre class="cmd"><code>go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0</code></pre>
+    </li>
+    <li>
+      <p>On Linux, install a C compiler and the GTK 4 and WebKitGTK 6.0 headers. On macOS, install the Xcode Command Line Tools with <code>xcode-select --install</code>. Windows needs no C compiler.</p>
+<pre class="cmd"><code><span class="c"># Debian 13, Ubuntu 24.04 and later</span>
+sudo apt install gcc libc6-dev pkg-config libgtk-4-dev \
+    libwebkitgtk-6.0-dev libx11-dev
+<span class="c"># Fedora</span>
+sudo dnf install gcc pkgconf-pkg-config gtk4-devel \
+    webkitgtk6.0-devel libX11-devel</code></pre>
+    </li>
+    <li>
+      <p>Get the source, check the toolchain, and build:</p>
+<pre class="cmd"><code>git clone https://github.com/sorrelfox/postsonde.git
+cd postsonde
+make setup   <span class="c"># checks the tools, installs the frontend's npm packages</span>
+make check   <span class="c"># optional: the same checks CI runs</span>
+make build   <span class="c"># bin/postsonde for this system</span></code></pre>
+    </li>
+    <li>
+      <p>Start it, with or without a project folder to open:</p>
+<pre class="cmd"><code>bin/postsonde
+bin/postsonde ~/work/my-api</code></pre>
+    </li>
+  </ol>
+  <div class="prose">
+    <p>Each file of a release has a target of its own. All but the last run in Docker containers, so they need Docker but none of the GTK libraries, and they leave their files in <code>dist/</code>:</p>
+    <ul>
+      <li><code>make linux</code>: the <code>.deb</code> packages and the AppImages</li>
+      <li><code>make rpm</code>: the Fedora RPMs (<code>FEDORA=44</code>, <code>45</code> or <code>all</code> picks the release)</li>
+      <li><code>make flatpak</code>: the Flatpak bundle</li>
+      <li><code>make windows</code>: the Windows installers</li>
+      <li><code>make sources</code>: the source tarball</li>
+      <li><code>make macos</code>: on a Mac, the universal app and its disk image</li>
+    </ul>
+    <p><a href="https://github.com/sorrelfox/postsonde/blob/HEAD/docs/building.md">docs/building.md</a> covers every target and the details for each system.</p>
+  </div>
+</section>
+
+<section class="chapter" id="packages" aria-labelledby="packages-title">
+  <h2 id="packages-title">What a release will have</h2>
+  <p class="prose">For each system, the file to take and how to install it. <code>&lt;version&gt;</code> is the release's version number.</p>
+  <div class="table" role="region" aria-label="The files of a release" tabindex="0">
+    <table>
+      <thead>
+        <tr><th scope="col">System</th><th scope="col">File</th><th scope="col">Install</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Ubuntu 24.04 and later, Debian 13 and later</th><td><code>postsonde_&lt;version&gt;_amd64.deb</code> or <code>_arm64.deb</code></td><td>with apt, <a href="#linux">below</a></td></tr>
+        <tr><th scope="row">Ubuntu 22.04, Debian 12</th><td><code>postsonde-gtk3_&lt;version&gt;_amd64.deb</code> or <code>_arm64.deb</code></td><td>with apt</td></tr>
+        <tr><th scope="row">Fedora 44 and 45</th><td><code>postsonde-&lt;version&gt;-1.fc44.x86_64.rpm</code>, with <code>fc45</code> and <code>aarch64</code> variants</td><td>with dnf</td></tr>
+        <tr><th scope="row">Any distribution with Flatpak, x86-64 only</th><td><code>PostSonde-&lt;version&gt;-x86_64.flatpak</code></td><td>with flatpak, for your user</td></tr>
+        <tr><th scope="row">Any distribution with glibc 2.35 or later</th><td><code>PostSonde-&lt;version&gt;-x86_64.AppImage</code> or <code>-aarch64.AppImage</code></td><td>make it executable and run it</td></tr>
+        <tr><th scope="row">macOS 13 or later, Apple silicon and Intel</th><td><code>PostSonde-&lt;version&gt;-macos-universal.dmg</code></td><td>drag PostSonde to Applications, then see <a href="#macos">the first launch</a></td></tr>
+        <tr><th scope="row">Windows 10 and 11</th><td><code>PostSonde-&lt;version&gt;-windows-amd64-setup.exe</code> or <code>-arm64-setup.exe</code></td><td>run it, then see <a href="#windows">the first launch</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="prose section-after">A release also has the source tarball, <code>postsonde-&lt;version&gt;.tar.xz</code>, with the tree, the frontend build and the vendored Go modules.</p>
+</section>
+
+<section class="chapter prose" id="verify" aria-labelledby="verify-title">
+  <h2 id="verify-title">Checking a download</h2>
+  <p>Each release lists the SHA-256 checksum of every file in <code>SHA256SUMS</code>. Every file but that one also has a build provenance attestation: a signed record that this repository's release workflow built it from the tagged commit. In the folder with your download, the first line checks the checksum, and the second, with the <a href="https://github.com/sorrelfox/postsonde/blob/HEAD/docs/releasing.md#checking-a-release">GitHub CLI</a>, the attestation:</p>
+<pre class="cmd"><code>sha256sum -c --ignore-missing SHA256SUMS
+gh attestation verify PostSonde-&lt;version&gt;-x86_64.AppImage --repo sorrelfox/postsonde</code></pre>
+</section>
+
+<section class="chapter prose" id="linux" aria-labelledby="linux-title">
+  <h2 id="linux-title">Installing on Linux</h2>
+  <p>Install a <code>.deb</code> or an <code>.rpm</code> with apt or dnf, not <code>dpkg -i</code> or <code>rpm -i</code>, so that the GTK and WebKit libraries it needs come along:</p>
+<pre class="cmd"><code><span class="c"># Ubuntu 24.04 and later, Debian 13 and later</span>
+sudo apt install ./postsonde_&lt;version&gt;_amd64.deb
+<span class="c"># Ubuntu 22.04, Debian 12</span>
+sudo apt install ./postsonde-gtk3_&lt;version&gt;_amd64.deb
+<span class="c"># Fedora 44; on Fedora 45, the fc45 file</span>
+sudo dnf install ./postsonde-&lt;version&gt;-1.fc44.x86_64.rpm</code></pre>
+  <p>The GTK 3 package is for releases that don't have WebKitGTK 6.0; on later ones, take the GTK 4 package. Each Fedora release has its own RPM, built against its libraries.</p>
+  <p>The Flatpak runs on the GNOME 51 runtime, which flatpak fetches from Flathub if you don't have it yet:</p>
+<pre class="cmd"><code>flatpak install --user ./PostSonde-&lt;version&gt;-x86_64.flatpak
+flatpak run io.github.sorrelfox.PostSonde</code></pre>
+  <p>The AppImage is one file that runs without installing:</p>
+<pre class="cmd"><code>chmod +x PostSonde-&lt;version&gt;-x86_64.AppImage
+./PostSonde-&lt;version&gt;-x86_64.AppImage</code></pre>
+  <p>It brings its own GTK 3 and WebKit2GTK, so it runs on Ubuntu 22.04, Debian 12, Fedora 36 and anything newer. It needs FUSE, that is the <code>fusermount</code> or <code>fusermount3</code> tool and <code>/dev/fuse</code>; where FUSE isn't available, start it with <code>--appimage-extract-and-run</code>. It doesn't add itself to your applications menu, but a tool such as Gear Lever or AppImageLauncher can do that.</p>
+</section>
+
+<section class="chapter prose" id="macos" aria-labelledby="macos-title">
+  <h2 id="macos-title">First launch on macOS</h2>
+  <p>Unless a release says otherwise, the app is signed ad hoc and not notarized by Apple, which needs a paid developer account, so macOS blocks it the first time you open it.</p>
+  <ol class="steps tight">
+    <li>Open the <code>.dmg</code> and drag PostSonde to Applications.</li>
+    <li>Open PostSonde. When macOS says it can't verify the app, click <strong>Done</strong>.</li>
+    <li>Open <strong>System Settings › Privacy &amp; Security</strong>, scroll to Security, and click <strong>Open Anyway</strong> next to PostSonde. The button stays there for about an hour after the previous step.</li>
+    <li>Confirm with your password. From then on, PostSonde opens normally.</li>
+  </ol>
+  <p>If macOS says the app "is damaged", run this in Terminal and open it again:</p>
+<pre class="cmd"><code>xattr -dr com.apple.quarantine /Applications/PostSonde.app</code></pre>
+  <p>These steps come back with each new version until PostSonde is notarized.</p>
+</section>
+
+<section class="chapter prose" id="windows" aria-labelledby="windows-title">
+  <h2 id="windows-title">First launch on Windows</h2>
+  <ol class="steps tight">
+    <li>Download the installer for your PC: <code>-amd64-setup.exe</code> for most PCs, <code>-arm64-setup.exe</code> for Windows on ARM. <strong>Settings › System › About › System type</strong> tells you which you have.</li>
+    <li>Run it. The installer isn't code-signed yet, so Windows SmartScreen may say "Windows protected your PC". Click <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
+    <li>Click through the installer. It installs for your user only, needs no administrator rights and downloads nothing. PostSonde is in the Start menu afterwards.</li>
+  </ol>
+  <p>PostSonde needs the Microsoft Edge WebView2 Runtime. Windows 11 includes it, and Windows 10 gets it with Edge updates. If it's missing, the installer tells you where to get it.</p>
+  <p>To update, run the installer of the new version. To remove PostSonde, use <strong>Settings › Apps › Installed apps</strong>.</p>
+</section>
+
+<section class="chapter page-end" id="requirements" aria-labelledby="requirements-title">
+  <h2 id="requirements-title">What it needs</h2>
+  <p class="prose">PostSonde draws its window with the web view your system already has, not a bundled browser engine. Two packages bring their own: the AppImage has GTK 3 and WebKit2GTK inside, and the Flatpak runs on the GNOME runtime, with GTK 4 and WebKitGTK 6.0.</p>
+  <div class="table" role="region" aria-label="System requirements" tabindex="0">
+    <table>
+      <thead>
+        <tr><th scope="col">System</th><th scope="col">Processors</th><th scope="col">Web view</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Linux</th><td>x86-64, ARM64</td><td>WebKitGTK 6.0 with GTK 4, or WebKit2GTK 4.1 with GTK 3 for the GTK 3 build</td></tr>
+        <tr><th scope="row">macOS 13 Ventura or later</th><td>Apple silicon, Intel</td><td>WKWebView, part of macOS</td></tr>
+        <tr><th scope="row">Windows 10 and 11</th><td>x64, ARM64</td><td>Microsoft Edge WebView2 Runtime</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>PostSonde is free software under the <a href="https://github.com/sorrelfox/postsonde/blob/HEAD/LICENSE">MIT License</a>.</p>
+    <ul class="foot-links">
+      <li><a href="https://github.com/sorrelfox/postsonde">Source code</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/releases">Releases</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/issues">Issues</a></li>
+      <li><a href="https://github.com/sorrelfox/postsonde/blob/HEAD/PRIVACY.md">Privacy</a></li>
+    </ul>
+    <p class="fine">This site sets no cookies and loads nothing from other sites. It is set in Instrument Sans and JetBrains Mono, the app's own typefaces, under the SIL Open Font License 1.1 (<a href="fonts/OFL-InstrumentSans.txt">Instrument Sans</a>, <a href="fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a>).</p>
+  </div>
+</footer>
+</body>
+</html>

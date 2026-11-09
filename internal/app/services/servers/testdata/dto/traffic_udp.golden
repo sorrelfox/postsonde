@@ -1,0 +1,50 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000f3",
+      "seq": 14,
+      "time": "2026-09-16T08:00:12Z",
+      "peer": "127.0.0.1:53128",
+      "connId": 0,
+      "direction": "in",
+      "kind": "message",
+      "summary": "5 bytes from 127.0.0.1:53128",
+      "text": "hello",
+      "dataBase64": "",
+      "binary": false,
+      "size": 5,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": null,
+      "udp": {
+        "local": "127.0.0.1:9125",
+        "reply": ""
+      },
+      "captured": false
+    },
+    {
+      "serverId": "srv_00000000000000f3",
+      "seq": 15,
+      "time": "2026-09-16T08:00:12Z",
+      "peer": "127.0.0.1:53128",
+      "connId": 0,
+      "direction": "out",
+      "kind": "message",
+      "summary": "1 byte to 127.0.0.1:53128 (fixed)",
+      "text": "\u0006",
+      "dataBase64": "",
+      "binary": false,
+      "size": 1,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": null,
+      "udp": {
+        "local": "127.0.0.1:9125",
+        "reply": "fixed"
+      },
+      "captured": false
+    }
+  ]
+}

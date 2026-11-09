@@ -1,0 +1,4 @@
+GET / HTTP/1.1\r\n
+Host: ADDR\r\n
+user-agent: PostSonde-Test/1.0\r\n
+\r\n

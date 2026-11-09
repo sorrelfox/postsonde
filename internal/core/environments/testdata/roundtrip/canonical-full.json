@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "environment",
+  "id": "env_0000000000000a01",
+  "name": "Staging",
+  "color": "#2f7d4a",
+  "variables": [
+    {
+      "name": "baseUrl",
+      "value": "https://staging.api.example"
+    },
+    {
+      "name": "token",
+      "value": "",
+      "secret": true,
+      "description": "Personal access token"
+    },
+    {
+      "name": "old",
+      "value": "{{baseUrl}}/v1",
+      "description": "Kept for the v1 requests",
+      "disabled": true
+    },
+    {
+      "name": "auth",
+      "value": "{\"user\": {\"id\": 7}, \"tags\": [\"a\", \"b\"]}"
+    },
+    {
+      "name": "région",
+      "value": "Zürich · 東京 \\{{literal}}"
+    },
+    {
+      "name": "dup",
+      "value": "first"
+    },
+    {
+      "name": "dup",
+      "value": "second"
+    }
+  ]
+}

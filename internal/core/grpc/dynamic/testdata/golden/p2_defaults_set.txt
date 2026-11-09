@@ -1,0 +1,10 @@
+type: codec.p2.Defaults
+d_int32: -42
+d_string: "héllo"
+d_double: +Inf
+d_enum: 2
+d_bytes: 0x0102
+d_bool: true
+d_float: NaN
+d_uint64: 18446744073709551615
+req: 0

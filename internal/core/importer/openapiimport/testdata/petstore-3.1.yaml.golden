@@ -1,0 +1,269 @@
+{
+  "diagnostics": [
+    {
+      "Code": "openapi.webhooks",
+      "Severity": "info",
+      "Message": "The document's webhook (newPet) describes a request the API sends, and was not imported.",
+      "At": "webhooks @0:0"
+    }
+  ],
+  "environments": 0,
+  "name": "Petstore 3.1",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{api_key.key}}"
+    },
+    "description": "A pet store that uses OpenAPI 3.1 features.\n\nWebhooks, JSON Schema 2020-12 keywords, recursive schemas,\n$anchor references and path items in components.",
+    "diagnostics": [
+      {
+        "Code": "openapi.servers",
+        "Severity": "info",
+        "Message": "The document lists 2 servers; baseUrl is the first. The others are in the variable's description.",
+        "At": "servers[0] @14:5"
+      }
+    ],
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "tags[0] @24:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "Pets in the store",
+        "diagnostics": null,
+        "folder": "pets",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./pets.get @33:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets",
+              "params": [
+                {
+                  "name": "limit",
+                  "value": "20",
+                  "description": "How many items to return",
+                  "disabled": true
+                },
+                {
+                  "name": "tags",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "List pets"
+          },
+          {
+            "at": "paths./pets.post @64:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{baseUrl}}/pets",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\n  \"name\": \"Rex\",\n  \"tag\": \"dog\"\n}"
+              },
+              "auth": {
+                "type": "none"
+              }
+            },
+            "request": "Add a pet"
+          },
+          {
+            "at": "paths./pets/{petId}.get @258:9",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": ""
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "showPetById"
+          },
+          {
+            "at": "paths./pets/{petId}.delete @271:9",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "DELETE",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": ""
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "deletePet"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "tags[1] @26:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "trees",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./trees/{id}.get @87:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/trees/{id}",
+              "pathParams": [
+                {
+                  "name": "id",
+                  "value": "{{$uuid}}"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "getTree"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "paths./subscriptions.post @98:7",
+        "diagnostics": [
+          {
+            "Code": "openapi.callback",
+            "Severity": "info",
+            "Message": "The operation's callback (onEvent) describes a request the API sends, and was not imported.",
+            "At": "paths./subscriptions.post @98:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "POST",
+          "url": "{{baseUrl}}/subscriptions",
+          "body": {
+            "mode": "urlencoded",
+            "fields": [
+              {
+                "name": "callbackUrl",
+                "value": "https://example.com"
+              },
+              {
+                "name": "events",
+                "value": "string"
+              }
+            ]
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "subscribe"
+      }
+    ],
+    "variables": [
+      {
+        "name": "baseUrl",
+        "value": "https://{{env}}.petstore.example:{{port}}/v2",
+        "description": "Hosted. Other servers: http://localhost:8080/v2."
+      },
+      {
+        "name": "env",
+        "value": "api",
+        "description": "One of: api, staging."
+      },
+      {
+        "name": "port",
+        "value": "443"
+      },
+      {
+        "name": "api_key.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “api_key” scheme."
+      }
+    ]
+  }
+}

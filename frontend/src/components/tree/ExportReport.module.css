@@ -1,0 +1,73 @@
+/* The report of a Postman export: items with their notes, scrolling
+ * inside the dialog when long. */
+.report {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: min(420px, 60vh);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.path {
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.skipped {
+  color: var(--warn);
+  font-weight: 400;
+}
+
+.notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.note {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.severity {
+  flex: none;
+  min-width: 52px;
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.note[data-severity="warning"] .severity {
+  color: var(--warn);
+}
+
+.note[data-severity="info"] .severity {
+  color: var(--text3);
+}

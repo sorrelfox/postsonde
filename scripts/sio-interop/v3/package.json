@@ -1,0 +1,7 @@
+{
+  "name": "postsonde-sio-interop-v3",
+  "private": true,
+  "dependencies": {
+    "socket.io": "3.1.2"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_9d0a6c3e1f7b2584",
+  "name": "List orders",
+  "method": "GET",
+  "url": "{{baseUrl}}/graphql",
+  "query": "{ orders { id } }",
+  "auth": {
+    "type": "inherit"
+  }
+}

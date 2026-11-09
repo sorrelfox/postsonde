@@ -1,0 +1,67 @@
+{
+  "diagnostics": null,
+  "environments": [
+    {
+      "at": " @[1,1]",
+      "diagnostics": null,
+      "environment": "Staging",
+      "variables": [
+        {
+          "Name": "baseUrl",
+          "Value": "https://staging.shop.example",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "count",
+          "Value": "5",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "debug",
+          "Value": "false",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "user",
+          "Value": "ops",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "missing",
+          "Value": "",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "auth",
+          "Value": "{\"token\":\"stg-token\",\"scopes\":[\"read\",\"write\"]}",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    }
+  ],
+  "name": "Staging",
+  "root": {
+    "at": "",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": null,
+    "variables": null
+  }
+}

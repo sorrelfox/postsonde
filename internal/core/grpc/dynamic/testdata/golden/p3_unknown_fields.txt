@@ -1,0 +1,7 @@
+type: codec.p3.Nested
+a: 1
+b: "known"
+child: {}
+child.a: 2
+child.b: "c"
+unknown: 2108070605040302012a0372617735ffffffff38ffffffffffffffffff01420201044a08080912046e696e65

@@ -1,0 +1,3 @@
+curl -X PUT https://api.test/blob ^
+  -H "Content-Type: application/json" ^
+  --data-binary "@C:\Users\Me\My Files\report 100"%".json"

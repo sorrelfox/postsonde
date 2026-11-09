@@ -1,0 +1,16 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/me",
+    headers={
+        "Accept": "text/html, application/json",
+        "X-A": "1",
+        "Host": "example.test",
+        "Cookie": "a=1; b=2",
+    },
+    allow_redirects=False,
+)
+
+print(response.status_code)
+print(response.text)

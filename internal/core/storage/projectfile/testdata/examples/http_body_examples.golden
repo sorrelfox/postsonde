@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_2e6c9a0d4b7f1358",
+  "name": "Get quote",
+  "method": "POST",
+  "url": "{{baseUrl}}/StockQuote",
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "text/xml; charset=utf-8"
+    },
+    {
+      "name": "SOAPAction",
+      "value": "\"urn:example:GetQuote\""
+    }
+  ],
+  "body": {
+    "mode": "raw",
+    "type": "xml",
+    "text": "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <m:GetQuote xmlns:m=\"urn:example\"><m:Symbol>ACME</m:Symbol></m:GetQuote>\n  </soap:Body>\n</soap:Envelope>"
+  },
+  "bodyExamples": [
+    {
+      "name": "Empty",
+      "body": {
+        "mode": "none"
+      }
+    },
+    {
+      "name": "ACME",
+      "active": true
+    }
+  ],
+  "auth": {
+    "type": "none"
+  }
+}

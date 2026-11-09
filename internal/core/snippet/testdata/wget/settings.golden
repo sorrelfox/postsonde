@@ -1,0 +1,8 @@
+wget https://api.test/items \
+  --method POST \
+  --header 'Content-Type: application/json' \
+  --body-data '{}' \
+  --no-check-certificate \
+  --max-redirect 5 \
+  --timeout 1.5 \
+  -O -

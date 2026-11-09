@@ -1,0 +1,16 @@
+# source
+{ user(id: 4) { name } }
+# tree
+Document [0:24]
+  Definitions[0]: OperationDefinition [0:24] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:24] LBrace=0 RBrace=23
+      Selections[0]: Field [2:22] Colon=-1
+        Name: Name [2:6] Value="user"
+        Arguments: ArgumentList [6:13] LParen=6 RParen=12
+          Arguments[0]: Argument [7:12] Colon=9
+            Name: Name [7:9] Value="id"
+            Value: IntValue [11:12] Raw="4"
+        SelectionSet: SelectionSet [14:22] LBrace=14 RBrace=21
+          Selections[0]: Field [16:20] Colon=-1
+            Name: Name [16:20] Value="name"
+# errors

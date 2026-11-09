@@ -1,0 +1,17 @@
+const response = await fetch("https://api.test/q", {
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain",
+  },
+  body: `trailing spaces   
+  indented
+	tabbed
+100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH \${x} $(id) \`tick\` {{notAVar}} 'single' ''two'' "double" ""two"" \\ \\\\ \\" end\\
+"""triple""" \\u0041 \\n */ // # -- ; C:\\dir\\
+
+‘curly’ “double” 日本 😀 \u00a0nbsp \u2028ls
+   `,
+});
+
+console.log(response.status);
+console.log(await response.text());

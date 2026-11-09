@@ -1,0 +1,84 @@
+# tree
+File [0:1774] Name="route_guide.proto"
+  Decls[0]: Syntax [140:158] Leading=" A route guide in the style of the classic gRPC streaming example: one\n method of each call type. Written for PostSonde's parser tests.\n"
+    Value: StringLit [149:157] Value="proto3"
+  Decls[1]: Option [160:205]
+    Name: OptionName [167:177]
+      Parts[0]: OptionNamePart [167:177] Name=[167:177]"go_package"
+    Value: StringLit [180:204] Value="example.com/routeguide"
+  Decls[2]: Option [206:240]
+    Name: OptionName [213:232]
+      Parts[0]: OptionNamePart [213:232] Name=[213:232]"java_multiple_files"
+    Value: IdentLit [235:239] Value="true"
+  Decls[3]: Option [241:293]
+    Name: OptionName [248:260]
+      Parts[0]: OptionNamePart [248:260] Name=[248:260]"java_package"
+    Value: StringLit [263:292] Value="io.grpc.examples.routeguide"
+  Decls[4]: Option [294:342]
+    Name: OptionName [301:321]
+      Parts[0]: OptionNamePart [301:321] Name=[301:321]"java_outer_classname"
+    Value: StringLit [324:341] Value="RouteGuideProto"
+  Decls[5]: Package [344:363] Name=[352:362]"routeguide"
+  Decls[6]: Service [402:836] Leading=" Interface exported by the server.\n" Name=[410:420]"RouteGuide" RBrace=835
+    Body[0]: RPC [495:537] Leading=" A simple RPC.\n\n Obtains the feature at a given position.\n" Name=[499:509]"GetFeature" LBrace=535 RBrace=536
+      Input: RPCType [509:516] Type=[510:515]"Point"
+      Output: RPCType [525:534] Type=[526:533]"Feature"
+    Body[1]: RPC [580:635] Leading=" A server-to-client streaming RPC.\n" Name=[584:596]"ListFeatures" LBrace=633 RBrace=634
+      Input: RPCType [596:607] Type=[597:606]"Rectangle"
+      Output: RPCType [616:632] Stream=true StreamLoc=[617:623] Type=[624:631]"Feature"
+    Body[2]: RPC [678:733] Leading=" A client-to-server streaming RPC.\n" Name=[682:693]"RecordRoute" LBrace=731 RBrace=732
+      Input: RPCType [693:707] Stream=true StreamLoc=[694:700] Type=[701:706]"Point"
+      Output: RPCType [716:730] Type=[717:729]"RouteSummary"
+    Body[3]: RPC [773:834] Leading=" A bidirectional streaming RPC.\n" Name=[777:786]"RouteChat" LBrace=832 RBrace=833
+      Input: RPCType [786:804] Stream=true StreamLoc=[787:793] Type=[794:803]"RouteNote"
+      Output: RPCType [813:831] Stream=true StreamLoc=[814:820] Type=[821:830]"RouteNote"
+  Decls[7]: Message [989:1051] Leading=" Points are represented as latitude-longitude pairs in the E7\n representation (degrees multiplied by 10**7 and rounded to the nearest\n integer).\n" Name=[997:1002]"Point" RBrace=1050
+    Body[0]: Field [1007:1026] Type=[1007:1012]"int32" Name=[1013:1021]"latitude"
+      Number: IntLit [1024:1025] Raw="1" Value=1
+    Body[1]: Field [1029:1049] Type=[1029:1034]"int32" Name=[1035:1044]"longitude"
+      Number: IntLit [1047:1048] Raw="2" Value=2
+  Decls[8]: Message [1152:1275] Leading=" A latitude-longitude rectangle, represented as two diagonally opposite\n points \"lo\" and \"hi\".\n" Name=[1160:1169]"Rectangle" RBrace=1274
+    Body[0]: Field [1174:1187] Trailing=" One corner of the rectangle.\n" Type=[1174:1179]"Point" Name=[1180:1182]"lo"
+      Number: IntLit [1185:1186] Raw="1" Value=1
+    Body[1]: Field [1222:1235] Trailing=" The other corner of the rectangle.\n" Type=[1222:1227]"Point" Name=[1228:1230]"hi"
+      Number: IntLit [1233:1234] Raw="2" Value=2
+  Decls[9]: Message [1277:1337] Name=[1285:1292]"Feature" RBrace=1336
+    Body[0]: Field [1297:1313] Type=[1297:1303]"string" Name=[1304:1308]"name"
+      Number: IntLit [1311:1312] Raw="1" Value=1
+    Body[1]: Field [1316:1335] Type=[1316:1321]"Point" Name=[1322:1330]"location"
+      Number: IntLit [1333:1334] Raw="2" Value=2
+  Decls[10]: Message [1339:1404] Name=[1347:1356]"RouteNote" RBrace=1403
+    Body[0]: Field [1361:1380] Type=[1361:1366]"Point" Name=[1367:1375]"location"
+      Number: IntLit [1378:1379] Raw="1" Value=1
+    Body[1]: Field [1383:1402] Type=[1383:1389]"string" Name=[1390:1397]"message"
+      Number: IntLit [1400:1401] Raw="2" Value=2
+  Decls[11]: Message [1601:1772] Leading=" A RouteSummary is received in response to a RecordRoute rpc.\n\n It contains the number of individual points received, the number of\n detected features, and the total distance covered. " Name=[1609:1621]"RouteSummary" RBrace=1771
+    Body[0]: Field [1626:1648] Type=[1626:1631]"int32" Name=[1632:1643]"point_count"
+      Number: IntLit [1646:1647] Raw="1" Value=1
+    Body[1]: Field [1651:1675] Type=[1651:1656]"int32" Name=[1657:1670]"feature_count"
+      Number: IntLit [1673:1674] Raw="2" Value=2
+    Body[2]: Field [1678:1697] Type=[1678:1683]"int32" Name=[1684:1692]"distance"
+      Number: IntLit [1695:1696] Raw="3" Value=3
+    Body[3]: Field [1747:1770] Leading=" The duration of the traversal in seconds.\n" Type=[1747:1752]"int32" Name=[1753:1765]"elapsed_time"
+      Number: IntLit [1768:1769] Raw="4" Value=4
+  Decls[12]: Empty [1772:1773]
+  Comments[0]: Comment [0:72]
+  Comments[1]: Comment [73:139]
+  Comments[2]: Comment [365:401]
+  Comments[3]: Comment [425:441]
+  Comments[4]: Comment [444:446]
+  Comments[5]: Comment [449:492]
+  Comments[6]: Comment [541:577]
+  Comments[7]: Comment [639:675]
+  Comments[8]: Comment [737:770]
+  Comments[9]: Comment [838:901]
+  Comments[10]: Comment [902:975]
+  Comments[11]: Comment [976:988]
+  Comments[12]: Comment [1053:1126]
+  Comments[13]: Comment [1127:1151]
+  Comments[14]: Comment [1188:1219]
+  Comments[15]: Comment [1236:1273]
+  Comments[16]: Comment [1406:1600] Block=true
+  Comments[17]: Comment [1700:1744]
+# errors
+# diagnostics

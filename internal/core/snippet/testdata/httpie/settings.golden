@@ -1,0 +1,4 @@
+http --verify=no --follow --max-redirects=5 --timeout=1.5 \
+  --raw '{}' \
+  POST https://api.test/items \
+  Content-Type:application/json

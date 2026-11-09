@@ -1,0 +1,73 @@
+/* "Create mock route" (MOCK-03): the server choice, and what the route
+ * sends and leaves out. The rest comes from OpenApiRoutes.module.css. */
+
+.select {
+  flex: 1;
+  min-width: 160px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-sm2);
+}
+
+.select:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.heading {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+}
+
+.table {
+  display: block;
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.table th {
+  padding: var(--space-1) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  color: var(--text3);
+  font-weight: var(--fw-semibold);
+  text-align: left;
+}
+
+.table td {
+  padding: var(--space-1) var(--space-4);
+  color: var(--text2);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.field {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  color: var(--text);
+}

@@ -1,0 +1,82 @@
+// Test messages for the dynamic codec: proto2 defaults, groups, closed
+// enums, packed options, extensions and unknown groups.
+syntax = "proto2";
+
+package codec.p2;
+
+enum Kind {
+  KIND_A = 1;
+  KIND_B = 2;
+  KIND_C = 3;
+}
+
+message Defaults {
+  optional int32 d_int32 = 1 [default = -42];
+  optional string d_string = 2 [default = "h\303\251llo"];
+  optional double d_double = 3 [default = inf];
+  optional Kind d_enum = 4 [default = KIND_B];
+  optional bytes d_bytes = 5 [default = "\001\002"];
+  optional bool d_bool = 6 [default = true];
+  optional float d_float = 7 [default = nan];
+  optional uint64 d_uint64 = 8 [default = 18446744073709551615];
+  optional Kind no_default_enum = 9;
+  required int32 req = 10;
+}
+
+message Groups {
+  optional group G = 1 {
+    optional int32 a = 2;
+    optional string b = 3;
+  }
+  repeated group R = 4 {
+    optional int32 c = 5;
+    repeated group Inner = 6 {
+      optional sint32 d = 7;
+    }
+  }
+  repeated int32 packed_int32 = 8 [packed = true];
+  repeated int32 expanded_int32 = 9;
+  repeated Kind packed_kind = 10 [packed = true];
+  repeated Kind expanded_kind = 11;
+  optional string no_utf8_check = 12;
+  optional Kind kind = 13;
+  map<string, Kind> kind_map = 14;
+}
+
+// Extension numbers are below the regular fields, so that field number
+// order is also the order protobuf-go's deterministic encoding uses
+// (extensions first).
+message Extendable {
+  extensions 1 to 99;
+  optional int32 plain = 100;
+}
+
+extend Extendable {
+  optional int32 ext_int32 = 1;
+  repeated string ext_strings = 2;
+  optional Defaults ext_msg = 3;
+  repeated sint32 ext_packed = 4 [packed = true];
+  optional group ExtGroup = 5 {
+    optional int32 v = 6;
+  }
+}
+
+// Wide is Narrow with more fields, including groups; its encodings are
+// decoded as Narrow to test unknown groups.
+message Wide {
+  optional int32 a = 1;
+  optional group Extra = 2 {
+    optional int32 x = 3;
+    optional group Deeper = 4 {
+      optional string y = 5;
+    }
+  }
+  optional fixed32 f = 6;
+  repeated group More = 7 {
+    optional int64 z = 8;
+  }
+}
+
+message Narrow {
+  optional int32 a = 1;
+}

@@ -1,0 +1,20 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String body = "q=a%26b%3Dc+d%2Be%25f+%22g%22+%27h%27+%C3%A9&path=C%3A%5Cdir%5C&sym=%24x+%60y%60+%5Ez+%25PATH%25";
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.test/q"))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

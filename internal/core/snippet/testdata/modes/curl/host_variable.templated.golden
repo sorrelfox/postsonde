@@ -1,0 +1,3 @@
+curl 'https://{{host}}/items/{{id}}' \
+  -g \
+  -L --max-redirs 10

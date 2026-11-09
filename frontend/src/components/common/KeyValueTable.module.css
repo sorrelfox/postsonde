@@ -1,0 +1,252 @@
+/* Key/value table, after the mockup's params/headers table:
+ * a bordered, rounded box with an uppercase header row and 34px rows. */
+
+.frame {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg0);
+}
+
+.grid {
+  --kv-columns: 28px minmax(0, 1fr) minmax(0, 1.3fr);
+}
+
+.grid.withDescription {
+  --kv-columns: 28px minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr);
+}
+
+.grid.editable {
+  --kv-columns: 28px minmax(0, 1fr) minmax(0, 1.3fr) 28px;
+}
+
+.grid.editable.withDescription {
+  --kv-columns: 28px minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr) 28px;
+}
+
+.grid:focus-visible {
+  outline-offset: -2px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--kv-columns);
+  align-items: center;
+  height: var(--h-control-lg);
+  padding: 0 var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:not(.head):hover,
+.row:not(.head):focus-within {
+  background: var(--bg2);
+}
+
+.head {
+  height: var(--h-control);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.headCell {
+  min-width: 0;
+  padding-left: var(--space-3);
+}
+
+.disabled .cell:not(.center),
+.disabled .toggle {
+  opacity: 0.5;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 0;
+}
+
+.center {
+  justify-content: center;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.input:focus-visible {
+  outline-offset: -2px;
+}
+
+.mono .input,
+.mono .mirror {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+}
+
+.desc .input {
+  color: var(--text2);
+}
+
+/* renderValue: the input's text is transparent and the rendered text sits
+ * underneath at the same position, so only the caret and selection show. */
+.mirror {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  overflow: hidden;
+  white-space: pre;
+  color: var(--text);
+  pointer-events: none;
+}
+
+.input.overlay {
+  position: relative;
+  color: transparent;
+  caret-color: var(--text);
+}
+
+/* valueCell: content that replaces a row's value input (a file chip). */
+.custom {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-2);
+  /* Lets the content adapt to the cell's width (@container). */
+  container-type: inline-size;
+}
+
+/* valueActions: small controls at the end of the value cell; the input and
+ * its mirror are then wrapped in .field so the mirror ends before them. */
+.field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.valueActions {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-right: var(--space-1);
+}
+
+.toggle {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.toggle[aria-readonly="true"] {
+  cursor: default;
+}
+
+.delete {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+}
+
+.delete:hover,
+.delete:focus-visible {
+  color: var(--bad);
+  background: var(--bg3);
+}
+
+.add {
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--space-6) 0 40px;
+  border-top: 1px solid var(--line);
+  color: var(--text3);
+  font-size: var(--fs-md);
+  text-align: left;
+}
+
+.add:hover,
+.add:focus-visible {
+  color: var(--text);
+  background: var(--bg2);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Bulk edit (HTTP-08): the switch above the table, and the text editor
+ * that replaces the grid. */
+.bulkBar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-2);
+}
+
+.bulkSwitch {
+  height: 22px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.bulkSwitch:hover,
+.bulkSwitch:focus-visible {
+  color: var(--text);
+  background: var(--bg2);
+}
+
+.bulkSwitch[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.bulk {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  resize: vertical;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: var(--lh-code);
+}
+
+.bulk:focus-visible {
+  outline-offset: -2px;
+}

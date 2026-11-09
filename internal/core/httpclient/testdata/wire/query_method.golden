@@ -1,0 +1,6 @@
+QUERY /contacts HTTP/1.1\r\n
+Host: ADDR\r\n
+Content-Length: 20\r\n
+Content-Type: application/x-www-form-urlencoded\r\n
+\r\n
+select=name&limit=10

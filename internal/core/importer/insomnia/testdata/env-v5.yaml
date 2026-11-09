@@ -1,0 +1,12 @@
+type: environment.insomnia.rest/5.0
+name: Shared
+meta:
+  id: wrk_env
+environments:
+  name: Shared
+  meta:
+    id: env_shared
+  data:
+    region: eu
+    endpoints:
+      auth: https://auth.example

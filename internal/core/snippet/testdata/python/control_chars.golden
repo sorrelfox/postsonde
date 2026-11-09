@@ -1,0 +1,16 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/raw",
+    headers={
+        "Content-Type": "text/plain",
+    },
+    data=(
+        "line1\r\n"
+        "line2\x01\ttab \\ 'q'"
+    ),
+)
+
+print(response.status_code)
+print(response.text)

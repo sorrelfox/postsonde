@@ -1,0 +1,20 @@
+# source
+syntax = "proto3";
+// Outer.
+message M {
+  message N {
+    int32 a = 1;
+
+# tree
+File [0:72] Name="p.proto"
+  Decls[0]: Syntax [0:18]
+    Value: StringLit [9:17] Value="proto3"
+  Decls[1]: Message [29:71] Leading=" Outer.\n" Name=[37:38]"M" RBrace=-1
+    Body[0]: Message [43:71] Name=[51:52]"N" RBrace=-1
+      Body[0]: Field [59:71] Type=[59:64]"int32" Name=[65:66]"a"
+        Number: IntLit [69:70] Raw="1" Value=1
+  Comments[0]: Comment [19:28]
+# errors
+3:11 [39:40] unclosed delimiter: "{" is not closed
+4:13 [53:54] unclosed delimiter: "{" is not closed
+# diagnostics

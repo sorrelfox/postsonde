@@ -1,0 +1,46 @@
+{
+  "id": "srv_00000000000000f1",
+  "type": "echo_http",
+  "typeLabel": "Echo HTTP",
+  "name": "Echo HTTP",
+  "host": "localhost",
+  "port": 8443,
+  "allowLan": false,
+  "tls": {
+    "certificate": "files",
+    "certFile": "/certs/dev.pem",
+    "keyFile": "/certs/dev-key.pem",
+    "pfxFile": "",
+    "hasPassphrase": false
+  },
+  "certificate": {
+    "subject": "CN=localhost",
+    "issuer": "CN=Dev CA",
+    "notBefore": "2026-09-16T07:00:00Z",
+    "notAfter": "2027-09-16T08:00:00Z",
+    "sha256": "03d66dd08835c1ca3f128cceacd1f31ac94163096b20f445ae84285bc0832d72",
+    "names": [
+      "localhost",
+      "127.0.0.1",
+      "::1"
+    ]
+  },
+  "state": "running",
+  "addresses": [
+    "127.0.0.1:8443"
+  ],
+  "boundPort": 8443,
+  "scope": "loopback",
+  "warning": null,
+  "startedAt": "2026-09-16T08:00:00Z",
+  "stoppedAt": "",
+  "error": null,
+  "events": 0,
+  "config": {
+    "mockHttp": null,
+    "webSocket": null,
+    "webhook": null
+  },
+  "diagnostics": [],
+  "folder": null
+}

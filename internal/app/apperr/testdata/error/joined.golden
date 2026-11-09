@@ -1,0 +1,12 @@
+{
+  "kind": "invalid_argument",
+  "code": "",
+  "message": "Name is required.",
+  "hint": "",
+  "details": {
+    "field": "name"
+  },
+  "causes": [
+    "URL is required."
+  ]
+}

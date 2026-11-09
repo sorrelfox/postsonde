@@ -1,0 +1,5 @@
+curl.exe -X DELETE '{{baseUrl}}/items/{{id}}' `
+  -g `
+  -H 'Authorization: Bearer {{token}}' `
+  -L --max-redirs 3 `
+  -m 0.25

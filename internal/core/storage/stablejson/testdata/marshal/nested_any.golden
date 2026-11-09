@@ -1,0 +1,25 @@
+{
+  "10": "numeric strings sort as strings",
+  "9": "so 10 comes before 9",
+  "Mixed": "capitals sort before lowercase",
+  "alpha": {
+    "empty": {},
+    "list": [],
+    "nested": {
+      "a": "first",
+      "m": "middle",
+      "z": "last"
+    }
+  },
+  "zebra": [
+    3,
+    "two",
+    1.5,
+    true,
+    null,
+    {
+      "a": 1,
+      "b": 2
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+// Test messages for the dynamic codec: UTF-8 validation turned off for a
+// whole file.
+edition = "2023";
+
+package codec.ednone;
+
+option features.utf8_validation = NONE;
+
+message Text {
+  string s = 1;
+  repeated string list = 2;
+}

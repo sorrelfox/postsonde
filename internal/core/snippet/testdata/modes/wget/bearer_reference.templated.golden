@@ -1,0 +1,4 @@
+wget https://api.test/me \
+  --header 'Authorization: Bearer {{token}}' \
+  --max-redirect 10 \
+  -O -

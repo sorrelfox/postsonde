@@ -1,0 +1,4 @@
+wget https://api.test/items \
+  --method HEAD \
+  --max-redirect 10 \
+  -O -

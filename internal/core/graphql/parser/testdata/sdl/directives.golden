@@ -1,0 +1,57 @@
+# source
+directive @example on FIELD_DEFINITION | ARGUMENT_DEFINITION
+directive @delegateField(name: String!) repeatable on OBJECT | INTERFACE
+directive @pipe on
+  | FIELD
+  | FRAGMENT_SPREAD
+  | INLINE_FRAGMENT
+"Documented" directive @d(
+  "an argument" a: Int = 1 @deprecated
+) on QUERY | MUTATION | SUBSCRIPTION | FRAGMENT_DEFINITION | VARIABLE_DEFINITION | SCHEMA | SCALAR | OBJECT | UNION | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+# tree
+Document [0:444]
+  Definitions[0]: DirectiveDefinition [0:60] Keyword=0 At=10 Repeatable=-1 On=19
+    Name: Name [11:18] Value="example"
+    Locations[0]: Name [22:38] Value="FIELD_DEFINITION"
+    Locations[1]: Name [41:60] Value="ARGUMENT_DEFINITION"
+  Definitions[1]: DirectiveDefinition [61:133] Keyword=61 At=71 Repeatable=101 On=112
+    Name: Name [72:85] Value="delegateField"
+    Arguments: ArgumentDefinitionList [85:100] LParen=85 RParen=99
+      Arguments[0]: InputValueDefinition [86:99] Colon=90 Equals=-1
+        Name: Name [86:90] Value="name"
+        Type: NonNullType [92:99] Bang=98
+          Type: NamedType [92:98]
+            Name: Name [92:98] Value="String"
+    Locations[0]: Name [115:121] Value="OBJECT"
+    Locations[1]: Name [124:133] Value="INTERFACE"
+  Definitions[2]: DirectiveDefinition [134:202] Keyword=134 At=144 Repeatable=-1 On=150
+    Name: Name [145:149] Value="pipe"
+    Locations[0]: Name [157:162] Value="FIELD"
+    Locations[1]: Name [167:182] Value="FRAGMENT_SPREAD"
+    Locations[2]: Name [187:202] Value="INLINE_FRAGMENT"
+  Definitions[3]: DirectiveDefinition [203:444] Keyword=216 At=226 Repeatable=-1 On=271
+    Description: StringValue [203:215] Block=false Value="Documented"
+    Name: Name [227:228] Value="d"
+    Arguments: ArgumentDefinitionList [228:270] LParen=228 RParen=269
+      Arguments[0]: InputValueDefinition [232:268] Colon=247 Equals=253
+        Description: StringValue [232:245] Block=false Value="an argument"
+        Name: Name [246:247] Value="a"
+        Type: NamedType [249:252]
+          Name: Name [249:252] Value="Int"
+        DefaultValue: IntValue [255:256] Raw="1"
+        Directives[0]: Directive [257:268] At=257
+          Name: Name [258:268] Value="deprecated"
+    Locations[0]: Name [274:279] Value="QUERY"
+    Locations[1]: Name [282:290] Value="MUTATION"
+    Locations[2]: Name [293:305] Value="SUBSCRIPTION"
+    Locations[3]: Name [308:327] Value="FRAGMENT_DEFINITION"
+    Locations[4]: Name [330:349] Value="VARIABLE_DEFINITION"
+    Locations[5]: Name [352:358] Value="SCHEMA"
+    Locations[6]: Name [361:367] Value="SCALAR"
+    Locations[7]: Name [370:376] Value="OBJECT"
+    Locations[8]: Name [379:384] Value="UNION"
+    Locations[9]: Name [387:391] Value="ENUM"
+    Locations[10]: Name [394:404] Value="ENUM_VALUE"
+    Locations[11]: Name [407:419] Value="INPUT_OBJECT"
+    Locations[12]: Name [422:444] Value="INPUT_FIELD_DEFINITION"
+# errors

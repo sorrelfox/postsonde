@@ -1,0 +1,85 @@
+# tree
+File [0:859] Name="editions.proto"
+  Decls[0]: Syntax [76:93] Leading=" An editions file: features instead of labels, identifier reserved names.\n" Edition=true
+    Value: StringLit [86:92] Value="2023"
+  Decls[1]: Package [95:115] Name=[103:114]"shop.orders"
+  Decls[2]: Import [117:153] Kind=option
+    Path: StringLit [131:152] Value="shop/features.proto"
+  Decls[3]: Option [155:197]
+    Name: OptionName [162:185]
+      Parts[0]: OptionNamePart [162:170] Name=[162:170]"features"
+      Parts[1]: OptionNamePart [171:185] Name=[171:185]"field_presence"
+    Value: IdentLit [188:196] Value="IMPLICIT"
+  Decls[4]: Option [198:233]
+    Name: OptionName [205:223]
+      Parts[0]: OptionNamePart [205:213] Name=[205:213]"features"
+      Parts[1]: OptionNamePart [214:223] Name=[214:223]"enum_type"
+    Value: IdentLit [226:232] Value="CLOSED"
+  Decls[5]: Message [235:632] Name=[243:248]"Order" RBrace=631
+    Body[0]: Field [253:304] Type=[253:259]"string" Name=[260:262]"id"
+      Number: IntLit [265:266] Raw="1" Value=1
+      Options: CompactOptions [267:303]
+        Options[0]: Option [268:302]
+          Name: OptionName [268:291]
+            Parts[0]: OptionNamePart [268:276] Name=[268:276]"features"
+            Parts[1]: OptionNamePart [277:291] Name=[277:291]"field_presence"
+          Value: IdentLit [294:302] Value="EXPLICIT"
+    Body[1]: Field [307:381] Label=repeated LabelLoc=[307:315] Type=[316:324]"LineItem" Name=[325:330]"items"
+      Number: IntLit [333:334] Raw="2" Value=2
+      Options: CompactOptions [335:380]
+        Options[0]: Option [336:379]
+          Name: OptionName [336:368]
+            Parts[0]: OptionNamePart [336:344] Name=[336:344]"features"
+            Parts[1]: OptionNamePart [345:368] Name=[345:368]"repeated_field_encoding"
+          Value: IdentLit [371:379] Value="EXPANDED"
+    Body[2]: Field [384:402] Type=[384:390]"Status" Name=[391:397]"status"
+      Number: IntLit [400:401] Raw="3" Value=3
+    Body[3]: Field [405:463] Type=[405:413]"LineItem" Name=[414:418]"gift"
+      Number: IntLit [421:422] Raw="4" Value=4
+      Options: CompactOptions [423:462]
+        Options[0]: Option [424:461]
+          Name: OptionName [424:449]
+            Parts[0]: OptionNamePart [424:432] Name=[424:432]"features"
+            Parts[1]: OptionNamePart [433:449] Name=[433:449]"message_encoding"
+          Value: IdentLit [452:461] Value="DELIMITED"
+    Body[4]: Reserved [467:483]
+      Ranges[0]: Range [476:482]
+        From: IntLit [476:477] Raw="5" Value=5
+        To: IntLit [481:482] Raw="9" Value=9
+    Body[5]: Reserved [486:516]
+      Names[0]: ReservedName [495:507] Value="legacy_total"
+      Names[1]: ReservedName [509:515] Value="coupon"
+    Body[6]: Message [520:630] Name=[528:536]"LineItem" RBrace=629
+      Body[0]: Field [543:558] Type=[543:549]"string" Name=[550:553]"sku"
+        Number: IntLit [556:557] Raw="1" Value=1
+      Body[1]: Field [563:626] Type=[563:568]"int32" Name=[569:577]"quantity"
+        Number: IntLit [580:581] Raw="2" Value=2
+        Options: CompactOptions [582:625]
+          Options[0]: Option [583:624]
+            Name: OptionName [583:606]
+              Parts[0]: OptionNamePart [583:591] Name=[583:591]"features"
+              Parts[1]: OptionNamePart [592:606] Name=[592:606]"field_presence"
+            Value: IdentLit [609:624] Value="LEGACY_REQUIRED"
+  Decls[6]: Enum [634:754] Name=[639:645]"Status" RBrace=753
+    Body[0]: Option [650:685]
+      Name: OptionName [657:675]
+        Parts[0]: OptionNamePart [657:665] Name=[657:665]"features"
+        Parts[1]: OptionNamePart [666:675] Name=[666:675]"enum_type"
+      Value: IdentLit [678:684] Value="CLOSED"
+    Body[1]: EnumValue [688:706] Name=[688:701]"STATUS_PLACED"
+      Number: IntLit [704:705] Raw="1" Value=1
+    Body[2]: EnumValue [709:728] Name=[709:723]"STATUS_SHIPPED"
+      Number: IntLit [726:727] Raw="2" Value=2
+    Body[3]: Reserved [731:752]
+      Names[0]: ReservedName [740:751] Value="STATUS_LOST"
+  Decls[7]: Service [756:858] Name=[764:770]"Orders" RBrace=857
+    Body[0]: RPC [775:856] Name=[779:784]"Place" LBrace=808 RBrace=855
+      Input: RPCType [784:791] Type=[785:790]"Order"
+      Output: RPCType [800:807] Type=[801:806]"Order"
+      Body[0]: Option [814:852]
+        Name: OptionName [821:838]
+          Parts[0]: OptionNamePart [821:838] Name=[821:838]"idempotency_level"
+        Value: IdentLit [841:851] Value="IDEMPOTENT"
+  Comments[0]: Comment [0:75]
+# errors
+# diagnostics

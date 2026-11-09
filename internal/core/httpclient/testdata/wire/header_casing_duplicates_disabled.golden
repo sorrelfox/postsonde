@@ -1,0 +1,10 @@
+GET / HTTP/1.1\r\n
+Host: ADDR\r\n
+ETag: "v1"\r\n
+X-Dup: a\r\n
+X-Dup: b\r\n
+X-MiXeD-CaSe: 2\r\n
+X-Spaces: padded\r\n
+x-dup: c\r\n
+x-lower: 1\r\n
+\r\n

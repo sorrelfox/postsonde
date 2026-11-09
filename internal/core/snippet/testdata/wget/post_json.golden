@@ -1,0 +1,9 @@
+wget https://api.test/items \
+  --method POST \
+  --header 'Content-Type: application/json' \
+  --body-data '{
+  "name": "O'\''Brien",
+  "tags": ["a", "b"]
+}' \
+  --max-redirect 10 \
+  -O -

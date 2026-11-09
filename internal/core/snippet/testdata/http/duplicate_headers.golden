@@ -1,0 +1,7 @@
+GET /me HTTP/1.1
+Accept: text/html
+X-A: 1
+accept: application/json
+Host: example.test
+Cookie: a=1
+cookie: b=2

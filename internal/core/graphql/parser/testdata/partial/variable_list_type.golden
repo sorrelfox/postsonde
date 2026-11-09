@@ -1,0 +1,18 @@
+# source
+query Q($ids: [ID) { a }
+# tree
+Document [0:24]
+  Definitions[0]: OperationDefinition [0:24] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+    VariableDefinitions: VariableDefinitionList [7:18] LParen=7 RParen=17
+      Definitions[0]: VariableDefinition [8:17] Colon=12 Equals=-1
+        Variable: Variable [8:12] Dollar=8
+          Name: Name [9:12] Value="ids"
+        Type: ListType [14:17] LBracket=14 RBracket=-1
+          Type: NamedType [15:17]
+            Name: Name [15:17] Value="ID"
+    SelectionSet: SelectionSet [19:24] LBrace=19 RBrace=23
+      Selections[0]: Field [21:22] Colon=-1
+        Name: Name [21:22] Value="a"
+# errors
+1:15 [14:15] unclosed delimiter: "[" has no matching "]"

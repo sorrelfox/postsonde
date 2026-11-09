@@ -1,0 +1,771 @@
+{
+	"info": {
+		"_postman_id": "4b1c7e0a-2f6d-4f7e-9a51-0c3b8d2e6f11",
+		"name": "Shop API",
+		"description": "The shop's public API.\n\nSet `base_url` in an environment.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1234567"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"description": "Everything about users.",
+			"item": [
+				{
+					"name": "List users",
+					"protocolProfileBehavior": {
+						"followRedirects": false,
+						"maxRedirects": 3
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$randomUUID}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/users?sort=name&limit={{page_size}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "name"
+								},
+								{
+									"key": "limit",
+									"value": "{{page_size}}",
+									"description": "Page size"
+								},
+								{
+									"key": "q",
+									"value": "ada",
+									"disabled": true
+								},
+								{
+									"key": "active",
+									"value": null
+								}
+							]
+						},
+						"description": "Lists users, a page at a time."
+					},
+					"response": [
+						{
+							"name": "Two users",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer live-token-1"
+									}
+								],
+								"url": "{{base_url}}/users"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\"id\": 1, \"name\": \"Ada\"},\n  {\"id\": 2, \"name\": \"Grace\"}\n]"
+						},
+						{
+							"name": "",
+							"status": "Unauthorized",
+							"code": 401,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/problem+json"
+								}
+							],
+							"body": "{\"title\": \"No ```token```\"}"
+						},
+						{
+							"name": "Empty",
+							"code": 204,
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"status is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/:id/orders/:orderId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								":id",
+								"orders",
+								":orderId"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{user_id}}",
+									"description": "The user's ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"now\", Date.now());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "hunter2",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{admin_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{$guid}}\",\n  \"name\": \"{{$randomFirstName}}\",\n  \"code\": \"{{$randomAlphaNumeric}}{{$randomHexadecimal}}\",\n  \"created\": {{$timestamp}},\n  \"lucky\": {{$randomInt}},\n  \"email\": \"{{$randomEmail}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Avatars",
+					"auth": {
+						"type": "apikey",
+						"apikey": [
+							{
+								"key": "value",
+								"value": "{{api_key}}",
+								"type": "string"
+							},
+							{
+								"key": "key",
+								"value": "X-API-Key",
+								"type": "string"
+							}
+						]
+					},
+					"variable": [
+						{
+							"key": "avatar_secret",
+							"value": "s3cr3t-avatar",
+							"type": "secret"
+						},
+						{
+							"key": "max_size",
+							"value": 1048576,
+							"type": "number"
+						}
+					],
+					"item": [
+						{
+							"name": "Upload avatar",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/Users/ada/Pictures/me.png",
+											"contentType": "image/png"
+										},
+										{
+											"key": "caption",
+											"value": "Me at {{$isoTimestamp}}",
+											"type": "text"
+										},
+										{
+											"key": "extra",
+											"type": "file",
+											"src": [
+												"/Users/ada/Pictures/a.png",
+												"/Users/ada/Pictures/b.png"
+											]
+										},
+										{
+											"key": "draft",
+											"value": "true",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/users/{{user_id}}/avatar",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"{{user_id}}",
+										"avatar"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Replace avatar",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "image/png"
+									}
+								],
+								"body": {
+									"mode": "file",
+									"file": {
+										"src": "/Users/ada/Pictures/new.png"
+									}
+								},
+								"url": "{{base_url}}/users/{{user_id}}/avatar"
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{user_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"console.log(\"users folder\");"
+						]
+					}
+				}
+			],
+			"variable": [
+				{
+					"key": "user_id",
+					"value": "42"
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableCookies": true
+			}
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Log in",
+					"protocolProfileBehavior": {
+						"disableUrlEncoding": true,
+						"protocolVersion": "http2",
+						"strictSSL": false,
+						"followOriginalHttpMethod": true,
+						"followAuthorizationHeader": false,
+						"tlsDisabledProtocols": [
+							"TLSv1"
+						],
+						"insecureHTTPParser": true,
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "in",
+									"value": "query",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": "{{api_key}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "api_key",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text",
+									"description": "Never typed here"
+								},
+								{
+									"key": "remember",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Digest login",
+					"request": {
+						"auth": {
+							"type": "digest",
+							"digest": [
+								{
+									"key": "password",
+									"value": "{{digest_password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "realm",
+									"value": "shop",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "MD5",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/admin"
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth token",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "https://auth.shop.example/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "oauth-client-secret-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/me",
+						"proxy": {
+							"host": "proxy.local",
+							"port": 3128
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signed request",
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "secretKey",
+									"value": "aws-secret-2",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": "https://s3.amazonaws.com/shop-assets"
+					},
+					"response": []
+				},
+				{
+					"name": "Request token",
+					"request": {
+						"auth": {
+							"type": "oauth1",
+							"oauth1": [
+								{"key": "consumerKey", "value": "shop-consumer", "type": "string"},
+								{"key": "consumerSecret", "value": "oauth1-consumer-secret-5", "type": "string"},
+								{"key": "token", "value": "", "type": "string"},
+								{"key": "tokenSecret", "value": "{{oauth_token_secret}}", "type": "string"},
+								{"key": "signatureMethod", "value": "HMAC-SHA256", "type": "string"},
+								{"key": "timestamp", "value": "", "type": "string"},
+								{"key": "nonce", "value": "", "type": "string"},
+								{"key": "version", "value": "1.0", "type": "string"},
+								{"key": "realm", "value": "shop", "type": "string"},
+								{"key": "callback", "value": "https://app.shop.example/cb", "type": "string"},
+								{"key": "verifier", "value": "", "type": "string"},
+								{"key": "addParamsToHeader", "value": false, "type": "boolean"},
+								{"key": "addEmptyParamsToSign", "value": false, "type": "boolean"},
+								{"key": "includeBodyHash", "value": false, "type": "boolean"}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{"key": "scope", "value": "orders", "type": "text"}
+							]
+						},
+						"url": "{{base_url}}/oauth/request_token"
+					},
+					"response": []
+				},
+				{
+					"name": "Partner orders",
+					"request": {
+						"auth": {
+							"type": "oauth1",
+							"oauth1": [
+								{"key": "consumerKey", "value": "{{partner_key}}", "type": "string"},
+								{"key": "consumerSecret", "value": "unused-with-rsa", "type": "string"},
+								{"key": "privateKey", "value": "-----BEGIN PRIVATE KEY-----\nrsa-key-6\n-----END PRIVATE KEY-----", "type": "string"},
+								{"key": "token", "value": "partner-token", "type": "string"},
+								{"key": "tokenSecret", "value": "oauth1-token-secret-7", "type": "string"},
+								{"key": "signatureMethod", "value": "RSA-SHA1", "type": "string"},
+								{"key": "timestamp", "value": "1700000000", "type": "string"},
+								{"key": "nonce", "value": "fixed-nonce", "type": "string"},
+								{"key": "version", "value": "", "type": "string"},
+								{"key": "addParamsToHeader", "value": true, "type": "boolean"},
+								{"key": "addEmptyParamsToSign", "value": true, "type": "boolean"},
+								{"key": "includeBodyHash", "value": true, "type": "boolean"}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"status\": \"shipped\"}",
+							"options": {"raw": {"language": "json"}}
+						},
+						"url": "{{base_url}}/partner/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "Legacy partner",
+					"request": {
+						"auth": {
+							"type": "oauth1",
+							"oauth1": [
+								{"key": "consumerKey", "value": "legacy", "type": "string"},
+								{"key": "privateKey", "value": "{{legacy_key}}", "type": "string"},
+								{"key": "signatureMethod", "value": "RSA-SHA512", "type": "string"},
+								{"key": "version", "value": "1.0a", "type": "string"},
+								{"key": "disableHeaderEncoding", "value": true, "type": "boolean"}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": "{{base_url}}/legacy"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Search($q: String!) {\n  products(q: $q) { id name }\n}",
+						"variables": "{\n  \"q\": \"{{query}}\"\n}"
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/graphql",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product by GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{ product(id: \"{{product_id}}\") { name } }",
+						"variables": ""
+					}
+				},
+				"url": "{{base_url}}/graphql"
+			},
+			"response": []
+		},
+		{
+			"name": "Patch product (GraphQL)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation { touch }"
+					}
+				},
+				"url": "{{base_url}}/graphql"
+			},
+			"response": []
+		},
+		{
+			"name": "Run script",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "console.log('hi')",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": "{{base_url}}/scripts"
+			},
+			"response": []
+		},
+		{
+			"name": "Place order (XML)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<order><sku>{{sku}}</sku></order>"
+				},
+				"url": "{{base_url}}/orders#top"
+			},
+			"response": []
+		},
+		{
+			"name": "Health",
+			"request": "{{base_url}}/health"
+		},
+		{
+			"name": "Muted body",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "ignored",
+					"disabled": true
+				},
+				"url": "{{base_url}}/muted"
+			},
+			"response": []
+		},
+		{
+			"name": "Charge card",
+			"variable": [
+				{
+					"key": "amount",
+					"value": "100"
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{vault:stripe-key}}"
+					}
+				],
+				"url": "https://api.stripe.example/v1/charges"
+			},
+			"response": []
+		},
+		{
+			"name": "Placeholder"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.request.headers.add({key: 'X-Client', value: 'postman'});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test('fast', () => pm.expect(pm.response.responseTime).to.be.below(500));"
+				]
+			},
+			"disabled": true
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://shop.example/api",
+			"type": "string"
+		},
+		{
+			"key": "page_size",
+			"value": 20,
+			"type": "number",
+			"description": "Items per page"
+		},
+		{
+			"key": "api_key",
+			"value": "coll-api-key-5",
+			"type": "secret"
+		},
+		{
+			"key": "legacy",
+			"value": "x",
+			"disabled": true
+		}
+	]
+}

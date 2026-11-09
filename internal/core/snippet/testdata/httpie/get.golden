@@ -1,0 +1,2 @@
+http --follow --max-redirects=10 \
+  GET 'https://api.test/items?page=2&q=a%20b'

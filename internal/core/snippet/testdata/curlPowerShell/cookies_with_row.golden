@@ -1,0 +1,3 @@
+curl.exe https://api.test/me `
+  -H 'Cookie: theme=light; sid=abc' `
+  -L --max-redirs 10

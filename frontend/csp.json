@@ -1,0 +1,17 @@
+{
+  "$comment": "The UI's Content Security Policy (PRV-03), one directive per entry. The Go asset server sends it as a response header (frontend/assets.go, internal/app/csp.go) and the production build writes it into dist/index.html as a <meta> tag (vite.config.ts). Why each directive: docs/privacy.md.",
+  "directives": [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self' data:",
+    "connect-src 'self'",
+    "media-src 'self' data: blob:",
+    "worker-src 'self'",
+    "object-src 'none'",
+    "frame-src about:",
+    "base-uri 'none'",
+    "form-action 'none'"
+  ]
+}

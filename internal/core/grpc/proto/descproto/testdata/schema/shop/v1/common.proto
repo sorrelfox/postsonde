@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package shop.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Money {
+  string currency_code = 1;
+  int64 units = 2;
+  int32 nanos = 3;
+}
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_OPEN = 1;
+  STATUS_CLOSED = 2;
+  STATUS_DONE = 2 [deprecated = true];
+  option allow_alias = true;
+  reserved 10 to 20, 99;
+  reserved "STATUS_LOST";
+}
+
+message Audit {
+  google.protobuf.Timestamp created_at = 1;
+  string created_by = 2 [json_name = "author"];
+}

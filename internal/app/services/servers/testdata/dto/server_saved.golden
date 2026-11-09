@@ -1,0 +1,31 @@
+{
+  "id": "srv_00000000000000ee",
+  "type": "tcp",
+  "typeLabel": "TCP",
+  "name": "TCP",
+  "host": "",
+  "port": 7001,
+  "allowLan": false,
+  "tls": null,
+  "certificate": null,
+  "state": "stopped",
+  "addresses": [],
+  "boundPort": 0,
+  "scope": "",
+  "warning": null,
+  "startedAt": "",
+  "stoppedAt": "",
+  "error": null,
+  "events": 0,
+  "config": {
+    "mockHttp": null,
+    "webSocket": null,
+    "webhook": null
+  },
+  "diagnostics": [],
+  "folder": {
+    "workspaceId": "ws_7c1e4b9a2f3d5e60",
+    "folderId": "fld_2c7e5a91d0b3f846",
+    "folderName": "Chat"
+  }
+}

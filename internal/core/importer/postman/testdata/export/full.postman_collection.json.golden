@@ -1,0 +1,1506 @@
+{
+	"info": {
+		"_postman_id": "ca4fca6b-aa8f-518d-a389-d83045c27595",
+		"name": "Shop API",
+		"description": "The shop's API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"description": "Accounts.",
+			"item": [
+				{
+					"name": "List users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Debug",
+								"value": "1",
+								"description": "Tracing",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users?page=1&flag&limit=10#top",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "From 1"
+								},
+								{
+									"key": "flag",
+									"value": null
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "sort",
+									"value": "name",
+									"disabled": true
+								}
+							],
+							"hash": "top"
+						},
+						"description": "Lists them."
+					},
+					"response": [
+						{
+							"name": "Two users",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://shop.example.com/v1/users?page=1",
+									"protocol": "https",
+									"host": [
+										"shop",
+										"example",
+										"com"
+									],
+									"path": [
+										"v1",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "[{\"id\":1},{\"id\":2}]"
+						},
+						{
+							"name": "Gone",
+							"status": "Gone",
+							"code": 410,
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get user",
+					"protocolProfileBehavior": {
+						"disableUrlEncoding": true,
+						"followRedirects": false,
+						"followOriginalHttpMethod": true,
+						"followAuthorizationHeader": true,
+						"maxRedirects": 3,
+						"strictSSL": false,
+						"disableCookies": true,
+						"protocolVersion": "http2"
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{userId}}",
+									"description": "The user"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "key",
+									"value": "X-API-Key",
+									"type": "string"
+								},
+								{
+									"key": "value",
+									"value": "{{apiKey}}",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{$randomFirstName}}\",\n  \"id\": \"{{$guid}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-Key",
+										"value": "••••••",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"name\":\"{{literally}}\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": "{\"id\":\"u1\"}"
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Import",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "meta",
+											"value": "{\"dry\": true}",
+											"type": "text",
+											"contentType": "application/json",
+											"description": "Options"
+										},
+										{
+											"key": "file",
+											"src": "data/users.csv",
+											"type": "file"
+										},
+										{
+											"key": "note",
+											"value": "later",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/import",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"import"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "file",
+									"file": {
+										"src": "/tmp/blob.bin"
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/blob",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"blob"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Log in",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "user",
+											"value": "{{user}}",
+											"type": "text"
+										},
+										{
+											"key": "remember",
+											"value": "1",
+											"type": "text",
+											"description": "Stay logged in",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "digest",
+						"digest": [
+							{
+								"key": "username",
+								"value": "admin",
+								"type": "string"
+							},
+							{
+								"key": "password",
+								"value": "{{adminPassword}}",
+								"type": "string"
+							}
+						]
+					}
+				},
+				{
+					"name": "Empty",
+					"item": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{user}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{pass}}",
+						"type": "string"
+					}
+				]
+			},
+			"variable": [
+				{
+					"key": "userId",
+					"value": "42",
+					"type": "string"
+				}
+			]
+		},
+		{
+			"name": "Search",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{gqlToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Client",
+						"value": "postsonde",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query Search($q: String!) {\n  search(q: $q) { id }\n}",
+						"variables": "{\"q\": \"shoe\"}"
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/graphql",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Schema over GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{ __typename }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://api.example.com/graphql",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signed",
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA256",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "ck",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{consumerSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "token",
+							"value": "at",
+							"type": "string"
+						},
+						{
+							"key": "tokenSecret",
+							"value": "{{tokenSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "timestamp",
+							"value": "1700000000",
+							"type": "string"
+						},
+						{
+							"key": "nonce",
+							"value": "n0nce",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "realm",
+							"value": "photos",
+							"type": "string"
+						},
+						{
+							"key": "callback",
+							"value": "https://cb.example.com",
+							"type": "string"
+						},
+						{
+							"key": "verifier",
+							"value": "v",
+							"type": "string"
+						},
+						{
+							"key": "includeBodyHash",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/photos?size=original",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"photos"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "original"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signed form",
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "signatureMethod",
+							"value": "HMAC-SHA1",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "ck",
+							"type": "string"
+						},
+						{
+							"key": "consumerSecret",
+							"value": "{{cs}}",
+							"type": "string"
+						},
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "tokenSecret",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "timestamp",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "nonce",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "1.0",
+							"type": "string"
+						},
+						{
+							"key": "realm",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "callback",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "verifier",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "includeBodyHash",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "status",
+							"value": "hi",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.example.com/status",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signed with RSA",
+			"request": {
+				"auth": {
+					"type": "oauth1",
+					"oauth1": [
+						{
+							"key": "signatureMethod",
+							"value": "RSA-SHA1",
+							"type": "string"
+						},
+						{
+							"key": "consumerKey",
+							"value": "ck",
+							"type": "string"
+						},
+						{
+							"key": "privateKey",
+							"value": "{{privateKey}}",
+							"type": "string"
+						},
+						{
+							"key": "token",
+							"value": "at",
+							"type": "string"
+						},
+						{
+							"key": "timestamp",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "nonce",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "version",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "realm",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "callback",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "verifier",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "includeBodyHash",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addParamsToHeader",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "addEmptyParamsToSign",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/rsa",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"rsa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JWT",
+			"request": {
+				"auth": {
+					"type": "jwt",
+					"jwt": [
+						{
+							"key": "algorithm",
+							"value": "HS384",
+							"type": "string"
+						},
+						{
+							"key": "secret",
+							"value": "{{jwtSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "isSecretBase64Encoded",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "payload",
+							"value": "{\"sub\": \"{{userId}}\", \"iat\": {{$timestamp}}}",
+							"type": "string"
+						},
+						{
+							"key": "header",
+							"value": "{\"kid\": \"k1\"}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "headerPrefix",
+							"value": "JWT",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/me",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JWT in query",
+			"request": {
+				"auth": {
+					"type": "jwt",
+					"jwt": [
+						{
+							"key": "algorithm",
+							"value": "RS256",
+							"type": "string"
+						},
+						{
+							"key": "privateKey",
+							"value": "{{pem}}",
+							"type": "string"
+						},
+						{
+							"key": "payload",
+							"value": "{}",
+							"type": "string"
+						},
+						{
+							"key": "header",
+							"value": "{}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "queryParam",
+							"type": "string"
+						},
+						{
+							"key": "queryParamKey",
+							"value": "tok",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/feed",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"feed"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AWS",
+			"request": {
+				"auth": {
+					"type": "awsv4",
+					"awsv4": [
+						{
+							"key": "accessKey",
+							"value": "AKIDEXAMPLE",
+							"type": "string"
+						},
+						{
+							"key": "secretKey",
+							"value": "{{awsSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "region",
+							"value": "us-east-1",
+							"type": "string"
+						},
+						{
+							"key": "service",
+							"value": "iam",
+							"type": "string"
+						},
+						{
+							"key": "sessionToken",
+							"value": "{{awsSession}}",
+							"type": "string"
+						},
+						{
+							"key": "addAuthDataToQuery",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://iam.amazonaws.com/?Action=ListUsers",
+					"protocol": "https",
+					"host": [
+						"iam",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "Action",
+							"value": "ListUsers"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AWS presigned",
+			"request": {
+				"auth": {
+					"type": "awsv4",
+					"awsv4": [
+						{
+							"key": "accessKey",
+							"value": "{{awsKey}}",
+							"type": "string"
+						},
+						{
+							"key": "secretKey",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "region",
+							"value": "eu-west-1",
+							"type": "string"
+						},
+						{
+							"key": "service",
+							"value": "s3",
+							"type": "string"
+						},
+						{
+							"key": "sessionToken",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "addAuthDataToQuery",
+							"value": true,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://bucket.s3.amazonaws.com/key",
+					"protocol": "https",
+					"host": [
+						"bucket",
+						"s3",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"key"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hawk",
+			"request": {
+				"auth": {
+					"type": "hawk",
+					"hawk": [
+						{
+							"key": "authId",
+							"value": "dh37fgj492je",
+							"type": "string"
+						},
+						{
+							"key": "authKey",
+							"value": "{{hawkKey}}",
+							"type": "string"
+						},
+						{
+							"key": "algorithm",
+							"value": "sha1",
+							"type": "string"
+						},
+						{
+							"key": "extraData",
+							"value": "some-app-data",
+							"type": "string"
+						},
+						{
+							"key": "app",
+							"value": "app1",
+							"type": "string"
+						},
+						{
+							"key": "delegation",
+							"value": "dlg1",
+							"type": "string"
+						},
+						{
+							"key": "includePayloadHash",
+							"value": true,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "hello",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hawk.example.com/resource",
+					"protocol": "https",
+					"host": [
+						"hawk",
+						"example",
+						"com"
+					],
+					"path": [
+						"resource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OAuth 2.0",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{idp}}/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "shop",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{clientSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "orders:read",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "queryParams",
+							"type": "string"
+						},
+						{
+							"key": "tokenRequestParams",
+							"value": [
+								{
+									"key": "audience",
+									"value": "https://api.example.com",
+									"enabled": true,
+									"send_as": "request_body"
+								},
+								{
+									"key": "tenant",
+									"value": "t1",
+									"enabled": true,
+									"send_as": "request_body"
+								},
+								{
+									"key": "debug",
+									"value": "1",
+									"enabled": false,
+									"send_as": "request_body"
+								}
+							],
+							"type": "any"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/orders",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OAuth 2.0 sign-in",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code_with_pkce",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{idp}}/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "desk",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{idp}}/authorize",
+							"type": "string"
+						},
+						{
+							"key": "challengeAlgorithm",
+							"value": "S256",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://127.0.0.1:8765/callback",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "headerPrefix",
+							"value": "Bearer",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/me",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OAuth 2.0 password",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "password_credentials",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{idp}}/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "legacy",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{user}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "headerPrefix",
+							"value": "Bearer",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/me",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OAuth 2.0 implicit",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "implicit",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "spa",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{idp}}/authorize",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:9000/cb",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "headerPrefix",
+							"value": "Bearer",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.example.com/me",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "XML",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<a>{{x}}</a>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.example.com/xml",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"xml"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "HTML",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<p>hi</p>",
+					"options": {
+						"raw": {
+							"language": "html"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.example.com/html",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"html"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Text",
+			"request": {
+				"method": "PURGE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "all",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://[::1]:8443/cache/{{key}}",
+					"protocol": "https",
+					"host": [
+						"[::1]"
+					],
+					"port": "8443",
+					"path": [
+						"cache",
+						"{{key}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://shop.example.com/v1",
+			"type": "string"
+		},
+		{
+			"key": "apiKey",
+			"value": "",
+			"type": "secret"
+		},
+		{
+			"key": "old",
+			"value": "x",
+			"type": "string",
+			"description": "No longer used",
+			"disabled": true
+		}
+	]
+}

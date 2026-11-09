@@ -1,0 +1,26 @@
+type: spec.insomnia.rest/5.0
+name: Pets design
+meta:
+  id: wrk_design
+collection:
+  - url: https://pets.example/pets
+    name: List pets
+    meta:
+      id: req_pets
+    method: GET
+spec:
+  contents:
+    openapi: 3.0.0
+    info:
+      title: Pets
+      version: 1.0.0
+    paths: {}
+  meta:
+    id: spc_pets
+testSuites:
+  - name: Pets suite
+    meta:
+      id: uts_pets
+    tests:
+      - name: Lists pets
+        code: "const r = await insomnia.send();"

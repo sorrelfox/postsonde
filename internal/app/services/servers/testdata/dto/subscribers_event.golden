@@ -1,0 +1,17 @@
+{
+  "serverId": "srv_00000000000000f2",
+  "subscribers": [
+    {
+      "id": "2",
+      "connId": 6,
+      "peer": "127.0.0.1:53127",
+      "target": "/events",
+      "connectedAt": "2026-09-16T08:00:00Z",
+      "lastEventId": "7",
+      "origin": "http://localhost:3000",
+      "userAgent": "Mozilla/5.0",
+      "eventsSent": 3,
+      "bytesSent": 90
+    }
+  ]
+}

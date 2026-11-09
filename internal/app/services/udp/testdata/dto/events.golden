@@ -1,0 +1,104 @@
+[
+  {
+    "connId": "udp_0123456789abcdef",
+    "requestId": "req_dns",
+    "address": "dns.test:53",
+    "seq": 1,
+    "state": "open",
+    "at": "2026-10-26T10:00:00.123Z",
+    "localAddr": "127.0.0.1:50000",
+    "remoteAddr": "10.0.0.1:40000",
+    "via": "socks5h://proxy.lan:1080",
+    "proxy": {
+      "scheme": "socks5h",
+      "version": "SOCKS5",
+      "proxy": "proxy.lan:1080",
+      "proxyAddr": "10.0.0.1:1080",
+      "command": "UDP ASSOCIATE",
+      "relayAddr": "10.0.0.1:40000",
+      "auth": "username/password",
+      "remoteDns": true,
+      "reply": 0,
+      "replyText": "succeeded",
+      "handshakeMs": 1.5
+    },
+    "connected": false,
+    "maxPayload": 65490,
+    "close": null,
+    "error": null
+  },
+  {
+    "connId": "udp_0123456789abcdef",
+    "requestId": "req_dns",
+    "seq": 2,
+    "datagrams": [
+      {
+        "direction": "sent",
+        "at": "2026-10-26T10:00:00.123Z",
+        "data": "cGluZw==",
+        "size": 4,
+        "truncated": false,
+        "peer": "dns.test:53",
+        "error": null
+      },
+      {
+        "direction": "received",
+        "at": "2026-10-26T10:00:00.123Z",
+        "data": "AP8=",
+        "size": 2,
+        "truncated": false,
+        "peer": "10.0.0.53:53",
+        "error": null
+      },
+      {
+        "direction": "note",
+        "at": "2026-10-26T10:00:00.123Z",
+        "data": "",
+        "size": 0,
+        "truncated": false,
+        "peer": "",
+        "error": {
+          "kind": "protocol",
+          "code": "netx.socks_udp_fragment_dropped",
+          "message": "A fragmented datagram from the SOCKS relay was dropped.",
+          "hint": "",
+          "details": {},
+          "causes": []
+        }
+      },
+      {
+        "direction": "received",
+        "at": "2026-10-26T10:00:00.123Z",
+        "data": "Y3V0",
+        "size": 1400,
+        "truncated": true,
+        "peer": "10.0.0.53:53",
+        "error": null
+      }
+    ]
+  },
+  {
+    "connId": "udp_0123456789abcdef",
+    "requestId": "req_dns",
+    "address": "dns.test:53",
+    "seq": 3,
+    "state": "closed",
+    "at": "2026-10-26T10:00:01.623Z",
+    "localAddr": "",
+    "remoteAddr": "",
+    "via": "",
+    "proxy": null,
+    "connected": false,
+    "maxPayload": 0,
+    "close": {
+      "initiatedBy": "local",
+      "bytesSent": 4,
+      "bytesReceived": 1402,
+      "datagramsSent": 1,
+      "datagramsReceived": 2,
+      "notes": 1,
+      "durationMs": 1500
+    },
+    "error": null
+  }
+]

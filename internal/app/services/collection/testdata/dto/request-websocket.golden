@@ -1,0 +1,118 @@
+{
+  "id": "req_ws",
+  "kind": "websocket",
+  "name": "Feed",
+  "description": "",
+  "method": "",
+  "url": "ws://localhost:8080/feed?room=lobby",
+  "params": [
+    {
+      "name": "room",
+      "value": "lobby",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    },
+    {
+      "name": "debug",
+      "value": "1",
+      "description": "",
+      "enabled": false,
+      "extra": ""
+    }
+  ],
+  "pathParams": [],
+  "headers": [
+    {
+      "name": "X-Client",
+      "value": "postsonde",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    }
+  ],
+  "body": {
+    "mode": "",
+    "type": "",
+    "text": "",
+    "fields": [],
+    "parts": [],
+    "path": "",
+    "contentType": "",
+    "extra": ""
+  },
+  "bodyExamples": [],
+  "query": "",
+  "variables": "",
+  "operationName": "",
+  "connectionParams": "",
+  "schemaFile": "",
+  "address": "",
+  "sendMode": "",
+  "lineEnding": "",
+  "message": "{\"hello\":1}",
+  "subprotocols": [
+    "chat.v1",
+    "chat.v2"
+  ],
+  "messageFormat": "json",
+  "savedMessages": [
+    {
+      "name": "Join",
+      "text": "{\"join\":\"{{room}}\"}",
+      "format": "json",
+      "extra": ""
+    },
+    {
+      "name": "Bye",
+      "text": "bye",
+      "format": "text",
+      "extra": "{\"x-color\":\"red\"}"
+    }
+  ],
+  "service": "",
+  "proto": {
+    "files": [],
+    "importPaths": [],
+    "inherit": false,
+    "extra": ""
+  },
+  "metadata": [],
+  "auth": {
+    "type": "inherit",
+    "username": "",
+    "password": "",
+    "prefix": null,
+    "token": "",
+    "key": "",
+    "value": "",
+    "in": "",
+    "disabled": false,
+    "localSecrets": [],
+    "extra": ""
+  },
+  "settings": {
+    "timeoutMs": null,
+    "followRedirects": null,
+    "maxRedirects": null,
+    "followOriginalMethod": null,
+    "forwardAuthorization": null,
+    "verifyTls": null,
+    "connectTimeoutMs": 4000,
+    "urlEncoding": "",
+    "httpVersion": "",
+    "sendCookies": false,
+    "storeCookies": null,
+    "tls": null,
+    "deadlineMs": null,
+    "pingIntervalMs": 20000,
+    "pongTimeoutMs": 0,
+    "autoReconnect": true,
+    "reconnectMaxAttempts": 0,
+    "reconnectDelayMs": 250,
+    "reconnectMaxDelayMs": 8000,
+    "extra": ""
+  },
+  "extra": "{\"x-note\":\"kept\"}",
+  "version": 1
+}

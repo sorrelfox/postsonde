@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package shop.v1;
+
+// Re-exported: files importing common.proto can use google.type.Money.
+import public "google/type/money.proto";
+
+message Address {
+  repeated string lines = 1;
+  string country = 2;
+}
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  SHIPPED = 2;
+}

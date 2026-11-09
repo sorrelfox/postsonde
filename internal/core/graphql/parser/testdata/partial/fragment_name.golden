@@ -1,0 +1,8 @@
+# source
+fragment F
+# tree
+Document [0:10]
+  Definitions[0]: FragmentDefinition [0:10] Keyword=0
+    Name: Name [9:10] Value="F"
+# errors
+1:11 [10:10] unexpected token: expected "on", found end of input

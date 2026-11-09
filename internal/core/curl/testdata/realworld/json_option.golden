@@ -1,0 +1,64 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": false,
+  "url": "https://example.com/api",
+  "urls": [
+    {
+      "value": "https://example.com/api",
+      "start": 54,
+      "end": 77
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "accept",
+      "value": "text/plain",
+      "kind": "set",
+      "implied": false,
+      "start": 30,
+      "end": 53
+    },
+    {
+      "name": "Content-Type",
+      "value": "application/json",
+      "kind": "set",
+      "implied": true,
+      "start": 0,
+      "end": 0
+    }
+  ],
+  "data": [
+    {
+      "kind": "json",
+      "option": "--json",
+      "value": "{\"tool\":\"curl\"}",
+      "name": "",
+      "file": "",
+      "start": 5,
+      "end": 29
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

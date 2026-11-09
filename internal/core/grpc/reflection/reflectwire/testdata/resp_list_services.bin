@@ -1,0 +1,7 @@
+
+localhost:50051
+localhost:50051:*2?
+
+shop.v1.OrderService
+%
+#grpc.reflection.v1.ServerReflection

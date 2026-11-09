@@ -1,0 +1,45 @@
+{
+  "name": "issues",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/repos/OWNER/REPO/issues",
+    "headers": [
+      {
+        "name": "Accept",
+        "value": "application/vnd.github+json"
+      },
+      {
+        "name": "Authorization",
+        "value": "Bearer \u003cYOUR-TOKEN\u003e"
+      },
+      {
+        "name": "X-GitHub-Api-Version",
+        "value": "2022-11-28"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"title\":\"Found a bug\",\"body\":\"I'm having a problem with this.\",\"labels\":[\"bug\"]}"
+    },
+    "auth": {
+      "type": "inherit"
+    },
+    "settings": {
+      "followRedirects": true
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.body_type",
+      "severity": "info",
+      "start": 207,
+      "end": 297,
+      "message": "The body is JSON but has no Content-Type header; it is imported as JSON, where curl would send it as a form."
+    }
+  ]
+}

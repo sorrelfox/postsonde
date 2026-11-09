@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_5b8e1d3c9f07a246",
+  "name": "Products offline",
+  "url": "{{baseUrl}}/graphql",
+  "query": "{\n  products {\n    id\n  }\n}",
+  "schemaFile": "schemas/catalogue.graphql",
+  "auth": {
+    "type": "inherit"
+  }
+}

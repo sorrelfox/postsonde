@@ -1,0 +1,93 @@
+{
+  "id": "srv_00000000000000aa",
+  "type": "mock_http",
+  "typeLabel": "Mock HTTP",
+  "name": "Mock HTTP",
+  "host": "",
+  "port": 3000,
+  "allowLan": false,
+  "tls": null,
+  "certificate": null,
+  "state": "stopped",
+  "addresses": [],
+  "boundPort": 0,
+  "scope": "",
+  "warning": null,
+  "startedAt": "",
+  "stoppedAt": "",
+  "error": null,
+  "events": 0,
+  "config": {
+    "mockHttp": {
+      "routes": [
+        {
+          "id": "rt_user",
+          "enabled": true,
+          "method": "GET",
+          "path": "/users/:id",
+          "status": 200,
+          "headers": [
+            {
+              "enabled": true,
+              "name": "X-Mock",
+              "value": "yes"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\"id\": 1}"
+          },
+          "delay": {
+            "mode": "random",
+            "ms": 0,
+            "minMs": 100,
+            "maxMs": 250
+          },
+          "responses": [],
+          "templated": false
+        },
+        {
+          "id": "rt_bad",
+          "enabled": true,
+          "method": "POST",
+          "path": "/users/{id",
+          "status": 201,
+          "headers": [],
+          "body": {
+            "mode": "none",
+            "type": "",
+            "text": ""
+          },
+          "delay": {
+            "mode": "none",
+            "ms": 0,
+            "minMs": 0,
+            "maxMs": 0
+          },
+          "responses": [],
+          "templated": false
+        }
+      ],
+      "strictTrailingSlash": true,
+      "caseInsensitive": false
+    },
+    "webSocket": null,
+    "webhook": null
+  },
+  "diagnostics": [
+    {
+      "code": "mockroute.invalid_segment",
+      "routeIndex": 1,
+      "routeId": "rt_bad",
+      "field": "pattern",
+      "start": 7,
+      "end": 10,
+      "responseIndex": -1,
+      "headerIndex": -1,
+      "ruleIndex": -1,
+      "message": "A parameter in braces must fill the whole segment and end with }, for example {id}."
+    }
+  ],
+  "folder": null
+}

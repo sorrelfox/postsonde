@@ -1,0 +1,7 @@
+http --follow --max-redirects=10 \
+  --raw '{"user":"ann","token":"••••••"}' \
+  POST 'https://api.test/users/7?q=a%20b&t=••••••' \
+  X-User:ann \
+  'X-Token:••••••' \
+  X-Uuid:<uuid> \
+  Content-Type:application/json

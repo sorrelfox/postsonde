@@ -1,0 +1,81 @@
+.statusBar {
+  height: 26px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: 0 var(--space-7);
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  background: var(--bg0);
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  white-space: nowrap;
+}
+
+.group {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--ok);
+}
+
+/* Auto-save state (AutoSaveStatus) */
+.dotBusy {
+  background: var(--warn);
+}
+
+.dotBad {
+  background: var(--bad);
+}
+
+.statusButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.statusButton:hover {
+  color: var(--text2);
+}
+
+.statusButton[aria-expanded] {
+  color: var(--bad);
+}
+
+.statusButton:focus-visible {
+  border-radius: var(--radius-xs);
+}
+
+.details {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text2);
+  user-select: text;
+}
+
+.version {
+  font-family: var(--font-mono);
+}

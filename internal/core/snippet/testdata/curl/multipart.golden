@@ -1,0 +1,7 @@
+curl https://api.test/upload \
+  --form-string 'title=a;b,c "q"' \
+  -F 'meta="{\"k\":1}";type=application/json' \
+  --form-string at=@literal \
+  -F 'file=@<root>/data.json;type=application/json' \
+  -F 'odd=@"<root>/odd name;1.txt";type=text/x-odd' \
+  -L --max-redirs 10

@@ -1,0 +1,42 @@
+# Local-only config
+.mcp.json
+appname.txt
+.claude/settings.local.json
+
+# OS noise
+.DS_Store
+
+# Go
+/bin/
+/dist/
+/postsonde
+*.test
+*.out
+*.prof
+
+# Frontend (Wails)
+frontend/node_modules/
+# Vite build output. The placeholder keeps `//go:embed all:dist` compiling
+# on a fresh checkout (see frontend/assets.go).
+frontend/dist/*
+!frontend/dist/.gitkeep
+# frontend/bindings/ (generated TypeScript bindings) is committed on purpose,
+# so tsc and CI work without the Wails CLI; see docs/bindings.md.
+
+# CI caches (GOMODCACHE, GOCACHE, npm), kept in the project dir so the CI
+# jobs can cache them; see docs/ci.md.
+/.cache/
+/.npm/
+
+# Wails / Task build by-products
+.task/
+*.syso
+build/linux/appimage/build/
+build/linux/appimage/postsonde
+build/linux/appimage/postsonde.png
+build/linux/postsonde.desktop
+build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
+
+# The Socket.IO interop packages install outside the repo (scripts/sio-interop.sh)
+scripts/sio-interop/*/node_modules/
+/.idea/

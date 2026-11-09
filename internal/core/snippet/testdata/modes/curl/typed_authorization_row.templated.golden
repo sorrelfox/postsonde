@@ -1,0 +1,4 @@
+curl https://api.test/me \
+  -H 'Authorization: Bearer ••••••' \
+  -H 'Proxy-Authorization: Basic {{token}}' \
+  -L --max-redirs 10

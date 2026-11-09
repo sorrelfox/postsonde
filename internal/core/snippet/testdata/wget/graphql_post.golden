@@ -1,0 +1,7 @@
+wget https://api.test/graphql \
+  --method POST \
+  --header 'Accept: application/graphql-response+json, application/json;q=0.9' \
+  --header 'Content-Type: application/json' \
+  --body-data '{"query":"query Q($id: ID!) {\n  user(id: $id) { name }\n}","variables":{"id":"1"},"operationName":"Q"}' \
+  --max-redirect 10 \
+  -O -

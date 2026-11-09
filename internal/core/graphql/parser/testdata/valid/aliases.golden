@@ -1,0 +1,32 @@
+# source
+{ user(id: 4) { id name smallPic: profilePic(size: 64) bigPic: profilePic(size: 1024) } }
+# tree
+Document [0:89]
+  Definitions[0]: OperationDefinition [0:89] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:89] LBrace=0 RBrace=88
+      Selections[0]: Field [2:87] Colon=-1
+        Name: Name [2:6] Value="user"
+        Arguments: ArgumentList [6:13] LParen=6 RParen=12
+          Arguments[0]: Argument [7:12] Colon=9
+            Name: Name [7:9] Value="id"
+            Value: IntValue [11:12] Raw="4"
+        SelectionSet: SelectionSet [14:87] LBrace=14 RBrace=86
+          Selections[0]: Field [16:18] Colon=-1
+            Name: Name [16:18] Value="id"
+          Selections[1]: Field [19:23] Colon=-1
+            Name: Name [19:23] Value="name"
+          Selections[2]: Field [24:54] Colon=32
+            Alias: Name [24:32] Value="smallPic"
+            Name: Name [34:44] Value="profilePic"
+            Arguments: ArgumentList [44:54] LParen=44 RParen=53
+              Arguments[0]: Argument [45:53] Colon=49
+                Name: Name [45:49] Value="size"
+                Value: IntValue [51:53] Raw="64"
+          Selections[3]: Field [55:85] Colon=61
+            Alias: Name [55:61] Value="bigPic"
+            Name: Name [63:73] Value="profilePic"
+            Arguments: ArgumentList [73:85] LParen=73 RParen=84
+              Arguments[0]: Argument [74:84] Colon=78
+                Name: Name [74:78] Value="size"
+                Value: IntValue [80:84] Raw="1024"
+# errors

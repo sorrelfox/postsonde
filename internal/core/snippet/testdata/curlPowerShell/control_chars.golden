@@ -1,0 +1,4 @@
+curl.exe https://api.test/raw `
+  -H 'Content-Type: text/plain' `
+  --data-raw "line1`r`nline2`u{1}`ttab \ 'q'" `
+  -L --max-redirs 10

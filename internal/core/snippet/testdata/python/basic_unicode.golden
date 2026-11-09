@@ -1,0 +1,12 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "http://api.test/me",
+    auth=("jürgen".encode(), "pässwörd ✓".encode()),
+    verify=False,
+    allow_redirects=False,
+)
+
+print(response.status_code)
+print(response.text)

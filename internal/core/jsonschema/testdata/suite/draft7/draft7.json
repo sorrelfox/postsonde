@@ -1,0 +1,79 @@
+[
+    {
+        "description": "items as an array with additionalItems",
+        "schema": {"$schema": "http://json-schema.org/draft-07/schema#", "items": [{"type": "integer"}, {"type": "string"}], "additionalItems": false},
+        "tests": [
+            {"description": "a full tuple", "data": [1, "a"], "valid": true},
+            {"description": "a wrong type", "data": ["a", "a"], "valid": false},
+            {"description": "an extra item", "data": [1, "a", 2], "valid": false}
+        ]
+    },
+    {
+        "description": "additionalItems with a schema",
+        "schema": {"$schema": "http://json-schema.org/draft-07/schema#", "items": [{}], "additionalItems": {"type": "integer"}},
+        "tests": [
+            {"description": "integers after the tuple", "data": [null, 2, 3], "valid": true},
+            {"description": "a string after the tuple", "data": [null, "x"], "valid": false}
+        ]
+    },
+    {
+        "description": "additionalItems is ignored when items is a schema",
+        "schema": {"$schema": "http://json-schema.org/draft-07/schema#", "items": {}, "additionalItems": false},
+        "tests": [
+            {"description": "any items", "data": [1, 2, 3], "valid": true}
+        ]
+    },
+    {
+        "description": "dependencies with an array and a schema",
+        "schema": {"$schema": "http://json-schema.org/draft-07/schema#", "dependencies": {"bar": ["foo"], "baz": {"required": ["qux"]}}},
+        "tests": [
+            {"description": "neither", "data": {}, "valid": true},
+            {"description": "bar with foo", "data": {"bar": 1, "foo": 1}, "valid": true},
+            {"description": "bar without foo", "data": {"bar": 1}, "valid": false},
+            {"description": "baz with qux", "data": {"baz": 1, "qux": 1}, "valid": true},
+            {"description": "baz without qux", "data": {"baz": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "$ref ignores its siblings in draft-07",
+        "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "definitions": {"reffed": {"type": "array"}},
+            "properties": {"foo": {"$ref": "#/definitions/reffed", "maxItems": 2}}
+        },
+        "tests": [
+            {"description": "maxItems is ignored", "data": {"foo": [1, 2, 3]}, "valid": true},
+            {"description": "the ref still applies", "data": {"foo": "string"}, "valid": false}
+        ]
+    },
+    {
+        "description": "$id with a fragment is an anchor in draft-07",
+        "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [{"$ref": "#foo"}],
+            "definitions": {"A": {"$id": "#foo", "type": "integer"}}
+        },
+        "tests": [
+            {"description": "a match", "data": 1, "valid": true},
+            {"description": "a mismatch", "data": "a", "valid": false}
+        ]
+    },
+    {
+        "description": "if, then and else in draft-07",
+        "schema": {"$schema": "http://json-schema.org/draft-07/schema#", "if": {"type": "string"}, "then": {"minLength": 2}, "else": {"minimum": 0}},
+        "tests": [
+            {"description": "a long string", "data": "ab", "valid": true},
+            {"description": "a short string", "data": "a", "valid": false},
+            {"description": "a positive number", "data": 1, "valid": true},
+            {"description": "a negative number", "data": -1, "valid": false}
+        ]
+    },
+    {
+        "description": "2020-12 keywords are not keywords in draft-07",
+        "schema": {"$schema": "http://json-schema.org/draft-07/schema#", "prefixItems": [{"type": "string"}], "dependentRequired": {"a": ["b"]}, "unevaluatedProperties": false},
+        "tests": [
+            {"description": "all of them are ignored", "data": {"a": 1, "c": 2}, "valid": true},
+            {"description": "prefixItems is ignored", "data": [1], "valid": true}
+        ]
+    }
+]

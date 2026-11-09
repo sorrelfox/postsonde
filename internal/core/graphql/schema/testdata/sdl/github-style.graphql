@@ -1,0 +1,311 @@
+# Hand-authored, modelled on the public GitHub GraphQL API's schema file
+# (names and shapes only; descriptions reworded): Relay connections,
+# interfaces implementing interfaces, custom scalars with @specifiedBy,
+# a @oneOf input, deprecations, mutations with input and payload types,
+# and extensions.
+
+"""
+Represents an object which can take actions on GitHub. Typically a User or Bot.
+"""
+interface Actor {
+  "A URL pointing to the actor's public avatar."
+  avatarUrl(
+    "The size of the resulting square image."
+    size: Int
+  ): URI!
+
+  "The username of the actor."
+  login: String!
+
+  "The HTTP URL for this actor."
+  url: URI!
+}
+
+"An object with an ID."
+interface Node {
+  "ID of the object."
+  id: ID!
+}
+
+"Represents an owner of a Repository."
+interface RepositoryOwner implements Node {
+  avatarUrl(size: Int): URI!
+  id: ID!
+  login: String!
+  repositories(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    "Ordering options for repositories returned from the connection"
+    orderBy: RepositoryOrder = {field: CREATED_AT, direction: ASC}
+    privacy: RepositoryPrivacy
+    isFork: Boolean
+  ): RepositoryConnection!
+  url: URI!
+}
+
+"Entities that can be starred."
+interface Starrable implements Node {
+  id: ID!
+  stargazerCount: Int!
+  viewerHasStarred: Boolean!
+}
+
+"An RFC 3986, RFC 3987, and RFC 6570 (level 4) compliant URI string."
+scalar URI @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3986")
+
+"An ISO-8601 encoded UTC date string."
+scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339")
+
+"A string containing HTML code."
+scalar HTML
+
+"Git SSH string"
+scalar GitSSHRemote
+
+"A user is an individual's account on GitHub that owns repositories and can make new content."
+type User implements Actor & Node & RepositoryOwner {
+  avatarUrl(size: Int): URI!
+  bio: String
+  bioHTML: HTML!
+  company: String
+  createdAt: DateTime!
+  id: ID!
+  login: String!
+  name: String
+  repositories(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: RepositoryOrder = {field: CREATED_AT, direction: ASC}
+    privacy: RepositoryPrivacy
+    isFork: Boolean
+  ): RepositoryConnection!
+  url: URI!
+  "Whether or not this user is a site administrator."
+  isSiteAdmin: Boolean!
+  "The user's public profile location."
+  location: String
+  databaseId: Int @deprecated(reason: "`databaseId` will be removed. Use `fullDatabaseId` instead.")
+}
+
+"An account on GitHub, with one or more owners, that has repositories, members and teams."
+type Organization implements Actor & Node & RepositoryOwner {
+  avatarUrl(size: Int): URI!
+  id: ID!
+  login: String!
+  name: String
+  repositories(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    orderBy: RepositoryOrder = {field: CREATED_AT, direction: ASC}
+    privacy: RepositoryPrivacy
+    isFork: Boolean
+  ): RepositoryConnection!
+  url: URI!
+}
+
+"A special type of user which takes actions on behalf of GitHub Apps."
+type Bot implements Actor & Node {
+  avatarUrl(size: Int): URI!
+  id: ID!
+  login: String!
+  url: URI!
+}
+
+"A repository contains the content for a project."
+type Repository implements Node & Starrable {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  issues(
+    first: Int
+    after: String
+    labels: [String!]
+    states: [IssueState!]
+    filterBy: IssueFilters
+  ): IssueConnection!
+  name: String!
+  nameWithOwner: String!
+  owner: RepositoryOwner!
+  sshUrl: GitSSHRemote!
+  stargazerCount: Int!
+  url: URI!
+  viewerHasStarred: Boolean!
+  topics: [[String!]!]
+}
+
+"An Issue is a place to discuss ideas, enhancements, tasks, and bugs for a project."
+type Issue implements Node {
+  author: Actor
+  body: String!
+  closed: Boolean!
+  createdAt: DateTime!
+  id: ID!
+  number: Int!
+  repository: Repository!
+  state: IssueState!
+  title: String!
+}
+
+"A list of repositories owned by the subject."
+type RepositoryConnection {
+  edges: [RepositoryEdge]
+  nodes: [Repository]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type RepositoryEdge {
+  cursor: String!
+  node: Repository
+}
+
+type IssueConnection {
+  edges: [IssueEdge]
+  nodes: [Issue]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type IssueEdge {
+  cursor: String!
+  node: Issue
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+"The possible states of an issue."
+enum IssueState {
+  "An issue that has been closed"
+  CLOSED
+  "An issue that is still open"
+  OPEN
+}
+
+"The privacy of a repository"
+enum RepositoryPrivacy {
+  PRIVATE
+  PUBLIC
+}
+
+"Properties by which repository connections can be ordered."
+enum RepositoryOrderField {
+  CREATED_AT
+  NAME
+  PUSHED_AT
+  STARGAZERS
+  UPDATED_AT
+}
+
+"Possible directions in which to order a list of items when provided an `orderBy` argument."
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+"Ordering options for repository connections"
+input RepositoryOrder {
+  direction: OrderDirection!
+  field: RepositoryOrderField!
+}
+
+"Ways in which to filter lists of issues."
+input IssueFilters {
+  assignee: String
+  createdBy: String
+  labels: [String!]
+  since: DateTime
+  states: [IssueState!]
+  viewerSubscribed: Boolean = false
+}
+
+"Look up a repository owner by exactly one of its identifiers."
+input OwnerLookup @oneOf {
+  login: String
+  id: ID
+}
+
+"Autogenerated input type of AddStar"
+input AddStarInput {
+  clientMutationId: String
+  starrableId: ID!
+}
+
+"Autogenerated return type of AddStar."
+type AddStarPayload {
+  clientMutationId: String
+  starrable: Starrable
+}
+
+"Autogenerated input type of CreateIssue"
+input CreateIssueInput {
+  body: String
+  clientMutationId: String
+  repositoryId: ID!
+  title: String!
+  labelIds: [ID!]
+}
+
+type CreateIssuePayload {
+  clientMutationId: String
+  issue: Issue
+}
+
+"Any object that can be the result of a search."
+union SearchResultItem = Issue | Organization | Repository | User
+
+type SearchResultItemConnection {
+  codeCount: Int!
+  issueCount: Int!
+  nodes: [SearchResultItem]
+  pageInfo: PageInfo!
+  repositoryCount: Int!
+}
+
+enum SearchType {
+  ISSUE
+  REPOSITORY
+  USER
+  DISCUSSION @deprecated
+}
+
+"The query root of GitHub's GraphQL interface."
+type Query {
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
+  repository(owner: String!, name: String!, followRenames: Boolean = true): Repository
+  repositoryOwner(login: String!): RepositoryOwner
+  owner(by: OwnerLookup!): RepositoryOwner
+  search(query: String!, type: SearchType!, first: Int, after: String): SearchResultItemConnection!
+  user(login: String!): User
+  viewer: User!
+}
+
+"The root query for implementing GraphQL mutations."
+type Mutation {
+  addStar(input: AddStarInput!): AddStarPayload
+  createIssue(input: CreateIssueInput!): CreateIssuePayload
+}
+
+directive @requiredCapabilities(requiredCapabilities: [String!]) on OBJECT | SCALAR | ARGUMENT_DEFINITION | INTERFACE | INPUT_OBJECT | FIELD_DEFINITION | ENUM | ENUM_VALUE | UNION | INPUT_FIELD_DEFINITION
+
+extend type Repository {
+  "Returns a count of how many forks there are of this repository."
+  forkCount: Int!
+}
+
+extend enum IssueState {
+  "An issue that has been locked"
+  LOCKED
+}

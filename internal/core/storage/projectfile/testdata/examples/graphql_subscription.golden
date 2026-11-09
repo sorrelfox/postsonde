@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_9c0d4e2b7a15f863",
+  "name": "User events",
+  "url": "{{baseUrl}}/graphql",
+  "query": "subscription UserEvents($id: ID!) {\n  userEvents(id: $id) {\n    type\n    at\n  }\n}",
+  "variables": "{\n  \"id\": \"{{userId}}\"\n}",
+  "connectionParams": "{\n  \"authToken\": \"{{token}}\"\n}",
+  "auth": {
+    "type": "inherit"
+  }
+}

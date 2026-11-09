@@ -1,0 +1,8 @@
+const response = await fetch("https://api.test/me", {
+  headers: {
+    "Authorization": "Basic " + btoa(String.fromCharCode(...new TextEncoder().encode("ann:••••••"))),
+  },
+});
+
+console.log(response.status);
+console.log(await response.text());

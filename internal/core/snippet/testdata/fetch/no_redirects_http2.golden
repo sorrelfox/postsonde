@@ -1,0 +1,7 @@
+const response = await fetch("http://api.test/items", {
+  redirect: "manual",
+  signal: AbortSignal.timeout(30000),
+});
+
+console.log(response.status);
+console.log(await response.text());

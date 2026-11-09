@@ -1,0 +1,29 @@
+<dictionary> {
+  ExceptionsList : <array> {
+    0 : *.local
+    1 : 169.254/16
+    2 : intranet.corp.example
+  }
+  ExcludeSimpleHostnames : 1
+  FTPPassive : 1
+  HTTPEnable : 1
+  HTTPPort : 3128
+  HTTPProxy : web.proxy.test
+  HTTPSEnable : 1
+  HTTPSPort : 8443
+  HTTPSProxy : secure.proxy.test
+  ProxyAutoDiscoveryEnable : 0
+  SOCKSEnable : 1
+  SOCKSPort : 1080
+  SOCKSProxy : socks.proxy.test
+  __SCOPED__ : <dictionary> {
+    en0 : <dictionary> {
+      ExceptionsList : <array> {
+        0 : scoped.example
+      }
+      HTTPEnable : 1
+      HTTPPort : 9999
+      HTTPProxy : scoped.proxy.test
+    }
+  }
+}

@@ -1,0 +1,15 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/items",
+    headers={
+        "Content-Type": "application/json",
+    },
+    data="{}",
+    timeout=1.5,
+    verify=False,
+)
+
+print(response.status_code)
+print(response.text)

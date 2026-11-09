@@ -1,0 +1,207 @@
+/* PostSonde design tokens, ported from the mockup.
+ *
+ * This is the ONLY file allowed to contain literal colours;
+ * scripts/check-css-tokens.sh enforces that. Everything else uses var(--…).
+ *
+ * The theme is picked by data-theme on <html>, set by styles/theme.ts and
+ * by public/theme-init.js, which index.html loads (before first paint).
+ *
+ * Contrast (UI-11): both themes meet WCAG AA. Text and coloured text
+ * tokens reach 4.5:1 on the surfaces they are drawn on, the accent 3:1 as
+ * a focus ring or border; styles/contrast.test.ts lists the pairs and
+ * fails when a change breaks one (docs/frontend.md#accessibility).
+ */
+
+/* ---------------------------------------------------------------------------
+ * Theme-independent tokens
+ * ------------------------------------------------------------------------- */
+:root {
+  /* Font families. The font files come from styles/fonts.css. */
+  --font-sans: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Type scale: 13px UI base, plus the smaller sizes the mockup uses. */
+  --fs-2xs: 10px; /* tiny badges, kind tags */
+  --fs-xs: 10.5px; /* counters, pills */
+  --fs-sm: 11px; /* column headers, section captions */
+  --fs-sm2: 11.5px; /* secondary labels */
+  --fs-md: 12px; /* dense lists, tabs, table rows */
+  --fs-md2: 12.5px; /* inputs, tree items */
+  --fs-base: 13px; /* UI base, primary buttons */
+  --fs-lg: 14px; /* headings in panels */
+
+  /* Mono sizes (code, URLs, method labels). */
+  --fs-mono-xs: 10.5px; /* method badges in tabs and tree */
+  --fs-mono-sm: 11.5px; /* status line, meta */
+  --fs-mono: 12px; /* editor and viewer body */
+  --fs-mono-lg: 12.5px; /* URL bar */
+
+  /* The editor font (UI-08): code editors, response viewers and, for the
+     family, the one-line fields such as the URL. The editor settings
+     override these on <html> (components/editor/preferences.ts). */
+  --font-editor: var(--font-mono);
+  --fs-editor: var(--fs-mono);
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  --lh-tight: 1.2;
+  --lh-base: 1.5;
+  --lh-code: 22px; /* editor / response viewer line height */
+  --lh-editor: var(--lh-code); /* follows --fs-editor, set with it */
+
+  --tracking-caps: 0.04em; /* uppercase captions (COLLECTIONS, KEY…) */
+  --tracking-tight: -0.01em; /* brand name */
+
+  /* Radii (mockup: 2–8px, 12px, 50% for dots). */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-round: 50%;
+
+  /* Spacing (the mockup's recurring gaps and paddings). */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 10px;
+  --space-6: 12px;
+  --space-7: 14px;
+  --space-8: 16px;
+
+  /* Control heights (toolbar rows, inputs, buttons). */
+  --h-control-sm: 24px;
+  --h-control: 30px;
+  --h-control-lg: 34px;
+
+  --scrollbar-size: 10px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Dark theme (also the fallback before data-theme is set)
+ * ------------------------------------------------------------------------- */
+:root:not([data-theme]),
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces, lines, text */
+  --bg0: #0e1013;
+  --bg1: #14171c;
+  --bg2: #1a1e25;
+  --bg3: #242a33;
+  --line: #252b34;
+  --line2: #2f3641;
+  --text: #e7e9ee;
+  --text2: #a7afbd;
+  --text3: #8791a1;
+
+  /* Accent */
+  --accent: #4fd1a5;
+  --accent-ink: #06261c; /* text on an --accent fill */
+  --accent-dim: rgba(79, 209, 165, 0.14);
+
+  /* HTTP methods and request kinds */
+  --m-get: #4fd1a5;
+  --m-post: #f2b544;
+  --m-put: #6ea8fe;
+  --m-patch: #c48cff;
+  --m-del: #ff6b6b;
+  --m-gql: #e07be0;
+  --m-dir: #a7afbd;
+  --m-ws: #6ea8fe;
+
+  /* Syntax */
+  --tk-kw: #c792ea;
+  --tk-field: #e7e9ee;
+  --tk-arg: #82aaff;
+  --tk-var: #f78c6c;
+  --tk-str: #ecc48d;
+  --tk-num: #f78c6c;
+  --tk-type: #ffcb6b;
+  --tk-dir: #c792ea;
+  --tk-punct: #848e9f;
+  --tk-cm: #8791a1;
+  --tk-key: #82aaff;
+  --tk-bool: #f78c6c;
+  --tk-plain: #e7e9ee;
+  --tk-err: #ff6b6b;
+
+  /* Status */
+  --ok: #4fd1a5;
+  --warn: #f2b544;
+  --bad: #ff6b6b;
+
+  /* Selection and elevation */
+  --sel: rgba(79, 209, 165, 0.1);
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --scrim: rgba(0, 0, 0, 0.45); /* behind modal overlays */
+}
+
+/* ---------------------------------------------------------------------------
+ * Light theme
+ * ------------------------------------------------------------------------- */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg0: #eef0f3;
+  --bg1: #ffffff;
+  --bg2: #f4f5f8;
+  --bg3: #e4e7ec;
+  --line: #e1e4ea;
+  --line2: #d2d7df;
+  --text: #161a21;
+  --text2: #4a5262;
+  --text3: #5c6577;
+
+  --accent: #0c7153;
+  --accent-ink: #ffffff;
+  /* The tints are of the mockup's lighter accent: the darker text accent
+     (for 4.5:1) would make selected rows too dark for the muted text. */
+  --accent-dim: rgba(15, 143, 105, 0.12);
+
+  --m-get: #0c7153;
+  --m-post: #8a5b17;
+  --m-put: #1658ea;
+  --m-patch: #7a38ed;
+  --m-del: #c52020;
+  --m-gql: #a922ba;
+  --m-dir: #4a5262;
+  --m-ws: #1658ea;
+
+  --tk-kw: #7c3aed;
+  --tk-field: #161a21;
+  --tk-arg: #1d4ed8;
+  --tk-var: #c2410c;
+  --tk-str: #9a5b00;
+  --tk-num: #c2410c;
+  --tk-type: #b05109;
+  --tk-dir: #7c3aed;
+  --tk-punct: #656d7c;
+  --tk-cm: #5c6577;
+  --tk-key: #1d4ed8;
+  --tk-bool: #c2410c;
+  --tk-plain: #161a21;
+  --tk-err: #c52020;
+
+  --ok: #0c7153;
+  --warn: #8a5b17;
+  --bad: #c52020;
+
+  --sel: rgba(15, 143, 105, 0.1);
+  --shadow: 0 12px 32px rgba(20, 30, 50, 0.18);
+  --scrim: rgba(20, 30, 50, 0.28); /* behind modal overlays */
+}
+
+/* ---------------------------------------------------------------------------
+ * Derived tokens (theme-aware because they reference the theme tokens)
+ * ------------------------------------------------------------------------- */
+:root {
+  /* A 2px accent ring (3:1 on every surface, UI-11), for controls that draw
+     focus with box-shadow instead of the global :focus-visible outline. */
+  --focus-ring: 0 0 0 2px var(--accent);
+}

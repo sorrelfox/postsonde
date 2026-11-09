@@ -1,0 +1,68 @@
+[
+  {
+    "connId": "tcp_0123456789abcdef",
+    "requestId": "req_echo",
+    "address": "localhost:7000",
+    "seq": 1,
+    "state": "open",
+    "at": "2026-09-16T10:00:00.123Z",
+    "localAddr": "127.0.0.1:50000",
+    "remoteAddr": "127.0.0.1:7000",
+    "tls": {
+      "version": "TLS 1.3",
+      "cipherSuite": "TLS_AES_128_GCM_SHA256",
+      "serverName": "localhost",
+      "peerSubject": "CN=server"
+    },
+    "close": null,
+    "error": null
+  },
+  {
+    "connId": "tcp_0123456789abcdef",
+    "requestId": "req_echo",
+    "seq": 2,
+    "chunks": [
+      {
+        "direction": "sent",
+        "at": "2026-09-16T10:00:00.123Z",
+        "data": "aGVsbG8NCg==",
+        "size": 7,
+        "incomplete": false
+      },
+      {
+        "direction": "received",
+        "at": "2026-09-16T10:00:00.123Z",
+        "data": "AP8=",
+        "size": 2,
+        "incomplete": false
+      },
+      {
+        "direction": "received",
+        "at": "2026-09-16T10:00:00.123Z",
+        "data": "cGFy",
+        "size": 3,
+        "incomplete": true
+      }
+    ]
+  },
+  {
+    "connId": "tcp_0123456789abcdef",
+    "requestId": "req_echo",
+    "address": "localhost:7000",
+    "seq": 3,
+    "state": "closed",
+    "at": "2026-09-16T10:00:01.623Z",
+    "localAddr": "",
+    "remoteAddr": "",
+    "tls": null,
+    "close": {
+      "initiatedBy": "remote",
+      "bytesSent": 7,
+      "bytesReceived": 10,
+      "chunksSent": 1,
+      "chunksReceived": 2,
+      "durationMs": 1500
+    },
+    "error": null
+  }
+]

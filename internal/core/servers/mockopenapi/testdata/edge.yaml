@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Edge cases
+  version: "1"
+servers:
+  - url: /base/{version}
+    variables:
+      version: {default: v9}
+paths:
+  /files/{name}.{ext}:
+    get:
+      operationId: getFile
+      responses:
+        '200':
+          description: A file
+          content:
+            application/octet-stream:
+              schema: {type: string, format: binary}
+  /items/{item-id}:activate:
+    post:
+      operationId: activateItem
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            Location:
+              required: true
+              schema: {type: string, format: uri}
+            X-Tags:
+              schema:
+                type: array
+                items: {type: string}
+              example: [a, b]
+            X-Obj:
+              schema: {type: object}
+              example: {k: v, a: 1}
+            X-Bad:
+              schema: {type: string}
+              example: "line\r\nbreak"
+            X-Optional:
+              schema: {type: string}
+            Content-Type:
+              schema: {type: string}
+              example: text/weird
+            X-Enum:
+              schema: {type: string, enum: [fast, slow]}
+  /a/{id}/b/{id}:
+    get:
+      operationId: twice
+      responses:
+        default:
+          description: Anything
+          content:
+            text/plain; charset=utf-8:
+              schema: {type: string}
+              example: hello
+  /dup/{a}:
+    get:
+      operationId: dupFirst
+      responses:
+        '200': {description: OK}
+  /dup/{b}:
+    get:
+      operationId: dupSecond
+      responses:
+        '200': {description: OK}
+  /problems:
+    get:
+      responses:
+        '404':
+          description: Not found only
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                properties:
+                  title: {type: string, example: Not Found}
+                  status: {type: integer, example: 404}
+  /empty:
+    delete:
+      operationId: deleteEmpty
+      responses:
+        '204':
+          description: Gone
+          content:
+            application/json:
+              schema: {type: object}
+    options:
+      responses: {}
+  /formats:
+    get:
+      operationId: getFormats
+      responses:
+        '200':
+          description: Many formats
+          content:
+            text/csv:
+              schema: {type: string}
+              example: "a,b\n1,2\n"
+            text/html:
+              example: <p>hi</p>
+            application/yaml:
+              schema:
+                type: object
+                properties:
+                  n: {type: integer}
+  /yaml:
+    get:
+      operationId: getYaml
+      responses:
+        '200':
+          description: YAML
+          content:
+            application/x-yaml:
+              schema:
+                type: object
+                properties:
+                  n: {type: integer, example: 3}
+  /named:
+    get:
+      operationId: getNamed
+      responses:
+        '201':
+          description: Named examples
+          content:
+            application/json:
+              examples:
+                external:
+                  externalValue: https://example.com/a.json
+                first:
+                  value: {which: first}
+                second:
+                  value: {which: second}
+  /external:
+    get:
+      operationId: getExternal
+      responses:
+        '200':
+          description: Only an external example
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+              examples:
+                ext:
+                  externalValue: https://example.com/a.json
+  /wild:
+    get:
+      operationId: getWild
+      responses:
+        '200':
+          description: Anything
+          content:
+            '*/*':
+              schema: {type: string, example: plain}
+  /noschema:
+    get:
+      operationId: getNoSchema
+      responses:
+        '200':
+          description: Content without schema or example
+          content:
+            application/json: {}
+  /glob*/{x}:
+    get:
+      operationId: getGlob
+      responses:
+        '200': {description: OK}
+  /search?type=x:
+    get:
+      operationId: search
+      responses:
+        '200': {description: OK}
+  /xml:
+    get:
+      operationId: getXml
+      responses:
+        '200':
+          description: XML from a string example
+          content:
+            application/xml:
+              example: <ok/>

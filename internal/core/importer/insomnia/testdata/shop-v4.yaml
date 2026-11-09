@@ -1,0 +1,31 @@
+_type: export
+__export_format: 4
+__export_date: 2026-09-12T10:21:44.123Z
+__export_source: insomnia.desktop.app:v2023.5.8
+resources:
+  - _id: req_health
+    parentId: wrk_ops
+    url: "{{ base_url }}/health"
+    name: Health
+    method: HEAD
+    body: {}
+    parameters: []
+    headers: []
+    authentication:
+      type: ntlm
+      username: ops
+      password: "{{ _.ops_password }}"
+    metaSortKey: -2
+    _type: request
+  - _id: wrk_ops
+    parentId: null
+    name: Ops
+    description: Operations endpoints.
+    scope: collection
+    _type: workspace
+  - _id: env_ops
+    parentId: wrk_ops
+    name: Base Environment
+    data:
+      base_url: https://ops.example
+    _type: environment

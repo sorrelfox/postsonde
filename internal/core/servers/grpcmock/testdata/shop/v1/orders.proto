@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package shop.v1;
+
+import "google/protobuf/timestamp.proto";
+import "shop/v1/common.proto";
+
+// Orders is the service the gRPC mock server tests serve.
+service Orders {
+  rpc GetOrder(GetOrderRequest) returns (Order);
+  rpc ListOrders(ListOrdersRequest) returns (stream Order);
+  rpc Upload(stream Order) returns (UploadSummary);
+  rpc Chat(stream Note) returns (stream Note);
+  rpc Track(stream GetOrderRequest) returns (stream Order);
+  rpc Cancel(GetOrderRequest) returns (Order);
+}
+
+message GetOrderRequest {
+  string id = 1;
+}
+
+message ListOrdersRequest {
+  int32 page_size = 1;
+}
+
+message Order {
+  string id = 1;
+  Money total = 2;
+  google.protobuf.Timestamp created = 3;
+  repeated string items = 4;
+}
+
+message UploadSummary {
+  int32 count = 1;
+}
+
+message Note {
+  string text = 1;
+}

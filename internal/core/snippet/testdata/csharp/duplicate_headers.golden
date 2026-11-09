@@ -1,0 +1,21 @@
+using System;
+using System.Net.Http;
+
+var handler = new SocketsHttpHandler
+{
+    UseCookies = false,
+    AllowAutoRedirect = false,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/me");
+request.Headers.TryAddWithoutValidation("Accept", "text/html");
+request.Headers.TryAddWithoutValidation("X-A", "1");
+request.Headers.TryAddWithoutValidation("accept", "application/json");
+request.Headers.TryAddWithoutValidation("Host", "example.test");
+request.Headers.TryAddWithoutValidation("Cookie", "a=1");
+request.Headers.TryAddWithoutValidation("cookie", "b=2");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

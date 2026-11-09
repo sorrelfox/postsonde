@@ -1,0 +1,36 @@
+/* The title bar's project switcher (STO-06): looks like the project name it
+ * replaced, with a chevron, and a quiet hover like the title bar's other
+ * controls. */
+
+.button {
+  min-width: 0;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: calc(-1 * var(--space-2));
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text2);
+  font-size: var(--fs-md2);
+}
+
+.button svg {
+  flex: none;
+}
+
+.button:hover:not(:disabled),
+.button[aria-expanded="true"] {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--text3);
+}

@@ -1,0 +1,61 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
+	"net/textproto"
+	"os"
+)
+
+func main() {
+	var body bytes.Buffer
+	form := multipart.NewWriter(&body)
+	part := func(disposition, contentType string) io.Writer {
+		header := textproto.MIMEHeader{"Content-Disposition": {disposition}}
+		if contentType != "" {
+			header.Set("Content-Type", contentType)
+		}
+		w, err := form.CreatePart(header)
+		if err != nil {
+			panic(err)
+		}
+		return w
+	}
+	readFile := func(path string) []byte {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			panic(err)
+		}
+		return data
+	}
+	part(`form-data; name="doc"; filename="upload.txt"`, "text/plain").Write(readFile(`C:\tmp\a&b\up;load.txt`))
+	io.WriteString(part(`form-data; name="dir"`, ""), `C:\tmp\`)
+	if err := form.Close(); err != nil {
+		panic(err)
+	}
+	req, err := http.NewRequest("POST", "https://api.test/upload", &body)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Set("Content-Type", form.FormDataContentType())
+
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(data))
+}

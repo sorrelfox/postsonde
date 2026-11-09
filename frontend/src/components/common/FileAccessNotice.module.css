@@ -1,0 +1,95 @@
+/* The file-access notice of a file picker (PRV-10): a warning-coloured
+ * line per folder under the picker, with a small button that allows the
+ * folder, and a close button. */
+
+/* The default space above it; a caller's class (zero specificity here)
+ * sets its own. */
+:where(.notice) {
+  margin-top: var(--space-3);
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg2);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.list {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  color: var(--warn);
+}
+
+.item[data-state="done"] {
+  color: var(--text2);
+}
+
+.item svg {
+  flex: none;
+}
+
+.text {
+  flex: 1;
+  min-width: 12em;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  display: block;
+  color: var(--bad);
+}
+
+.button {
+  flex: none;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.dismiss {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+}
+
+.dismiss:hover {
+  background: var(--bg3);
+  color: var(--text);
+}

@@ -1,0 +1,37 @@
+{
+  "id": "srv_00000000000000dd",
+  "type": "webhook",
+  "typeLabel": "Webhook receiver",
+  "name": "Webhook receiver",
+  "host": "",
+  "port": 4000,
+  "allowLan": false,
+  "tls": null,
+  "certificate": null,
+  "state": "stopped",
+  "addresses": [],
+  "boundPort": 0,
+  "scope": "",
+  "warning": null,
+  "startedAt": "",
+  "stoppedAt": "",
+  "error": null,
+  "events": 0,
+  "config": {
+    "mockHttp": null,
+    "webSocket": null,
+    "webhook": {
+      "status": 202,
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": "{\"ok\":true}"
+    }
+  },
+  "diagnostics": [],
+  "folder": null
+}

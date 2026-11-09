@@ -1,0 +1,3 @@
+type: codec.p3.Oneofs
+plain: "q"
+o_bytes: 0x

@@ -1,0 +1,7 @@
+http --multipart --follow --max-redirects=10 \
+  POST https://api.test/upload \
+  'title=a;b,c "q"' \
+  'meta={"k":1}' \
+  'at=\@literal' \
+  'file@<root>/data.json;type=application/json' \
+  'odd@<root>/odd name;1.txt;type=text/x-odd'

@@ -1,0 +1,75 @@
+/* Local TLS (SRV-05): the TLS fields of the server editors and the local
+ * CA that signs generated certificates. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 560px;
+}
+
+.tls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fileRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.ca {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+}
+
+.caTitle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.caTitle svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+.caRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.caPath {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: text;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  color: var(--text2);
+  font-size: var(--fs-sm);
+  line-height: 16px;
+}

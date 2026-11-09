@@ -1,0 +1,90 @@
+# nfpm config for the `postsonde-gtk3` .deb: the legacy GTK3 +
+# WebKit2GTK 4.1 build (`-tags gtk3`) for Ubuntu 22.04+ and Debian 12+.
+# scripts/package-linux-deb.sh builds it with `wails3 tool package` and sets
+# the PKG_* variables. postsonde.yaml is its GTK4 twin: keep `contents` the
+# same in both (only the doc directory differs). docs/packaging.md explains
+# the fields.
+name: postsonde-gtk3
+arch: ${PKG_ARCH}
+platform: linux
+version: ${PKG_VERSION}
+# Use the version as given (0.0.0~git<sha> or the release tag), unparsed.
+version_schema: none
+section: devel
+priority: optional
+maintainer: Sorrelfox <348316453+sorrelfox@users.noreply.github.com>
+description: |-
+  Local-only desktop API testing tool (GTK 3 build)
+  PostSonde sends HTTP and GraphQL requests and shows the responses. It runs
+  entirely on your machine, with no account, cloud sync or telemetry.
+
+  This is the legacy GTK 3 build (WebKit2GTK 4.1), for releases without
+  WebKitGTK 6.0 such as Ubuntu 22.04 and Debian 12. Where WebKitGTK 6.0 is
+  available, install postsonde instead.
+vendor: Sorrelfox
+homepage: https://github.com/sorrelfox/PostSonde
+license: MIT
+umask: 0o022
+
+# One package per GTK stack. Both install /usr/bin/postsonde, so only one can
+# be installed; installing either replaces the other.
+conflicts:
+  - postsonde
+replaces:
+  - postsonde
+
+# Exactly the binary's NEEDED libraries (readelf -d), mapped to the Ubuntu
+# 22.04 packages that ship them (dpkg -S), with the minimum versions
+# dpkg-shlibdeps derives from their symbols files (docs/packaging.md shows
+# how to regenerate). libglib2.0-0 covers libglib, libgio and libgobject (on
+# 24.04 libglib2.0-0t64 provides it); libgtk-3-0 covers libgtk and libgdk.
+depends:
+  - libc6 (>= 2.34)
+  - libgdk-pixbuf-2.0-0 (>= 2.31.1)
+  - libglib2.0-0 (>= 2.33.14)
+  - libgtk-3-0 (>= 3.21.5)
+  - libjavascriptcoregtk-4.1-0
+  - libsoup-3.0-0 (>= 2.4.0)
+  - libwebkit2gtk-4.1-0 (>= 2.39.91)
+  - libx11-6
+
+contents:
+  - src: ${PKG_BINARY}
+    dst: /usr/bin/postsonde
+    expand: true
+    file_info:
+      mode: 0755
+  - src: ./build/linux/io.github.sorrelfox.PostSonde.desktop
+    dst: /usr/share/applications/io.github.sorrelfox.PostSonde.desktop
+  - src: ./build/linux/io.github.sorrelfox.PostSonde.metainfo.xml
+    dst: /usr/share/metainfo/io.github.sorrelfox.PostSonde.metainfo.xml
+  - src: ./assets/icons/linux/hicolor/16x16/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/16x16/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/24x24/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/24x24/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/32x32/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/32x32/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/48x48/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/48x48/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/64x64/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/64x64/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/128x128/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/128x128/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/256x256/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/256x256/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/512x512/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/512x512/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/scalable/apps/postsonde.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/postsonde.svg
+  # License files: ours (copyright, generated from LICENSE) and the
+  # third-party ones the bundled components require (the OFL for the fonts).
+  # Debian policy puts them in /usr/share/doc/<package name>.
+  - src: ${PKG_STAGE}/copyright
+    dst: /usr/share/doc/postsonde-gtk3/copyright
+    expand: true
+  - src: ./THIRD_PARTY_NOTICES.md
+    dst: /usr/share/doc/postsonde-gtk3/THIRD_PARTY_NOTICES.md
+  - src: ./frontend/src/assets/fonts/instrument-sans/OFL.txt
+    dst: /usr/share/doc/postsonde-gtk3/fonts/instrument-sans/OFL.txt
+  - src: ./frontend/src/assets/fonts/jetbrains-mono/OFL.txt
+    dst: /usr/share/doc/postsonde-gtk3/fonts/jetbrains-mono/OFL.txt

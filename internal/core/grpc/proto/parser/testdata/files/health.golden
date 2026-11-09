@@ -1,0 +1,64 @@
+# tree
+File [0:1311] Name="health.proto"
+  Decls[0]: Syntax [139:157] Detached=[" A health checking service in the shape of the standard gRPC health\n protocol (grpc.health.v1). Written for PostSonde's parser tests.\n"]
+    Value: StringLit [148:156] Value="proto3"
+  Decls[1]: Package [159:182] Name=[167:181]"grpc.health.v1"
+  Decls[2]: Option [184:227]
+    Name: OptionName [191:207]
+      Parts[0]: OptionNamePart [191:207] Name=[191:207]"csharp_namespace"
+    Value: StringLit [210:226] Value="Grpc.Health.V1"
+  Decls[3]: Option [228:295]
+    Name: OptionName [235:245]
+      Parts[0]: OptionNamePart [235:245] Name=[235:245]"go_package"
+    Value: StringLit [248:294] Value="google.golang.org/grpc/health/grpc_health_v1"
+  Decls[4]: Option [296:330]
+    Name: OptionName [303:322]
+      Parts[0]: OptionNamePart [303:322] Name=[303:322]"java_multiple_files"
+    Value: IdentLit [325:329] Value="true"
+  Decls[5]: Option [331:375]
+    Name: OptionName [338:358]
+      Parts[0]: OptionNamePart [338:358] Name=[338:358]"java_outer_classname"
+    Value: StringLit [361:374] Value="HealthProto"
+  Decls[6]: Option [376:418]
+    Name: OptionName [383:395]
+      Parts[0]: OptionNamePart [383:395] Name=[383:395]"java_package"
+    Value: StringLit [398:417] Value="io.grpc.health.v1"
+  Decls[7]: Message [420:472] Name=[428:446]"HealthCheckRequest" RBrace=471
+    Body[0]: Field [451:470] Type=[451:457]"string" Name=[458:465]"service"
+      Number: IntLit [468:469] Raw="1" Value=1
+  Decls[8]: Message [474:675] Name=[482:501]"HealthCheckResponse" RBrace=674
+    Body[0]: Enum [506:645] Name=[511:524]"ServingStatus" RBrace=644
+      Body[0]: EnumValue [531:543] Name=[531:538]"UNKNOWN"
+        Number: IntLit [541:542] Raw="0" Value=0
+      Body[1]: EnumValue [548:560] Name=[548:555]"SERVING"
+        Number: IntLit [558:559] Raw="1" Value=1
+      Body[2]: EnumValue [565:581] Name=[565:576]"NOT_SERVING"
+        Number: IntLit [579:580] Raw="2" Value=2
+      Body[3]: EnumValue [586:606] Trailing=" Used only by the Watch method.\n" Name=[586:601]"SERVICE_UNKNOWN"
+        Number: IntLit [604:605] Raw="3" Value=3
+    Body[1]: Field [648:673] Type=[648:661]"ServingStatus" Name=[662:668]"status"
+      Number: IntLit [671:672] Raw="1" Value=1
+  Decls[9]: Message [677:705] Name=[685:702]"HealthListRequest" RBrace=704
+  Decls[10]: Message [707:852] Name=[715:733]"HealthListResponse" RBrace=851
+    Body[0]: MapField [804:850] Leading=" Health status of every known service, keyed by service name.\n" KeyType=[808:814]"string" ValType=[816:835]"HealthCheckResponse" Name=[837:845]"statuses"
+      Number: IntLit [848:849] Raw="1" Value=1
+  Decls[11]: Service [924:1310] Leading=" Health is the service checked by load balancers and orchestrators.\n" Name=[932:938]"Health" RBrace=1309
+    Body[0]: RPC [1011:1071] Leading=" Check returns the serving status of one service, or NOT_FOUND.\n" Name=[1015:1020]"Check" LBrace=-1 RBrace=-1
+      Input: RPCType [1020:1040] Type=[1021:1039]"HealthCheckRequest"
+      Output: RPCType [1049:1070] Type=[1050:1069]"HealthCheckResponse"
+    Body[1]: RPC [1121:1178] Leading=" List returns the status of all services.\n" Name=[1125:1129]"List" LBrace=-1 RBrace=-1
+      Input: RPCType [1129:1148] Type=[1130:1147]"HealthListRequest"
+      Output: RPCType [1157:1177] Type=[1158:1176]"HealthListResponse"
+    Body[2]: RPC [1241:1308] Leading=" Watch streams the serving status whenever it changes.\n" Name=[1245:1250]"Watch" LBrace=-1 RBrace=-1
+      Input: RPCType [1250:1270] Type=[1251:1269]"HealthCheckRequest"
+      Output: RPCType [1279:1307] Stream=true StreamLoc=[1280:1286] Type=[1287:1306]"HealthCheckResponse"
+  Comments[0]: Comment [0:69]
+  Comments[1]: Comment [70:137]
+  Comments[2]: Comment [608:641]
+  Comments[3]: Comment [738:801]
+  Comments[4]: Comment [854:923]
+  Comments[5]: Comment [943:1008]
+  Comments[6]: Comment [1075:1118]
+  Comments[7]: Comment [1182:1238]
+# errors
+# diagnostics

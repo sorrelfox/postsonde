@@ -1,0 +1,38 @@
+{
+  "name": "completions",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/v1/chat/completions",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      },
+      {
+        "name": "Authorization",
+        "value": "Bearer $OPENAI_API_KEY"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\n    \"model\": \"model-x\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"Say hello!\"}]\n  }"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.shell_expansion",
+      "severity": "warning",
+      "start": 119,
+      "end": 134,
+      "message": "The shell would expand “$OPENAI_API_KEY”; it is kept as written."
+    }
+  ]
+}

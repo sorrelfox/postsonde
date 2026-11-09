@@ -1,0 +1,17 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/q");
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes("q=a%26b%3Dc+d%2Be%25f+%22g%22+%27h%27+%C3%A9&path=C%3A%5Cdir%5C&sym=%24x+%60y%60+%5Ez+%25PATH%25"));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/x-www-form-urlencoded");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

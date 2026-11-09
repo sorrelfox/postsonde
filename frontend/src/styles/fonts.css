@@ -1,0 +1,67 @@
+/*
+ * Bundled UI fonts. The woff2 files live in src/assets/fonts/ and Vite
+ * copies them into dist/ with hashed names, so the app never fetches fonts
+ * from the network (PRV-03). Sources, versions and licences: the SOURCE.md
+ * and OFL.txt next to each font.
+ *
+ * Each face tries an installed copy first (full name, then PostScript name),
+ * then the bundled file. font-display: swap shows the fallback stack from the
+ * --font-sans / --font-mono tokens until the face is ready.
+ */
+
+/* Instrument Sans 1.000: 400, 500, 600 (the weights the mockup uses) */
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local("Instrument Sans Regular"),
+    local("InstrumentSans-Regular"),
+    url("../assets/fonts/instrument-sans/InstrumentSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    local("Instrument Sans Medium"),
+    local("InstrumentSans-Medium"),
+    url("../assets/fonts/instrument-sans/InstrumentSans-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    local("Instrument Sans SemiBold"),
+    local("InstrumentSans-SemiBold"),
+    url("../assets/fonts/instrument-sans/InstrumentSans-SemiBold.woff2") format("woff2");
+}
+
+/* JetBrains Mono 2.304: 400, 500 */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local("JetBrains Mono Regular"),
+    local("JetBrainsMono-Regular"),
+    url("../assets/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    local("JetBrains Mono Medium"),
+    local("JetBrainsMono-Medium"),
+    url("../assets/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2") format("woff2");
+}

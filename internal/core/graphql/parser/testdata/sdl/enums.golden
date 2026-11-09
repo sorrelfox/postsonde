@@ -1,0 +1,38 @@
+# source
+enum Direction {
+  NORTH
+  EAST @deprecated(reason: "no")
+  SOUTH
+  WEST
+}
+extend enum Direction { UP DOWN }
+extend enum Direction @flag
+# tree
+Document [0:136]
+  Definitions[0]: TypeDefinition [0:74] Extend=-1 Kind=enum Keyword=0 Implements=-1 Equals=-1 LBrace=15 RBrace=73
+    Name: Name [5:14] Value="Direction"
+    EnumValues[0]: EnumValueDefinition [19:24]
+      Name: Name [19:24] Value="NORTH"
+    EnumValues[1]: EnumValueDefinition [27:57]
+      Name: Name [27:31] Value="EAST"
+      Directives[0]: Directive [32:57] At=32
+        Name: Name [33:43] Value="deprecated"
+        Arguments: ArgumentList [43:57] LParen=43 RParen=56
+          Arguments[0]: Argument [44:56] Colon=50
+            Name: Name [44:50] Value="reason"
+            Value: StringValue [52:56] Block=false Value="no"
+    EnumValues[2]: EnumValueDefinition [60:65]
+      Name: Name [60:65] Value="SOUTH"
+    EnumValues[3]: EnumValueDefinition [68:72]
+      Name: Name [68:72] Value="WEST"
+  Definitions[1]: TypeDefinition [75:108] Extend=75 Kind=enum Keyword=82 Implements=-1 Equals=-1 LBrace=97 RBrace=107
+    Name: Name [87:96] Value="Direction"
+    EnumValues[0]: EnumValueDefinition [99:101]
+      Name: Name [99:101] Value="UP"
+    EnumValues[1]: EnumValueDefinition [102:106]
+      Name: Name [102:106] Value="DOWN"
+  Definitions[2]: TypeDefinition [109:136] Extend=109 Kind=enum Keyword=116 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [121:130] Value="Direction"
+    Directives[0]: Directive [131:136] At=131
+      Name: Name [132:136] Value="flag"
+# errors

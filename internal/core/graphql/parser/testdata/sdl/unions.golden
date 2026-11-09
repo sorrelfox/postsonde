@@ -1,0 +1,33 @@
+# source
+union SearchResult = Photo | Person
+union Wrapped =
+  | Photo
+  | Person
+union Pending
+extend union SearchResult = Video
+extend union SearchResult @deprecated
+# tree
+Document [0:158]
+  Definitions[0]: TypeDefinition [0:35] Extend=-1 Kind=union Keyword=0 Implements=-1 Equals=19 LBrace=-1 RBrace=-1
+    Name: Name [6:18] Value="SearchResult"
+    Members[0]: NamedType [21:26]
+      Name: Name [21:26] Value="Photo"
+    Members[1]: NamedType [29:35]
+      Name: Name [29:35] Value="Person"
+  Definitions[1]: TypeDefinition [36:72] Extend=-1 Kind=union Keyword=36 Implements=-1 Equals=50 LBrace=-1 RBrace=-1
+    Name: Name [42:49] Value="Wrapped"
+    Members[0]: NamedType [56:61]
+      Name: Name [56:61] Value="Photo"
+    Members[1]: NamedType [66:72]
+      Name: Name [66:72] Value="Person"
+  Definitions[2]: TypeDefinition [73:86] Extend=-1 Kind=union Keyword=73 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [79:86] Value="Pending"
+  Definitions[3]: TypeDefinition [87:120] Extend=87 Kind=union Keyword=94 Implements=-1 Equals=113 LBrace=-1 RBrace=-1
+    Name: Name [100:112] Value="SearchResult"
+    Members[0]: NamedType [115:120]
+      Name: Name [115:120] Value="Video"
+  Definitions[4]: TypeDefinition [121:158] Extend=121 Kind=union Keyword=128 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [134:146] Value="SearchResult"
+    Directives[0]: Directive [147:158] At=147
+      Name: Name [148:158] Value="deprecated"
+# errors

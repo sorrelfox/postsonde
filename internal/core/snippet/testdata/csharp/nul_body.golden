@@ -1,0 +1,17 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    AllowAutoRedirect = false,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/raw");
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes("a\0b\u001bc"));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/octet-stream");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

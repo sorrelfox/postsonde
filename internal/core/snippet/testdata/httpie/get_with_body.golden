@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  --raw '{"q":"x"}' \
+  GET https://api.test/search \
+  Content-Type:application/json

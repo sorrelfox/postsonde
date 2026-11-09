@@ -1,0 +1,92 @@
+/* The Server tab of the folder settings view (SRV-04): the folder's saved
+ * server, laid out in the folder editor's section. */
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 880px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--text3);
+}
+
+.emptyTitle {
+  color: var(--text);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+  font-size: var(--fs-md);
+}
+
+.kind {
+  color: var(--text);
+  font-weight: var(--fw-semibold);
+}
+
+.state {
+  color: var(--text2);
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 560px;
+}
+
+.config {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+/* The routes editor fills a pane of its own in the Servers view; here it
+ * gets a bounded height inside the scrolling section. */
+.configBody {
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.confirmText {
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}

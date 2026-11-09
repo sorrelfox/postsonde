@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/upload",
+    files=[
+        ("text", (None, "x", "text/plain; charset=utf-8")),
+        ("file", ("data.json", open("<root>/data.json", "rb"), 'application/json; charset="utf-8"')),
+    ],
+)
+
+print(response.status_code)
+print(response.text)

@@ -1,0 +1,3 @@
+curl.exe https://api.test/me `
+  -u 'ann:p@ss:w''rd' `
+  -L --max-redirs 10

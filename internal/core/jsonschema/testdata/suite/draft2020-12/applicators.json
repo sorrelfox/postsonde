@@ -1,0 +1,154 @@
+[
+    {
+        "description": "allOf",
+        "schema": {"allOf": [{"properties": {"bar": {"type": "integer"}}, "required": ["bar"]}, {"properties": {"foo": {"type": "string"}}, "required": ["foo"]}]},
+        "tests": [
+            {"description": "both match", "data": {"foo": "baz", "bar": 2}, "valid": true},
+            {"description": "the second fails", "data": {"bar": 2}, "valid": false},
+            {"description": "the first fails", "data": {"foo": "baz"}, "valid": false},
+            {"description": "a wrong type", "data": {"foo": "baz", "bar": "quux"}, "valid": false}
+        ]
+    },
+    {
+        "description": "allOf with boolean schemas",
+        "schema": {"allOf": [true, false]},
+        "tests": [
+            {"description": "anything fails", "data": "foo", "valid": false}
+        ]
+    },
+    {
+        "description": "anyOf",
+        "schema": {"anyOf": [{"type": "integer"}, {"minimum": 2}]},
+        "tests": [
+            {"description": "the first matches", "data": 1, "valid": true},
+            {"description": "the second matches", "data": 2.5, "valid": true},
+            {"description": "both match", "data": 3, "valid": true},
+            {"description": "neither matches", "data": 1.5, "valid": false}
+        ]
+    },
+    {
+        "description": "anyOf with a base schema",
+        "schema": {"type": "string", "anyOf": [{"maxLength": 2}, {"minLength": 4}]},
+        "tests": [
+            {"description": "the base schema fails", "data": 3, "valid": false},
+            {"description": "one branch matches", "data": "foobar", "valid": true},
+            {"description": "no branch matches", "data": "foo", "valid": false}
+        ]
+    },
+    {
+        "description": "oneOf",
+        "schema": {"oneOf": [{"type": "integer"}, {"minimum": 2}]},
+        "tests": [
+            {"description": "the first matches", "data": 1, "valid": true},
+            {"description": "the second matches", "data": 2.5, "valid": true},
+            {"description": "both match", "data": 3, "valid": false},
+            {"description": "neither matches", "data": 1.5, "valid": false}
+        ]
+    },
+    {
+        "description": "oneOf with required",
+        "schema": {"type": "object", "oneOf": [{"required": ["foo", "bar"]}, {"required": ["foo", "baz"]}]},
+        "tests": [
+            {"description": "both missing", "data": {"bar": 2}, "valid": false},
+            {"description": "the first matches", "data": {"foo": 1, "bar": 2}, "valid": true},
+            {"description": "the second matches", "data": {"foo": 1, "baz": 3}, "valid": true},
+            {"description": "both match", "data": {"foo": 1, "bar": 2, "baz": 3}, "valid": false}
+        ]
+    },
+    {
+        "description": "not",
+        "schema": {"not": {"type": "integer"}},
+        "tests": [
+            {"description": "a string", "data": "foo", "valid": true},
+            {"description": "an integer", "data": 1, "valid": false}
+        ]
+    },
+    {
+        "description": "not with properties",
+        "schema": {"not": {"type": "object", "properties": {"foo": {"type": "string"}}}},
+        "tests": [
+            {"description": "a number", "data": 1, "valid": true},
+            {"description": "a mismatch in the object", "data": {"foo": 1}, "valid": true},
+            {"description": "a match", "data": {"foo": "bar"}, "valid": false}
+        ]
+    },
+    {
+        "description": "not true and not false",
+        "schema": {"properties": {"a": {"not": true}, "b": {"not": false}}},
+        "tests": [
+            {"description": "b is fine", "data": {"b": 1}, "valid": true},
+            {"description": "a is never fine", "data": {"a": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "if, then and else",
+        "schema": {"if": {"exclusiveMaximum": 0}, "then": {"minimum": -10}, "else": {"multipleOf": 2}},
+        "tests": [
+            {"description": "then matches", "data": -1, "valid": true},
+            {"description": "then fails", "data": -100, "valid": false},
+            {"description": "else matches", "data": 4, "valid": true},
+            {"description": "else fails", "data": 3, "valid": false}
+        ]
+    },
+    {
+        "description": "if without then or else",
+        "schema": {"if": {"const": 0}},
+        "tests": [
+            {"description": "a match", "data": 0, "valid": true},
+            {"description": "a mismatch", "data": "hello", "valid": true}
+        ]
+    },
+    {
+        "description": "then and else without if are ignored",
+        "schema": {"then": {"const": 0}, "else": {"const": 0}},
+        "tests": [
+            {"description": "anything", "data": "hello", "valid": true}
+        ]
+    },
+    {
+        "description": "if on a discriminator",
+        "schema": {
+            "type": "object",
+            "if": {"properties": {"kind": {"const": "card"}}, "required": ["kind"]},
+            "then": {"required": ["number"]},
+            "else": {"required": ["iban"]}
+        },
+        "tests": [
+            {"description": "a card with a number", "data": {"kind": "card", "number": "4111"}, "valid": true},
+            {"description": "a card without a number", "data": {"kind": "card", "iban": "DE00"}, "valid": false},
+            {"description": "a transfer with an iban", "data": {"kind": "transfer", "iban": "DE00"}, "valid": true},
+            {"description": "a transfer without an iban", "data": {"kind": "transfer"}, "valid": false}
+        ]
+    },
+    {
+        "description": "boolean schema true",
+        "schema": true,
+        "tests": [
+            {"description": "a number", "data": 1, "valid": true},
+            {"description": "null", "data": null, "valid": true}
+        ]
+    },
+    {
+        "description": "boolean schema false",
+        "schema": false,
+        "tests": [
+            {"description": "a number", "data": 1, "valid": false},
+            {"description": "an empty object", "data": {}, "valid": false}
+        ]
+    },
+    {
+        "description": "the empty schema allows anything",
+        "schema": {},
+        "tests": [
+            {"description": "an array", "data": [1, {"a": null}], "valid": true}
+        ]
+    },
+    {
+        "description": "unknown keywords are ignored",
+        "schema": {"x-kind": "id", "nullable": true, "type": "string"},
+        "tests": [
+            {"description": "a string", "data": "a", "valid": true},
+            {"description": "null", "data": null, "valid": false}
+        ]
+    }
+]

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- PostSonde 16 px icon. Two arcs per side merge at this size, so only
+       the dot and one heavy arc on each side are kept. -->
+  <rect x="0" y="0" width="1024" height="1024" rx="228" fill="#14171c"/>
+  <rect x="32" y="32" width="960" height="960" rx="196" fill="none" stroke="#2f3641" stroke-width="64"/>
+  <g fill="none" stroke="#4fd1a5" stroke-width="120" stroke-linecap="round">
+    <path d="M297.04 726.96A304 304 0 0 1 297.04 297.04"/>
+    <path d="M726.96 297.04A304 304 0 0 1 726.96 726.96"/>
+  </g>
+  <circle cx="512" cy="512" r="112" fill="#4fd1a5"/>
+</svg>

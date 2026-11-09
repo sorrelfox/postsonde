@@ -1,0 +1,138 @@
+# An Apollo Federation 2 subgraph as `rover subgraph introspect` prints it:
+# the federation directives and scalars are declared in the file, entities
+# are extended with @key, and the _Entity union and _Service type are the
+# ones the gateway queries.
+
+extend schema
+  @link(url: "https://specs.apollo.dev/federation/v2.3", import: ["@key", "@shareable", "@external", "@requires", "@provides", "@tag", "@inaccessible", "@override"])
+
+directive @key(fields: FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+directive @requires(fields: FieldSet!) on FIELD_DEFINITION
+
+directive @provides(fields: FieldSet!) on FIELD_DEFINITION
+
+directive @external(reason: String) on OBJECT | FIELD_DEFINITION
+
+directive @tag(name: String!) repeatable on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @extends on OBJECT | INTERFACE
+
+directive @shareable repeatable on OBJECT | FIELD_DEFINITION
+
+directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+
+directive @override(from: String!) on FIELD_DEFINITION
+
+directive @composeDirective(name: String!) repeatable on SCHEMA
+
+directive @interfaceObject on OBJECT
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+scalar FieldSet
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+scalar _Any
+
+type _Service {
+  sdl: String
+}
+
+union _Entity = Product | User | Review
+
+"""A price with its currency, in minor units."""
+type Money @shareable {
+  amount: Int!
+  currency: Currency!
+}
+
+enum Currency {
+  EUR
+  USD
+  GBP @deprecated(reason: "Not sold in the UK any more.")
+}
+
+"""A product in the catalogue."""
+type Product @key(fields: "id") @key(fields: "sku package") @tag(name: "public") {
+  id: ID!
+  sku: String
+  package: String
+  name: String @shareable
+  price: Money
+  "Delivery estimate; needs the shipping weight from the inventory subgraph."
+  delivery(zip: String): DeliveryEstimate @requires(fields: "weight")
+  weight: Float @external
+  reviews(first: Int = 5, after: String): ReviewConnection!
+  variation: ProductVariation
+  createdBy: User @provides(fields: "totalProductsCreated")
+}
+
+type ProductVariation {
+  id: ID!
+}
+
+type DeliveryEstimate {
+  estimatedDelivery: String
+  fastestDelivery: String
+}
+
+type User @key(fields: "email") {
+  email: ID! @external
+  name: String @override(from: "users")
+  totalProductsCreated: Int @external
+}
+
+type Review @key(fields: "id") {
+  id: ID!
+  body: String!
+  rating: Int
+  author: User
+  product: Product!
+}
+
+type ReviewConnection {
+  edges: [ReviewEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ReviewEdge {
+  cursor: String!
+  node: Review!
+}
+
+type PageInfo @shareable {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+
+input ProductFilter {
+  nameContains: String
+  priceBelow: Int
+  currencies: [Currency!] = [EUR, USD]
+}
+
+type Query {
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+  product(id: ID!): Product
+  products(filter: ProductFilter = {}, first: Int = 20): [Product!]! @tag(name: "public")
+  review(id: ID!): Review @inaccessible
+}
+
+type Mutation {
+  createReview(productId: ID!, body: String!, rating: Int): Review
+}

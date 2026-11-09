@@ -1,0 +1,8 @@
+websocat 'wss://echo.test/socket?room=1&x=a%20b' \
+  -H 'Authorization: Bearer ••••••' \
+  -H 'Origin: https://app.test' \
+  -H 'X-Tricky: 100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\' \
+  --protocol 'chat.v1, graphql-ws' \
+  -k \
+  --ping-interval 30 \
+  --ping-timeout 10

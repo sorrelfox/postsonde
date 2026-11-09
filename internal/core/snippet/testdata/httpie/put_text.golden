@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  --raw 'plain text' \
+  PUT https://api.test/items/1 \
+  Content-Type:text/plain

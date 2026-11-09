@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "kind": "environment",
+  "id": "env_92f0d5b8a61c3e47",
+  "name": "Production",
+  "color": "#d0342c",
+  "variables": [
+    {
+      "name": "baseUrl",
+      "value": "https://api.acme.example"
+    },
+    {
+      "name": "token",
+      "value": "",
+      "secret": true,
+      "description": "Personal access token"
+    }
+  ]
+}

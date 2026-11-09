@@ -1,0 +1,24 @@
+# source
+message A {}
+@#$ junk ;
+} message B { int32 x = 1 [a = ]; }
+# tree
+File [0:59] Name="p.proto"
+  Decls[0]: Message [0:12] Name=[8:9]"A" RBrace=11
+  Decls[1]: Message [26:59] Name=[34:35]"B" RBrace=58
+    Body[0]: Field [38:57] Type=[38:43]"int32" Name=[44:45]"x"
+      Number: IntLit [48:49] Raw="1" Value=1
+      Options: CompactOptions [50:54]
+        Options[0]: Option [51:54]
+          Name: OptionName [51:52]
+            Parts[0]: OptionNamePart [51:52] Name=[51:52]"a"
+# errors
+2:1 [13:14] lexical error: unexpected character '@'
+2:2 [14:15] lexical error: unexpected character '#'
+2:3 [15:16] lexical error: unexpected character '$'
+2:5 [17:21] unexpected token: expected top-level declaration (message, enum, service, extend, option, import or package), found "junk"
+3:1 [24:25] unexpected token: expected top-level declaration, found "}"
+3:32 [55:56] unexpected token: expected a value, found "]"
+# diagnostics
+1:1 [0:0] warning syntax: no syntax specified; the file is treated as proto2 (add syntax = "proto2"; or syntax = "proto3";)
+3:15 [38:38] error label: fields in proto2 files need a label: "required", "optional" or "repeated"

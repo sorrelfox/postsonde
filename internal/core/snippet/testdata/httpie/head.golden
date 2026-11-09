@@ -1,0 +1,2 @@
+http --follow --max-redirects=10 \
+  HEAD https://api.test/items

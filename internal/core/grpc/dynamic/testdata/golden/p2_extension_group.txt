@@ -1,0 +1,3 @@
+type: codec.p2.Extendable
+[codec.p2.extgroup]: {}
+[codec.p2.extgroup].v: 42

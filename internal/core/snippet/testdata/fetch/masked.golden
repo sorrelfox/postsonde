@@ -1,0 +1,12 @@
+const response = await fetch("https://api.test/items?key=••••••", {
+  method: "POST",
+  headers: {
+    "X-Api-Key": String.fromCharCode(...new TextEncoder().encode("••••••")),
+    "Authorization": String.fromCharCode(...new TextEncoder().encode("Bearer ••••••")),
+    "Content-Type": "application/json",
+  },
+  body: "{\"password\":\"••••••\"}",
+});
+
+console.log(response.status);
+console.log(await response.text());

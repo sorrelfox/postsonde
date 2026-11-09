@@ -1,0 +1,49 @@
+{
+  "diagnostics": null,
+  "environments": null,
+  "name": "Star Wars films",
+  "root": {
+    "at": "",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "Star Wars films",
+    "headers": null,
+    "items": [
+      {
+        "at": " @[1,1]",
+        "diagnostics": [
+          {
+            "Code": "altair.script",
+            "Severity": "warning",
+            "Message": "The request's pre-request script is kept in its description: PostSonde does not run Altair scripts.",
+            "At": " @[1,1]"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "description": "Altair pre-request script (turned off in Altair; not run by PostSonde):\n\n```js\naltair.helpers.setEnvironment('ts', Date.now());\n```",
+          "url": "https://swapi-graphql.example/graphql",
+          "query": "query AllFilms($first: Int) {\n  allFilms(first: $first) {\n    films {\n      title\n      releaseDate\n    }\n  }\n}\n",
+          "variables": "{\n  \"first\": 3\n}",
+          "headers": [
+            {
+              "name": "X-Client",
+              "value": "altair"
+            }
+          ],
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "Star Wars films"
+      }
+    ],
+    "variables": null
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_8a3f1c6e0b92d547",
+  "name": "Ticker",
+  "url": "{{baseUrl}}/graphql",
+  "query": "subscription Ticker {\n  ticker {\n    symbol\n    price\n  }\n}",
+  "auth": {
+    "type": "inherit"
+  },
+  "settings": {
+    "graphqlTransport": {
+      "query": "ws",
+      "subscription": "sse"
+    }
+  }
+}

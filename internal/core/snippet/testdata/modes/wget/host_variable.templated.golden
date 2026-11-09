@@ -1,0 +1,3 @@
+wget 'https://{{host}}/items/{{id}}' \
+  --max-redirect 10 \
+  -O -

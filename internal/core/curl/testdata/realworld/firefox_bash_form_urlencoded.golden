@@ -1,0 +1,152 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": true,
+  "url": "https://shop.example.org/api/cart",
+  "urls": [
+    {
+      "value": "https://shop.example.org/api/cart",
+      "start": 5,
+      "end": 40
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "User-Agent",
+      "value": "Mozilla/5.0 (X11; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0",
+      "kind": "set",
+      "implied": false,
+      "start": 62,
+      "end": 149
+    },
+    {
+      "name": "Accept",
+      "value": "*/*",
+      "kind": "set",
+      "implied": false,
+      "start": 150,
+      "end": 166
+    },
+    {
+      "name": "Accept-Language",
+      "value": "en-US,en;q=0.5",
+      "kind": "set",
+      "implied": false,
+      "start": 167,
+      "end": 203
+    },
+    {
+      "name": "Accept-Encoding",
+      "value": "gzip, deflate, br, zstd",
+      "kind": "set",
+      "implied": false,
+      "start": 204,
+      "end": 249
+    },
+    {
+      "name": "Content-Type",
+      "value": "application/x-www-form-urlencoded; charset=UTF-8",
+      "kind": "set",
+      "implied": false,
+      "start": 250,
+      "end": 317
+    },
+    {
+      "name": "X-Requested-With",
+      "value": "XMLHttpRequest",
+      "kind": "set",
+      "implied": false,
+      "start": 318,
+      "end": 355
+    },
+    {
+      "name": "Origin",
+      "value": "https://shop.example.org",
+      "kind": "set",
+      "implied": false,
+      "start": 356,
+      "end": 393
+    },
+    {
+      "name": "Connection",
+      "value": "keep-alive",
+      "kind": "set",
+      "implied": false,
+      "start": 394,
+      "end": 421
+    },
+    {
+      "name": "Cookie",
+      "value": "cart=7f3a; consent=yes",
+      "kind": "set",
+      "implied": false,
+      "start": 422,
+      "end": 457
+    },
+    {
+      "name": "Sec-Fetch-Dest",
+      "value": "empty",
+      "kind": "set",
+      "implied": false,
+      "start": 458,
+      "end": 484
+    },
+    {
+      "name": "Sec-Fetch-Mode",
+      "value": "cors",
+      "kind": "set",
+      "implied": false,
+      "start": 485,
+      "end": 510
+    },
+    {
+      "name": "Sec-Fetch-Site",
+      "value": "same-origin",
+      "kind": "set",
+      "implied": false,
+      "start": 511,
+      "end": 543
+    },
+    {
+      "name": "TE",
+      "value": "trailers",
+      "kind": "set",
+      "implied": false,
+      "start": 544,
+      "end": 561
+    }
+  ],
+  "data": [
+    {
+      "kind": "raw",
+      "option": "--data-raw",
+      "value": "product_id=42\u0026qty=1\u0026note=gift%20wrap",
+      "name": "",
+      "file": "",
+      "start": 562,
+      "end": 611
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": true,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

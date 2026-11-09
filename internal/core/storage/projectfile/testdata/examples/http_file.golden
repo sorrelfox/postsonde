@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_7b2e9c41d0a8f365",
+  "name": "Import catalogue",
+  "method": "POST",
+  "url": "{{baseUrl}}/catalogue/import",
+  "body": {
+    "mode": "file",
+    "path": "fixtures/catalogue.csv",
+    "contentType": "text/csv; charset=utf-8"
+  },
+  "auth": {
+    "type": "inherit"
+  }
+}

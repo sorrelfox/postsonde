@@ -1,0 +1,13 @@
+org.gnome.system.proxy autoconfig-url ''
+org.gnome.system.proxy ignore-hosts @as []
+org.gnome.system.proxy mode 'manual'
+org.gnome.system.proxy use-same-proxy true
+org.gnome.system.proxy.http authentication-password ''
+org.gnome.system.proxy.http authentication-user ''
+org.gnome.system.proxy.http host 'web.proxy.test'
+org.gnome.system.proxy.http port 8080
+org.gnome.system.proxy.http use-authentication false
+org.gnome.system.proxy.https host ''
+org.gnome.system.proxy.https port 0
+org.gnome.system.proxy.socks host ''
+org.gnome.system.proxy.socks port 0

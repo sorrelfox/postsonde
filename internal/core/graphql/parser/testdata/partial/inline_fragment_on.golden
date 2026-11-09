@@ -1,0 +1,13 @@
+# source
+{ ... on 
+# tree
+Document [0:9]
+  Definitions[0]: OperationDefinition [0:9] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:9] LBrace=0 RBrace=-1
+      Selections[0]: InlineFragment [2:9] Spread=2
+        TypeCondition: TypeCondition [6:9] On=6
+          Type: NamedType [8:9]
+            Name: Name [8:9] Value=""
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"
+1:10 [9:9] unexpected token: expected type name, found end of input

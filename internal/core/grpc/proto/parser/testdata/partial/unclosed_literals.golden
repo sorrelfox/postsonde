@@ -1,0 +1,27 @@
+# source
+option (a) = { b: [1, 2 c: <d: 1 };
+message M {}
+# tree
+File [0:48] Name="p.proto"
+  Decls[0]: Option [0:35]
+    Name: OptionName [7:10]
+      Parts[0]: OptionNamePart [7:10] Extension=true Name=[8:9]"a"
+    Value: MessageLit [13:34]
+      Fields[0]: MessageLitField [15:23]
+        Name: FieldRef [15:16] Name=[15:16]"b"
+        Value: ListLit [18:23]
+          Elements[0]: IntLit [19:20] Raw="1" Value=1
+          Elements[1]: IntLit [22:23] Raw="2" Value=2
+      Fields[1]: MessageLitField [24:32]
+        Name: FieldRef [24:25] Name=[24:25]"c"
+        Value: MessageLit [27:32]
+          Fields[0]: MessageLitField [28:32]
+            Name: FieldRef [28:29] Name=[28:29]"d"
+            Value: IntLit [31:32] Raw="1" Value=1
+  Decls[1]: Message [36:48] Name=[44:45]"M" RBrace=47
+# errors
+1:19 [18:19] unclosed delimiter: "[" is not closed
+1:25 [24:25] unexpected token: expected "," or "]", found "c"
+1:28 [27:28] unclosed delimiter: "<" is not closed
+# diagnostics
+1:1 [0:0] warning syntax: no syntax specified; the file is treated as proto2 (add syntax = "proto2"; or syntax = "proto3";)

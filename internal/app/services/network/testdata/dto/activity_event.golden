@@ -1,0 +1,25 @@
+{
+  "active": 1,
+  "conns": [
+    {
+      "id": 3,
+      "opKind": "http.send",
+      "opId": "op_3f9a0c12d4e5b678",
+      "network": "tcp",
+      "address": "example.com:443",
+      "localAddr": "192.168.1.20:53211",
+      "remoteAddr": "10.0.0.1:1080",
+      "via": "socks5h://proxy.lan:1080",
+      "state": "closed",
+      "startedAt": "2026-09-19T09:30:00Z",
+      "connectedAt": "2026-09-19T09:30:00.0425Z",
+      "endedAt": "2026-09-19T09:30:02Z",
+      "connectMs": 42.5,
+      "durationMs": 2000,
+      "bytesIn": 5120,
+      "bytesOut": 812,
+      "errorCode": "",
+      "error": ""
+    }
+  ]
+}

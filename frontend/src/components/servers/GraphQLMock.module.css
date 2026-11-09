@@ -1,0 +1,56 @@
+/* The GraphQL mock server's editor (SSRV-08): the pasted schema and the
+   overrides. Rows, inputs and buttons come from WsServer.module.css. */
+
+.schemaText,
+.value {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.45;
+  resize: vertical;
+  tab-size: 2;
+}
+
+.schemaText {
+  min-height: 12em;
+}
+
+.schemaText:focus,
+.value:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.value[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.override {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.override[data-disabled] .target,
+.override[data-disabled] .value {
+  opacity: 0.6;
+}
+
+.target {
+  flex: 1 1 14em;
+  min-width: 0;
+  font-family: var(--font-mono);
+}
+
+.code {
+  width: 12em;
+  font-family: var(--font-mono);
+}

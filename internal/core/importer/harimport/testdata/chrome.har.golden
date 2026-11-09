@@ -1,0 +1,416 @@
+{
+  "diagnostics": [
+    {
+      "Code": "har.filtered",
+      "Severity": "info",
+      "Message": "Left out 2 static resources (images, scripts, styles, fonts, media), 1 CORS preflight request and 1 repeated request (the same method, URL and body as an earlier one).",
+      "At": "log.entries @0:0"
+    }
+  ],
+  "name": "chrome",
+  "root": {
+    "at": "",
+    "diagnostics": null,
+    "folder": "",
+    "items": [
+      {
+        "at": "log.entries[0] @20:7",
+        "diagnostics": [
+          {
+            "Code": "har.cookies_dropped",
+            "Severity": "warning",
+            "Message": "The browser's cookies (sid, theme) were not imported: they are its session, not part of the request. PostSonde's cookie jar keeps the cookies servers set when you send.",
+            "At": "log.entries[0] @20:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 200 OK (text/html).",
+          "method": "GET",
+          "url": "https://shop.example.com/cart",
+          "headers": [
+            {
+              "name": "accept",
+              "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+            },
+            {
+              "name": "accept-language",
+              "value": "en-GB,en;q=0.9"
+            },
+            {
+              "name": "user-agent",
+              "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+            }
+          ],
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "GET /cart"
+      },
+      {
+        "at": "log.entries[4] @157:7",
+        "diagnostics": [
+          {
+            "Code": "har.auth",
+            "Severity": "info",
+            "Message": "The Authorization header (Bearer) became the request's auth; its secret is kept on this machine only, not in the project's files.",
+            "At": "log.entries[4] @157:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 200 OK (application/json).",
+          "method": "GET",
+          "url": "https://api.shop.example.com/v1/cart?currency=EUR&include=items%2Ctotals",
+          "params": [
+            {
+              "name": "currency",
+              "value": "EUR"
+            },
+            {
+              "name": "include",
+              "value": "items%2Ctotals"
+            }
+          ],
+          "headers": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "origin",
+              "value": "https://shop.example.com"
+            },
+            {
+              "name": "x-request-id",
+              "value": "5b0e2c4a"
+            }
+          ],
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzI1NiJ9.chrome-bearer-7f3a"
+          }
+        },
+        "request": "GET /v1/cart"
+      },
+      {
+        "at": "log.entries[5] @191:7",
+        "diagnostics": [
+          {
+            "Code": "har.auth",
+            "Severity": "info",
+            "Message": "The Authorization header (Bearer) became the request's auth; its secret is kept on this machine only, not in the project's files.",
+            "At": "log.entries[5] @191:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 201 Created (application/json).",
+          "method": "POST",
+          "url": "https://api.shop.example.com/v1/cart/items",
+          "headers": [
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "type": "json",
+            "text": "{\"sku\":\"TSHIRT-42-BLUE\",\"qty\":2}"
+          },
+          "auth": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzI1NiJ9.chrome-bearer-7f3a"
+          }
+        },
+        "request": "POST /v1/cart/items"
+      },
+      {
+        "at": "log.entries[7] @247:7",
+        "diagnostics": [
+          {
+            "Code": "har.auth",
+            "Severity": "info",
+            "Message": "The Authorization header (Bearer) became the request's auth; its secret is kept on this machine only, not in the project's files.",
+            "At": "log.entries[7] @247:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 200 OK (application/json).",
+          "url": "https://api.shop.example.com/graphql",
+          "query": "query ProductSearch($term: String!, $first: Int) {\n  products(term: $term, first: $first) {\n    id\n    name\n  }\n}",
+          "variables": "{\n  \"term\": \"t-shirt\",\n  \"first\": 10\n}",
+          "operationName": "ProductSearch",
+          "headers": [
+            {
+              "name": "apollographql-client-name",
+              "value": "shop-web"
+            }
+          ],
+          "auth": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzI1NiJ9.chrome-bearer-7f3a"
+          }
+        },
+        "request": "ProductSearch"
+      },
+      {
+        "at": "log.entries[8] @278:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 303 See Other.",
+          "method": "POST",
+          "url": "https://shop.example.com/newsletter",
+          "headers": [
+            {
+              "name": "content-type",
+              "value": "application/x-www-form-urlencoded"
+            },
+            {
+              "name": "origin",
+              "value": "https://shop.example.com"
+            }
+          ],
+          "body": {
+            "mode": "urlencoded",
+            "fields": [
+              {
+                "name": "email",
+                "value": "ada@example.com"
+              },
+              {
+                "name": "topics",
+                "value": "news & offers"
+              }
+            ]
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "POST /newsletter"
+      },
+      {
+        "at": "log.entries[9] @313:7",
+        "diagnostics": [
+          {
+            "Code": "har.file_part",
+            "Severity": "info",
+            "Message": "1 part uploads a file the recording names but does not hold; choose the file on this machine before sending.",
+            "At": "log.entries[9] @313:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 201 Created (application/json).",
+          "method": "POST",
+          "url": "https://api.shop.example.com/v1/avatars",
+          "body": {
+            "mode": "multipart",
+            "parts": [
+              {
+                "name": "avatar",
+                "value": "",
+                "file": "me.png",
+                "contentType": "image/png"
+              },
+              {
+                "name": "caption",
+                "value": "Holiday photo"
+              }
+            ]
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "POST /v1/avatars"
+      },
+      {
+        "at": "log.entries[10] @342:7",
+        "diagnostics": [
+          {
+            "Code": "har.cookies_dropped",
+            "Severity": "warning",
+            "Message": "The browser's cookies (sid) were not imported: they are its session, not part of the request. PostSonde's cookie jar keeps the cookies servers set when you send.",
+            "At": "log.entries[10] @342:7"
+          },
+          {
+            "Code": "har.websocket_messages",
+            "Severity": "info",
+            "Message": "4 messages were sent in the recording; they are the request's saved messages (3, repeats left out). 2 messages received are not imported.",
+            "At": "log.entries[10] @342:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "websocket",
+          "id": "req_x",
+          "name": "",
+          "url": "wss://realtime.shop.example.com/socket?v=2",
+          "params": [
+            {
+              "name": "v",
+              "value": "2"
+            }
+          ],
+          "headers": [
+            {
+              "name": "Origin",
+              "value": "https://shop.example.com"
+            }
+          ],
+          "subprotocols": [
+            "cart.v2",
+            "json"
+          ],
+          "savedMessages": [
+            {
+              "name": "Sent message 1",
+              "text": "{\"type\":\"subscribe\",\"channel\":\"cart\"}",
+              "format": "json"
+            },
+            {
+              "name": "Sent message 2",
+              "text": "ping"
+            },
+            {
+              "name": "Sent message 4",
+              "text": "AAEC",
+              "format": "base64"
+            }
+          ]
+        },
+        "request": "WebSocket /socket"
+      },
+      {
+        "at": "log.entries[11] @383:7",
+        "code": "har.unsupported",
+        "name": "GET data: URL",
+        "reason": "A data: URL is not fetched over the network, so there is no request to import.",
+        "skipped": "request"
+      },
+      {
+        "at": "log.entries[12] @406:7",
+        "diagnostics": [
+          {
+            "Code": "har.auth",
+            "Severity": "info",
+            "Message": "The Authorization header (Basic) became the request's auth; its secret is kept on this machine only, not in the project's files.",
+            "At": "log.entries[12] @406:7"
+          },
+          {
+            "Code": "har.auth_dropped",
+            "Severity": "warning",
+            "Message": "The x-api-key header was not imported: the request already has its auth, and PostSonde keeps one credential per request. Add it as a secret variable.",
+            "At": "log.entries[12] @406:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 202 Accepted.",
+          "method": "POST",
+          "url": "https://api.shop.example.com/v1/admin/reindex?scope=products",
+          "params": [
+            {
+              "name": "scope",
+              "value": "products"
+            }
+          ],
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "basic",
+            "username": "admin",
+            "password": "reindex-pass-42"
+          }
+        },
+        "request": "POST /v1/admin/reindex"
+      },
+      {
+        "at": "log.entries[13] @432:7",
+        "diagnostics": [
+          {
+            "Code": "har.auth_dropped",
+            "Severity": "warning",
+            "Message": "The Authorization header answered a Digest challenge and cannot be sent again; it was not imported. Set up Digest auth with the user's password.",
+            "At": "log.entries[13] @432:7"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "description": "Recorded response: 200 OK (text/csv).",
+          "method": "GET",
+          "url": "https://api.shop.example.com/v1/reports/daily",
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "GET /v1/reports/daily"
+      },
+      {
+        "at": "log.entries[14] @457:7",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "http",
+          "id": "req_x",
+          "name": "",
+          "method": "GET",
+          "url": "http://localhost:9999/health",
+          "headers": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            }
+          ],
+          "body": {
+            "mode": "none"
+          },
+          "auth": {
+            "type": "inherit"
+          }
+        },
+        "request": "GET /health"
+      }
+    ]
+  }
+}

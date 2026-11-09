@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ws_7c1e4b9a2f3d5e60",
+    "name": "Shop API",
+    "path": "/Users/zoe/Projects/shop-api",
+    "openedAt": "2026-09-16T09:30:00Z",
+    "available": true
+  },
+  {
+    "id": "ws_0b8d2e61c4a9f375",
+    "name": "Old",
+    "path": "/Volumes/usb/old",
+    "openedAt": "2026-09-16T08:30:00Z",
+    "available": false
+  }
+]

@@ -1,0 +1,37 @@
+# source
+"""
+The root of the schema.
+"""
+schema @link(url: "https://example.com") {
+  query: MyQueryRootType
+  mutation: MyMutationRootType
+  subscription: MySubscriptionRootType
+}
+
+type MyQueryRootType { someField: String }
+# tree
+Document [0:215]
+  Definitions[0]: SchemaDefinition [0:171] Extend=-1 Keyword=32 LBrace=73 RBrace=170
+    Description: StringValue [0:31] Block=true Value="The root of the schema."
+    Directives[0]: Directive [39:72] At=39
+      Name: Name [40:44] Value="link"
+      Arguments: ArgumentList [44:72] LParen=44 RParen=71
+        Arguments[0]: Argument [45:71] Colon=48
+          Name: Name [45:48] Value="url"
+          Value: StringValue [50:71] Block=false Value="https://example.com"
+    OperationTypes[0]: RootOperationTypeDefinition [77:99] Operation=query Keyword=77 Colon=82
+      Type: NamedType [84:99]
+        Name: Name [84:99] Value="MyQueryRootType"
+    OperationTypes[1]: RootOperationTypeDefinition [102:130] Operation=mutation Keyword=102 Colon=110
+      Type: NamedType [112:130]
+        Name: Name [112:130] Value="MyMutationRootType"
+    OperationTypes[2]: RootOperationTypeDefinition [133:169] Operation=subscription Keyword=133 Colon=145
+      Type: NamedType [147:169]
+        Name: Name [147:169] Value="MySubscriptionRootType"
+  Definitions[1]: TypeDefinition [173:215] Extend=-1 Kind=type Keyword=173 Implements=-1 Equals=-1 LBrace=194 RBrace=214
+    Name: Name [178:193] Value="MyQueryRootType"
+    Fields[0]: FieldDefinition [196:213] Colon=205
+      Name: Name [196:205] Value="someField"
+      Type: NamedType [207:213]
+        Name: Name [207:213] Value="String"
+# errors

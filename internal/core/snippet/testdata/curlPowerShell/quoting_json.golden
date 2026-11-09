@@ -1,0 +1,10 @@
+curl.exe -X PATCH https://api.test/q `
+  -H 'Content-Type: application/json' `
+  --data-raw '{
+  "path": "C:\\dir\\",
+  "quote": "say \"hi\"",
+  "escape": "\u00e9\n",
+  "template": "${x} `y` {{z}}",
+  "text": "héllo ✓"
+}' `
+  -L --max-redirs 10

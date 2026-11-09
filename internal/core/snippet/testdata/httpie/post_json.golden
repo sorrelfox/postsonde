@@ -1,0 +1,7 @@
+http --follow --max-redirects=10 \
+  --raw '{
+  "name": "O'\''Brien",
+  "tags": ["a", "b"]
+}' \
+  POST https://api.test/items \
+  Content-Type:application/json

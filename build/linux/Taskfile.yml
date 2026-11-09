@@ -1,0 +1,74 @@
+version: '3'
+
+includes:
+  common: ../Taskfile.yml
+
+# Native builds only: needs a C compiler and the GTK4 + WebKitGTK 6.0
+# development packages. For the legacy GTK3/WebKit2GTK 4.1 stack build with
+# `wails3 build EXTRA_TAGS=gtk3`. Packaging: docs/packaging.md.
+
+tasks:
+  build:
+    summary: Builds the application binary into bin/
+    deps:
+      - task: common:go:mod:tidy
+      - task: common:build:frontend
+        vars:
+          BUILD_FLAGS:
+            ref: .BUILD_FLAGS
+          DEV:
+            ref: .DEV
+      - task: common:sync:icons
+    cmds:
+      - go build {{.BUILD_FLAGS}} -o "{{.OUTPUT}}" {{.MAIN_PKG}}
+    vars:
+      BUILD_FLAGS: '{{if eq .DEV "true"}}{{if .EXTRA_TAGS}}-tags {{.EXTRA_TAGS}} {{end}}-buildvcs=false -gcflags=all="-l" -ldflags="-X main.version={{.VERSION}}"{{else}}-tags production{{if .EXTRA_TAGS}},{{.EXTRA_TAGS}}{{end}} -trimpath -buildvcs=false -ldflags="-w -s -X main.version={{.VERSION}}"{{end}}'
+      DEFAULT_OUTPUT: '{{.BIN_DIR}}/{{.APP_NAME}}'
+      OUTPUT: '{{ .OUTPUT | default .DEFAULT_OUTPUT }}'
+    env:
+      GOOS: linux
+      CGO_ENABLED: 1
+      GOARCH: '{{.ARCH | default ARCH}}'
+
+  # `wails3 package` on Linux: a production build of the host's stack and
+  # architecture as bin/postsonde-linux-<stack>-<arch> (the CI name), then
+  # its .deb in dist/. EXTRA_TAGS=gtk3 selects the gtk3 build and the
+  # postsonde-gtk3 package. The AppImage is create:appimage.
+  package:
+    summary: Builds a production binary and packages it as a .deb in dist/ (docs/packaging.md)
+    vars:
+      STACK: '{{if eq .EXTRA_TAGS "gtk3"}}gtk3{{else}}gtk4{{end}}'
+      PKG_ARCH: '{{.ARCH | default ARCH}}'
+    cmds:
+      - task: build
+        vars:
+          OUTPUT: '{{.BIN_DIR}}/{{.APP_NAME}}-linux-{{.STACK}}-{{.PKG_ARCH}}'
+          EXTRA_TAGS:
+            ref: .EXTRA_TAGS
+      - task: create:deb
+        vars:
+          STACK:
+            ref: .STACK
+          PKG_ARCH:
+            ref: .PKG_ARCH
+
+  create:deb:
+    summary: Packages bin/postsonde-linux-<STACK>-<ARCH> as a .deb in dist/ (needs wails3 on PATH)
+    vars:
+      STACK: '{{.STACK | default "gtk4"}}'
+      PKG_ARCH: '{{.PKG_ARCH | default .ARCH | default ARCH}}'
+    cmds:
+      - scripts/package-linux-deb.sh {{.STACK}} {{.PKG_ARCH}}
+
+  # The AppImage wraps the gtk3 binary built on Ubuntu 22.04, so it is
+  # built in that container (Docker), not on the host.
+  create:appimage:
+    summary: Packages bin/postsonde-linux-gtk3-<ARCH> as an AppImage in dist/, in an ubuntu:22.04 container
+    vars:
+      PKG_ARCH: '{{.PKG_ARCH | default .ARCH | default ARCH}}'
+    cmds:
+      - docker run --rm --platform linux/{{.PKG_ARCH}} -v "{{.ROOT_DIR}}":/src -w /src ubuntu:22.04 scripts/package-linux-appimage.sh {{.PKG_ARCH}}
+
+  run:
+    cmds:
+      - '{{.BIN_DIR}}/{{.APP_NAME}}'

@@ -1,0 +1,93 @@
+{
+  "serverId": "srv_00000000000000dd",
+  "summary": {
+    "seq": 11,
+    "time": "2026-09-16T08:00:09Z",
+    "peer": "127.0.0.1:53126",
+    "method": "POST",
+    "target": "/hooks/github?delivery=1\u0026tag=a%20b\u0026flag",
+    "contentType": "application/json",
+    "size": 19,
+    "truncated": false
+  },
+  "proto": "HTTP/1.1",
+  "host": "127.0.0.1:4000",
+  "path": "/hooks/github",
+  "query": [
+    {
+      "name": "delivery",
+      "value": "1"
+    },
+    {
+      "name": "tag",
+      "value": "a b"
+    },
+    {
+      "name": "flag",
+      "value": ""
+    }
+  ],
+  "headers": [
+    {
+      "name": "Host",
+      "value": "127.0.0.1:4000"
+    },
+    {
+      "name": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "name": "X-Github-Event",
+      "value": "issues"
+    }
+  ],
+  "body": {
+    "method": "",
+    "url": "",
+    "finalUrl": "",
+    "redirects": 0,
+    "proto": "",
+    "protocol": "",
+    "statusCode": 0,
+    "status": "",
+    "headers": null,
+    "cookies": null,
+    "contentType": "application/json",
+    "body": "{\"action\":\"opened\"}",
+    "bodyLanguage": "json",
+    "bodyPretty": "{\n  \"action\": \"opened\"\n}",
+    "prettyState": "formatted",
+    "prettyError": "",
+    "charset": "UTF-8",
+    "charsetSource": "default",
+    "bodyHex": false,
+    "bodyNote": "",
+    "previewType": "",
+    "bodyBinary": false,
+    "bodyClipped": false,
+    "bodyShown": 19,
+    "bodyTruncated": false,
+    "bodyLimit": 0,
+    "size": 19,
+    "bodySize": 0,
+    "contentEncoding": "",
+    "bodyId": "",
+    "historyId": "",
+    "fileName": "",
+    "headerSize": 0,
+    "durationMs": 0,
+    "timeoutMs": 0,
+    "timeoutSource": "",
+    "insecureTls": false,
+    "insecureTlsSource": "",
+    "warnings": null,
+    "timeline": {
+      "hops": null,
+      "events": null,
+      "masked": false
+    },
+    "tests": [],
+    "extractions": [],
+    "incremental": null
+  }
+}

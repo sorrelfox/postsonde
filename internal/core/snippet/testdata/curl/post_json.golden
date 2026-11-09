@@ -1,0 +1,7 @@
+curl https://api.test/items \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+  "name": "O'\''Brien",
+  "tags": ["a", "b"]
+}' \
+  -L --max-redirs 10

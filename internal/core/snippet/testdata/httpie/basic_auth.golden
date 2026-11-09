@@ -1,0 +1,2 @@
+http '--auth=ann:p@ss:w'\''rd' --follow --max-redirects=10 \
+  GET https://api.test/me

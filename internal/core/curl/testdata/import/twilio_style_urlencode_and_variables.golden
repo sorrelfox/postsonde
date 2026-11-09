@@ -1,0 +1,56 @@
+{
+  "name": "Messages.json",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/2010-04-01/Accounts/$TWILIO_ACCOUNT_SID/Messages.json",
+    "body": {
+      "mode": "urlencoded",
+      "fields": [
+        {
+          "name": "Body",
+          "value": "Hello from PostSonde \u0026 friends"
+        },
+        {
+          "name": "From",
+          "value": "+15017122661"
+        },
+        {
+          "name": "To",
+          "value": "+15558675310"
+        }
+      ]
+    },
+    "auth": {
+      "type": "basic",
+      "username": "$TWILIO_ACCOUNT_SID",
+      "password": "$TWILIO_AUTH_TOKEN"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.shell_expansion",
+      "severity": "warning",
+      "start": 58,
+      "end": 77,
+      "message": "The shell would expand “$TWILIO_ACCOUNT_SID”; it is kept as written."
+    },
+    {
+      "code": "curl.shell_expansion",
+      "severity": "warning",
+      "start": 231,
+      "end": 250,
+      "message": "The shell would expand “$TWILIO_ACCOUNT_SID”; it is kept as written."
+    },
+    {
+      "code": "curl.shell_expansion",
+      "severity": "warning",
+      "start": 251,
+      "end": 269,
+      "message": "The shell would expand “$TWILIO_AUTH_TOKEN”; it is kept as written."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_9b3e6a1d07c4f528",
+  "name": "Log in",
+  "method": "POST",
+  "url": "{{baseUrl}}/login",
+  "headers": [
+    {
+      "name": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "body": {
+    "mode": "raw",
+    "type": "json",
+    "text": "{\"user\": \"{{user}}\", \"password\": \"{{password}}\"}"
+  },
+  "auth": {
+    "type": "none"
+  },
+  "assertions": [
+    {
+      "target": "status",
+      "op": "equals",
+      "expected": "200"
+    }
+  ],
+  "extractions": [
+    {
+      "source": "jsonpath",
+      "expr": "$.access_token",
+      "variable": "token",
+      "secret": true
+    },
+    {
+      "source": "jsonpath",
+      "expr": "$.user.id",
+      "variable": "userId",
+      "persist": true
+    },
+    {
+      "source": "cookie",
+      "expr": "session",
+      "variable": "session",
+      "secret": true
+    },
+    {
+      "source": "header",
+      "expr": "X-Request-Id",
+      "variable": "loginRequestId",
+      "scope": "run"
+    },
+    {
+      "source": "regex",
+      "expr": "\"expires_in\":(\\d+)",
+      "variable": "expiresIn",
+      "disabled": true
+    }
+  ]
+}

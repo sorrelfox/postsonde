@@ -1,0 +1,76 @@
+/* A small popup menu. Surfaces, lines and the shadow follow the
+ * mockup's popovers: a raised panel with a 1px line and --shadow. */
+
+.menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 170px;
+  max-width: min(420px, calc(100vw - 8px));
+  padding: var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-size: var(--fs-md2);
+  user-select: none;
+}
+
+.menu:focus {
+  /* a11y: the menu itself is focused only when it has no item to focus; the focused item shows its own ring. */
+  outline: none;
+}
+
+.item {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.item:focus {
+  outline: none;
+  background: var(--bg3);
+}
+
+.item:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.item[aria-disabled="true"] {
+  color: var(--text3);
+  cursor: default;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The check mark column of a choice (menuitemradio); empty when not chosen. */
+.check {
+  width: 12px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  margin-right: calc(var(--space-6) * -1 + var(--space-3));
+  color: var(--accent);
+}
+
+.separator {
+  height: 1px;
+  margin: var(--space-2) var(--space-1);
+  background: var(--line);
+}
+
+.shortcut {
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}

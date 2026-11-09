@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "kind": "graphql",
+  "id": "req_3d7f2a9c5e1b8046",
+  "name": "Catalogue",
+  "url": "{{baseUrl}}/graphql",
+  "query": "{\n  products {\n    id\n  }\n}",
+  "auth": {
+    "type": "inherit"
+  },
+  "settings": {
+    "graphqlSchemaRefresh": {
+      "onSend": true,
+      "intervalMinutes": 30
+    }
+  }
+}

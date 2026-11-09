@@ -1,0 +1,17 @@
+# source
+query Q($id: ) { a }
+# tree
+Document [0:20]
+  Definitions[0]: OperationDefinition [0:20] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+    VariableDefinitions: VariableDefinitionList [7:14] LParen=7 RParen=13
+      Definitions[0]: VariableDefinition [8:13] Colon=11 Equals=-1
+        Variable: Variable [8:11] Dollar=8
+          Name: Name [9:11] Value="id"
+        Type: NamedType [12:13]
+          Name: Name [12:13] Value=""
+    SelectionSet: SelectionSet [15:20] LBrace=15 RBrace=19
+      Selections[0]: Field [17:18] Colon=-1
+        Name: Name [17:18] Value="a"
+# errors
+1:14 [13:14] unexpected token: expected type name, found ")"

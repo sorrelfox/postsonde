@@ -1,0 +1,72 @@
+# source
+query Q(
+  $a: [[Int!]]!
+  $b: String = "x" @deprecated(reason: "no")
+  $c: Input = {a: [1, {b: null}], e: ENUM}
+  $d: Boolean! = false @x @y
+) @operationDirective(v: $a) { f }
+# tree
+Document [0:176]
+  Definitions[0]: OperationDefinition [0:176] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+    VariableDefinitions: VariableDefinitionList [7:143] LParen=7 RParen=142
+      Definitions[0]: VariableDefinition [11:24] Colon=13 Equals=-1
+        Variable: Variable [11:13] Dollar=11
+          Name: Name [12:13] Value="a"
+        Type: NonNullType [15:24] Bang=23
+          Type: ListType [15:23] LBracket=15 RBracket=22
+            Type: ListType [16:22] LBracket=16 RBracket=21
+              Type: NonNullType [17:21] Bang=20
+                Type: NamedType [17:20]
+                  Name: Name [17:20] Value="Int"
+      Definitions[1]: VariableDefinition [27:69] Colon=29 Equals=38
+        Variable: Variable [27:29] Dollar=27
+          Name: Name [28:29] Value="b"
+        Type: NamedType [31:37]
+          Name: Name [31:37] Value="String"
+        DefaultValue: StringValue [40:43] Block=false Value="x"
+        Directives[0]: Directive [44:69] At=44
+          Name: Name [45:55] Value="deprecated"
+          Arguments: ArgumentList [55:69] LParen=55 RParen=68
+            Arguments[0]: Argument [56:68] Colon=62
+              Name: Name [56:62] Value="reason"
+              Value: StringValue [64:68] Block=false Value="no"
+      Definitions[2]: VariableDefinition [72:112] Colon=74 Equals=82
+        Variable: Variable [72:74] Dollar=72
+          Name: Name [73:74] Value="c"
+        Type: NamedType [76:81]
+          Name: Name [76:81] Value="Input"
+        DefaultValue: ObjectValue [84:112] LBrace=84 RBrace=111
+          Fields[0]: ObjectField [85:102] Colon=86
+            Name: Name [85:86] Value="a"
+            Value: ListValue [88:102] LBracket=88 RBracket=101
+              Values[0]: IntValue [89:90] Raw="1"
+              Values[1]: ObjectValue [92:101] LBrace=92 RBrace=100
+                Fields[0]: ObjectField [93:100] Colon=94
+                  Name: Name [93:94] Value="b"
+                  Value: NullValue [96:100]
+          Fields[1]: ObjectField [104:111] Colon=105
+            Name: Name [104:105] Value="e"
+            Value: EnumValue [107:111] Value="ENUM"
+      Definitions[3]: VariableDefinition [115:141] Colon=117 Equals=128
+        Variable: Variable [115:117] Dollar=115
+          Name: Name [116:117] Value="d"
+        Type: NonNullType [119:127] Bang=126
+          Type: NamedType [119:126]
+            Name: Name [119:126] Value="Boolean"
+        DefaultValue: BooleanValue [130:135] Value=false
+        Directives[0]: Directive [136:138] At=136
+          Name: Name [137:138] Value="x"
+        Directives[1]: Directive [139:141] At=139
+          Name: Name [140:141] Value="y"
+    Directives[0]: Directive [144:170] At=144
+      Name: Name [145:163] Value="operationDirective"
+      Arguments: ArgumentList [163:170] LParen=163 RParen=169
+        Arguments[0]: Argument [164:169] Colon=165
+          Name: Name [164:165] Value="v"
+          Value: Variable [167:169] Dollar=167
+            Name: Name [168:169] Value="a"
+    SelectionSet: SelectionSet [171:176] LBrace=171 RBrace=175
+      Selections[0]: Field [173:174] Colon=-1
+        Name: Name [173:174] Value="f"
+# errors

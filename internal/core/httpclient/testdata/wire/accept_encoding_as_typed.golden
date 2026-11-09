@@ -1,0 +1,4 @@
+GET / HTTP/1.1\r\n
+Host: ADDR\r\n
+Accept-Encoding: gzip, br\r\n
+\r\n

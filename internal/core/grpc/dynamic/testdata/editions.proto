@@ -1,0 +1,34 @@
+// Test messages for the dynamic codec: editions features.
+edition = "2023";
+
+package codec.ed;
+
+enum Closed {
+  option features.enum_type = CLOSED;
+  CLOSED_ZERO = 0;
+  CLOSED_ONE = 1;
+}
+
+message Inner {
+  int32 x = 1;
+}
+
+message Features {
+  Inner delimited = 1 [features.message_encoding = DELIMITED];
+  repeated Inner delimited_list = 2 [features.message_encoding = DELIMITED];
+  int32 explicit_int32 = 3;
+  int32 implicit_int32 = 4 [features.field_presence = IMPLICIT];
+  repeated int32 packed = 5;
+  repeated int32 expanded = 6 [features.repeated_field_encoding = EXPANDED];
+  string verified = 7;
+  string unverified = 8 [features.utf8_validation = NONE];
+  Closed closed = 9;
+  Inner length_prefixed = 10;
+}
+
+// Unverified turns UTF-8 validation off on a map field, which applies to
+// its key and value.
+message Unverified {
+  map<string, string> m = 1 [features.utf8_validation = NONE];
+  map<string, string> verified_map = 2;
+}

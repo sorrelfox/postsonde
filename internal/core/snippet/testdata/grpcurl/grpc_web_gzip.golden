@@ -1,0 +1,5 @@
+# grpcurl calls over native gRPC (HTTP/2), not gRPC-Web: the server must accept both.
+# grpcurl sends its messages uncompressed (no gzip).
+grpcurl -plaintext \
+  -d '{}' \
+  localhost:8080 echo.Echo/Say

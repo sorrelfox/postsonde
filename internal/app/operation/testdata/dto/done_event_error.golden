@@ -1,0 +1,20 @@
+{
+  "opId": "op_0123456789abcdef",
+  "seq": 3,
+  "status": "error",
+  "error": {
+    "kind": "network",
+    "code": "netx.connection_refused",
+    "message": "The connection to 127.0.0.1:9 was refused.",
+    "hint": "Is the server running on that host and port?",
+    "details": {
+      "address": "127.0.0.1:9"
+    },
+    "causes": [
+      "dial tcp 127.0.0.1:9: connect: connection refused"
+    ]
+  },
+  "items": 0,
+  "batches": 0,
+  "elapsedMs": 5
+}

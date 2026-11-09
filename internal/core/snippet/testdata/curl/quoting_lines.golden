@@ -1,0 +1,9 @@
+curl -X PUT https://api.test/q \
+  -H 'Content-Type: text/plain' \
+  --data-raw 'trailing   
+	tab first
+   
+"""q"""" \u0041 C:\dir\ ${x} %PATH% '\''a'\''
+
+  last  ' \
+  -L --max-redirs 10

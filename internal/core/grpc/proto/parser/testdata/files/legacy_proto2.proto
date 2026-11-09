@@ -1,0 +1,64 @@
+// proto2 constructs found in real imports such as descriptor.proto:
+// labels, defaults, groups, extension ranges and extensions.
+syntax = "proto2";
+
+package legacy;
+
+option optimize_for = SPEED;
+
+message Envelope {
+  required string id = 1;
+  optional int32 retries = 2 [default = 3];
+  optional double ratio = 3 [default = -inf];
+  optional float scale = 4 [default = 1.5e-3];
+  optional string greeting = 5 [default = "hello\n"];
+  optional bytes magic = 6 [default = "\xDE\xAD\xBE\xEF"];
+  optional Kind kind = 7 [default = KIND_B];
+  repeated int32 samples = 8 [packed = true];
+  optional int64 min_value = 9 [default = -9223372036854775808];
+  optional uint64 max_value = 10 [default = 18446744073709551615];
+
+  enum Kind {
+    KIND_A = 1;
+    KIND_B = 2;
+  }
+
+  repeated group Attachment = 11 {
+    required string name = 1;
+    optional bytes data = 2;
+  }
+
+  extensions 100 to 199;
+  extensions 1000 to max [declaration = {
+    number: 1000
+    full_name: ".legacy.trace_id"
+    type: "string"
+  }];
+
+  reserved 20 to 29;
+  reserved "old_id";
+}
+
+extend Envelope {
+  optional string trace_id = 1000;
+  repeated group Hop = 100 {
+    optional string host = 1;
+  }
+}
+
+message Container {
+  extend Envelope {
+    optional Container container = 101;
+  }
+  oneof payload {
+    string text = 1;
+    group Blob = 2 {
+      optional bytes data = 1;
+    }
+  }
+}
+
+message WireSet {
+  option message_set_wire_format = true;
+  extensions 4 to max;
+}

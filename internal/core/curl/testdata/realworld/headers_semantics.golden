@@ -1,0 +1,95 @@
+{
+  "dialect": "posix",
+  "method": "GET",
+  "methodExplicit": false,
+  "url": "https://example.com",
+  "urls": [
+    {
+      "value": "https://example.com",
+      "start": 5,
+      "end": 24
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "X-Empty",
+      "value": "",
+      "kind": "empty",
+      "implied": false,
+      "start": 25,
+      "end": 38
+    },
+    {
+      "name": "Accept",
+      "value": "",
+      "kind": "remove",
+      "implied": false,
+      "start": 39,
+      "end": 51
+    },
+    {
+      "name": "x-dup",
+      "value": "1",
+      "kind": "set",
+      "implied": false,
+      "start": 52,
+      "end": 65
+    },
+    {
+      "name": "X-Dup",
+      "value": "2",
+      "kind": "set",
+      "implied": false,
+      "start": 66,
+      "end": 79
+    },
+    {
+      "name": "  X-Spaced ",
+      "value": "v",
+      "kind": "set",
+      "implied": false,
+      "start": 107,
+      "end": 129
+    }
+  ],
+  "data": null,
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.invalid_value",
+      "severity": "warning",
+      "start": 80,
+      "end": 90,
+      "message": "A header must be “Name: value”, “Name:” or “Name;”; this one is ignored.",
+      "text": "-H 'bogus'"
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "warning",
+      "start": 91,
+      "end": 106,
+      "message": "curl reads this value from the file “headers.txt”; PostSonde does not read it.",
+      "text": "-H @headers.txt"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "entries": [
+    {
+      "seq": 7,
+      "at": "2026-09-19T09:30:00.123Z",
+      "level": "warn",
+      "message": "dial refused: not started by a user operation",
+      "source": "netx",
+      "opId": "op_3f9a0c12d4e5b678",
+      "opKind": "http.send",
+      "fields": [
+        {
+          "key": "component",
+          "value": "netx"
+        },
+        {
+          "key": "address",
+          "value": "example.com:443"
+        }
+      ]
+    }
+  ]
+}

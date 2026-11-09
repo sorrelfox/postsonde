@@ -1,0 +1,117 @@
+{
+  "id": "req_sio",
+  "kind": "socketio",
+  "name": "Chat",
+  "description": "",
+  "method": "",
+  "url": "https://localhost:3000/admin?room=lobby",
+  "params": [
+    {
+      "name": "room",
+      "value": "lobby",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    }
+  ],
+  "pathParams": [],
+  "headers": [
+    {
+      "name": "X-Client",
+      "value": "postsonde",
+      "description": "",
+      "enabled": true,
+      "extra": ""
+    }
+  ],
+  "body": {
+    "mode": "",
+    "type": "",
+    "text": "",
+    "fields": [],
+    "parts": [],
+    "path": "",
+    "contentType": "",
+    "extra": ""
+  },
+  "bodyExamples": [],
+  "query": "",
+  "variables": "",
+  "operationName": "",
+  "connectionParams": "",
+  "schemaFile": "",
+  "address": "",
+  "sendMode": "",
+  "lineEnding": "",
+  "message": "[\"hi\", {\"$base64\": \"AAE=\"}]",
+  "subprotocols": [],
+  "messageFormat": "",
+  "savedMessages": [
+    {
+      "name": "Join",
+      "text": "[\"lobby\"]",
+      "format": "",
+      "event": "join",
+      "ack": true,
+      "extra": ""
+    },
+    {
+      "name": "Ping",
+      "text": "",
+      "format": "",
+      "event": "ping",
+      "extra": "{\"x-color\":\"red\"}"
+    }
+  ],
+  "path": "/rt/",
+  "namespace": "/admin",
+  "authPayload": "{\"token\":\"{{token}}\"}",
+  "transport": "polling",
+  "socketIoVersion": "v2",
+  "event": "chat",
+  "ack": true,
+  "listen": [
+    "chat",
+    "typing"
+  ],
+  "service": "",
+  "proto": {
+    "files": [],
+    "importPaths": [],
+    "inherit": false,
+    "extra": ""
+  },
+  "metadata": [],
+  "auth": {
+    "type": "inherit",
+    "username": "",
+    "password": "",
+    "prefix": null,
+    "token": "",
+    "key": "",
+    "value": "",
+    "in": "",
+    "disabled": false,
+    "localSecrets": [],
+    "extra": ""
+  },
+  "settings": {
+    "timeoutMs": null,
+    "followRedirects": null,
+    "maxRedirects": null,
+    "followOriginalMethod": null,
+    "forwardAuthorization": null,
+    "verifyTls": false,
+    "connectTimeoutMs": null,
+    "urlEncoding": "",
+    "httpVersion": "",
+    "sendCookies": null,
+    "storeCookies": null,
+    "tls": null,
+    "deadlineMs": null,
+    "ackTimeoutMs": 2500,
+    "extra": ""
+  },
+  "extra": "{\"x-note\":\"kept\"}",
+  "version": 1
+}

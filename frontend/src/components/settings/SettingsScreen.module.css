@@ -1,0 +1,478 @@
+.screen {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  background: var(--bg1);
+}
+
+/* Left column: same width and surface as the sidebar it replaces. */
+.nav {
+  width: 272px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  background: var(--bg0);
+}
+
+.navHeader {
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-7);
+}
+
+.navTitle {
+  color: var(--text2);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--space-3);
+}
+
+.navItem {
+  width: 100%;
+  height: var(--h-control);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  color: var(--text2);
+  font-size: var(--fs-base);
+  text-align: left;
+}
+
+.navItem:hover {
+  color: var(--text);
+}
+
+.navItem[aria-current="page"] {
+  background: var(--sel);
+  color: var(--text);
+  font-weight: var(--fw-medium);
+}
+
+.navItem[aria-current="page"] svg {
+  color: var(--accent);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 56px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: 0 32px;
+  border-bottom: 1px solid var(--line);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+}
+
+.saved {
+  color: var(--text3);
+  font-size: var(--fs-md);
+  white-space: nowrap;
+}
+
+.button,
+.smallButton {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text2);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+}
+
+.button {
+  height: var(--h-control);
+  padding: 0 var(--space-7);
+  font-size: var(--fs-base);
+}
+
+.smallButton {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-5);
+  font-size: var(--fs-md);
+}
+
+.button:hover,
+.smallButton:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.fileError {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) 32px;
+  border-bottom: 1px solid var(--line);
+  color: var(--bad);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  user-select: text;
+}
+
+.fileError svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-2) 32px 24px;
+}
+
+.content {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+}
+
+.groupTitle {
+  margin: 20px 0 var(--space-4);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding: var(--space-6) var(--space-7);
+}
+
+.row + .row {
+  border-top: 1px solid var(--line);
+}
+
+/* With an error the text column grows; keep the control on the label's line. */
+.row[data-invalid="true"] {
+  align-items: start;
+}
+
+.rowText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rowLabel {
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+}
+
+.rowDescription {
+  color: var(--text3);
+  font-size: var(--fs-md);
+  line-height: 1.45;
+}
+
+.rowError {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--bad);
+  font-size: var(--fs-md);
+}
+
+.rowError svg {
+  flex: none;
+}
+
+/* A setting in an unsafe state, such as TLS verification off (HTTP-23). */
+.rowWarning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--warn);
+  font-size: var(--fs-md);
+}
+
+.rowWarning svg {
+  flex: none;
+}
+
+.rowControl {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  max-width: 100%;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.segment {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.segment:hover {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"] {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.input {
+  height: var(--h-control);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  outline: none;
+}
+
+.input[data-width="timeout"] {
+  width: 72px;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.unit {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.path {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: text;
+}
+
+/* A custom CA bundle's path, certificates and warnings (NET-04). */
+.bundleDetails {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.bundleDetails .path {
+  display: block;
+}
+
+.problems {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-7);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  font-size: var(--fs-md);
+  user-select: text;
+}
+
+.problemsTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--warn);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+}
+
+.problemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--text);
+  line-height: var(--lh-base);
+}
+
+.problemHint {
+  color: var(--text3);
+}
+
+.facts {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-7);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+}
+
+.factsTitle {
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+}
+
+.factList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fact {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--text2);
+  font-size: var(--fs-md2);
+}
+
+.factIcon {
+  display: flex;
+  color: var(--ok);
+}
+
+.factsNote {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+/* Editor page (UI-08) */
+.input[data-width="fontSize"] {
+  width: 64px;
+}
+
+.select {
+  width: 200px;
+  height: var(--h-control);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-md2);
+  outline: none;
+}
+
+.select:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+/* The preview: a real read-only editor with the settings applied. */
+.preview {
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+/* The admin policy (SET-02): its notice at the top of every page, the lock
+   after a locked setting's label, and the disabled control column. */
+.policy {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-7);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg0);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  user-select: text;
+}
+
+.policy .problemsTitle {
+  color: var(--accent);
+}
+
+.lockBadge {
+  display: inline-flex;
+  vertical-align: -1px;
+  margin-left: var(--space-3);
+  color: var(--text3);
+}
+
+/* A disabled fieldset as the control column: no fieldset chrome. */
+.lockedControl {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  cursor: not-allowed;
+}
+
+.lockedControl > * {
+  opacity: 0.6;
+}

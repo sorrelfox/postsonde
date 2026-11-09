@@ -1,0 +1,14 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/raw",
+    headers={
+        "Content-Type": "application/octet-stream",
+    },
+    data="a\x00b\x1bc",
+    allow_redirects=False,
+)
+
+print(response.status_code)
+print(response.text)

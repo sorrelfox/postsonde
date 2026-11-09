@@ -1,0 +1,7 @@
+// fetch has no Digest auth: answer the server's challenge for user "ann\n// x".
+const response = await fetch("https://api.test/me", {
+  redirect: "manual",
+});
+
+console.log(response.status);
+console.log(await response.text());

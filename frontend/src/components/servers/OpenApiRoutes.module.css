@@ -1,0 +1,229 @@
+/* The "Generate routes from OpenAPI" preview (MOCK-09): the file, the path
+ * prefix, merge or replace, the generated routes and the notes about the
+ * document. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-height: 0;
+}
+
+.source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+}
+
+.file {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta,
+.hint,
+.summary {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.summary {
+  color: var(--text2);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.label {
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.input {
+  flex: 1;
+  min-width: 120px;
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input:focus-visible,
+.link:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+  font-size: var(--fs-sm2);
+}
+
+.modeHint {
+  color: var(--text3);
+}
+
+.error {
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.list {
+  max-height: 260px;
+  margin: 0;
+  padding: var(--space-1);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  list-style: none;
+}
+
+.route {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-4);
+}
+
+.route[data-status="existing"],
+.route[data-status="over_limit"] {
+  opacity: 0.55;
+}
+
+.badge {
+  width: 42px;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--m-dir);
+}
+
+.badge[data-tone="get"] { color: var(--m-get); }
+.badge[data-tone="post"] { color: var(--m-post); }
+.badge[data-tone="put"] { color: var(--m-put); }
+.badge[data-tone="patch"] { color: var(--m-patch); }
+.badge[data-tone="del"] { color: var(--m-del); }
+
+.path {
+  flex: 1 1 50%;
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status {
+  flex: none;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.what {
+  flex: 1 1 30%;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag {
+  flex: none;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--bg3);
+  color: var(--text2);
+  font-size: var(--fs-xs);
+}
+
+.diagnostics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.diagnostic {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.diagnostic svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+.diagnostic[data-severity="warning"] svg { color: var(--warn); }
+.diagnostic[data-severity="error"] svg { color: var(--bad); }
+.diagnostic[data-severity="info"] svg { color: var(--text3); }
+
+.operation,
+.line {
+  color: var(--text3);
+}
+
+.operation {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.notes {
+  max-height: 200px;
+  overflow: auto;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.notes summary {
+  margin-bottom: var(--space-2);
+  cursor: pointer;
+}

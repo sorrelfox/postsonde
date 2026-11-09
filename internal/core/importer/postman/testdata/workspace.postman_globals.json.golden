@@ -1,0 +1,53 @@
+{
+  "diagnostics": null,
+  "environments": [
+    {
+      "at": " @1:1",
+      "diagnostics": [
+        {
+          "Code": "postman.globals",
+          "Severity": "info",
+          "Message": "Postman globals are imported as an environment. To make them global variables, copy them into the project's global variables.",
+          "At": " @1:1"
+        }
+      ],
+      "environment": "My Workspace Globals",
+      "variables": [
+        {
+          "Name": "company",
+          "Value": "Shop Inc.",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "global_secret",
+          "Value": "glob-secret-77",
+          "Description": "",
+          "Secret": true,
+          "Disabled": false
+        },
+        {
+          "Name": "retries",
+          "Value": "3",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    }
+  ],
+  "name": "My Workspace Globals",
+  "root": {
+    "at": "",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": null,
+    "variables": null
+  }
+}

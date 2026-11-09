@@ -1,0 +1,162 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": false,
+  "url": "https://api.example.com/v1/orders?page=2\u0026sort=desc",
+  "urls": [
+    {
+      "value": "https://api.example.com/v1/orders?page=2\u0026sort=desc",
+      "start": 5,
+      "end": 57
+    }
+  ],
+  "urlQuery": null,
+  "headers": [
+    {
+      "name": "accept",
+      "value": "application/json, text/plain, */*",
+      "kind": "set",
+      "implied": false,
+      "start": 62,
+      "end": 108
+    },
+    {
+      "name": "accept-language",
+      "value": "en-US,en;q=0.9,de;q=0.8",
+      "kind": "set",
+      "implied": false,
+      "start": 113,
+      "end": 158
+    },
+    {
+      "name": "authorization",
+      "value": "Bearer eyJhbGciOiJIUzI1NiJ9.e30.c2lnbmF0dXJl",
+      "kind": "set",
+      "implied": false,
+      "start": 163,
+      "end": 227
+    },
+    {
+      "name": "content-type",
+      "value": "application/json",
+      "kind": "set",
+      "implied": false,
+      "start": 232,
+      "end": 267
+    },
+    {
+      "name": "origin",
+      "value": "https://app.example.com",
+      "kind": "set",
+      "implied": false,
+      "start": 308,
+      "end": 344
+    },
+    {
+      "name": "priority",
+      "value": "u=1, i",
+      "kind": "set",
+      "implied": false,
+      "start": 349,
+      "end": 370
+    },
+    {
+      "name": "referer",
+      "value": "https://app.example.com/orders",
+      "kind": "set",
+      "implied": false,
+      "start": 375,
+      "end": 419
+    },
+    {
+      "name": "sec-ch-ua",
+      "value": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\"",
+      "kind": "set",
+      "implied": false,
+      "start": 424,
+      "end": 505
+    },
+    {
+      "name": "sec-ch-ua-mobile",
+      "value": "?0",
+      "kind": "set",
+      "implied": false,
+      "start": 510,
+      "end": 535
+    },
+    {
+      "name": "sec-ch-ua-platform",
+      "value": "\"macOS\"",
+      "kind": "set",
+      "implied": false,
+      "start": 540,
+      "end": 572
+    },
+    {
+      "name": "sec-fetch-dest",
+      "value": "empty",
+      "kind": "set",
+      "implied": false,
+      "start": 577,
+      "end": 603
+    },
+    {
+      "name": "sec-fetch-mode",
+      "value": "cors",
+      "kind": "set",
+      "implied": false,
+      "start": 608,
+      "end": 633
+    },
+    {
+      "name": "sec-fetch-site",
+      "value": "same-site",
+      "kind": "set",
+      "implied": false,
+      "start": 638,
+      "end": 668
+    },
+    {
+      "name": "user-agent",
+      "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+      "kind": "set",
+      "implied": false,
+      "start": 673,
+      "end": 807
+    }
+  ],
+  "data": [
+    {
+      "kind": "raw",
+      "option": "--data-raw",
+      "value": "{\"items\":[{\"sku\":\"A-1\",\"qty\":2}],\"note\":\"leave at door\"}",
+      "name": "",
+      "file": "",
+      "start": 812,
+      "end": 881
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": [
+    "session=abc123; theme=dark"
+  ],
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": []
+}

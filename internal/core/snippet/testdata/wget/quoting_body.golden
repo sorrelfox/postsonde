@@ -1,0 +1,13 @@
+wget https://api.test/q \
+  --method POST \
+  --header 'Content-Type: text/plain' \
+  --body-data 'trailing spaces   
+  indented
+	tabbed
+100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} '\''single'\'' '\'''\''two'\'''\'' "double" ""two"" \ \\ \" end\
+"""triple""" \u0041 \n */ // # -- ; C:\dir\
+
+‘curly’ “double” 日本 😀  nbsp  ls
+   ' \
+  --max-redirect 10 \
+  -O -

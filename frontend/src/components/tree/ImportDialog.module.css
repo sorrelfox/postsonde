@@ -1,0 +1,377 @@
+/* The Import dialog (IMP-10): the chosen file, a summary, the tree of
+ * what the import creates (method badges as in the collection tree,
+ * diagnostics behind a per-row toggle), the options, and the report.
+ * Fields come from NewItemDialog.module.css. */
+
+.intro,
+.formats,
+.note {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.formats,
+.note {
+  color: var(--text3);
+}
+
+.ext {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.formatSelect {
+  cursor: pointer;
+}
+
+.fileLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.fileLine svg {
+  flex: none;
+  color: var(--text3);
+}
+
+.fileName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.formatName {
+  flex: none;
+  color: var(--text3);
+}
+
+.linkButton {
+  flex: none;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+.linkButton:disabled {
+  color: var(--text3);
+  cursor: default;
+  text-decoration: none;
+}
+
+.linkButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.summary,
+.reportSummary {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-medium);
+}
+
+/* The tree of what the import creates. */
+.tree {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-height: 38vh;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.rows,
+.rowDiagnostics,
+.fileDiagnostics,
+.problems,
+.problemDiagnostics {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rows {
+  padding: var(--space-2) 0;
+}
+
+.rowLine {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 24px;
+  padding-right: var(--space-4);
+  font-size: var(--fs-md);
+}
+
+.icon {
+  width: 38px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--m-dir);
+}
+
+.badge,
+.skippedBadge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-medium);
+}
+
+.badge[data-tone="get"] { color: var(--m-get); }
+.badge[data-tone="post"] { color: var(--m-post); }
+.badge[data-tone="put"] { color: var(--m-put); }
+.badge[data-tone="patch"] { color: var(--m-patch); }
+.badge[data-tone="del"] { color: var(--m-del); }
+.badge[data-tone="gql"] { color: var(--m-gql); }
+.badge[data-tone="ws"] { color: var(--m-ws); }
+.badge[data-tone="dir"] { color: var(--m-dir); }
+.badge[data-tone="warn"] { color: var(--warn); }
+
+.skippedBadge {
+  color: var(--warn);
+  text-transform: uppercase;
+}
+
+.name {
+  flex: none;
+  max-width: 50%;
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row[data-status="skipped"] .name,
+.row[data-status="failed"] .name {
+  color: var(--text3);
+  text-decoration: line-through;
+}
+
+.detail {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.failed {
+  flex: none;
+  color: var(--bad);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+}
+
+.diagToggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.diagToggle:hover {
+  background: var(--bg2);
+}
+
+.diagToggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.diagToggle[data-severity="error"] { color: var(--bad); }
+.diagToggle[data-severity="warning"] { color: var(--warn); }
+
+.rowDiagnostics {
+  padding-top: var(--space-1);
+  padding-bottom: var(--space-2);
+  padding-right: var(--space-4);
+}
+
+.more {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+/* A diagnostic: severity, message and where it is in the file. */
+.diagnostic {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.diagnostic svg {
+  flex: none;
+  align-self: center;
+}
+
+.severity {
+  flex: none;
+  min-width: 52px;
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.where {
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.diagnostic[data-severity="error"] .severity,
+.diagnostic[data-severity="error"] svg {
+  color: var(--bad);
+}
+
+.diagnostic[data-severity="warning"] .severity,
+.diagnostic[data-severity="warning"] svg {
+  color: var(--warn);
+}
+
+.diagnostic[data-severity="info"] .severity,
+.diagnostic[data-severity="info"] svg {
+  color: var(--text3);
+}
+
+.fileDiagnostics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+}
+
+.checks:empty {
+  display: none;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.check input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+/* The report. */
+.counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.counts > div {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.counts dt {
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.counts dd {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+}
+
+.counts > div[data-tone="warn"] dd {
+  color: var(--warn);
+}
+
+.counts > div[data-tone="bad"] dd {
+  color: var(--bad);
+}
+
+.problems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.problemHead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+  margin-bottom: var(--space-1);
+}
+
+.problemName {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.problemDiagnostics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}

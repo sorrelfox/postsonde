@@ -1,0 +1,13 @@
+/* {{variable}} chips outside CodeMirror (ENV-11), matching the editor's
+ * .cm-templateVariable: no padding, so the text keeps its position under a
+ * transparent input. */
+.chip {
+  color: var(--tk-var);
+  background-color: color-mix(in srgb, var(--tk-var) 14%, transparent);
+  border-radius: var(--radius-xs);
+}
+
+.unresolved {
+  color: var(--bad);
+  background-color: color-mix(in srgb, var(--bad) 16%, transparent);
+}

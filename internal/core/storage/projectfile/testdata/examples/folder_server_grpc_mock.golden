@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_3c9a1e7b5d20f846",
+  "name": "Orders mock",
+  "auth": {
+    "type": "inherit"
+  },
+  "server": {
+    "type": "grpc_mock",
+    "port": 50051,
+    "grpcMock": {
+      "files": [
+        "protos/shop/v1/orders.proto"
+      ],
+      "importPaths": [
+        "protos"
+      ],
+      "methods": [
+        {
+          "service": "shop.v1.Orders",
+          "method": "GetOrder",
+          "messages": [
+            "{\n  \"id\": \"o-1\",\n  \"total\": {\"currency\": \"EUR\", \"units\": \"42\"}\n}"
+          ],
+          "headers": [
+            {
+              "name": "x-mock",
+              "value": "postsonde"
+            }
+          ],
+          "delayMs": 250
+        },
+        {
+          "service": "shop.v1.Orders",
+          "method": "ListOrders",
+          "messages": [
+            "{\"id\": \"o-1\"}",
+            "{\"id\": \"o-2\"}"
+          ],
+          "intervalMs": 500
+        },
+        {
+          "service": "shop.v1.Orders",
+          "method": "CancelOrder",
+          "status": 5,
+          "statusMessage": "no such order",
+          "trailers": [
+            {
+              "name": "x-trace-bin",
+              "value": "AAEC"
+            }
+          ]
+        },
+        {
+          "service": "shop.v1.Orders",
+          "method": "Chat",
+          "bidi": "echo"
+        }
+      ]
+    }
+  }
+}

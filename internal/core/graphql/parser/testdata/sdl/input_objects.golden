@@ -1,0 +1,76 @@
+# source
+input Point2D {
+  x: Float
+  y: Float = 0.5 @deprecated
+  tags: [[String!]!] = [["a"], []]
+  where: Filter = {field: "name", op: EQ, values: [1, null]}
+}
+input Filter @oneOf { a: Int b: String }
+extend input Point2D { z: Float }
+extend input Point2D @x
+# tree
+Document [0:252]
+  Definitions[0]: TypeDefinition [0:153] Extend=-1 Kind=input Keyword=0 Implements=-1 Equals=-1 LBrace=14 RBrace=152
+    Name: Name [6:13] Value="Point2D"
+    InputFields[0]: InputValueDefinition [18:26] Colon=19 Equals=-1
+      Name: Name [18:19] Value="x"
+      Type: NamedType [21:26]
+        Name: Name [21:26] Value="Float"
+    InputFields[1]: InputValueDefinition [29:55] Colon=30 Equals=38
+      Name: Name [29:30] Value="y"
+      Type: NamedType [32:37]
+        Name: Name [32:37] Value="Float"
+      DefaultValue: FloatValue [40:43] Raw="0.5"
+      Directives[0]: Directive [44:55] At=44
+        Name: Name [45:55] Value="deprecated"
+    InputFields[2]: InputValueDefinition [58:90] Colon=62 Equals=77
+      Name: Name [58:62] Value="tags"
+      Type: ListType [64:76] LBracket=64 RBracket=75
+        Type: NonNullType [65:75] Bang=74
+          Type: ListType [65:74] LBracket=65 RBracket=73
+            Type: NonNullType [66:73] Bang=72
+              Type: NamedType [66:72]
+                Name: Name [66:72] Value="String"
+      DefaultValue: ListValue [79:90] LBracket=79 RBracket=89
+        Values[0]: ListValue [80:85] LBracket=80 RBracket=84
+          Values[0]: StringValue [81:84] Block=false Value="a"
+        Values[1]: ListValue [87:89] LBracket=87 RBracket=88
+    InputFields[3]: InputValueDefinition [93:151] Colon=98 Equals=107
+      Name: Name [93:98] Value="where"
+      Type: NamedType [100:106]
+        Name: Name [100:106] Value="Filter"
+      DefaultValue: ObjectValue [109:151] LBrace=109 RBrace=150
+        Fields[0]: ObjectField [110:123] Colon=115
+          Name: Name [110:115] Value="field"
+          Value: StringValue [117:123] Block=false Value="name"
+        Fields[1]: ObjectField [125:131] Colon=127
+          Name: Name [125:127] Value="op"
+          Value: EnumValue [129:131] Value="EQ"
+        Fields[2]: ObjectField [133:150] Colon=139
+          Name: Name [133:139] Value="values"
+          Value: ListValue [141:150] LBracket=141 RBracket=149
+            Values[0]: IntValue [142:143] Raw="1"
+            Values[1]: NullValue [145:149]
+  Definitions[1]: TypeDefinition [154:194] Extend=-1 Kind=input Keyword=154 Implements=-1 Equals=-1 LBrace=174 RBrace=193
+    Name: Name [160:166] Value="Filter"
+    Directives[0]: Directive [167:173] At=167
+      Name: Name [168:173] Value="oneOf"
+    InputFields[0]: InputValueDefinition [176:182] Colon=177 Equals=-1
+      Name: Name [176:177] Value="a"
+      Type: NamedType [179:182]
+        Name: Name [179:182] Value="Int"
+    InputFields[1]: InputValueDefinition [183:192] Colon=184 Equals=-1
+      Name: Name [183:184] Value="b"
+      Type: NamedType [186:192]
+        Name: Name [186:192] Value="String"
+  Definitions[2]: TypeDefinition [195:228] Extend=195 Kind=input Keyword=202 Implements=-1 Equals=-1 LBrace=216 RBrace=227
+    Name: Name [208:215] Value="Point2D"
+    InputFields[0]: InputValueDefinition [218:226] Colon=219 Equals=-1
+      Name: Name [218:219] Value="z"
+      Type: NamedType [221:226]
+        Name: Name [221:226] Value="Float"
+  Definitions[3]: TypeDefinition [229:252] Extend=229 Kind=input Keyword=236 Implements=-1 Equals=-1 LBrace=-1 RBrace=-1
+    Name: Name [242:249] Value="Point2D"
+    Directives[0]: Directive [250:252] At=250
+      Name: Name [251:252] Value="x"
+# errors

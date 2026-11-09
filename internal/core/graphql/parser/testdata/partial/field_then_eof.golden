@@ -1,0 +1,10 @@
+# source
+{ user
+# tree
+Document [0:6]
+  Definitions[0]: OperationDefinition [0:6] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:6] LBrace=0 RBrace=-1
+      Selections[0]: Field [2:6] Colon=-1
+        Name: Name [2:6] Value="user"
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"

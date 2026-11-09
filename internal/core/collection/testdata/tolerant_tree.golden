@@ -1,0 +1,26 @@
+root ws_1 kind=workspace name="Tolerant" path=""
+  folder fld_b kind=folder name="B" path="b-folder" readOnly=invalid
+    request req_second kind=graphql name="Second" path="b-folder/second.json"
+    request req_first kind=graphql name="First" path="b-folder/first.json"
+  request req_z kind=http name="Z" path="z.json"
+  invalid env_1 kind=environment name="Misplaced" path="env.json" readOnly=invalid
+  request req_newer kind=http name="Newer" path="newer.json" readOnly=newer_version
+  request req_90ca01f060ec8649 kind=http name="No id" path="no-id.json" idChanged
+  invalid req_cdc11d5b27c32778 name="syntax" path="syntax.json" readOnly=invalid
+  invalid req_wrong kind=http name="Wrong type" path="wrong-type.json" readOnly=invalid
+problems:
+  b-folder/_folder.json node=fld_b kind=parse code=projectfile.parse_failed
+    path=<root>/b-folder/_folder.json
+  env.json node=env_1 kind=parse code=projectfile.wrong_kind
+    expected=request
+    kind=environment
+    path=<root>/env.json
+  no-id.json node=req_90ca01f060ec8649 kind=invalid_argument code=collection.missing_id
+    newId=req_90ca01f060ec8649
+    path=<root>/no-id.json
+  syntax.json node=req_cdc11d5b27c32778 kind=parse code=projectfile.parse_failed
+    column=3
+    line=4
+    path=<root>/syntax.json
+  wrong-type.json node=req_wrong kind=parse code=projectfile.parse_failed
+    path=<root>/wrong-type.json

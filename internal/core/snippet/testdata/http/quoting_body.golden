@@ -1,0 +1,13 @@
+POST /q HTTP/1.1
+Host: api.test
+Content-Type: text/plain
+Content-Length: 273
+
+trailing spaces   
+  indented
+	tabbed
+100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' "double" ""two"" \ \\ \" end\
+"""triple""" \u0041 \n */ // # -- ; C:\dir\
+
+‘curly’ “double” 日本 😀  nbsp  ls
+   

@@ -1,0 +1,2 @@
+{"schemaVersion": 3, "kind": "gemini", "id": "req_e0b1c2d3a4f56789",
+ "name": "Echo", "path": "/echo", "certificate": null,   "message": {"text": "hi"}}

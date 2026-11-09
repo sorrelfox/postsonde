@@ -1,0 +1,7 @@
+curl https://api.test/items \
+  -H 'Accept: application/json' \
+  -H 'X-Quote: it'\''s "quoted" $HOME `id`' \
+  -H 'X-Empty;' \
+  -H 'X-Unicode: héllo ✓' \
+  -H 'User-Agent: PostSonde-test' \
+  -L --max-redirs 10

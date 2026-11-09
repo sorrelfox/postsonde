@@ -1,0 +1,18 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/q",
+    headers={
+        "X-Odd!#$%&'*+.^_`|~": "100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\",
+        "X-Unicode": "héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛".encode(),
+        "X-Long": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "X-Json": '{"a":"b\\"c","d":[1,2],"e":"C:\\\\dir\\\\"}',
+        "X-Tab": "a\tb",
+        "X-Empty": "",
+        "User-Agent": None,
+    },
+)
+
+print(response.status_code)
+print(response.text)

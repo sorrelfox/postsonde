@@ -1,0 +1,303 @@
+/* Compare two responses (HTTP-40): the two selects, the status, the
+ * headers table and the side-by-side body. Removed lines are tinted with
+ * --bad, added ones with --ok and changed ones with --warn; each also has
+ * a +, − or ~ marker, so colour is never the only signal. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-7);
+  min-height: 0;
+}
+
+.picks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3) var(--space-5);
+}
+
+.pick {
+  display: flex;
+  flex: 1 1 260px;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.label {
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.select {
+  height: var(--h-control-sm);
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg0);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.swap {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.select:focus-visible,
+.swap:focus-visible,
+.fold button:focus-visible,
+.changes summary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.hint,
+.counts {
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.error {
+  margin: 0;
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-height: 0;
+}
+
+.status {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+}
+
+.heading {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.notices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.notices li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.notices svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--warn);
+}
+
+.changes {
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.changes summary {
+  cursor: pointer;
+}
+
+.changes ul {
+  max-height: 160px;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}
+
+.path {
+  color: var(--text);
+}
+
+.tableWrap {
+  max-height: 55vh;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.headers,
+.diff {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  line-height: 1.5;
+}
+
+.headers th,
+.headers td {
+  padding: var(--space-1) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.headers thead th,
+.diff thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg1);
+  color: var(--text3);
+  font-weight: var(--fw-semibold);
+  text-align: left;
+}
+
+.headers tbody th {
+  color: var(--text);
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.value {
+  display: block;
+  color: var(--text2);
+}
+
+.none {
+  color: var(--text3);
+}
+
+.diff {
+  table-layout: fixed;
+}
+
+.diff th,
+.diff td {
+  padding: 0 var(--space-3);
+}
+
+.diff .num {
+  width: 44px;
+  color: var(--text3);
+  text-align: right;
+  user-select: none;
+}
+
+.code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
+.code[data-empty] {
+  background: var(--bg1);
+}
+
+.marker {
+  display: inline-block;
+  width: 1.5ch;
+  font-weight: var(--fw-semibold);
+}
+
+.marker[data-kind="removed"] { color: var(--bad); }
+.marker[data-kind="added"] { color: var(--ok); }
+.marker[data-kind="changed"] { color: var(--warn); }
+
+tr[data-kind="removed"] > [data-side="left"],
+.headers tr[data-kind="removed"] > * {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+}
+
+tr[data-kind="added"] > [data-side="right"],
+.headers tr[data-kind="added"] > * {
+  background: color-mix(in srgb, var(--ok) 14%, transparent);
+}
+
+tr[data-kind="changed"] > [data-side] {
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+}
+
+.headers tr[data-kind="changed"] > th {
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+}
+
+.fold td {
+  padding: 0;
+  background: var(--bg1);
+}
+
+.fold button {
+  width: 100%;
+  padding: var(--space-1) var(--space-4);
+  border: 0;
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-sm2);
+  text-align: left;
+  cursor: pointer;
+}
+
+.fold button:hover {
+  color: var(--text);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

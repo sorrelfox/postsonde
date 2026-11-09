@@ -1,0 +1,18 @@
+# source
+query Q(id: ID!) { a }
+# tree
+Document [0:22]
+  Definitions[0]: OperationDefinition [0:22] Operation=query Keyword=0
+    Name: Name [6:7] Value="Q"
+    VariableDefinitions: VariableDefinitionList [7:16] LParen=7 RParen=15
+      Definitions[0]: VariableDefinition [8:15] Colon=10 Equals=-1
+        Variable: Variable [8:10] Dollar=-1
+          Name: Name [8:10] Value="id"
+        Type: NonNullType [12:15] Bang=14
+          Type: NamedType [12:14]
+            Name: Name [12:14] Value="ID"
+    SelectionSet: SelectionSet [17:22] LBrace=17 RBrace=21
+      Selections[0]: Field [19:20] Colon=-1
+        Name: Name [19:20] Value="a"
+# errors
+1:9 [8:10] unexpected token: expected "$", found name "id"

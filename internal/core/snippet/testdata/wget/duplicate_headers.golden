@@ -1,0 +1,9 @@
+wget https://api.test/me \
+  --header 'Accept: text/html' \
+  --header 'X-A: 1' \
+  --header 'accept: application/json' \
+  --header 'Host: example.test' \
+  --header 'Cookie: a=1' \
+  --header 'cookie: b=2' \
+  --max-redirect 0 \
+  -O -

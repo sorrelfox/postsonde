@@ -1,0 +1,650 @@
+{
+	"info": {
+		"_postman_id": "ca4fca6b-aa8f-518d-a389-d83045c27595",
+		"name": "Lossy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Inner",
+			"item": [
+				{
+					"name": "Own tenant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "x-trace",
+								"value": "mine",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/yaml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "a: {{ secret | base64 }}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/files/{fileId}?stamp={{$timestampMs}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"files",
+								"{fileId}"
+							],
+							"query": [
+								{
+									"key": "stamp",
+									"value": "{{$timestampMs}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Typed secret",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "u",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Who",
+								"value": "{{$prompt Name}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/octet-stream",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "body.bin"
+							}
+						},
+						"url": {
+							"raw": "https://x.example.com",
+							"protocol": "https",
+							"host": [
+								"x",
+								"example",
+								"com"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Picture",
+							"code": 200,
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Big",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ••••••",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://x.example.com",
+									"protocol": "https",
+									"host": [
+										"x",
+										"example",
+										"com"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": "[1,2"
+						}
+					]
+				},
+				{
+					"name": "Turned off",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://x.example.com",
+							"protocol": "https",
+							"host": [
+								"x",
+								"example",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "JWT extras",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "algorithm",
+									"value": "ES256",
+									"type": "string"
+								},
+								{
+									"key": "privateKey",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "payload",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://x.example.com",
+							"protocol": "https",
+							"host": [
+								"x",
+								"example",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AWS extras",
+					"request": {
+						"auth": {
+							"type": "awsv4",
+							"awsv4": [
+								{
+									"key": "accessKey",
+									"value": "AKID",
+									"type": "string"
+								},
+								{
+									"key": "secretKey",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "region",
+									"value": "us-east-1",
+									"type": "string"
+								},
+								{
+									"key": "service",
+									"value": "s3",
+									"type": "string"
+								},
+								{
+									"key": "sessionToken",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addAuthDataToQuery",
+									"value": true,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://bucket.s3.amazonaws.com/key",
+							"protocol": "https",
+							"host": [
+								"bucket",
+								"s3",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"key"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Hawk typed key",
+					"request": {
+						"auth": {
+							"type": "hawk",
+							"hawk": [
+								{
+									"key": "authId",
+									"value": "id",
+									"type": "string"
+								},
+								{
+									"key": "authKey",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "sha256",
+									"type": "string"
+								},
+								{
+									"key": "extraData",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "app",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "delegation",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "includePayloadHash",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://hawk.example.com",
+							"protocol": "https",
+							"host": [
+								"hawk",
+								"example",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth 2.0 extras",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "grant_type",
+									"value": "password_credentials",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://idp.example.com/token",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "app",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "state",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "u",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://x.example.com",
+							"protocol": "https",
+							"host": [
+								"x",
+								"example",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth in body of a GET",
+					"request": {
+						"auth": {
+							"type": "oauth1",
+							"oauth1": [
+								{
+									"key": "signatureMethod",
+									"value": "HMAC-SHA1",
+									"type": "string"
+								},
+								{
+									"key": "consumerKey",
+									"value": "ck",
+									"type": "string"
+								},
+								{
+									"key": "consumerSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenSecret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "timestamp",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "nonce",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "version",
+									"value": "1.0",
+									"type": "string"
+								},
+								{
+									"key": "realm",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "callback",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "verifier",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "includeBodyHash",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "addParamsToHeader",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "addEmptyParamsToSign",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Tenant",
+								"value": "inner",
+								"type": "text"
+							},
+							{
+								"key": "X-Trace",
+								"value": "{{$uuid}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://x.example.com",
+							"protocol": "https",
+							"host": [
+								"x",
+								"example",
+								"com"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			}
+		},
+		{
+			"name": "GraphQL extras",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "k",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Tenant",
+						"value": "acme",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query A { a } query B { b }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "https://api.example.com/graphql",
+					"protocol": "https",
+					"host": [
+						"api",
+						"example",
+						"com"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": "",
+			"type": "secret"
+		},
+		{
+			"key": "typed",
+			"value": "",
+			"type": "secret"
+		}
+	]
+}

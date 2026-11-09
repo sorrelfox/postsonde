@@ -1,0 +1,74 @@
+# source
+query withNestedFragments {
+  user(id: 4) {
+    friends(first: 10) { ...friendFields }
+    mutualFriends(first: 10) { ...friendFields }
+  }
+}
+
+fragment friendFields on User {
+  id
+  name
+  ...standardProfilePic
+}
+
+fragment standardProfilePic on User @dir {
+  profilePic(size: 50)
+}
+# tree
+Document [0:281]
+  Definitions[0]: OperationDefinition [0:141] Operation=query Keyword=0
+    Name: Name [6:25] Value="withNestedFragments"
+    SelectionSet: SelectionSet [26:141] LBrace=26 RBrace=140
+      Selections[0]: Field [30:139] Colon=-1
+        Name: Name [30:34] Value="user"
+        Arguments: ArgumentList [34:41] LParen=34 RParen=40
+          Arguments[0]: Argument [35:40] Colon=37
+            Name: Name [35:37] Value="id"
+            Value: IntValue [39:40] Raw="4"
+        SelectionSet: SelectionSet [42:139] LBrace=42 RBrace=138
+          Selections[0]: Field [48:86] Colon=-1
+            Name: Name [48:55] Value="friends"
+            Arguments: ArgumentList [55:66] LParen=55 RParen=65
+              Arguments[0]: Argument [56:65] Colon=61
+                Name: Name [56:61] Value="first"
+                Value: IntValue [63:65] Raw="10"
+            SelectionSet: SelectionSet [67:86] LBrace=67 RBrace=85
+              Selections[0]: FragmentSpread [69:84] Spread=69
+                Name: Name [72:84] Value="friendFields"
+          Selections[1]: Field [91:135] Colon=-1
+            Name: Name [91:104] Value="mutualFriends"
+            Arguments: ArgumentList [104:115] LParen=104 RParen=114
+              Arguments[0]: Argument [105:114] Colon=110
+                Name: Name [105:110] Value="first"
+                Value: IntValue [112:114] Raw="10"
+            SelectionSet: SelectionSet [116:135] LBrace=116 RBrace=134
+              Selections[0]: FragmentSpread [118:133] Spread=118
+                Name: Name [121:133] Value="friendFields"
+  Definitions[1]: FragmentDefinition [143:212] Keyword=143
+    Name: Name [152:164] Value="friendFields"
+    TypeCondition: TypeCondition [165:172] On=165
+      Type: NamedType [168:172]
+        Name: Name [168:172] Value="User"
+    SelectionSet: SelectionSet [173:212] LBrace=173 RBrace=211
+      Selections[0]: Field [177:179] Colon=-1
+        Name: Name [177:179] Value="id"
+      Selections[1]: Field [182:186] Colon=-1
+        Name: Name [182:186] Value="name"
+      Selections[2]: FragmentSpread [189:210] Spread=189
+        Name: Name [192:210] Value="standardProfilePic"
+  Definitions[2]: FragmentDefinition [214:281] Keyword=214
+    Name: Name [223:241] Value="standardProfilePic"
+    TypeCondition: TypeCondition [242:249] On=242
+      Type: NamedType [245:249]
+        Name: Name [245:249] Value="User"
+    Directives[0]: Directive [250:254] At=250
+      Name: Name [251:254] Value="dir"
+    SelectionSet: SelectionSet [255:281] LBrace=255 RBrace=280
+      Selections[0]: Field [259:279] Colon=-1
+        Name: Name [259:269] Value="profilePic"
+        Arguments: ArgumentList [269:279] LParen=269 RParen=278
+          Arguments[0]: Argument [270:278] Colon=274
+            Name: Name [270:274] Value="size"
+            Value: IntValue [276:278] Raw="50"
+# errors

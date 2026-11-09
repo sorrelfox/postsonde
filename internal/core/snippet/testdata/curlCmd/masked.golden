@@ -1,0 +1,6 @@
+curl "https://api.test/items?key=••••••" ^
+  -H "X-Api-Key: ••••••" ^
+  -H "Authorization: Bearer ••••••" ^
+  -H "Content-Type: application/json" ^
+  --data-raw "{""password"":""••••••""}" ^
+  -L --max-redirs 10

@@ -1,0 +1,6 @@
+wget https://api.test/items/1 \
+  --method PUT \
+  --header 'Content-Type: text/plain' \
+  --body-data 'plain text' \
+  --max-redirect 10 \
+  -O -

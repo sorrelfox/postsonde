@@ -1,0 +1,103 @@
+[
+    {
+        "description": "unevaluatedProperties false with properties",
+        "schema": {"type": "object", "properties": {"foo": {"type": "string"}}, "unevaluatedProperties": false},
+        "tests": [
+            {"description": "no extra", "data": {"foo": "a"}, "valid": true},
+            {"description": "an extra property", "data": {"foo": "a", "bar": "b"}, "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedProperties sees through allOf",
+        "schema": {"allOf": [{"properties": {"foo": {"type": "string"}}}], "properties": {"bar": {}}, "unevaluatedProperties": false},
+        "tests": [
+            {"description": "foo and bar", "data": {"foo": "a", "bar": 1}, "valid": true},
+            {"description": "an extra property", "data": {"foo": "a", "baz": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedProperties sees through $ref",
+        "schema": {"$defs": {"base": {"properties": {"id": {"type": "integer"}}}}, "$ref": "#/$defs/base", "properties": {"name": {}}, "unevaluatedProperties": false},
+        "tests": [
+            {"description": "id and name", "data": {"id": 1, "name": "x"}, "valid": true},
+            {"description": "an extra property", "data": {"id": 1, "other": 2}, "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedProperties with anyOf takes every matching branch",
+        "schema": {
+            "anyOf": [
+                {"properties": {"a": {"const": 1}}, "required": ["a"]},
+                {"properties": {"b": {"const": 2}}, "required": ["b"]}
+            ],
+            "unevaluatedProperties": false
+        },
+        "tests": [
+            {"description": "a only", "data": {"a": 1}, "valid": true},
+            {"description": "a and b", "data": {"a": 1, "b": 2}, "valid": true},
+            {"description": "b does not match its branch", "data": {"a": 1, "b": 3}, "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedProperties with if and then",
+        "schema": {
+            "if": {"properties": {"kind": {"const": "a"}}, "required": ["kind"]},
+            "then": {"properties": {"alpha": {}}},
+            "else": {"properties": {"beta": {}}},
+            "unevaluatedProperties": false
+        },
+        "tests": [
+            {"description": "kind a with alpha", "data": {"kind": "a", "alpha": 1}, "valid": true},
+            {"description": "kind a with beta", "data": {"kind": "a", "beta": 1}, "valid": false},
+            {"description": "no kind with beta", "data": {"beta": 1}, "valid": true},
+            {"description": "kind b is not evaluated by the failing if", "data": {"kind": "b", "beta": 1}, "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedProperties with a schema",
+        "schema": {"properties": {"foo": {}}, "unevaluatedProperties": {"type": "number"}},
+        "tests": [
+            {"description": "number extras", "data": {"foo": "x", "bar": 1}, "valid": true},
+            {"description": "string extras", "data": {"foo": "x", "bar": "y"}, "valid": false}
+        ]
+    },
+    {
+        "description": "nested unevaluatedProperties sees the outer properties only through the nesting",
+        "schema": {"properties": {"foo": {}}, "allOf": [{"unevaluatedProperties": false}]},
+        "tests": [
+            {"description": "foo is unevaluated inside allOf", "data": {"foo": 1}, "valid": false},
+            {"description": "empty object", "data": {}, "valid": true}
+        ]
+    },
+    {
+        "description": "unevaluatedItems false with prefixItems",
+        "schema": {"prefixItems": [{"type": "string"}], "unevaluatedItems": false},
+        "tests": [
+            {"description": "one item", "data": ["a"], "valid": true},
+            {"description": "an extra item", "data": ["a", "b"], "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedItems with items evaluates everything",
+        "schema": {"items": {"type": "number"}, "unevaluatedItems": false},
+        "tests": [
+            {"description": "numbers", "data": [1, 2], "valid": true}
+        ]
+    },
+    {
+        "description": "unevaluatedItems sees through allOf and contains",
+        "schema": {"allOf": [{"prefixItems": [true, true]}], "contains": {"const": "x"}, "unevaluatedItems": false},
+        "tests": [
+            {"description": "two items and a contained third", "data": [1, 2, "x"], "valid": true},
+            {"description": "a third item not contained", "data": [1, 2, "x", 3], "valid": false}
+        ]
+    },
+    {
+        "description": "unevaluatedItems with a schema",
+        "schema": {"prefixItems": [{"type": "string"}], "unevaluatedItems": {"type": "integer"}},
+        "tests": [
+            {"description": "integers after", "data": ["a", 1, 2], "valid": true},
+            {"description": "a string after", "data": ["a", "b"], "valid": false}
+        ]
+    }
+]

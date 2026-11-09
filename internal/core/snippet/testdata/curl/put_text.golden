@@ -1,0 +1,4 @@
+curl -X PUT https://api.test/items/1 \
+  -H 'Content-Type: text/plain' \
+  --data-raw 'plain text' \
+  -L --max-redirs 10

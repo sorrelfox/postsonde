@@ -1,0 +1,78 @@
+{
+  "events": [
+    {
+      "serverId": "srv_0123456789abcdef",
+      "seq": 1,
+      "time": "2026-09-16T08:00:00Z",
+      "peer": "",
+      "connId": 0,
+      "direction": "system",
+      "kind": "started",
+      "summary": "Listening on 0.0.0.0:8080",
+      "text": "",
+      "dataBase64": "",
+      "binary": false,
+      "size": 0,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": null,
+      "captured": false
+    },
+    {
+      "serverId": "srv_0123456789abcdef",
+      "seq": 3,
+      "time": "2026-09-16T08:00:01.5Z",
+      "peer": "127.0.0.1:53122",
+      "connId": 1,
+      "direction": "in",
+      "kind": "request",
+      "summary": "POST /users?id=1",
+      "text": "{\"name\":\"Ada\"}",
+      "dataBase64": "",
+      "binary": false,
+      "size": 14,
+      "truncated": false,
+      "http": {
+        "method": "POST",
+        "target": "/users?id=1",
+        "proto": "HTTP/1.1",
+        "status": 0,
+        "headers": [
+          {
+            "name": "Host",
+            "value": "127.0.0.1:8080"
+          },
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "route": null,
+        "delayMs": 0
+      },
+      "ws": null,
+      "tcp": null,
+      "captured": false
+    },
+    {
+      "serverId": "srv_0123456789abcdef",
+      "seq": 4,
+      "time": "2026-09-16T08:00:02Z",
+      "peer": "127.0.0.1:53122",
+      "connId": 1,
+      "direction": "in",
+      "kind": "message",
+      "summary": "4 bytes",
+      "text": "",
+      "dataBase64": "/wAQIA==",
+      "binary": true,
+      "size": 70000,
+      "truncated": true,
+      "http": null,
+      "ws": null,
+      "tcp": null,
+      "captured": false
+    }
+  ]
+}

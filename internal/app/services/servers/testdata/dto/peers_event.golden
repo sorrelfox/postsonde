@@ -1,0 +1,15 @@
+{
+  "serverId": "srv_00000000000000f3",
+  "peers": [
+    {
+      "addr": "127.0.0.1:53128",
+      "local": "127.0.0.1:9125",
+      "firstSeen": "2026-09-16T08:00:00Z",
+      "lastSeen": "2026-09-16T08:00:12Z",
+      "datagramsIn": 1,
+      "datagramsOut": 2,
+      "bytesIn": 5,
+      "bytesOut": 6
+    }
+  ]
+}

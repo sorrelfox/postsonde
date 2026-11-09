@@ -1,0 +1,548 @@
+/* The Servers sidebar view and the server view in the work area (SRV-01).
+ * The header matches the other sidebar views (components/shell/Sidebar.module.css). */
+
+.header {
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-5) 0 var(--space-7);
+}
+
+.title {
+  color: var(--text2);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.headerButton {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  color: var(--text3);
+}
+
+.headerButton:not(:disabled):hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow: auto;
+  padding: 0 var(--space-3) var(--space-6);
+}
+
+/* ---- list ---------------------------------------------------------------- */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.row:hover {
+  background: var(--bg2);
+}
+
+.rowSelected,
+.rowSelected:hover {
+  background: var(--sel);
+}
+
+.rowMain {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-1) 0;
+  color: var(--text);
+  font-size: var(--fs-md2);
+  text-align: left;
+}
+
+.rowName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: var(--fw-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowState {
+  flex: none;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.rowMeta {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-left: 16px;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.uptime {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The folder a saved server is defined in (SRV-04). */
+.rowFolder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding-left: 16px;
+  overflow: hidden;
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowFolder svg {
+  flex: none;
+}
+
+.groupTitle {
+  margin: var(--space-3) var(--space-4) var(--space-2);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rowError {
+  padding-left: 16px;
+  overflow: hidden;
+  color: var(--bad);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--radius-round);
+  background: var(--text3);
+}
+
+.dot[data-state="running"] {
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent);
+}
+
+.dot[data-state="starting"],
+.dot[data-state="stopping"] {
+  background: var(--warn);
+}
+
+.dot[data-state="failed"] {
+  background: var(--bad);
+}
+
+.address {
+  position: relative;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-xs);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+button.address:hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.addressIdle {
+  color: var(--text3);
+}
+
+.addressText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copied {
+  position: absolute;
+  left: 100%;
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-xs);
+  background: var(--bg3);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  white-space: nowrap;
+}
+
+.warnIcon {
+  display: inline-grid;
+  color: var(--warn);
+}
+
+.iconButton {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+}
+
+.iconButton:not(:disabled):hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.linkButton {
+  color: var(--accent);
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+/* ---- new server form ----------------------------------------------------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0 var(--space-2) var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+}
+
+.formTitle {
+  color: var(--text);
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+}
+
+.formNote {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.typeChoice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+}
+
+.typeOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  white-space: nowrap;
+}
+
+.fields {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+}
+
+.portField {
+  flex: 0 0 72px;
+}
+
+.input {
+  width: 100%;
+  height: 26px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.lanNote,
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  color: var(--warn);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.lanNote svg,
+.warning svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+.error {
+  color: var(--bad);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+}
+
+.formButtons,
+.detailsButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.smallButton {
+  height: 24px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: 5px;
+  background: var(--bg1);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+}
+
+.smallButton:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.primary:not(:disabled):hover {
+  color: var(--accent-ink);
+  filter: brightness(1.08);
+}
+
+.danger:not(:disabled):hover {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+/* ---- server view --------------------------------------------------------- */
+
+.details {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  overflow: auto;
+  padding: var(--space-7) var(--space-8);
+}
+
+.detailsHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.detailsTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.failure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--bad);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.hint {
+  color: var(--text2);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-4);
+  font-size: var(--fs-md);
+}
+
+.fact dt {
+  color: var(--text3);
+}
+
+.fact dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.traffic {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "Show as Text / Hex" above a TCP server's traffic (SSRV-05). */
+.trafficBar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg1);
+}
+
+.trafficCaption {
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.segmented {
+  flex: none;
+  display: inline-flex;
+  padding: 1px;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.segment {
+  height: calc(var(--h-control-sm) - 4px);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  cursor: pointer;
+}
+
+.segment:hover {
+  color: var(--text);
+}
+
+.segment[aria-pressed="true"] {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* The TLS part of a server's details (SRV-05). */
+.detailsSubtitle {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fingerprint {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+  user-select: text;
+}

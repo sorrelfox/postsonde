@@ -1,0 +1,44 @@
+# Size budgets of the binaries and packages (APP-05), checked by
+# scripts/check-size.sh in the size:budgets CI job. docs/footprint.md.
+#
+#   <glob on the file name>  <budget: bytes, or a whole number of K/M (KiB/MiB)>
+#
+# First match wins. Each budget is the size measured on 2026-11-08 (Wails
+# v3.0.0, Go 1.27, the CI images) plus about 10%, rounded up to a whole
+# MiB; "est." marks a target that couldn't be built locally, budgeted from
+# its sibling. Raise a budget only on purpose, in its own commit with the
+# reason, and update the table in docs/footprint.md.
+
+# Linux binaries (linux:gtk4, linux:gtk3)
+postsonde-linux-gtk4-amd64            33M   # 29.8 MiB
+postsonde-linux-gtk4-arm64            30M   # 27.3 MiB
+postsonde-linux-gtk3-amd64            33M   # 29.8 MiB
+postsonde-linux-gtk3-arm64            30M   # 27.2 MiB
+
+# Windows binaries (windows:build)
+postsonde-windows-amd64.exe           34M   # 30.5 MiB
+postsonde-windows-arm64.exe           31M   # 27.6 MiB
+
+# Linux packages (linux:packages); the name carries the version
+postsonde_*_amd64.deb                 14M   # 11.9 MiB
+postsonde_*_arm64.deb                 12M   # 10.8 MiB
+postsonde-gtk3_*_amd64.deb            14M   # 11.9 MiB
+postsonde-gtk3_*_arm64.deb            12M   # 10.8 MiB
+PostSonde-*-x86_64.AppImage           94M   # 84.8 MiB
+PostSonde-*-aarch64.AppImage          94M   # est. as x86_64
+
+# Fedora RPMs (linux:rpm), one budget for both releases, measured on
+# 2026-11-09: .fc44 and .fc45 x86_64 are both 9.3 MiB
+postsonde-*.x86_64.rpm                11M   # 9.3 MiB
+postsonde-*.aarch64.rpm               11M   # est. as x86_64
+
+# Flatpak bundle (linux:flatpak), measured on 2026-11-09 (GNOME 51 SDK)
+PostSonde-*-x86_64.flatpak            10M   # 8.7 MiB
+
+# Windows installers (windows:installer)
+PostSonde-*-windows-amd64-setup.exe   10M   # 8.9 MiB
+PostSonde-*-windows-arm64-setup.exe    9M   # 7.6 MiB
+
+# macOS (the macos:dmg job of the release workflow): add the .dmg's budget
+# here once a release run has measured it; size:budgets leaves the .dmg out
+# until then.

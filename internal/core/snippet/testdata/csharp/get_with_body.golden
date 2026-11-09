@@ -1,0 +1,17 @@
+using System;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "https://api.test/search");
+request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes("{\"q\":\"x\"}"));
+request.Content.Headers.TryAddWithoutValidation("Content-Type", "application/json");
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

@@ -1,0 +1,31 @@
+/* The keyboard-reachable tooltip (UI-11): a small raised panel like the
+ * context menu's, next to its trigger. */
+.tooltip {
+  position: fixed;
+  z-index: 1100;
+  max-width: min(360px, calc(100vw - 16px));
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-size: var(--fs-sm2);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-base);
+  text-align: left;
+  white-space: pre-line;
+  pointer-events: none;
+}
+
+.tooltip[hidden] {
+  display: none;
+}
+
+.tooltip[data-placement="bottom"] {
+  transform: translateY(6px);
+}
+
+.tooltip[data-placement="top"] {
+  transform: translateY(calc(-100% - 6px));
+}

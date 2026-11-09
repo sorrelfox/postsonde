@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_5b8e1d3a7c204f96",
+  "name": "Prices",
+  "auth": {
+    "type": "inherit"
+  },
+  "server": {
+    "type": "sse",
+    "port": 8082,
+    "sse": {
+      "path": "/events",
+      "allowOrigin": "*",
+      "keepAliveSec": 15,
+      "retryMs": 3000,
+      "autoId": true,
+      "timers": [
+        {
+          "event": "price",
+          "data": "{\"symbol\": \"ACME\", \"at\": {{$timestamp}}}",
+          "intervalMs": 1000
+        },
+        {
+          "event": "heartbeat",
+          "data": "{{$isoTimestamp}}",
+          "intervalMs": 30000,
+          "disabled": true
+        }
+      ]
+    }
+  }
+}

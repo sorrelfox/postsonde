@@ -1,0 +1,38 @@
+{
+  "name": "items",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/items",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      },
+      {
+        "name": "Authorization",
+        "value": "Bearer $env:TOKEN"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"name\":\"it's\",\"tab\":\"`t\"}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.shell_expansion",
+      "severity": "warning",
+      "start": 106,
+      "end": 110,
+      "message": "The shell would expand “$env”; it is kept as written."
+    }
+  ]
+}

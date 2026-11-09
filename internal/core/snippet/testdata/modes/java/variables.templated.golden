@@ -1,0 +1,23 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String body = "{\"user\":\"{{user}}\",\"token\":\"{{token}}\"}";
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("{{base}}/users/{{id}}?q={{q}}&t={{token}}"))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("X-User", "{{user}}")
+                .header("X-Token", "{{token}}")
+                .header("X-Uuid", "{{$uuid}}")
+                .header("Content-Type", "application/json")
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

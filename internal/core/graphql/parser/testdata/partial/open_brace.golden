@@ -1,0 +1,11 @@
+# source
+{
+# tree
+Document [0:1]
+  Definitions[0]: OperationDefinition [0:1] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:1] LBrace=0 RBrace=-1
+      Selections[0]: Field [1:1] Colon=-1
+        Name: Name [1:1] Value=""
+# errors
+1:1 [0:1] unclosed delimiter: "{" has no matching "}"
+1:2 [1:1] unexpected token: expected field, fragment spread or inline fragment, found end of input

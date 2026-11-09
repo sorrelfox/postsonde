@@ -1,0 +1,9 @@
+{
+  "opId": "op_0123456789abcdef",
+  "seq": 3,
+  "status": "ok",
+  "error": null,
+  "items": 2,
+  "batches": 1,
+  "elapsedMs": 120
+}

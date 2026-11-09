@@ -1,0 +1,81 @@
+[
+    {
+        "description": "minLength and maxLength count code points",
+        "schema": {"minLength": 2, "maxLength": 3},
+        "tests": [
+            {"description": "long enough", "data": "foo", "valid": true},
+            {"description": "too short", "data": "f", "valid": false},
+            {"description": "too long", "data": "fooo", "valid": false},
+            {"description": "two supplementary characters are two code points", "data": "💩💩", "valid": true},
+            {"description": "one supplementary character is one code point", "data": "💩", "valid": false},
+            {"description": "non-strings are ignored", "data": 1, "valid": true}
+        ]
+    },
+    {
+        "description": "maxLength 0",
+        "schema": {"maxLength": 0},
+        "tests": [
+            {"description": "empty", "data": "", "valid": true},
+            {"description": "not empty", "data": "a", "valid": false}
+        ]
+    },
+    {
+        "description": "pattern is not anchored",
+        "schema": {"pattern": "a+"},
+        "tests": [
+            {"description": "matches in the middle", "data": "xxaxx", "valid": true},
+            {"description": "no match", "data": "xyz", "valid": false},
+            {"description": "non-strings are ignored", "data": true, "valid": true}
+        ]
+    },
+    {
+        "description": "anchored pattern",
+        "schema": {"pattern": "^[a-z]{2,4}-\\d+$"},
+        "tests": [
+            {"description": "a match", "data": "abc-12", "valid": true},
+            {"description": "a prefix only", "data": "abc-12x", "valid": false}
+        ]
+    },
+    {
+        "description": "ECMA-262 \\u escapes",
+        "schema": {"pattern": "^\\u00e9+$"},
+        "tests": [
+            {"description": "e acute", "data": "éé", "valid": true},
+            {"description": "plain e", "data": "e", "valid": false}
+        ]
+    },
+    {
+        "description": "ECMA-262 \\s matches Unicode white space",
+        "schema": {"pattern": "^\\s$"},
+        "tests": [
+            {"description": "a space", "data": " ", "valid": true},
+            {"description": "a no-break space", "data": " ", "valid": true},
+            {"description": "an ideographic space", "data": "　", "valid": true},
+            {"description": "a letter", "data": "a", "valid": false}
+        ]
+    },
+    {
+        "description": "ECMA-262 \\s inside a class",
+        "schema": {"pattern": "^[\\s,]+$"},
+        "tests": [
+            {"description": "spaces and commas", "data": " , ,", "valid": true},
+            {"description": "a letter", "data": " a", "valid": false}
+        ]
+    },
+    {
+        "description": "ECMA-262 \\S outside a class",
+        "schema": {"pattern": "^\\S+$"},
+        "tests": [
+            {"description": "letters", "data": "abc", "valid": true},
+            {"description": "a no-break space", "data": "a b", "valid": false}
+        ]
+    },
+    {
+        "description": "Unicode property escapes",
+        "schema": {"pattern": "^\\p{L}+$"},
+        "tests": [
+            {"description": "letters of any script", "data": "étéж", "valid": true},
+            {"description": "digits", "data": "123", "valid": false}
+        ]
+    }
+]

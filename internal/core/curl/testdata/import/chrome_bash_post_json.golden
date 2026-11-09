@@ -1,0 +1,92 @@
+{
+  "name": "orders",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/v1/orders?page=2\u0026sort=desc",
+    "params": [
+      {
+        "name": "page",
+        "value": "2"
+      },
+      {
+        "name": "sort",
+        "value": "desc"
+      }
+    ],
+    "headers": [
+      {
+        "name": "accept",
+        "value": "application/json, text/plain, */*"
+      },
+      {
+        "name": "accept-language",
+        "value": "en-US,en;q=0.9,de;q=0.8"
+      },
+      {
+        "name": "authorization",
+        "value": "Bearer eyJhbGciOiJIUzI1NiJ9.e30.c2lnbmF0dXJl"
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "origin",
+        "value": "https://app.example.com"
+      },
+      {
+        "name": "priority",
+        "value": "u=1, i"
+      },
+      {
+        "name": "referer",
+        "value": "https://app.example.com/orders"
+      },
+      {
+        "name": "sec-ch-ua",
+        "value": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\""
+      },
+      {
+        "name": "sec-ch-ua-mobile",
+        "value": "?0"
+      },
+      {
+        "name": "sec-ch-ua-platform",
+        "value": "\"macOS\""
+      },
+      {
+        "name": "sec-fetch-dest",
+        "value": "empty"
+      },
+      {
+        "name": "sec-fetch-mode",
+        "value": "cors"
+      },
+      {
+        "name": "sec-fetch-site",
+        "value": "same-site"
+      },
+      {
+        "name": "user-agent",
+        "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+      },
+      {
+        "name": "Cookie",
+        "value": "session=abc123; theme=dark"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"items\":[{\"sku\":\"A-1\",\"qty\":2}],\"note\":\"leave at door\"}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": []
+}

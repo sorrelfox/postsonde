@@ -1,0 +1,17 @@
+type: codec.ed.Features
+delimited: {}
+delimited.x: 1
+delimited_list[0]: {}
+delimited_list[0].x: 0
+delimited_list[1]: {}
+delimited_list[1].x: 1
+explicit_int32: 0
+implicit_int32: 3
+packed[0]: 1
+packed[1]: 2
+expanded[0]: 3
+expanded[1]: 4
+verified: "✓"
+unverified: "\xc3"
+closed: 1
+length_prefixed: {}

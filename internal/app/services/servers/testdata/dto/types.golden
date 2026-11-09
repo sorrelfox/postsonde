@@ -1,0 +1,172 @@
+[
+  {
+    "name": "echo_http",
+    "label": "Echo HTTP",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null
+    }
+  },
+  {
+    "name": "mock_http",
+    "label": "Mock HTTP",
+    "defaultConfig": {
+      "mockHttp": {
+        "routes": [
+          {
+            "id": "rt_hello",
+            "enabled": true,
+            "method": "GET",
+            "path": "/hello",
+            "status": 200,
+            "headers": [],
+            "body": {
+              "mode": "raw",
+              "type": "json",
+              "text": "{\n  \"message\": \"Hello from PostSonde\"\n}"
+            },
+            "delay": {
+              "mode": "none",
+              "ms": 0,
+              "minMs": 0,
+              "maxMs": 0
+            },
+            "responses": [],
+            "templated": false
+          }
+        ],
+        "strictTrailingSlash": false,
+        "caseInsensitive": false
+      },
+      "webSocket": null,
+      "webhook": null
+    }
+  },
+  {
+    "name": "websocket",
+    "label": "WebSocket",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": {
+        "path": "/",
+        "subprotocols": [],
+        "echo": false,
+        "maxMessageSize": 0,
+        "rules": []
+      },
+      "webhook": null
+    }
+  },
+  {
+    "name": "tcp",
+    "label": "TCP",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null
+    }
+  },
+  {
+    "name": "webhook",
+    "label": "Webhook receiver",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": {
+        "status": 200,
+        "headers": [],
+        "body": ""
+      }
+    }
+  },
+  {
+    "name": "sse",
+    "label": "SSE",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null,
+      "sse": {
+        "path": "/events",
+        "allowOrigin": "",
+        "keepAliveSec": 15,
+        "retryMs": 0,
+        "autoId": false,
+        "timers": []
+      }
+    }
+  },
+  {
+    "name": "udp",
+    "label": "UDP",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null,
+      "udp": {
+        "echo": true,
+        "fixedReply": false,
+        "reply": "",
+        "replyFormat": "text"
+      }
+    }
+  },
+  {
+    "name": "grpc_mock",
+    "label": "gRPC mock",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null,
+      "grpcMock": {
+        "files": [],
+        "importPaths": [],
+        "reflection": true,
+        "methods": []
+      }
+    }
+  },
+  {
+    "name": "socketio",
+    "label": "Socket.IO",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null,
+      "socketIo": {
+        "path": "/socket.io/",
+        "namespaces": [],
+        "auth": "",
+        "transports": "",
+        "allowOrigin": "",
+        "pingIntervalMs": 25000,
+        "pingTimeoutMs": 20000,
+        "maxPayload": 1000000,
+        "echo": false,
+        "ackMode": "echo",
+        "rules": []
+      }
+    }
+  },
+  {
+    "name": "graphql_mock",
+    "label": "GraphQL mock",
+    "defaultConfig": {
+      "mockHttp": null,
+      "webSocket": null,
+      "webhook": null,
+      "graphqlMock": {
+        "path": "/graphql",
+        "schemaFile": "",
+        "schemaText": "type Query {\n  \"A user by ID.\"\n  user(id: ID!): User\n  users(first: Int = 10): [User!]!\n  search(text: String!): [SearchResult!]!\n}\n\ntype Mutation {\n  createUser(input: CreateUserInput!): User!\n}\n\ninterface Node {\n  id: ID!\n}\n\ntype User implements Node {\n  id: ID!\n  name: String!\n  email: String\n  role: Role!\n  posts: [Post!]!\n}\n\ntype Post implements Node {\n  id: ID!\n  title: String!\n  publishedAt: DateTime\n  author: User!\n}\n\nunion SearchResult = User | Post\n\nenum Role {\n  ADMIN\n  EDITOR\n  VIEWER\n}\n\ninput CreateUserInput {\n  name: String!\n  email: String\n  role: Role = VIEWER\n}\n\nscalar DateTime\n",
+        "introspection": true,
+        "listLength": 2,
+        "nullPercent": 0,
+        "seed": 0,
+        "allowOrigin": "",
+        "overrides": []
+      }
+    }
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "kind": "udp",
+  "id": "req_5c8e1a7f2b904d63",
+  "name": "DNS probe",
+  "address": "{{dnsHost}}:53",
+  "sendMode": "hex",
+  "message": "12 34 01 00 00 01 00 00 00 00 00 00 07 65 78 61 6d 70 6c 65 03 63 6f 6d 00 00 01 00 01",
+  "settings": {
+    "connected": true,
+    "ipVersion": "ipv4",
+    "maxDatagramBytes": 1500,
+    "openTimeoutMs": 5000
+  }
+}

@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  POST https://api.test/blob \
+  Content-Type:application/json \
+  < <root>/data.json

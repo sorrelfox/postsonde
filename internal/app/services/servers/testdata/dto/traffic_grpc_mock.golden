@@ -1,0 +1,88 @@
+{
+  "events": [
+    {
+      "serverId": "srv_00000000000000f4",
+      "seq": 16,
+      "time": "2026-09-16T08:00:13Z",
+      "peer": "127.0.0.1:53129",
+      "connId": 7,
+      "direction": "in",
+      "kind": "message",
+      "summary": "Request message 1 of call 1 (shop.v1.GetOrderRequest, 5 bytes)",
+      "text": "{\n  \"id\": \"o-1\"\n}",
+      "dataBase64": "",
+      "binary": false,
+      "size": 17,
+      "truncated": false,
+      "http": null,
+      "ws": null,
+      "tcp": null,
+      "grpc": {
+        "call": 1,
+        "method": "/shop.v1.Orders/GetOrder",
+        "kind": "unary",
+        "web": false,
+        "type": "shop.v1.GetOrderRequest",
+        "index": 0,
+        "code": 0,
+        "codeName": "",
+        "message": "",
+        "trailers": []
+      },
+      "captured": false
+    },
+    {
+      "serverId": "srv_00000000000000f4",
+      "seq": 17,
+      "time": "2026-09-16T08:00:13Z",
+      "peer": "127.0.0.1:53129",
+      "connId": 7,
+      "direction": "out",
+      "kind": "response",
+      "summary": "NOT_FOUND: gone (call 1, 1 message received, 0 messages sent)",
+      "text": "",
+      "dataBase64": "",
+      "binary": false,
+      "size": 0,
+      "truncated": false,
+      "http": {
+        "method": "POST",
+        "target": "/shop.v1.Orders/GetOrder",
+        "proto": "HTTP/2.0",
+        "status": 200,
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/grpc"
+          },
+          {
+            "name": "Grpc-Status",
+            "value": "5"
+          }
+        ],
+        "route": null,
+        "delayMs": 0
+      },
+      "ws": null,
+      "tcp": null,
+      "grpc": {
+        "call": 1,
+        "method": "/shop.v1.Orders/GetOrder",
+        "kind": "unary",
+        "web": false,
+        "type": "",
+        "index": 0,
+        "code": 5,
+        "codeName": "NOT_FOUND",
+        "message": "gone",
+        "trailers": [
+          {
+            "name": "x-trace",
+            "value": "t1"
+          }
+        ]
+      },
+      "captured": false
+    }
+  ]
+}

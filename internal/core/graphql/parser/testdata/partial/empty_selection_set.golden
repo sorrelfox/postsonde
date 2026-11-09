@@ -1,0 +1,13 @@
+# source
+{ user { } }
+# tree
+Document [0:12]
+  Definitions[0]: OperationDefinition [0:12] Operation=query Keyword=-1
+    SelectionSet: SelectionSet [0:12] LBrace=0 RBrace=11
+      Selections[0]: Field [2:10] Colon=-1
+        Name: Name [2:6] Value="user"
+        SelectionSet: SelectionSet [7:10] LBrace=7 RBrace=9
+          Selections[0]: Field [8:9] Colon=-1
+            Name: Name [8:9] Value=""
+# errors
+1:10 [9:10] unexpected token: expected field, fragment spread or inline fragment, found "}"

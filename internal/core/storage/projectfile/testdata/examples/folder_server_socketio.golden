@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_8d2f6a0c4e1b9537",
+  "name": "Live",
+  "auth": {
+    "type": "inherit"
+  },
+  "server": {
+    "type": "socketio",
+    "port": 3000,
+    "socketIo": {
+      "namespaces": [
+        "/admin",
+        "/chat"
+      ],
+      "auth": "{\"token\":\"dev-token\"}",
+      "allowOrigin": "http://localhost:5173",
+      "echo": true,
+      "ackMode": "none",
+      "rules": [
+        {
+          "match": "exact",
+          "pattern": "ping",
+          "ack": "[\"pong\", {\"at\": {{$timestamp}}}]"
+        },
+        {
+          "match": "regex",
+          "pattern": "^order:",
+          "emit": "order:updated",
+          "emitArgs": "{\"status\": \"shipped\"}",
+          "delayMs": 500
+        },
+        {
+          "match": "contains",
+          "pattern": "debug",
+          "ack": "\"off\"",
+          "disabled": true
+        }
+      ]
+    }
+  }
+}

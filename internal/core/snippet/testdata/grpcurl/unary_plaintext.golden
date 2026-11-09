@@ -1,0 +1,5 @@
+grpcurl -plaintext \
+  -H 'authorization: Bearer ••••••' \
+  -H 'x-trace: abc' \
+  -d '{"id": "o-1"}' \
+  localhost:50051 shop.v1.Orders/Get

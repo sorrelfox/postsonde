@@ -1,0 +1,5 @@
+type: codec.p3.Optionals
+o_int32: -1
+o_double: -0
+implicit_int32: 4
+implicit_double: -0

@@ -1,0 +1,62 @@
+{
+  "name": "graphql",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://www.example.com/graphql",
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      },
+      {
+        "name": "Accept",
+        "value": "application/json"
+      },
+      {
+        "name": "Sec-Fetch-Site",
+        "value": "same-origin"
+      },
+      {
+        "name": "Accept-Language",
+        "value": "en-GB,en;q=0.9"
+      },
+      {
+        "name": "Accept-Encoding",
+        "value": "gzip, deflate, br"
+      },
+      {
+        "name": "Origin",
+        "value": "https://www.example.com"
+      },
+      {
+        "name": "User-Agent",
+        "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+      },
+      {
+        "name": "Connection",
+        "value": "keep-alive"
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"query\":\"query Me { me { id name } }\",\"variables\":{}}"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.not_imported",
+      "severity": "info",
+      "start": 415,
+      "end": 438,
+      "message": "The Content-Length header is not imported: PostSonde sends the length of the body it sends."
+    }
+  ]
+}

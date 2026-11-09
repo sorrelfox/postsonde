@@ -1,0 +1,14 @@
+# source
+fragment on User { id }
+# tree
+Document [0:23]
+  Definitions[0]: FragmentDefinition [0:23] Keyword=0
+    Name: Name [8:9] Value=""
+    TypeCondition: TypeCondition [9:16] On=9
+      Type: NamedType [12:16]
+        Name: Name [12:16] Value="User"
+    SelectionSet: SelectionSet [17:23] LBrace=17 RBrace=22
+      Selections[0]: Field [19:21] Colon=-1
+        Name: Name [19:21] Value="id"
+# errors
+1:10 [9:11] unexpected token: expected fragment name, found name "on"

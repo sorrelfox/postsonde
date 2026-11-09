@@ -1,0 +1,767 @@
+{
+  "diagnostics": [
+    {
+      "Code": "insomnia.cookies_skipped",
+      "Severity": "info",
+      "Message": "The cookie jar (2 cookie(s)) is not imported: PostSonde keeps the cookies servers set as requests are sent.",
+      "At": "resources[26] @354:5"
+    }
+  ],
+  "environments": [
+    {
+      "at": "resources[24] @331:5",
+      "diagnostics": [
+        {
+          "Code": "insomnia.base_environment",
+          "Severity": "info",
+          "Message": "The base environment's variables were added to this environment; its own values win.",
+          "At": "resources[24] @331:5"
+        },
+        {
+          "Code": "insomnia.nested_value",
+          "Severity": "info",
+          "Message": "Values nested in objects or lists became variables with dotted names (a.b, list.0), which the converted {{ _.a.b }} references use.",
+          "At": "resources[22] @306:5"
+        },
+        {
+          "Code": "insomnia.private_environment",
+          "Severity": "info",
+          "Message": "The environment was private in Insomnia, so its variables were imported as secrets, kept on this machine only.",
+          "At": "resources[24] @331:5"
+        }
+      ],
+      "environment": "Local (private)",
+      "variables": [
+        {
+          "Name": "base_url",
+          "Value": "http://localhost:8080",
+          "Description": "",
+          "Secret": true,
+          "Disabled": false
+        },
+        {
+          "Name": "token",
+          "Value": "dev-token-123",
+          "Description": "",
+          "Secret": true,
+          "Disabled": false
+        },
+        {
+          "Name": "user.login",
+          "Value": "ada",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "user.name",
+          "Value": "Ada",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    },
+    {
+      "at": "resources[23] @321:5",
+      "diagnostics": [
+        {
+          "Code": "insomnia.base_environment",
+          "Severity": "info",
+          "Message": "The base environment's variables were added to this environment; its own values win.",
+          "At": "resources[23] @321:5"
+        },
+        {
+          "Code": "insomnia.nested_value",
+          "Severity": "info",
+          "Message": "Values nested in objects or lists became variables with dotted names (a.b, list.0), which the converted {{ _.a.b }} references use.",
+          "At": "resources[22] @306:5"
+        }
+      ],
+      "environment": "Staging",
+      "variables": [
+        {
+          "Name": "base_url",
+          "Value": "https://staging.shop.example/v2",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "token",
+          "Value": "",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "user.login",
+          "Value": "ada",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "user.name",
+          "Value": "Ada",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "user_id",
+          "Value": "42",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        }
+      ]
+    },
+    {
+      "at": "resources[25] @340:5",
+      "diagnostics": [
+        {
+          "Code": "insomnia.base_environment",
+          "Severity": "info",
+          "Message": "The base environment's variables were added to this environment; its own values win.",
+          "At": "resources[25] @340:5"
+        },
+        {
+          "Code": "insomnia.nested_value",
+          "Severity": "info",
+          "Message": "Values nested in objects or lists became variables with dotted names (a.b, list.0), which the converted {{ _.a.b }} references use.",
+          "At": "resources[22] @306:5"
+        },
+        {
+          "Code": "insomnia.secret_value",
+          "Severity": "warning",
+          "Message": "Vault secrets are encrypted in the export: their variables were imported without values. Type the values in the environment.",
+          "At": "resources[25] @340:5"
+        }
+      ],
+      "environment": "Production",
+      "variables": [
+        {
+          "Name": "base_url",
+          "Value": "https://shop.example/v2",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "token",
+          "Value": "",
+          "Description": "",
+          "Secret": true,
+          "Disabled": false
+        },
+        {
+          "Name": "user.login",
+          "Value": "ada",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "user.name",
+          "Value": "Ada",
+          "Description": "",
+          "Secret": false,
+          "Disabled": false
+        },
+        {
+          "Name": "debug",
+          "Value": "1",
+          "Description": "",
+          "Secret": false,
+          "Disabled": true
+        }
+      ]
+    }
+  ],
+  "name": "Shop API",
+  "root": {
+    "at": "resources[2] @53:5",
+    "auth": {
+      "type": "inherit"
+    },
+    "description": "The shop's public API.",
+    "diagnostics": null,
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "resources[3] @63:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": [
+          {
+            "Code": "insomnia.nested_value",
+            "Severity": "info",
+            "Message": "Values nested in objects or lists became variables with dotted names (a.b, list.0), which the converted {{ _.a.b }} references use.",
+            "At": "resources[3] @63:5"
+          }
+        ],
+        "folder": "API",
+        "headers": null,
+        "items": [
+          {
+            "at": "resources[1] @38:5",
+            "auth": {
+              "type": "bearer",
+              "token": "{{token}}"
+            },
+            "description": "User management.\n\nInsomnia pre-request script (not run by PostSonde):\n\n```js\ninsomnia.request.addHeader({ key: 'X-Req', value: '1' });\n```",
+            "diagnostics": [
+              {
+                "Code": "insomnia.script",
+                "Severity": "warning",
+                "Message": "The folder's pre-request script is kept in its description: PostSonde does not run Insomnia scripts.",
+                "At": "resources[1] @38:5"
+              }
+            ],
+            "folder": "Users",
+            "headers": [
+              {
+                "name": "X-Team",
+                "value": "{{team-id}}"
+              }
+            ],
+            "items": [
+              {
+                "at": "resources[0] @7:5",
+                "diagnostics": [
+                  {
+                    "Code": "insomnia.setting_skipped",
+                    "Severity": "info",
+                    "Message": "Insomnia settings PostSonde does not have were turned off and are not imported: rebuild the path.",
+                    "At": "resources[0] @7:5"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "description": "Lists the users, a page at a time.",
+                  "method": "GET",
+                  "url": "{{base_url}}/users?sort=name&limit={{page_size}}&q=a%26b",
+                  "params": [
+                    {
+                      "name": "sort",
+                      "value": "name"
+                    },
+                    {
+                      "name": "limit",
+                      "value": "{{page_size}}"
+                    },
+                    {
+                      "name": "q",
+                      "value": "a&b"
+                    },
+                    {
+                      "name": "debug",
+                      "value": "true",
+                      "disabled": true
+                    }
+                  ],
+                  "headers": [
+                    {
+                      "name": "Accept",
+                      "value": "application/json"
+                    },
+                    {
+                      "name": "X-Trace",
+                      "value": "on",
+                      "disabled": true
+                    }
+                  ],
+                  "body": {
+                    "mode": "none"
+                  },
+                  "auth": {
+                    "type": "inherit"
+                  },
+                  "settings": {
+                    "followRedirects": false,
+                    "urlEncoding": "none"
+                  }
+                },
+                "request": "List users"
+              },
+              {
+                "at": "resources[4] @74:5",
+                "diagnostics": [
+                  {
+                    "Code": "insomnia.script",
+                    "Severity": "warning",
+                    "Message": "The request's after-response script is kept in its description: PostSonde does not run Insomnia scripts.",
+                    "At": "resources[4] @74:5"
+                  },
+                  {
+                    "Code": "insomnia.auth_changed",
+                    "Severity": "warning",
+                    "Message": "The Basic auth was set to encode the credentials as ISO-8859-1; PostSonde encodes them as UTF-8.",
+                    "At": "resources[4] @74:5"
+                  },
+                  {
+                    "Code": "insomnia.template_converted",
+                    "Severity": "info",
+                    "Message": "The Insomnia “now” tag became the dynamic value {{$isoTimestamp}}.",
+                    "At": "resources[4] @74:5"
+                  },
+                  {
+                    "Code": "insomnia.template_converted",
+                    "Severity": "info",
+                    "Message": "The Insomnia “uuid” tag became the dynamic value {{$uuid}}.",
+                    "At": "resources[4] @74:5"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "description": "Insomnia after-response script (not run by PostSonde):\n\n```js\ninsomnia.test('201', () => insomnia.expect(insomnia.response.code).to.eql(201));\n```",
+                  "method": "POST",
+                  "url": "{{base_url}}/users",
+                  "headers": [
+                    {
+                      "name": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": {
+                    "mode": "raw",
+                    "type": "json",
+                    "text": "{\n  \"id\": \"{{$uuid}}\",\n  \"createdAt\": \"{{$isoTimestamp}}\",\n  \"name\": \"{{user.name}}\"\n}"
+                  },
+                  "auth": {
+                    "type": "basic",
+                    "username": "{{user.login}}",
+                    "password": "hunter2"
+                  }
+                },
+                "request": "Create user"
+              },
+              {
+                "at": "resources[5] @92:5",
+                "diagnostics": [
+                  {
+                    "Code": "insomnia.template_tag",
+                    "Severity": "warning",
+                    "Message": "The Insomnia template tag “response” in a header is left as written: PostSonde has no such tag. Replace it with a {{variable}}.",
+                    "At": "resources[5] @92:5"
+                  },
+                  {
+                    "Code": "insomnia.template_expression",
+                    "Severity": "warning",
+                    "Message": "An Insomnia template expression in a header is left as written: only variables such as {{ _.name }} are converted.",
+                    "At": "resources[5] @92:5"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "method": "GET",
+                  "url": "{{base_url}}/users/me",
+                  "headers": [
+                    {
+                      "name": "Authorization",
+                      "value": "Bearer {% response 'body', 'req_login', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+                    },
+                    {
+                      "name": "X-Name",
+                      "value": "{{ _.name | upper }}"
+                    }
+                  ],
+                  "body": {
+                    "mode": "none"
+                  },
+                  "auth": {
+                    "type": "none"
+                  }
+                },
+                "request": "Me"
+              },
+              {
+                "at": "resources[6] @108:5",
+                "diagnostics": [
+                  {
+                    "Code": "insomnia.auth_changed",
+                    "Severity": "warning",
+                    "Message": "The API key was sent as a cookie; it is imported as a Cookie header holding the key.",
+                    "At": "resources[6] @108:5"
+                  }
+                ],
+                "file": {
+                  "schemaVersion": 1,
+                  "kind": "http",
+                  "id": "req_x",
+                  "name": "",
+                  "method": "GET",
+                  "url": "{{base_url}}/users/:id",
+                  "pathParams": [
+                    {
+                      "name": "id",
+                      "value": "{{user_id}}"
+                    }
+                  ],
+                  "body": {
+                    "mode": "none"
+                  },
+                  "auth": {
+                    "type": "apikey",
+                    "key": "Cookie",
+                    "value": "session={{session}}"
+                  }
+                },
+                "request": "Get user"
+              }
+            ],
+            "variables": [
+              {
+                "name": "page_size",
+                "value": "20"
+              }
+            ]
+          }
+        ],
+        "variables": [
+          {
+            "name": "api.version",
+            "value": "v2"
+          },
+          {
+            "name": "api.regions.0",
+            "value": "eu"
+          },
+          {
+            "name": "api.regions.1",
+            "value": "us"
+          }
+        ]
+      },
+      {
+        "at": "resources[7] @122:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "Forms",
+        "headers": null,
+        "items": [
+          {
+            "at": "resources[8] @130:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{base_url}}/login",
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/x-www-form-urlencoded"
+                }
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "fields": [
+                  {
+                    "name": "user",
+                    "value": "{{user.login}}"
+                  },
+                  {
+                    "name": "remember",
+                    "value": "1",
+                    "disabled": true
+                  }
+                ]
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "api_key",
+                "value": "{{api_key}}",
+                "in": "query"
+              }
+            },
+            "request": "Log in"
+          },
+          {
+            "at": "resources[9] @148:5",
+            "diagnostics": [
+              {
+                "Code": "insomnia.file_path",
+                "Severity": "info",
+                "Message": "The body sends a file by its path on the machine the export was made on; check that the path exists here.",
+                "At": "resources[9] @148:5"
+              },
+              {
+                "Code": "insomnia.template_converted",
+                "Severity": "info",
+                "Message": "The Insomnia “now” tag became the dynamic value {{$timestamp}}.",
+                "At": "resources[9] @148:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "PUT",
+              "url": "{{base_url}}/users/me/avatar",
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "multipart/form-data"
+                }
+              ],
+              "body": {
+                "mode": "multipart",
+                "parts": [
+                  {
+                    "name": "file",
+                    "value": "",
+                    "file": "/Users/ada/Pictures/me.png"
+                  },
+                  {
+                    "name": "caption",
+                    "value": "Me at {{$timestamp}}"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "digest",
+                "username": "ada",
+                "password": "{{password}}"
+              }
+            },
+            "request": "Upload avatar"
+          },
+          {
+            "at": "resources[10] @166:5",
+            "diagnostics": [
+              {
+                "Code": "insomnia.file_path",
+                "Severity": "info",
+                "Message": "The body sends a file by its path on the machine the export was made on; check that the path exists here.",
+                "At": "resources[10] @166:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{base_url}}/import",
+              "body": {
+                "mode": "file",
+                "path": "/tmp/users.csv",
+                "contentType": "text/csv"
+              },
+              "auth": {
+                "type": "oauth2",
+                "grantType": "client_credentials",
+                "tokenUrl": "{{base_url}}/oauth/token",
+                "clientId": "shop",
+                "clientSecret": "s3cr3t"
+              }
+            },
+            "request": "Import CSV"
+          },
+          {
+            "at": "resources[11] @181:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{base_url}}/partner/orders",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "oauth1",
+                "consumerKey": "{{partner_key}}",
+                "consumerSecret": "oauth1-consumer-s3cr3t",
+                "accessToken": "partner-token",
+                "tokenSecret": "oauth1-token-s3cr3t",
+                "signatureMethod": "HMAC-SHA1",
+                "callback": "https://app.shop.example/cb",
+                "verifier": "v123",
+                "realm": "shop",
+                "nonce": "fixed-nonce",
+                "timestamp": "1700000000",
+                "bodyHash": true
+              }
+            },
+            "request": "Partner orders"
+          },
+          {
+            "at": "resources[12] @200:5",
+            "diagnostics": [
+              {
+                "Code": "insomnia.auth_unsupported",
+                "Severity": "info",
+                "Message": "The Hawk auth was turned off, and PostSonde has no such auth: the request sends no auth.",
+                "At": "resources[12] @200:5"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{base_url}}/notes",
+              "headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/edn"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "text",
+                "text": "{:title \"{{title}}\"}"
+              },
+              "auth": {
+                "type": "none"
+              }
+            },
+            "request": "Post note"
+          },
+          {
+            "at": "resources[13] @212:5",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{base_url}}/reports/daily.csv",
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "netrc"
+              }
+            },
+            "request": "Daily report"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "resources[14] @224:5",
+        "diagnostics": null,
+        "file": {
+          "schemaVersion": 1,
+          "kind": "graphql",
+          "id": "req_x",
+          "name": "",
+          "url": "{{base_url}}/graphql",
+          "query": "query Search($q: String!) {\n  products(q: $q) { id name }\n}",
+          "variables": "{\n  \"q\": \"{{query}}\",\n  \"first\": 10\n}",
+          "operationName": "Search",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "auth": {
+            "type": "bearer",
+            "prefix": "Token",
+            "token": "{{token}}"
+          }
+        },
+        "request": "Search products"
+      },
+      {
+        "at": "resources[15] @240:5",
+        "diagnostics": [
+          {
+            "Code": "insomnia.proto_skipped",
+            "Severity": "warning",
+            "Message": "The .proto file “orders.proto” is kept inside the Insomnia export and was not imported: save it as a file and add it to the request's proto setup.",
+            "At": "resources[15] @240:5"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "grpc",
+          "id": "req_x",
+          "name": "",
+          "address": "{{grpc_host}}:443",
+          "service": "shop.v1.Orders",
+          "method": "GetOrder",
+          "message": "{\n  \"id\": \"{{order_id}}\"\n}",
+          "metadata": [
+            {
+              "name": "x-api-key",
+              "value": "{{api_key}}"
+            }
+          ],
+          "settings": {
+            "tls": true
+          }
+        },
+        "request": "Get order"
+      },
+      {
+        "at": "resources[17] @261:5",
+        "diagnostics": [
+          {
+            "Code": "insomnia.auth_unsupported",
+            "Severity": "warning",
+            "Message": "The WebSocket request's Bearer auth was not imported: PostSonde's WebSocket requests have no auth settings. Add an Authorization header instead.",
+            "At": "resources[17] @261:5"
+          }
+        ],
+        "file": {
+          "schemaVersion": 1,
+          "kind": "websocket",
+          "id": "req_x",
+          "name": "",
+          "url": "wss://{{ws_host}}/feed?channel=orders",
+          "params": [
+            {
+              "name": "channel",
+              "value": "orders"
+            }
+          ],
+          "headers": [
+            {
+              "name": "Origin",
+              "value": "https://shop.example"
+            }
+          ],
+          "message": "{\"subscribe\": \"{{channel}}\"}",
+          "messageFormat": "json"
+        },
+        "request": "Order feed"
+      },
+      {
+        "at": "resources[19] @283:5",
+        "code": "insomnia.unsupported",
+        "name": "Smoke tests",
+        "reason": "PostSonde does not import Insomnia test suites.",
+        "skipped": "test suite"
+      }
+    ],
+    "variables": null
+  }
+}

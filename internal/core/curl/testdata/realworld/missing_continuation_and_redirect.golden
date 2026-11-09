@@ -1,0 +1,70 @@
+{
+  "dialect": "posix",
+  "method": "PUT",
+  "methodExplicit": false,
+  "url": "https://example.com/upload",
+  "urls": [
+    {
+      "value": "https://example.com/upload",
+      "start": 5,
+      "end": 31
+    }
+  ],
+  "urlQuery": null,
+  "headers": null,
+  "data": null,
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "report.pdf",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.missing_continuation",
+      "severity": "warning",
+      "start": 31,
+      "end": 32,
+      "message": "The line ends without a line continuation; the next line is read as part of the command.",
+      "text": "\n"
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "info",
+      "start": 34,
+      "end": 47,
+      "message": "curl sends the file “report.pdf”; it is kept as a path and not read here.",
+      "text": "-T report.pdf"
+    },
+    {
+      "code": "curl.redirect_ignored",
+      "severity": "warning",
+      "start": 48,
+      "end": 52,
+      "message": "The shell redirection is ignored.",
+      "text": "2\u003e\u00261"
+    },
+    {
+      "code": "curl.redirect_ignored",
+      "severity": "warning",
+      "start": 53,
+      "end": 64,
+      "message": "The shell redirection is ignored.",
+      "text": "\u003e /dev/null"
+    }
+  ]
+}

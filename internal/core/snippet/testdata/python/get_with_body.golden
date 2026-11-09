@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "GET",
+    "https://api.test/search",
+    headers={
+        "Content-Type": "application/json",
+    },
+    data='{"q":"x"}',
+)
+
+print(response.status_code)
+print(response.text)

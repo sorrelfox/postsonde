@@ -1,0 +1,4 @@
+wget https://api.test/items/1 \
+  --method DELETE \
+  --max-redirect 10 \
+  -O -

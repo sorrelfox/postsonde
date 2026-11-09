@@ -1,0 +1,13 @@
+const response = await fetch("https://api.test/q", {
+  headers: {
+    "X-Odd!#$%&'*+.^_`|~": "100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\",
+    "X-Unicode": String.fromCharCode(...new TextEncoder().encode("héllo ✓ 日本 😀 ‘curly’ “double” „low“ ‚s‛")),
+    "X-Long": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "X-Json": "{\"a\":\"b\\\"c\",\"d\":[1,2],\"e\":\"C:\\\\dir\\\\\"}",
+    "X-Tab": "a\tb",
+    "X-Empty": "",
+  },
+});
+
+console.log(response.status);
+console.log(await response.text());

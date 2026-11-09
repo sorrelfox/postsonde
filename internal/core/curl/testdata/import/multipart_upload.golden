@@ -1,0 +1,105 @@
+{
+  "name": "files",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "https://api.example.com/v1/files",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer abc"
+      }
+    ],
+    "body": {
+      "mode": "multipart",
+      "parts": [
+        {
+          "name": "purpose",
+          "value": "fine-tune"
+        },
+        {
+          "name": "file",
+          "value": "",
+          "file": "my data.jsonl",
+          "contentType": "application/jsonl"
+        },
+        {
+          "name": "meta",
+          "value": "{\"a\":1}",
+          "contentType": "application/json"
+        },
+        {
+          "name": "avatar",
+          "value": "",
+          "file": "img;1.png"
+        },
+        {
+          "name": "notes",
+          "value": "",
+          "file": "notes.txt"
+        },
+        {
+          "name": "raw",
+          "value": "@not-a-file;really"
+        }
+      ]
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.file_reference",
+      "severity": "info",
+      "start": 112,
+      "end": 159,
+      "message": "curl sends the file “my data.jsonl”; it is kept as a path and not read here."
+    },
+    {
+      "code": "curl.file_not_read",
+      "severity": "warning",
+      "start": 112,
+      "end": 159,
+      "message": "The file “my data.jsonl” is sent from its path, which PostSonde reads relative to the project folder, not to where curl ran."
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "info",
+      "start": 208,
+      "end": 248,
+      "message": "curl sends the file “img;1.png”; it is kept as a path and not read here."
+    },
+    {
+      "code": "curl.file_not_read",
+      "severity": "warning",
+      "start": 208,
+      "end": 248,
+      "message": "The file “img;1.png” is sent from its path, which PostSonde reads relative to the project folder, not to where curl ran."
+    },
+    {
+      "code": "curl.not_imported",
+      "severity": "warning",
+      "start": 208,
+      "end": 248,
+      "message": "The part’s “filename=” is not imported; the file’s own name is sent."
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "warning",
+      "start": 253,
+      "end": 274,
+      "message": "curl reads this value from the file “notes.txt”; PostSonde does not read it."
+    },
+    {
+      "code": "curl.file_not_read",
+      "severity": "warning",
+      "start": 253,
+      "end": 274,
+      "message": "curl sends the content of “notes.txt” as a text field; PostSonde sends the file as an upload."
+    }
+  ]
+}

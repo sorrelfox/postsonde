@@ -1,0 +1,322 @@
+{
+  "log": {
+    "version": "1.2",
+    "creator": {
+      "name": "PostSonde",
+      "version": "1.4.0"
+    },
+    "pages": [
+      {
+        "startedDateTime": "2026-09-18T09:30:00.123Z",
+        "id": "page_1",
+        "title": "Orders",
+        "pageTimings": {
+          "onContentLoad": -1,
+          "onLoad": -1
+        }
+      }
+    ],
+    "entries": [
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:00.123Z",
+        "time": 182.2,
+        "request": {
+          "method": "POST",
+          "url": "https://api.test/orders?dry=1&tag=a%20b",
+          "httpVersion": "HTTP/2.0",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ••••••"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "queryString": [
+            {
+              "name": "dry",
+              "value": "1"
+            },
+            {
+              "name": "tag",
+              "value": "a b"
+            }
+          ],
+          "postData": {
+            "mimeType": "application/json",
+            "text": "{\"sku\":\"A\",\"n\":2}\n"
+          },
+          "headersSize": -1,
+          "bodySize": 18
+        },
+        "response": {
+          "status": 201,
+          "statusText": "Created",
+          "httpVersion": "HTTP/2.0",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Location",
+              "value": "/orders/9"
+            }
+          ],
+          "content": {
+            "size": 11,
+            "mimeType": "application/json",
+            "text": "{\"id\":9}\n\n\n"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": 11
+        },
+        "cache": {},
+        "timings": {
+          "blocked": 5.075,
+          "dns": 12.5,
+          "connect": 51.375,
+          "send": 0.5,
+          "wait": 110,
+          "receive": 2.75,
+          "ssl": 31.125
+        },
+        "serverIPAddress": "192.0.2.7",
+        "connection": "53122",
+        "comment": "Create order"
+      },
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:02.123Z",
+        "time": 40,
+        "request": {
+          "method": "POST",
+          "url": "http://[2001:db8::1]:8080/login",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [
+            {
+              "name": "sid",
+              "value": "abc"
+            },
+            {
+              "name": "theme",
+              "value": "dark"
+            }
+          ],
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            },
+            {
+              "name": "Cookie",
+              "value": "sid=abc; theme=dark"
+            }
+          ],
+          "queryString": [],
+          "postData": {
+            "mimeType": "application/x-www-form-urlencoded",
+            "params": [
+              {
+                "name": "user",
+                "value": "ada"
+              },
+              {
+                "name": "note",
+                "value": "a b&c"
+              }
+            ],
+            "text": "user=ada&note=a+b%26c"
+          },
+          "headersSize": -1,
+          "bodySize": 21
+        },
+        "response": {
+          "status": 200,
+          "statusText": "OK",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [
+            {
+              "name": "sid",
+              "value": "def",
+              "path": "/",
+              "expires": "2026-09-19T10:00:00.000Z",
+              "httpOnly": true,
+              "secure": true
+            }
+          ],
+          "headers": [
+            {
+              "name": "Set-Cookie",
+              "value": "sid=def; Path=/; Expires=Sat, 19 Sep 2026 10:00:00 GMT; HttpOnly; Secure"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "content": {
+            "size": 2,
+            "mimeType": "text/plain",
+            "text": "ok"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": 2
+        },
+        "cache": {},
+        "timings": {
+          "blocked": 31.7,
+          "dns": -1,
+          "connect": -1,
+          "send": 0.1,
+          "wait": 8,
+          "receive": 0.2,
+          "ssl": -1
+        },
+        "serverIPAddress": "2001:db8::1",
+        "connection": "50000",
+        "comment": "Login form — Followed 1 redirect to http://[2001:db8::1]:8080/home; the request is the first hop, the response and timings the last."
+      },
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:03.123Z",
+        "time": 55,
+        "request": {
+          "method": "GET",
+          "url": "https://cdn.test/logo.png",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": 0
+        },
+        "response": {
+          "status": 200,
+          "statusText": "OK",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [],
+          "content": {
+            "size": 70000,
+            "mimeType": "x-unknown",
+            "text": "iVBORw0KGgo=",
+            "encoding": "base64",
+            "comment": "The body is clipped to the first 64 KiB the history keeps."
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": 70000
+        },
+        "cache": {},
+        "timings": {
+          "blocked": -1,
+          "dns": -1,
+          "connect": -1,
+          "send": 0,
+          "wait": 55,
+          "receive": 0,
+          "ssl": -1
+        }
+      },
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:04.123Z",
+        "time": 0,
+        "request": {
+          "method": "POST",
+          "url": "https://down.test/graphql",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "queryString": [],
+          "postData": {
+            "mimeType": "application/json",
+            "text": "{\"query\":\"{ a }\"}"
+          },
+          "headersSize": -1,
+          "bodySize": 17
+        },
+        "response": {
+          "status": 0,
+          "statusText": "",
+          "httpVersion": "",
+          "cookies": [],
+          "headers": [],
+          "content": {
+            "size": 0,
+            "mimeType": "x-unknown"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "cache": {},
+        "timings": {
+          "blocked": -1,
+          "dns": -1,
+          "connect": -1,
+          "send": 0,
+          "wait": 0,
+          "receive": 0,
+          "ssl": -1
+        },
+        "comment": "Search",
+        "_error": "Could not connect to down.test."
+      },
+      {
+        "pageref": "page_1",
+        "startedDateTime": "2026-09-18T09:30:05.123Z",
+        "time": 0,
+        "request": {
+          "method": "GET",
+          "url": "https://slow.test/",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": 0
+        },
+        "response": {
+          "status": 0,
+          "statusText": "",
+          "httpVersion": "",
+          "cookies": [],
+          "headers": [],
+          "content": {
+            "size": 0,
+            "mimeType": "x-unknown"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "cache": {},
+        "timings": {
+          "blocked": -1,
+          "dns": -1,
+          "connect": -1,
+          "send": 0,
+          "wait": 0,
+          "receive": 0,
+          "ssl": -1
+        },
+        "comment": "Slow",
+        "_error": "Cancelled."
+      }
+    ]
+  }
+}

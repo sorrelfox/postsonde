@@ -1,0 +1,7 @@
+curl https://api.test/me \
+  -H 'Accept: text/html' \
+  -H 'X-A: 1' \
+  -H 'accept: application/json' \
+  -H 'Host: example.test' \
+  -H 'Cookie: a=1' \
+  -H 'cookie: b=2'

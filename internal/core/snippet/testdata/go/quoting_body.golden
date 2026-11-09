@@ -1,0 +1,29 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"strings"
+)
+
+func main() {
+	req, err := http.NewRequest("POST", "https://api.test/q", strings.NewReader("trailing spaces   \n  indented\n\ttabbed\n100% ^caret^ &amp| <tag> (paren) !bang! %PATH% %% $env:PATH ${x} $(id) `tick` {{notAVar}} 'single' ''two'' \"double\" \"\"two\"\" \\ \\\\ \\\" end\\\n\"\"\"triple\"\"\" \\u0041 \\n */ // # -- ; C:\\dir\\\n\n‘curly’ “double” 日本 😀 \u00a0nbsp \u2028ls\n   "))
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Content-Type", "text/plain")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(data))
+}

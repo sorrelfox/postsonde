@@ -1,0 +1,3 @@
+http --follow --max-redirects=3 --timeout=0.25 \
+  DELETE '{{baseUrl}}/items/{{id}}' \
+  'Authorization:Bearer {{token}}'

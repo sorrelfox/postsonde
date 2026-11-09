@@ -1,0 +1,61 @@
+{
+  "name": "x",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "GET",
+    "url": "https://example.com/x",
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 5,
+      "end": 19,
+      "message": "curl has no option “--frobnicate”; it is ignored, with the word after it taken as its value."
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 20,
+      "end": 28,
+      "message": "curl has no option “--wibble”; it is ignored."
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 51,
+      "end": 58,
+      "message": "curl has no option “--zap”; it is ignored."
+    },
+    {
+      "code": "curl.ignored_option",
+      "severity": "info",
+      "start": 59,
+      "end": 62,
+      "message": "The option “-Z” does not change the request and is ignored."
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 59,
+      "end": 62,
+      "message": "curl has no option “-9”; it is ignored."
+    },
+    {
+      "code": "curl.unknown_option",
+      "severity": "warning",
+      "start": 63,
+      "end": 65,
+      "message": "curl has no option “-W”; it is ignored."
+    }
+  ]
+}

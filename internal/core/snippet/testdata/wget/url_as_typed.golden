@@ -1,0 +1,3 @@
+wget 'https://api.test/a/../b/./c?f={x}&g=[1]|"q"' \
+  --max-redirect 10 \
+  -O -

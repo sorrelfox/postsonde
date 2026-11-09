@@ -1,0 +1,56 @@
+{
+  "dialect": "posix",
+  "method": "POST",
+  "methodExplicit": false,
+  "url": "https://example.com",
+  "urls": [
+    {
+      "value": "https://example.com",
+      "start": 5,
+      "end": 24
+    }
+  ],
+  "urlQuery": null,
+  "headers": null,
+  "data": [
+    {
+      "kind": "data",
+      "option": "-d",
+      "value": "{\"a\":1}",
+      "name": "",
+      "file": "",
+      "start": 25,
+      "end": 36
+    }
+  ],
+  "get": false,
+  "head": false,
+  "form": null,
+  "uploadFile": "",
+  "user": null,
+  "authScheme": "",
+  "oauth2Bearer": "",
+  "userAgent": null,
+  "referer": null,
+  "cookies": null,
+  "insecure": false,
+  "compressed": false,
+  "followRedirects": false,
+  "maxRedirects": null,
+  "httpVersion": "",
+  "maxTime": 0,
+  "connectTimeout": 0,
+  "proxy": "",
+  "proxyUser": null,
+  "noProxy": "",
+  "diagnostics": [
+    {
+      "code": "curl.unterminated_quote",
+      "severity": "error",
+      "start": 28,
+      "end": 36,
+      "message": "The quote that starts here is never closed.",
+      "text": "'{\"a\":1}"
+    }
+  ]
+}

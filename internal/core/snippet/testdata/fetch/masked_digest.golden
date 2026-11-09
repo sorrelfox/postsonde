@@ -1,0 +1,5 @@
+// fetch has no Digest auth: answer the server's challenge for user "ann".
+const response = await fetch("https://api.test/me");
+
+console.log(response.status);
+console.log(await response.text());

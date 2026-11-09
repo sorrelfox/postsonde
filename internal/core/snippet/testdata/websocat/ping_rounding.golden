@@ -1,0 +1,3 @@
+websocat ws://localhost:8080/ws \
+  --protocol v1 \
+  --ping-interval 2

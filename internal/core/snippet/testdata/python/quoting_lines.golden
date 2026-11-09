@@ -1,0 +1,20 @@
+import requests
+
+response = requests.request(
+    "PUT",
+    "https://api.test/q",
+    headers={
+        "Content-Type": "text/plain",
+    },
+    data=(
+        "trailing   \n"
+        "\ttab first\n"
+        "   \n"
+        "\"\"\"q\"\"\"\" \\u0041 C:\\dir\\ ${x} %PATH% 'a'\n"
+        "\n"
+        "  last  "
+    ),
+)
+
+print(response.status_code)
+print(response.text)

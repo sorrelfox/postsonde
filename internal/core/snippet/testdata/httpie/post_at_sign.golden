@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  --raw @not-a-file \
+  POST https://api.test/items \
+  Content-Type:text/plain

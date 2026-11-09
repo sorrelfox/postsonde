@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "name": "Users & roles",
+  "order": [
+    "list.json",
+    "create.json",
+    "admin"
+  ],
+  "variables": {
+    "Accept": "*/*",
+    "apiKey": "{{secret}}",
+    "baseUrl": "https://api.example.com"
+  },
+  "auth": {
+    "inherit": false,
+    "token": "{{token}}",
+    "type": "bearer"
+  }
+}

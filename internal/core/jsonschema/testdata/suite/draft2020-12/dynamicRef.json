@@ -1,0 +1,53 @@
+[
+    {
+        "description": "a $dynamicRef without a matching $dynamicAnchor works like $ref",
+        "schema": {
+            "$id": "https://example.com/plain",
+            "$defs": {"foo": {"$anchor": "items", "type": "string"}},
+            "items": {"$dynamicRef": "#items"}
+        },
+        "tests": [
+            {"description": "strings", "data": ["a", "b"], "valid": true},
+            {"description": "a number", "data": ["a", 1], "valid": false}
+        ]
+    },
+    {
+        "description": "a $dynamicRef resolves to the outermost $dynamicAnchor in the dynamic scope",
+        "schema": {
+            "$id": "https://example.com/strict-list",
+            "$ref": "list",
+            "$defs": {
+                "items": {"$dynamicAnchor": "items", "type": "string"},
+                "list": {
+                    "$id": "list",
+                    "type": "array",
+                    "items": {"$dynamicRef": "#items"},
+                    "$defs": {"items": {"$dynamicAnchor": "items"}}
+                }
+            }
+        },
+        "tests": [
+            {"description": "strings", "data": ["foo", "bar"], "valid": true},
+            {"description": "a number is not a string", "data": ["foo", 42], "valid": false}
+        ]
+    },
+    {
+        "description": "the generic list alone allows anything",
+        "schema": {
+            "$id": "https://example.com/generic",
+            "$defs": {
+                "list": {
+                    "$id": "list",
+                    "type": "array",
+                    "items": {"$dynamicRef": "#items"},
+                    "$defs": {"items": {"$dynamicAnchor": "items"}}
+                }
+            },
+            "$ref": "list"
+        },
+        "tests": [
+            {"description": "mixed items", "data": ["foo", 42], "valid": true},
+            {"description": "not an array", "data": {}, "valid": false}
+        ]
+    }
+]

@@ -1,0 +1,4 @@
+wget https://api.test/me \
+  --header 'Cookie: theme=light; sid=abc' \
+  --max-redirect 10 \
+  -O -

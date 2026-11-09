@@ -1,0 +1,94 @@
+# source
+query inlineFragmentTyping {
+  profiles(handles: ["zuck", "coca-cola"]) {
+    handle
+    ... on User { friends { count } }
+    ... on Page @include(if: true) { likers { count } }
+  }
+}
+
+query inlineFragmentNoType($expandedInfo: Boolean) {
+  user(handle: "zuck") {
+    id
+    ... @include(if: $expandedInfo) { firstName lastName }
+    ... { birthday }
+  }
+}
+# tree
+Document [0:356]
+  Definitions[0]: OperationDefinition [0:184] Operation=query Keyword=0
+    Name: Name [6:26] Value="inlineFragmentTyping"
+    SelectionSet: SelectionSet [27:184] LBrace=27 RBrace=183
+      Selections[0]: Field [31:182] Colon=-1
+        Name: Name [31:39] Value="profiles"
+        Arguments: ArgumentList [39:71] LParen=39 RParen=70
+          Arguments[0]: Argument [40:70] Colon=47
+            Name: Name [40:47] Value="handles"
+            Value: ListValue [49:70] LBracket=49 RBracket=69
+              Values[0]: StringValue [50:56] Block=false Value="zuck"
+              Values[1]: StringValue [58:69] Block=false Value="coca-cola"
+        SelectionSet: SelectionSet [72:182] LBrace=72 RBrace=181
+          Selections[0]: Field [78:84] Colon=-1
+            Name: Name [78:84] Value="handle"
+          Selections[1]: InlineFragment [89:122] Spread=89
+            TypeCondition: TypeCondition [93:100] On=93
+              Type: NamedType [96:100]
+                Name: Name [96:100] Value="User"
+            SelectionSet: SelectionSet [101:122] LBrace=101 RBrace=121
+              Selections[0]: Field [103:120] Colon=-1
+                Name: Name [103:110] Value="friends"
+                SelectionSet: SelectionSet [111:120] LBrace=111 RBrace=119
+                  Selections[0]: Field [113:118] Colon=-1
+                    Name: Name [113:118] Value="count"
+          Selections[2]: InlineFragment [127:178] Spread=127
+            TypeCondition: TypeCondition [131:138] On=131
+              Type: NamedType [134:138]
+                Name: Name [134:138] Value="Page"
+            Directives[0]: Directive [139:157] At=139
+              Name: Name [140:147] Value="include"
+              Arguments: ArgumentList [147:157] LParen=147 RParen=156
+                Arguments[0]: Argument [148:156] Colon=150
+                  Name: Name [148:150] Value="if"
+                  Value: BooleanValue [152:156] Value=true
+            SelectionSet: SelectionSet [158:178] LBrace=158 RBrace=177
+              Selections[0]: Field [160:176] Colon=-1
+                Name: Name [160:166] Value="likers"
+                SelectionSet: SelectionSet [167:176] LBrace=167 RBrace=175
+                  Selections[0]: Field [169:174] Colon=-1
+                    Name: Name [169:174] Value="count"
+  Definitions[1]: OperationDefinition [186:356] Operation=query Keyword=186
+    Name: Name [192:212] Value="inlineFragmentNoType"
+    VariableDefinitions: VariableDefinitionList [212:236] LParen=212 RParen=235
+      Definitions[0]: VariableDefinition [213:235] Colon=226 Equals=-1
+        Variable: Variable [213:226] Dollar=213
+          Name: Name [214:226] Value="expandedInfo"
+        Type: NamedType [228:235]
+          Name: Name [228:235] Value="Boolean"
+    SelectionSet: SelectionSet [237:356] LBrace=237 RBrace=355
+      Selections[0]: Field [241:354] Colon=-1
+        Name: Name [241:245] Value="user"
+        Arguments: ArgumentList [245:261] LParen=245 RParen=260
+          Arguments[0]: Argument [246:260] Colon=252
+            Name: Name [246:252] Value="handle"
+            Value: StringValue [254:260] Block=false Value="zuck"
+        SelectionSet: SelectionSet [262:354] LBrace=262 RBrace=353
+          Selections[0]: Field [268:270] Colon=-1
+            Name: Name [268:270] Value="id"
+          Selections[1]: InlineFragment [275:329] Spread=275
+            Directives[0]: Directive [279:306] At=279
+              Name: Name [280:287] Value="include"
+              Arguments: ArgumentList [287:306] LParen=287 RParen=305
+                Arguments[0]: Argument [288:305] Colon=290
+                  Name: Name [288:290] Value="if"
+                  Value: Variable [292:305] Dollar=292
+                    Name: Name [293:305] Value="expandedInfo"
+            SelectionSet: SelectionSet [307:329] LBrace=307 RBrace=328
+              Selections[0]: Field [309:318] Colon=-1
+                Name: Name [309:318] Value="firstName"
+              Selections[1]: Field [319:327] Colon=-1
+                Name: Name [319:327] Value="lastName"
+          Selections[2]: InlineFragment [334:350] Spread=334
+            SelectionSet: SelectionSet [338:350] LBrace=338 RBrace=349
+              Selections[0]: Field [340:348] Colon=-1
+                Name: Name [340:348] Value="birthday"
+# errors

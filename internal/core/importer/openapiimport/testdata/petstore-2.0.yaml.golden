@@ -1,0 +1,486 @@
+{
+  "diagnostics": null,
+  "environments": 0,
+  "name": "Petstore 2.0",
+  "root": {
+    "at": " @1:1",
+    "auth": {
+      "type": "bearer",
+      "token": "{{petstore_auth.token}}"
+    },
+    "description": "A pet store that uses the Swagger 2.0 features.\n\n[More about the store](https://petstore.example/docs)",
+    "diagnostics": [
+      {
+        "Code": "openapi.servers",
+        "Severity": "info",
+        "Message": "The document lists 2 servers; baseUrl is the first. The others are in the variable's description.",
+        "At": "servers[0] @13:7"
+      },
+      {
+        "Code": "openapi.auth_changed",
+        "Severity": "warning",
+        "Message": "PostSonde has no OAuth 2.0 flow: the “petstore_auth” scheme became Bearer auth with {{petstore_auth.token}}. Get an access token with the scopes write:pets read:pets (authorization URL https://petstore.example/oauth/authorize) and put it into that variable.",
+        "At": "security @0:0"
+      }
+    ],
+    "folder": "",
+    "headers": null,
+    "items": [
+      {
+        "at": "tags[0] @22:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "Everything about your pets",
+        "diagnostics": null,
+        "folder": "pets",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./pets.get @31:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets",
+              "params": [
+                {
+                  "name": "limit",
+                  "value": "20",
+                  "description": "How many items to return at one time (max 100)",
+                  "disabled": true
+                },
+                {
+                  "name": "status",
+                  "value": "available",
+                  "disabled": true
+                },
+                {
+                  "name": "tags",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "headers": [
+                {
+                  "name": "X-Trace-Id",
+                  "value": "{{$uuid}}",
+                  "disabled": true
+                },
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "List all pets"
+          },
+          {
+            "at": "paths./pets.post @79:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.media_type",
+                "Severity": "info",
+                "Message": "The body is sent as application/json; the operation also accepts application/xml.",
+                "At": "paths./pets.post @79:7"
+              },
+              {
+                "Code": "openapi.example_truncated",
+                "Severity": "info",
+                "Message": "The generated example stops where the schema refers back to itself.",
+                "At": "paths./pets.post @79:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "The pet to add",
+              "method": "POST",
+              "url": "{{baseUrl}}/pets",
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\n  \"name\": \"Rex\",\n  \"petType\": \"Pet\",\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\",\n  \"owner\": \"string\"\n}"
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "api_key",
+                "value": "{{api_key.key}}"
+              }
+            },
+            "request": "Create a pet"
+          },
+          {
+            "at": "paths./pets/{petId}.get @103:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Info for a specific pet"
+          },
+          {
+            "at": "paths./pets/{petId}.post @115:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet"
+                }
+              ],
+              "body": {
+                "mode": "urlencoded",
+                "fields": [
+                  {
+                    "name": "name",
+                    "value": "string",
+                    "description": "Updated name of the pet"
+                  },
+                  {
+                    "name": "status",
+                    "value": "string",
+                    "description": "Updated status of the pet"
+                  },
+                  {
+                    "name": "nicknames",
+                    "value": "string"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Update a pet with form data"
+          },
+          {
+            "at": "paths./pets/{petId}.delete @138:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "description": "**Deprecated.**",
+              "method": "DELETE",
+              "url": "{{baseUrl}}/pets/{petId}",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "api_key",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "name": "ids",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Deletes a pet"
+          },
+          {
+            "at": "paths./pets/{petId}/uploadImage.post @156:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.file",
+                "Severity": "info",
+                "Message": "The body has a file part: choose the file to send.",
+                "At": "paths./pets/{petId}/uploadImage.post @156:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{baseUrl}}/pets/{petId}/uploadImage",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "multipart",
+                "parts": [
+                  {
+                    "name": "additionalMetadata",
+                    "value": "string",
+                    "description": "Additional data to pass to server"
+                  },
+                  {
+                    "name": "file",
+                    "value": "",
+                    "description": "file to upload"
+                  }
+                ]
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Uploads an image"
+          },
+          {
+            "at": "paths./pets/{petId}/photo.get @178:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/pets/{petId}/photo",
+              "pathParams": [
+                {
+                  "name": "petId",
+                  "value": "",
+                  "description": "The id of the pet"
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "image/png"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Download the pet's photo"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "tags[1] @24:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "store",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./store/inventory.get @191:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/store/inventory",
+              "params": [
+                {
+                  "name": "fields",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "apikey",
+                "key": "api_key",
+                "value": "{{api_key.key}}"
+              }
+            },
+            "request": "Returns pet inventories by status"
+          }
+        ],
+        "variables": null
+      },
+      {
+        "at": "tags[2] @25:5",
+        "auth": {
+          "type": "inherit"
+        },
+        "description": "",
+        "diagnostics": null,
+        "folder": "users",
+        "headers": null,
+        "items": [
+          {
+            "at": "paths./users/login.get @214:7",
+            "diagnostics": null,
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "GET",
+              "url": "{{baseUrl}}/users/login?username&password",
+              "params": [
+                {
+                  "name": "username",
+                  "value": ""
+                },
+                {
+                  "name": "password",
+                  "value": ""
+                }
+              ],
+              "headers": [
+                {
+                  "name": "Accept",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "none"
+              },
+              "auth": {
+                "type": "basic",
+                "username": "{{basic_auth.username}}",
+                "password": "{{basic_auth.password}}"
+              }
+            },
+            "request": "Logs user into the system"
+          },
+          {
+            "at": "paths./users.post @240:7",
+            "diagnostics": [
+              {
+                "Code": "openapi.media_type",
+                "Severity": "info",
+                "Message": "The body is sent as application/json; the operation also accepts application/xml.",
+                "At": "paths./users.post @240:7"
+              }
+            ],
+            "file": {
+              "schemaVersion": 1,
+              "kind": "http",
+              "id": "req_x",
+              "name": "",
+              "method": "POST",
+              "url": "{{baseUrl}}/users",
+              "body": {
+                "mode": "raw",
+                "type": "json",
+                "text": "{\n  \"id\": 0,\n  \"username\": \"string\",\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}"
+              },
+              "auth": {
+                "type": "inherit"
+              }
+            },
+            "request": "Create user"
+          }
+        ],
+        "variables": null
+      }
+    ],
+    "variables": [
+      {
+        "name": "baseUrl",
+        "value": "https://petstore.example/v2",
+        "description": "Other servers: http://petstore.example/v2."
+      },
+      {
+        "name": "petstore_auth.token",
+        "value": "",
+        "secret": true,
+        "description": "An access token for the “petstore_auth” scheme."
+      },
+      {
+        "name": "api_key.key",
+        "value": "",
+        "secret": true,
+        "description": "The API key for the “api_key” scheme."
+      },
+      {
+        "name": "basic_auth.username",
+        "value": "",
+        "description": "The user name for the “basic_auth” scheme. Username and password"
+      },
+      {
+        "name": "basic_auth.password",
+        "value": "",
+        "secret": true,
+        "description": "The password for the “basic_auth” scheme."
+      }
+    ]
+  }
+}

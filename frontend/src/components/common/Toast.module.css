@@ -1,0 +1,160 @@
+/* Toasts: a 40px row on --bg1 with a --line2 border, 8px radius and
+ * --shadow, and a 2px bar for the time left. Stacked centred at the bottom
+ * of the work area, 16px above the 26px status bar. */
+
+.host {
+  position: absolute;
+  left: 50%;
+  bottom: calc(26px + var(--space-8));
+  z-index: 1000;
+  max-width: calc(100% - 2 * var(--space-8));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.toast {
+  min-width: 340px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  pointer-events: auto;
+  animation: enter 160ms ease-out;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.row {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 0 var(--space-3) 0 var(--space-6);
+}
+
+.icon {
+  flex: none;
+  display: flex;
+  color: var(--text3);
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--fs-md2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action {
+  height: 26px;
+  flex: none;
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--fs-md2);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.action:hover {
+  background: var(--bg2);
+}
+
+/* The shortcut help's key style (ShortcutHelp .kbd). */
+.kbd {
+  min-width: 20px;
+  flex: none;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 18px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dismiss {
+  width: var(--h-control-sm);
+  height: var(--h-control-sm);
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+}
+
+.dismiss:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.action:focus-visible,
+.dismiss:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.track {
+  height: 2px;
+  flex: none;
+  background: var(--line);
+}
+
+.bar {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  animation-name: countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* No slide-in, and no moving bar: base.css shortens every animation, which
+ * would empty the bar at once. The toast still dismisses itself on time. */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+
+  .track {
+    display: none;
+  }
+}

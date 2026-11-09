@@ -1,0 +1,199 @@
+type: collection.insomnia.rest/5.0
+name: Shop API v5
+meta:
+  id: wrk_5a1b2c3d4e5f
+  created: 1757671200000
+  modified: 1757671300000
+  description: The shop's API, exported from Insomnia 11.
+collection:
+  - name: Catalog
+    meta:
+      id: fld_catalog
+      created: 1757671200000
+      modified: 1757671200000
+      sortKey: -1757671200000
+      description: Products and prices.
+    environment:
+      currency: EUR
+      limits:
+        page: 50
+    headers:
+      - name: Accept-Language
+        value: "{{ _.lang }}"
+    authentication:
+      type: apikey
+      key: X-Api-Key
+      value: "{{ _.api_key }}"
+      addTo: header
+    scripts:
+      preRequest: |-
+        insomnia.environment.set("ts", Date.now());
+    children:
+      - name: Products
+        meta:
+          id: fld_products
+          sortKey: -1
+        children:
+          - url: "{{ _.base_url }}/products"
+            name: List products
+            meta:
+              id: req_products
+              sortKey: -2
+              description: Every product, 50 per page.
+            method: GET
+            parameters:
+              - name: per_page
+                value: "{{ _.limits.page }}"
+              - name: currency
+                value: "{{ _.currency }}"
+                disabled: true
+            headers:
+              - name: Accept
+                value: application/json
+            authentication: {}
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: "on"
+              cookies:
+                send: false
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/products/{{ _.product_id }}/price"
+            name: Set price
+            meta:
+              id: req_price
+              sortKey: -1
+            method: PATCH
+            body:
+              mimeType: application/xml
+              text: |-
+                <price currency="{{ _.currency }}">{{ _.price }}</price>
+            headers:
+              - name: Content-Type
+                value: application/xml
+            authentication:
+              type: iam
+              accessKeyId: AKIA
+              secretAccessKey: xyz
+              region: eu-west-1
+              service: execute-api
+            scripts:
+              afterResponse: |
+                insomnia.test("ok", () => insomnia.expect(insomnia.response.code).to.eql(200));
+            settings:
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.base_url }}/products/sync"
+            name: Sync products
+            meta:
+              id: req_sync
+              sortKey: 0
+            method: POST
+            authentication:
+              type: oauth1
+              disabled: true
+              signatureMethod: RSA-SHA1
+              consumerKey: sync
+              consumerSecret: ""
+              privateKey: |-
+                -----BEGIN PRIVATE KEY-----
+                rsa-sync-key
+                -----END PRIVATE KEY-----
+              tokenKey: "{{ _.sync_token }}"
+              tokenSecret: ignored-with-rsa
+              version: 1.0a
+              includeBodyHash: false
+  - url: "{{ _.base_url }}/graphql"
+    name: Product query
+    meta:
+      id: req_graphql5
+      sortKey: 5
+    method: GET
+    body:
+      mimeType: application/graphql
+      text: '{"query":"{ product(id: \"{{ _.product_id }}\") { name } }"}'
+    authentication:
+      type: bearer
+      token: "{{ _.token }}"
+      prefix: Bearer
+  - url: "{{ _.grpc_host }}:50051"
+    name: Stock
+    meta:
+      id: greq_stock
+      sortKey: 6
+    protoMethodName: /shop.v1.Stock/Watch
+    reflectionApi:
+      enabled: true
+      url: https://buf.build
+      module: buf.build/shop/stock
+    metadata:
+      - name: authorization
+        value: Bearer {{ _.token }}
+    body:
+      text: '{"sku": "{{ _.sku }}"}'
+  - url: "ws://{{ _.ws_host }}/stock?format=json"
+    name: Stock updates
+    meta:
+      id: ws-req_stock
+      sortKey: 7
+    headers:
+      - name: X-Client
+        value: postsonde
+    authentication:
+      type: basic
+      username: ada
+      password: "{{ _.password }}"
+  - name: Chat
+    url: http://localhost:3000
+    meta:
+      id: socketio-req_chat
+      sortKey: 8
+  - url: "{{ _.base_url }}/exports/stock.csv"
+    name: Stock export
+    meta:
+      id: req_export5
+      sortKey: 9
+    method: GET
+    authentication:
+      type: netrc
+      disabled: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_5
+  cookies:
+    - key: session
+      value: xyz
+      domain: shop.example
+environments:
+  name: Base Environment
+  meta:
+    id: env_5base
+    isPrivate: false
+  data:
+    base_url: https://api.shop.example
+    lang: en
+  subEnvironments:
+    - name: Dev
+      meta:
+        id: env_5dev
+        isPrivate: false
+        sortKey: 1
+      data:
+        base_url: http://localhost:8080
+        product_id: 7
+        ratio: 0.5
+        empty: null
+      color: "#7d69cb"
+    - name: Mine
+      meta:
+        id: env_5mine
+        isPrivate: true
+        sortKey: 2
+      data:
+        token: my-own-token

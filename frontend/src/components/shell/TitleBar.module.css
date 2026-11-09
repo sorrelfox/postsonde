@@ -1,0 +1,120 @@
+/* Mockup: 40px row, 14px side padding, 16px gaps. The brand block is as wide
+ * as rail + sidebar minus the padding (48 + 272 - 14), so the jump box
+ * centres over the main column. */
+.titleBar {
+  position: relative;
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: 0 var(--space-7);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg0);
+}
+
+/* The active environment's colour (ENV-08) as a stripe along the top. */
+.titleBar[data-env-color]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--env-color);
+  pointer-events: none;
+}
+
+.brand {
+  width: 306px;
+  flex: none;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.logo {
+  flex: none;
+  color: var(--accent);
+}
+
+.name {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+}
+
+.separator {
+  color: var(--text3);
+}
+
+.project {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-md2);
+}
+
+.project svg {
+  flex: none;
+}
+
+.projectPath {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closeProject {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  margin-left: calc(-1 * var(--space-2));
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+}
+
+.closeProject:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.center {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.iconButton {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line2);
+  border-radius: 7px;
+  background: var(--bg1);
+  color: var(--text2);
+}
+
+.iconButton:hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.iconButton:focus-visible {
+  border-radius: 7px;
+}

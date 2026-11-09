@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_c2e9b4170f8a6d53",
+  "name": "Page the on-call admin",
+  "method": "NOTIFY",
+  "url": "{{baseUrl}}/on-call/page",
+  "body": {
+    "mode": "raw",
+    "type": "text",
+    "text": "Zoë says: <urgent> & important"
+  },
+  "auth": {
+    "type": "inherit"
+  }
+}

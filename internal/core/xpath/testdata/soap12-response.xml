@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+  <env:Body>
+    <GetQuoteResponse xmlns="http://example.com/stockquote">
+      <Quote symbol="ACME" currency="USD">
+        <Price>101.25</Price>
+        <Change>-0.75</Change>
+        <Volume>1200300</Volume>
+      </Quote>
+      <Quote symbol="INIT" currency="EUR">
+        <Price>9.5</Price>
+        <Change>0.10</Change>
+        <Volume>88000</Volume>
+      </Quote>
+      <Quote symbol="NOPE" currency="USD">
+        <Price>n/a</Price>
+        <Change/>
+        <Volume>0</Volume>
+      </Quote>
+    </GetQuoteResponse>
+  </env:Body>
+</env:Envelope>

@@ -1,0 +1,2 @@
+curl.exe 'https://api.test/me?page=1&api_key=••••••' `
+  -L --max-redirs 10

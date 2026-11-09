@@ -1,0 +1,4 @@
+http --follow --max-redirects=10 \
+  --raw 'user=a+b&next=%2Fx%3Fy%3D1%26z%3D2' \
+  POST https://api.test/login \
+  Content-Type:application/x-www-form-urlencoded

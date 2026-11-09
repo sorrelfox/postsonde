@@ -1,0 +1,47 @@
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String boundary = "PostSonde" + UUID.randomUUID();
+        List<byte[]> form = new ArrayList<>();
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"we%22ird name\"\r\n"
+                + "\r\n"
+                + "line1\nline2 \"q\" 'q' $x %PATH%\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"unicode ✓\"\r\n"
+                + "Content-Type: text/plain; charset=utf-8\r\n"
+                + "\r\n"
+                + "héllo 😀\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"a@b:c\"\r\n"
+                + "\r\n"
+                + "@not-a-file\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"file\"; filename=\"odd name;1.txt\"\r\n"
+                + "Content-Type: text/plain\r\n"
+                + "\r\n").getBytes(StandardCharsets.UTF_8));
+        form.add(Files.readAllBytes(Path.of("<root>/odd name;1.txt")));
+        form.add("\r\n".getBytes(StandardCharsets.UTF_8));
+        form.add(("--" + boundary + "--\r\n").getBytes(StandardCharsets.UTF_8));
+        HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.NORMAL)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder(URI.create("https://api.test/q"))
+                .POST(HttpRequest.BodyPublishers.ofByteArrays(form))
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.statusCode());
+        System.out.println(response.body());
+    }
+}

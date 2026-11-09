@@ -1,0 +1,7 @@
+type: codec.p2.Defaults
+d_int32: 0
+d_string: ""
+d_double: 0
+d_bytes: 0x
+d_bool: false
+no_default_enum: 1

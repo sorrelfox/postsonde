@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "http",
+  "id": "req_3b9e0c5d71a4f286",
+  "name": "List orders",
+  "method": "GET",
+  "url": "{{baseUrl}}/orders",
+  "body": {
+    "mode": "none"
+  },
+  "auth": {
+    "type": "bearer",
+    "prefix": "Token",
+    "token": "{{token}}"
+  }
+}

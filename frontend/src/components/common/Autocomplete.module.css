@@ -1,0 +1,81 @@
+/* Autocomplete popup: a raised panel like ContextMenu, with a
+ * listbox of suggestions and the highlighted suggestion's note below. */
+
+.popup {
+  position: fixed;
+  z-index: 1000;
+  max-width: min(520px, calc(100vw - 8px));
+  padding: var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-size: var(--fs-md);
+  user-select: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  height: 26px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.option[aria-selected="true"] {
+  background: var(--bg3);
+}
+
+.label {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+}
+
+.detail {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text3);
+  font-size: var(--fs-sm2);
+}
+
+.noteMark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+  color: var(--warn);
+}
+
+.note {
+  /* As wide as the list, never wider: a long note wraps. */
+  width: 0;
+  min-width: 100%;
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+  border-top: 1px solid var(--line);
+  color: var(--text2);
+  font-size: var(--fs-sm2);
+  line-height: var(--lh-base);
+  white-space: normal;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

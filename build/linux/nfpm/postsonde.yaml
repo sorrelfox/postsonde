@@ -1,0 +1,85 @@
+# nfpm config for the `postsonde` .deb: the GTK4 + WebKitGTK 6.0 build
+# for Ubuntu 24.04+ and Debian 13+. scripts/package-linux-deb.sh builds it
+# with `wails3 tool package` and sets the PKG_* variables. postsonde-gtk3.yaml
+# is its GTK3 twin: keep `contents` the same in both. docs/packaging.md
+# explains the fields.
+name: postsonde
+arch: ${PKG_ARCH}
+platform: linux
+version: ${PKG_VERSION}
+# Use the version as given (0.0.0~git<sha> or the release tag), unparsed.
+version_schema: none
+section: devel
+priority: optional
+maintainer: Sorrelfox <348316453+sorrelfox@users.noreply.github.com>
+description: |-
+  Local-only desktop API testing tool
+  PostSonde sends HTTP and GraphQL requests and shows the responses. It runs
+  entirely on your machine, with no account, cloud sync or telemetry.
+
+  This is the GTK 4 build (WebKitGTK 6.0). On releases without WebKitGTK 6.0,
+  such as Ubuntu 22.04 and Debian 12, install postsonde-gtk3 instead.
+vendor: Sorrelfox
+homepage: https://github.com/sorrelfox/PostSonde
+license: MIT
+umask: 0o022
+
+# One package per GTK stack. Both install /usr/bin/postsonde, so only one can
+# be installed; installing either replaces the other.
+conflicts:
+  - postsonde-gtk3
+replaces:
+  - postsonde-gtk3
+
+# Exactly the binary's NEEDED libraries (readelf -d), mapped to the Ubuntu
+# 24.04 packages that ship them (dpkg -S), with the minimum versions
+# dpkg-shlibdeps derives from their symbols files (docs/packaging.md shows
+# how to regenerate). libglib2.0-0t64 covers libglib, libgio and libgobject.
+depends:
+  - libc6 (>= 2.34)
+  - libglib2.0-0t64 (>= 2.74.0)
+  - libgtk-4-1 (>= 4.13.8)
+  - libjavascriptcoregtk-6.0-1
+  - libsoup-3.0-0 (>= 2.4.0)
+  - libwebkitgtk-6.0-4 (>= 2.39.91)
+  - libx11-6
+
+contents:
+  - src: ${PKG_BINARY}
+    dst: /usr/bin/postsonde
+    expand: true
+    file_info:
+      mode: 0755
+  - src: ./build/linux/io.github.sorrelfox.PostSonde.desktop
+    dst: /usr/share/applications/io.github.sorrelfox.PostSonde.desktop
+  - src: ./build/linux/io.github.sorrelfox.PostSonde.metainfo.xml
+    dst: /usr/share/metainfo/io.github.sorrelfox.PostSonde.metainfo.xml
+  - src: ./assets/icons/linux/hicolor/16x16/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/16x16/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/24x24/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/24x24/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/32x32/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/32x32/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/48x48/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/48x48/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/64x64/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/64x64/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/128x128/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/128x128/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/256x256/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/256x256/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/512x512/apps/postsonde.png
+    dst: /usr/share/icons/hicolor/512x512/apps/postsonde.png
+  - src: ./assets/icons/linux/hicolor/scalable/apps/postsonde.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/postsonde.svg
+  # License files: ours (copyright, generated from LICENSE) and the
+  # third-party ones the bundled components require (the OFL for the fonts).
+  - src: ${PKG_STAGE}/copyright
+    dst: /usr/share/doc/postsonde/copyright
+    expand: true
+  - src: ./THIRD_PARTY_NOTICES.md
+    dst: /usr/share/doc/postsonde/THIRD_PARTY_NOTICES.md
+  - src: ./frontend/src/assets/fonts/instrument-sans/OFL.txt
+    dst: /usr/share/doc/postsonde/fonts/instrument-sans/OFL.txt
+  - src: ./frontend/src/assets/fonts/jetbrains-mono/OFL.txt
+    dst: /usr/share/doc/postsonde/fonts/jetbrains-mono/OFL.txt

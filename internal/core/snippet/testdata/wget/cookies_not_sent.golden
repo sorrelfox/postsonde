@@ -1,0 +1,3 @@
+wget https://api.test/me \
+  --max-redirect 10 \
+  -O -

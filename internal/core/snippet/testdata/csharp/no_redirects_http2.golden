@@ -1,0 +1,18 @@
+using System;
+using System.Net;
+using System.Net.Http;
+
+var handler = new SocketsHttpHandler
+{
+    AllowAutoRedirect = false,
+};
+using var client = new HttpClient(handler);
+client.Timeout = TimeSpan.FromMilliseconds(30000);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "http://api.test/items");
+request.Version = HttpVersion.Version20;
+request.VersionPolicy = HttpVersionPolicy.RequestVersionExact;
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

@@ -1,0 +1,33 @@
+{
+  "name": "Imported request",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "POST",
+    "url": "",
+    "body": {
+      "mode": "none"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.missing_url",
+      "severity": "error",
+      "start": 0,
+      "end": 15,
+      "message": "The command has no URL."
+    },
+    {
+      "code": "curl.missing_value",
+      "severity": "error",
+      "start": 13,
+      "end": 15,
+      "message": "The option “-H” needs a value."
+    }
+  ]
+}

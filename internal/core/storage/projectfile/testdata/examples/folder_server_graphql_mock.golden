@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "kind": "folder",
+  "id": "fld_3a9c5e1f7b2d4068",
+  "name": "Catalog mock",
+  "auth": {
+    "type": "inherit"
+  },
+  "server": {
+    "type": "graphql_mock",
+    "port": 4000,
+    "graphqlMock": {
+      "schemaFile": "schema/catalog.graphql",
+      "listLength": 5,
+      "nullPercent": 10,
+      "seed": 42,
+      "allowOrigin": "*",
+      "overrides": [
+        {
+          "target": "Query.product",
+          "args": "{\"id\": \"1\"}",
+          "value": "{\n  \"id\": \"1\",\n  \"name\": \"Teapot\"\n}"
+        },
+        {
+          "target": "Query.product",
+          "args": "{\"id\": \"404\"}",
+          "mode": "error",
+          "error": "Product not found.",
+          "code": "NOT_FOUND"
+        },
+        {
+          "target": "DateTime",
+          "value": "\"2026-01-01T00:00:00Z\"",
+          "disabled": true
+        }
+      ]
+    }
+  }
+}

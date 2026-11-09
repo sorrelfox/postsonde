@@ -1,0 +1,70 @@
+# source
+type type { type: type interface: interface input(input: input): input enum: enum on: on implements: implements repeatable: repeatable extend: extend schema: schema directive: directive }
+enum on { type input on extend }
+input schema { query: query }
+# tree
+Document [0:250]
+  Definitions[0]: TypeDefinition [0:187] Extend=-1 Kind=type Keyword=0 Implements=-1 Equals=-1 LBrace=10 RBrace=186
+    Name: Name [5:9] Value="type"
+    Fields[0]: FieldDefinition [12:22] Colon=16
+      Name: Name [12:16] Value="type"
+      Type: NamedType [18:22]
+        Name: Name [18:22] Value="type"
+    Fields[1]: FieldDefinition [23:43] Colon=32
+      Name: Name [23:32] Value="interface"
+      Type: NamedType [34:43]
+        Name: Name [34:43] Value="interface"
+    Fields[2]: FieldDefinition [44:70] Colon=63
+      Name: Name [44:49] Value="input"
+      Arguments: ArgumentDefinitionList [49:63] LParen=49 RParen=62
+        Arguments[0]: InputValueDefinition [50:62] Colon=55 Equals=-1
+          Name: Name [50:55] Value="input"
+          Type: NamedType [57:62]
+            Name: Name [57:62] Value="input"
+      Type: NamedType [65:70]
+        Name: Name [65:70] Value="input"
+    Fields[3]: FieldDefinition [71:81] Colon=75
+      Name: Name [71:75] Value="enum"
+      Type: NamedType [77:81]
+        Name: Name [77:81] Value="enum"
+    Fields[4]: FieldDefinition [82:88] Colon=84
+      Name: Name [82:84] Value="on"
+      Type: NamedType [86:88]
+        Name: Name [86:88] Value="on"
+    Fields[5]: FieldDefinition [89:111] Colon=99
+      Name: Name [89:99] Value="implements"
+      Type: NamedType [101:111]
+        Name: Name [101:111] Value="implements"
+    Fields[6]: FieldDefinition [112:134] Colon=122
+      Name: Name [112:122] Value="repeatable"
+      Type: NamedType [124:134]
+        Name: Name [124:134] Value="repeatable"
+    Fields[7]: FieldDefinition [135:149] Colon=141
+      Name: Name [135:141] Value="extend"
+      Type: NamedType [143:149]
+        Name: Name [143:149] Value="extend"
+    Fields[8]: FieldDefinition [150:164] Colon=156
+      Name: Name [150:156] Value="schema"
+      Type: NamedType [158:164]
+        Name: Name [158:164] Value="schema"
+    Fields[9]: FieldDefinition [165:185] Colon=174
+      Name: Name [165:174] Value="directive"
+      Type: NamedType [176:185]
+        Name: Name [176:185] Value="directive"
+  Definitions[1]: TypeDefinition [188:220] Extend=-1 Kind=enum Keyword=188 Implements=-1 Equals=-1 LBrace=196 RBrace=219
+    Name: Name [193:195] Value="on"
+    EnumValues[0]: EnumValueDefinition [198:202]
+      Name: Name [198:202] Value="type"
+    EnumValues[1]: EnumValueDefinition [203:208]
+      Name: Name [203:208] Value="input"
+    EnumValues[2]: EnumValueDefinition [209:211]
+      Name: Name [209:211] Value="on"
+    EnumValues[3]: EnumValueDefinition [212:218]
+      Name: Name [212:218] Value="extend"
+  Definitions[2]: TypeDefinition [221:250] Extend=-1 Kind=input Keyword=221 Implements=-1 Equals=-1 LBrace=234 RBrace=249
+    Name: Name [227:233] Value="schema"
+    InputFields[0]: InputValueDefinition [236:248] Colon=241 Equals=-1
+      Name: Name [236:241] Value="query"
+      Type: NamedType [243:248]
+        Name: Name [243:248] Value="query"
+# errors

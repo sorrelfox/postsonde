@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func main() {
+	file, err := os.Open(`C:\Users\Me\My Files\report 100%.json`)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	info, err := file.Stat()
+	if err != nil {
+		panic(err)
+	}
+	req, err := http.NewRequest("PUT", "https://api.test/blob", file)
+	if err != nil {
+		panic(err)
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.ContentLength = info.Size()
+
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp.Status)
+	fmt.Println(string(data))
+}

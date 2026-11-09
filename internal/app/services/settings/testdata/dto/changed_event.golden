@@ -1,0 +1,43 @@
+{
+  "settings": {
+    "version": 1,
+    "ui": {
+      "theme": "system",
+      "sidebarCollapsed": false,
+      "splitRatio": 0.5,
+      "responsePosition": "beside",
+      "splitRatioBelow": 0.5,
+      "customTheme": "",
+      "locale": "system"
+    },
+    "network": {
+      "defaultTimeoutMs": 0,
+      "verifyTls": true,
+      "maxResponseBodyMb": 512
+    },
+    "editor": {
+      "fontFamily": "JetBrains Mono",
+      "fontSize": 12,
+      "tabSize": 2,
+      "wordWrap": false,
+      "lineNumbers": true,
+      "matchBrackets": true
+    },
+    "shortcuts": {}
+  },
+  "problems": [
+    {
+      "kind": "invalid_argument",
+      "code": "settings.invalid_value",
+      "message": "The setting \"ui.splitRatio\" has an invalid value, 2.",
+      "hint": "Use a number from 0.2 to 0.8 in settings.json. PostSonde uses the default, 0.5, until then.",
+      "details": {
+        "expected": "a number from 0.2 to 0.8",
+        "field": "ui.splitRatio",
+        "value": "2"
+      },
+      "causes": []
+    }
+  ],
+  "source": "file"
+}

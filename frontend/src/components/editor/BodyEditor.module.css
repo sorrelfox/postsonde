@@ -1,0 +1,240 @@
+/* The Body section: a toolbar (mode pills, raw language, JSON tools),
+ * then the code editor in a bordered box filling the section, and a status
+ * line for JSON errors. */
+
+.body {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Body examples bar (HTTP-17) above the toolbar, and the SOAP helper
+ * (HTTP-18) below it: rows of controls. */
+.examples,
+.soap {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.soap {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.exampleName,
+.soapAction {
+  height: var(--h-control-sm);
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.exampleName {
+  width: 180px;
+}
+
+.soapAction {
+  flex: 1;
+  min-width: 200px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.exampleName:focus-visible,
+.soapAction:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.soapNote {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.toolbar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+}
+
+.modes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.mode {
+  position: relative;
+  height: var(--h-control-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* The native radio stays for keyboard and screen readers; the pill shows the state. */
+.mode input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.mode:hover {
+  color: var(--text);
+}
+
+.mode:has(input:checked) {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.mode:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.mode[data-disabled] {
+  cursor: default;
+}
+
+.mode[data-disabled]:not(:has(input:checked)) {
+  color: var(--text3);
+}
+
+.type {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.type:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.type:disabled {
+  opacity: 0.7;
+}
+
+.tools {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.tool {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.tool:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.tool:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tool:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.editorFrame {
+  flex: 1;
+  min-height: 160px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.editorFrame:focus-within {
+  border-color: var(--line2);
+}
+
+.status {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.status svg {
+  flex: none;
+  color: var(--bad);
+}
+
+.status span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.position {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tk-err);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  cursor: pointer;
+}
+
+.position:hover {
+  text-decoration: underline;
+}
+
+.position:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.note {
+  margin: 0;
+  padding: var(--space-6) var(--space-2);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}

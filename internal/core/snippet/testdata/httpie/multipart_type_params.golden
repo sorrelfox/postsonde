@@ -1,0 +1,4 @@
+http --multipart --follow --max-redirects=10 \
+  POST https://api.test/upload \
+  text=x \
+  'file@<root>/data.json;type=application/json; charset="utf-8"'

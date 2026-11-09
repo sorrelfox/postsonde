@@ -1,0 +1,26 @@
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    MaxAutomaticRedirections = 10,
+};
+using var client = new HttpClient(handler);
+
+var form = new MultipartFormDataContent();
+form.Add(new ByteArrayContent(Encoding.UTF8.GetBytes("line1\nline2 \"q\" 'q' $x %PATH%")), "we\"ird name");
+var part2 = new ByteArrayContent(Encoding.UTF8.GetBytes("héllo 😀"));
+part2.Headers.TryAddWithoutValidation("Content-Type", "text/plain; charset=utf-8");
+form.Add(part2, "unicode ✓");
+form.Add(new ByteArrayContent(Encoding.UTF8.GetBytes("@not-a-file")), "a@b:c");
+var part4 = new StreamContent(File.OpenRead("<root>/odd name;1.txt"));
+part4.Headers.TryAddWithoutValidation("Content-Type", "text/plain");
+form.Add(part4, "file", "odd name;1.txt");
+using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://api.test/q");
+request.Content = form;
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

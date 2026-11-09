@@ -1,0 +1,81 @@
+/* Rows inherited from the folders above (COL-03), above a Headers or
+ * Variables table: the dashed, muted box of the automatic headers, with
+ * the table's columns so names and values line up with the rows below. */
+
+.inherited {
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+  border: 1px dashed var(--line2);
+  border-radius: var(--radius-lg);
+  background: var(--bg1);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr) 28px;
+  align-items: center;
+  height: var(--h-control);
+  padding: 0 var(--space-3);
+  color: var(--text2);
+  cursor: default;
+}
+
+.name,
+.value {
+  min-width: 0;
+  padding: 0 var(--space-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+}
+
+.name {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.value {
+  grid-column: 3;
+  grid-row: 1;
+  color: var(--text3);
+}
+
+.from {
+  grid-column: 4;
+  grid-row: 1;
+  justify-self: start;
+  min-width: 0;
+  max-width: 100%;
+  margin-left: var(--space-3);
+  padding: 1px 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  background: var(--bg3);
+  color: var(--text3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+}
+
+.row[data-overridden] .name,
+.row[data-overridden] .value {
+  opacity: 0.6;
+}
+
+.row[data-overridden] .from {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line2);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

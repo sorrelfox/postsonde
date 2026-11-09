@@ -1,0 +1,12 @@
+wget https://api.test/q \
+  --method PATCH \
+  --header 'Content-Type: application/json' \
+  --body-data '{
+  "path": "C:\\dir\\",
+  "quote": "say \"hi\"",
+  "escape": "\u00e9\n",
+  "template": "${x} `y` {{z}}",
+  "text": "héllo ✓"
+}' \
+  --max-redirect 10 \
+  -O -

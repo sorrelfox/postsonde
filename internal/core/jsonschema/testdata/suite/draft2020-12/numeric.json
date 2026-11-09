@@ -1,0 +1,67 @@
+[
+    {
+        "description": "minimum and maximum",
+        "schema": {"minimum": 1.1, "maximum": 3},
+        "tests": [
+            {"description": "inside the range", "data": 2.6, "valid": true},
+            {"description": "the minimum itself", "data": 1.1, "valid": true},
+            {"description": "the maximum itself", "data": 3.0, "valid": true},
+            {"description": "below the minimum", "data": 0.6, "valid": false},
+            {"description": "above the maximum", "data": 3.5, "valid": false},
+            {"description": "non-numbers are ignored", "data": "x", "valid": true}
+        ]
+    },
+    {
+        "description": "exclusiveMinimum and exclusiveMaximum",
+        "schema": {"exclusiveMinimum": 1.1, "exclusiveMaximum": 3.0},
+        "tests": [
+            {"description": "inside the range", "data": 1.2, "valid": true},
+            {"description": "the minimum is excluded", "data": 1.1, "valid": false},
+            {"description": "the maximum is excluded", "data": 3, "valid": false},
+            {"description": "just below the maximum", "data": 2.9999, "valid": true}
+        ]
+    },
+    {
+        "description": "negative minimum",
+        "schema": {"minimum": -2},
+        "tests": [
+            {"description": "the minimum", "data": -2, "valid": true},
+            {"description": "below", "data": -2.0001, "valid": false},
+            {"description": "above", "data": 0, "valid": true}
+        ]
+    },
+    {
+        "description": "multipleOf an integer",
+        "schema": {"multipleOf": 2},
+        "tests": [
+            {"description": "a multiple", "data": 10, "valid": true},
+            {"description": "not a multiple", "data": 7, "valid": false},
+            {"description": "zero is a multiple", "data": 0, "valid": true}
+        ]
+    },
+    {
+        "description": "multipleOf a decimal is exact",
+        "schema": {"multipleOf": 0.0001},
+        "tests": [
+            {"description": "a multiple a float would get wrong", "data": 0.0075, "valid": true},
+            {"description": "not a multiple", "data": 0.00751, "valid": false},
+            {"description": "another float trap", "data": 19.99, "valid": true}
+        ]
+    },
+    {
+        "description": "multipleOf 0.01",
+        "schema": {"multipleOf": 0.01},
+        "tests": [
+            {"description": "money", "data": 4.35, "valid": true},
+            {"description": "too many decimals", "data": 4.351, "valid": false}
+        ]
+    },
+    {
+        "description": "big numbers compare exactly",
+        "schema": {"maximum": 18446744073709551615},
+        "tests": [
+            {"description": "the maximum", "data": 18446744073709551615, "valid": true},
+            {"description": "one more", "data": 18446744073709551616, "valid": false}
+        ]
+    }
+]

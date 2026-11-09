@@ -1,0 +1,43 @@
+{
+  "id": "srv_00000000000000f2",
+  "type": "sse",
+  "typeLabel": "SSE",
+  "name": "SSE",
+  "host": "",
+  "port": 8082,
+  "allowLan": false,
+  "tls": null,
+  "certificate": null,
+  "state": "stopped",
+  "addresses": [],
+  "boundPort": 0,
+  "scope": "",
+  "warning": null,
+  "startedAt": "",
+  "stoppedAt": "",
+  "error": null,
+  "events": 0,
+  "config": {
+    "mockHttp": null,
+    "webSocket": null,
+    "webhook": null,
+    "sse": {
+      "path": "/events",
+      "allowOrigin": "*",
+      "keepAliveSec": 15,
+      "retryMs": 3000,
+      "autoId": true,
+      "timers": [
+        {
+          "enabled": true,
+          "event": "tick",
+          "data": "{{$timestamp}}",
+          "id": "",
+          "intervalMs": 1000
+        }
+      ]
+    }
+  },
+  "diagnostics": [],
+  "folder": null
+}

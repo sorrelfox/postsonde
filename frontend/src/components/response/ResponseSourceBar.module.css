@@ -1,0 +1,85 @@
+/* The strip above an HTTP request's response (HTTP-38, HTTP-39): which
+ * response is shown (the latest, an earlier one, an example) and Save as
+ * example. */
+
+.bar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-7);
+  border-bottom: 1px solid var(--line);
+  color: var(--text2);
+  font-size: var(--fs-md);
+}
+
+.select {
+  height: var(--h-control-sm);
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: var(--bg1);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+.select:focus-visible,
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.note {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text3);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Create mock route and Save as example, at the end of the bar. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.button {
+  height: var(--h-control-sm);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* A stored response that could not be shown. */
+.error {
+  margin: var(--space-6) var(--space-7);
+  color: var(--bad);
+  font-size: var(--fs-md);
+}
+
+.loading {
+  margin: var(--space-6) var(--space-7);
+  color: var(--text3);
+  font-size: var(--fs-md);
+}

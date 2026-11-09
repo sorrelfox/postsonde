@@ -1,0 +1,8 @@
+POST /items?key=•••••• HTTP/1.1
+Host: api.test
+X-Api-Key: ••••••
+Authorization: Bearer ••••••
+Content-Type: application/json
+Content-Length: 33
+
+{"password":"••••••"}

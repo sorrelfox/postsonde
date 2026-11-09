@@ -1,0 +1,71 @@
+title: Recursive responses 1 (openapi 3.1.0)
+prefix: "/api" (default "/api")
+
+route 0 GET /api/nodes/:id id=rt_getnode enabled=true
+  from GET /nodes/{id} operationId="getNode" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "name": "string",
+    |   "children": []
+    | }
+
+route 1 GET /api/people/:id id=rt_getperson enabled=true
+  from GET /people/{id} operationId="getPerson" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "name": "Ada",
+    |   "employer": {
+    |     "title": "string",
+    |     "staff": []
+    |   }
+    | }
+
+route 2 GET /api/lists/:id id=rt_getlist enabled=true
+  from GET /lists/{id} operationId="getList" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "value": 3
+    | }
+
+route 3 GET /api/expressions/:id id=rt_getexpression enabled=true
+  from GET /expressions/{id} operationId="getExpression" response="200" mediaType="application/xml"
+  status 200, delay none
+  body raw xml
+    | <?xml version="1.0" encoding="UTF-8"?>
+    | <sum op="add"/>
+
+route 4 GET /api/deep id=rt_deep enabled=true
+  from GET /deep operationId="deep" response="200" mediaType="application/json"
+  status 200, delay none
+  body raw json
+    | {
+    |   "a": {
+    |     "a": {
+    |       "a": {
+    |         "a": {
+    |           "a": {
+    |             "a": {
+    |               "a": {
+    |                 "a": {}
+    |               }
+    |             }
+    |           }
+    |         }
+    |       }
+    |     }
+    |   }
+    | }
+
+diagnostics:
+  warning openapi.path_parameter route=-1 op="" line=10: GET /nodes/{id} does not define the path parameter {id}.
+  warning openapi.path_parameter route=-1 op="" line=20: GET /people/{id} does not define the path parameter {id}.
+  warning openapi.path_parameter route=-1 op="" line=30: GET /lists/{id} does not define the path parameter {id}.
+  warning openapi.path_parameter route=-1 op="" line=40: GET /expressions/{id} does not define the path parameter {id}.
+  info mockopenapi.example_truncated route=0 op="GET /nodes/{id}" line=10: The generated body stops where the schema refers back to itself.
+  info mockopenapi.example_truncated route=1 op="GET /people/{id}" line=20: The generated body stops where the schema refers back to itself.
+  info mockopenapi.example_truncated route=2 op="GET /lists/{id}" line=30: The generated body stops where the schema refers back to itself.
+  info mockopenapi.example_truncated route=3 op="GET /expressions/{id}" line=40: The generated body stops where the schema refers back to itself.
+  info mockopenapi.example_truncated route=4 op="GET /deep" line=50: The generated body was cut short at the depth or size limit.

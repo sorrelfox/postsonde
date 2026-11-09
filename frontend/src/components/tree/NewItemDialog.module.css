@@ -1,0 +1,170 @@
+/* The New folder and New request dialogs (COL-04): label-over-field
+ * fields with 6px gaps, 30px inputs on --bg0 with an accent focus ring,
+ * the type picker as a segmented control, and the file path in mono. */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.label {
+  color: var(--text2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+}
+
+.help {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.input {
+  height: var(--h-control);
+  width: 100%;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-md2);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.input[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bad) 22%, transparent);
+}
+
+.error {
+  color: var(--bad);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  overflow-wrap: anywhere;
+}
+
+/* Type picker: the native radios stay for keyboard and screen readers. */
+.kinds {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+}
+
+.kind {
+  position: relative;
+  height: var(--h-control-sm);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.kind input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.kind:hover {
+  color: var(--text);
+}
+
+.kind:has(input:checked) {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.kind:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Folder picker: the design's field look over an invisible native select. */
+.select {
+  position: relative;
+  height: var(--h-control);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-md2);
+}
+
+.select:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.folderIcon {
+  flex: none;
+  color: var(--accent);
+}
+
+.selectName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selectHint {
+  flex: none;
+  color: var(--text3);
+}
+
+.selectChevron {
+  flex: none;
+  margin-left: auto;
+  color: var(--text3);
+}
+
+.nativeSelect {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.nativeSelect:focus-visible {
+  outline: none;
+}
+
+.nativeSelect:disabled {
+  cursor: default;
+}
+
+.path {
+  color: var(--text3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,17 @@
+{
+  "workspaceId": "ws_7c1e4b9a2f3d5e60",
+  "problems": [
+    {
+      "folderId": "fld_93d0b7a2e5c14f68",
+      "folderName": "Mocks",
+      "error": {
+        "kind": "invalid_argument",
+        "code": "servers.unknown_type",
+        "message": "\"mqtt\" is not a kind of server PostSonde can run.",
+        "hint": "",
+        "details": {},
+        "causes": []
+      }
+    }
+  ]
+}

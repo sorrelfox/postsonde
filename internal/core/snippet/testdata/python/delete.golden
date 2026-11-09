@@ -1,0 +1,9 @@
+import requests
+
+response = requests.request(
+    "DELETE",
+    "https://api.test/items/1",
+)
+
+print(response.status_code)
+print(response.text)

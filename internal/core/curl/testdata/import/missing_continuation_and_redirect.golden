@@ -1,0 +1,55 @@
+{
+  "name": "upload",
+  "request": {
+    "schemaVersion": 0,
+    "kind": "",
+    "id": "",
+    "name": "",
+    "method": "PUT",
+    "url": "https://example.com/upload",
+    "body": {
+      "mode": "file",
+      "path": "report.pdf"
+    },
+    "auth": {
+      "type": "inherit"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "curl.missing_continuation",
+      "severity": "warning",
+      "start": 31,
+      "end": 32,
+      "message": "The line ends without a line continuation; the next line is read as part of the command."
+    },
+    {
+      "code": "curl.file_reference",
+      "severity": "info",
+      "start": 34,
+      "end": 47,
+      "message": "curl sends the file “report.pdf”; it is kept as a path and not read here."
+    },
+    {
+      "code": "curl.file_not_read",
+      "severity": "warning",
+      "start": 34,
+      "end": 47,
+      "message": "The file “report.pdf” is sent from its path, which PostSonde reads relative to the project folder, not to where curl ran."
+    },
+    {
+      "code": "curl.redirect_ignored",
+      "severity": "warning",
+      "start": 48,
+      "end": 52,
+      "message": "The shell redirection is ignored."
+    },
+    {
+      "code": "curl.redirect_ignored",
+      "severity": "warning",
+      "start": 53,
+      "end": 64,
+      "message": "The shell redirection is ignored."
+    }
+  ]
+}

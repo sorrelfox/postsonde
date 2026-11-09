@@ -1,0 +1,11 @@
+{
+  "valid": false,
+  "text": "{\"é\":}",
+  "error": {
+    "offset": 5,
+    "byteOffset": 6,
+    "line": 1,
+    "column": 6,
+    "message": "Invalid character '}' looking for beginning of value"
+  }
+}

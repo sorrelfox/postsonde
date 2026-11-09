@@ -1,0 +1,91 @@
+{
+  "workspaceId": "ws_0123456789abcdef",
+  "path": "<root>",
+  "readOnly": "",
+  "rootIds": [
+    "fld_users",
+    "req_health"
+  ],
+  "nodes": [
+    {
+      "id": "fld_users",
+      "parentId": null,
+      "kind": "folder",
+      "name": "Users",
+      "path": "users",
+      "fileKind": "folder",
+      "method": "",
+      "childIds": [
+        "req_1d401f0ec7e89331",
+        "req_me",
+        "req_ws"
+      ],
+      "readOnly": ""
+    },
+    {
+      "id": "req_1d401f0ec7e89331",
+      "parentId": "fld_users",
+      "kind": "invalid",
+      "name": "broken",
+      "path": "users/broken.json",
+      "fileKind": "",
+      "method": "",
+      "childIds": [],
+      "readOnly": "invalid"
+    },
+    {
+      "id": "req_me",
+      "parentId": "fld_users",
+      "kind": "request",
+      "name": "me",
+      "path": "users/me.json",
+      "fileKind": "graphql",
+      "method": "POST",
+      "childIds": [],
+      "readOnly": ""
+    },
+    {
+      "id": "req_ws",
+      "parentId": "fld_users",
+      "kind": "unknown",
+      "name": "Stream",
+      "path": "users/stream.json",
+      "fileKind": "mqtt",
+      "method": "",
+      "childIds": [],
+      "readOnly": "unknown_kind"
+    },
+    {
+      "id": "req_health",
+      "parentId": null,
+      "kind": "request",
+      "name": "Health",
+      "path": "health.json",
+      "fileKind": "http",
+      "method": "HEAD",
+      "childIds": [],
+      "readOnly": ""
+    }
+  ],
+  "problems": [
+    {
+      "path": "users/broken.json",
+      "nodeId": "req_1d401f0ec7e89331",
+      "error": {
+        "kind": "parse",
+        "code": "projectfile.parse_failed",
+        "message": "A project file does not match the PostSonde file format.",
+        "hint": "Fix the file by hand; docs/file-format.md describes the format. PostSonde does not overwrite it until then.",
+        "details": {
+          "column": "23",
+          "line": "1",
+          "path": "<root>/users/broken.json"
+        },
+        "causes": [
+          "unexpected end of JSON input"
+        ]
+      }
+    }
+  ],
+  "scratch": []
+}

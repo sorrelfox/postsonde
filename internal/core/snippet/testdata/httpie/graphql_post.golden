@@ -1,0 +1,5 @@
+http --follow --max-redirects=10 \
+  --raw '{"query":"query Q($id: ID!) {\n  user(id: $id) { name }\n}","variables":{"id":"1"},"operationName":"Q"}' \
+  POST https://api.test/graphql \
+  'Accept:application/graphql-response+json, application/json;q=0.9' \
+  Content-Type:application/json

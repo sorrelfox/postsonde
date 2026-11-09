@@ -1,0 +1,100 @@
+{
+  "ok": true,
+  "request": {
+    "id": "",
+    "kind": "http",
+    "name": "",
+    "description": "",
+    "method": "POST",
+    "url": "https://api.example.com/v1/orders?page=2",
+    "params": [
+      {
+        "name": "page",
+        "value": "2",
+        "description": "",
+        "enabled": true,
+        "extra": ""
+      }
+    ],
+    "pathParams": [],
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json",
+        "description": "",
+        "enabled": true,
+        "extra": ""
+      }
+    ],
+    "body": {
+      "mode": "raw",
+      "type": "json",
+      "text": "{\"note\":\"café ☕ 😀\"}",
+      "fields": [],
+      "parts": [],
+      "path": "",
+      "contentType": "",
+      "extra": ""
+    },
+    "bodyExamples": [],
+    "query": "",
+    "variables": "",
+    "operationName": "",
+    "connectionParams": "",
+    "schemaFile": "",
+    "address": "",
+    "sendMode": "",
+    "lineEnding": "",
+    "message": "",
+    "subprotocols": [],
+    "messageFormat": "",
+    "service": "",
+    "proto": {
+      "files": [],
+      "importPaths": [],
+      "inherit": false,
+      "extra": ""
+    },
+    "metadata": [],
+    "auth": {
+      "type": "basic",
+      "username": "ada",
+      "password": "s3cret",
+      "prefix": null,
+      "token": "",
+      "key": "",
+      "value": "",
+      "in": "",
+      "disabled": false,
+      "localSecrets": [],
+      "extra": ""
+    },
+    "settings": {
+      "timeoutMs": null,
+      "followRedirects": null,
+      "maxRedirects": null,
+      "followOriginalMethod": null,
+      "forwardAuthorization": null,
+      "verifyTls": false,
+      "connectTimeoutMs": null,
+      "urlEncoding": "",
+      "httpVersion": "",
+      "sendCookies": null,
+      "storeCookies": null,
+      "tls": null,
+      "deadlineMs": null,
+      "extra": ""
+    },
+    "extra": ""
+  },
+  "name": "orders",
+  "diagnostics": [
+    {
+      "code": "curl.not_imported",
+      "severity": "info",
+      "from": 149,
+      "to": 161,
+      "message": "PostSonde shows the response as received and does not decompress it, so “--compressed” is not imported."
+    }
+  ]
+}

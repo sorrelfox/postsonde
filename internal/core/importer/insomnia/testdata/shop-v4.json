@@ -1,0 +1,365 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-09-12T10:21:44.123Z",
+  "__export_source": "insomnia.desktop.app:v10.3.1",
+  "resources": [
+    {
+      "_id": "req_list_users",
+      "parentId": "fld_users",
+      "modified": 1726132904123,
+      "created": 1726132800000,
+      "url": "{{ _.base_url }}/users?sort=name",
+      "name": "List users",
+      "description": "Lists the users, a page at a time.",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        { "id": "pair_1", "name": "limit", "value": "{{ _.page_size }}", "description": "" },
+        { "id": "pair_2", "name": "q", "value": "a&b", "disabled": false },
+        { "id": "pair_3", "name": "debug", "value": "true", "disabled": true }
+      ],
+      "headers": [
+        { "name": "Accept", "value": "application/json" },
+        { "name": "X-Trace", "value": "on", "disabled": true }
+      ],
+      "authentication": {},
+      "metaSortKey": -1726132800000,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": false,
+      "settingRebuildPath": false,
+      "settingFollowRedirects": "off",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_users",
+      "parentId": "fld_api",
+      "modified": 1726132800000,
+      "created": 1726132800000,
+      "name": "Users",
+      "description": "User management.",
+      "environment": { "page_size": 20 },
+      "environmentPropertyOrder": { "&": ["page_size"] },
+      "metaSortKey": -1726132800000,
+      "preRequestScript": "insomnia.request.addHeader({ key: 'X-Req', value: '1' });",
+      "authentication": { "type": "bearer", "token": "{{ _.token }}", "prefix": "", "disabled": false },
+      "headers": [ { "name": "X-Team", "value": "{{ _['team-id'] }}" } ],
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_shop",
+      "parentId": null,
+      "modified": 1726132800000,
+      "created": 1726132800000,
+      "name": "Shop API",
+      "description": "The shop's public API.",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "fld_api",
+      "parentId": "wrk_shop",
+      "modified": 1726132800000,
+      "created": 1726132800000,
+      "name": "API",
+      "description": "",
+      "environment": { "api": { "version": "v2", "regions": ["eu", "us"] } },
+      "metaSortKey": -2000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_create_user",
+      "parentId": "fld_users",
+      "url": "{{_.base_url}}/users",
+      "name": "Create user",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": \"{% uuid 'v4' %}\",\n  \"createdAt\": \"{% now 'iso-8601', '' %}\",\n  \"name\": \"{{ _.user.name }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [ { "name": "Content-Type", "value": "application/json" } ],
+      "authentication": { "type": "basic", "username": "{{ _.user.login }}", "password": "hunter2", "useISO88591": true },
+      "metaSortKey": -1726132799000,
+      "settingFollowRedirects": "global",
+      "afterResponseScript": "insomnia.test('201', () => insomnia.expect(insomnia.response.code).to.eql(201));",
+      "_type": "request"
+    },
+    {
+      "_id": "req_me",
+      "parentId": "fld_users",
+      "url": "{{ _.base_url }}/users/me",
+      "name": "Me",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        { "name": "Authorization", "value": "Bearer {% response 'body', 'req_login', 'b64::JC50b2tlbg==::46b', 'never', 60 %}" },
+        { "name": "X-Name", "value": "{{ _.name | upper }}" }
+      ],
+      "authentication": { "type": "none" },
+      "metaSortKey": -1726132798000,
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_user",
+      "parentId": "fld_users",
+      "url": "{{ _.base_url }}/users/:id",
+      "name": "Get user",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "pathParameters": [ { "name": "id", "value": "{{ _.user_id }}" } ],
+      "headers": [],
+      "authentication": { "type": "apikey", "key": "session", "value": "{{ _.session }}", "addTo": "cookie", "disabled": false },
+      "metaSortKey": -1726132797000,
+      "_type": "request"
+    },
+    {
+      "_id": "fld_forms",
+      "parentId": "wrk_shop",
+      "name": "Forms",
+      "metaSortKey": -1000,
+      "environment": {},
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_login",
+      "parentId": "fld_forms",
+      "url": "{{ _.base_url }}/login",
+      "name": "Log in",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/x-www-form-urlencoded",
+        "params": [
+          { "id": "pair_a", "name": "user", "value": "{{ _.user.login }}" },
+          { "id": "pair_b", "name": "remember", "value": "1", "disabled": true }
+        ]
+      },
+      "headers": [ { "name": "Content-Type", "value": "application/x-www-form-urlencoded" } ],
+      "authentication": { "type": "apikey", "key": "api_key", "value": "{{ _.api_key }}", "addTo": "queryParams" },
+      "metaSortKey": -3,
+      "_type": "request"
+    },
+    {
+      "_id": "req_avatar",
+      "parentId": "fld_forms",
+      "url": "{{ _.base_url }}/users/me/avatar",
+      "name": "Upload avatar",
+      "method": "PUT",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          { "id": "pair_c", "name": "file", "value": "", "type": "file", "fileName": "/Users/ada/Pictures/me.png" },
+          { "id": "pair_d", "name": "caption", "value": "Me at {% now 'unix' %}" }
+        ]
+      },
+      "headers": [ { "name": "Content-Type", "value": "multipart/form-data" } ],
+      "authentication": { "type": "digest", "username": "ada", "password": "{{ _.password }}" },
+      "metaSortKey": -2,
+      "_type": "request"
+    },
+    {
+      "_id": "req_import",
+      "parentId": "fld_forms",
+      "url": "{{ _.base_url }}/import",
+      "name": "Import CSV",
+      "method": "POST",
+      "body": { "mimeType": "text/csv", "fileName": "/tmp/users.csv" },
+      "headers": [],
+      "authentication": {
+        "type": "oauth2", "grantType": "client_credentials",
+        "accessTokenUrl": "{{ _.base_url }}/oauth/token", "clientId": "shop", "clientSecret": "s3cr3t"
+      },
+      "metaSortKey": -1,
+      "_type": "request"
+    },
+    {
+      "_id": "req_partner",
+      "parentId": "fld_forms",
+      "url": "{{ _.base_url }}/partner/orders",
+      "name": "Partner orders",
+      "method": "GET",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "oauth1", "disabled": false, "signatureMethod": "HMAC-SHA1",
+        "consumerKey": "{{ _.partner_key }}", "consumerSecret": "oauth1-consumer-s3cr3t",
+        "tokenKey": "partner-token", "tokenSecret": "oauth1-token-s3cr3t",
+        "privateKey": "", "version": "", "nonce": "fixed-nonce", "timestamp": "1700000000",
+        "callback": "https://app.shop.example/cb", "realm": "shop", "verifier": "v123",
+        "includeBodyHash": true
+      },
+      "metaSortKey": 0,
+      "_type": "request"
+    },
+    {
+      "_id": "req_note",
+      "parentId": "fld_forms",
+      "url": "{{ _.base_url }}/notes",
+      "name": "Post note",
+      "method": "POST",
+      "body": { "mimeType": "application/edn", "text": "{:title \"{{ _.title }}\"}" },
+      "headers": [],
+      "authentication": { "type": "hawk", "id": "x", "key": "y", "disabled": true },
+      "metaSortKey": 0,
+      "_type": "request"
+    },
+    {
+      "_id": "req_report",
+      "parentId": "fld_forms",
+      "url": "{{ _.base_url }}/reports/daily.csv",
+      "name": "Daily report",
+      "method": "GET",
+      "body": {},
+      "headers": [],
+      "authentication": { "type": "netrc" },
+      "metaSortKey": 1,
+      "_type": "request"
+    },
+    {
+      "_id": "req_graphql",
+      "parentId": "wrk_shop",
+      "url": "{{ _.base_url }}/graphql",
+      "name": "Search products",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/graphql",
+        "text": "{\"query\":\"query Search($q: String!) {\\n  products(q: $q) { id name }\\n}\",\"variables\":{\"q\":\"{{ _.query }}\",\"first\":10},\"operationName\":\"Search\"}"
+      },
+      "parameters": [],
+      "headers": [ { "name": "Content-Type", "value": "application/json" } ],
+      "authentication": { "type": "bearer", "token": "{{ _.token }}", "prefix": "Token" },
+      "metaSortKey": 10,
+      "_type": "request"
+    },
+    {
+      "_id": "greq_orders",
+      "parentId": "wrk_shop",
+      "url": "grpcs://{{ _.grpc_host }}:443",
+      "name": "Get order",
+      "description": "",
+      "protoFileId": "pf_orders",
+      "protoMethodName": "/shop.v1.Orders/GetOrder",
+      "metadata": [ { "name": "x-api-key", "value": "{{ _.api_key }}" } ],
+      "body": { "text": "{\n  \"id\": \"{{ _.order_id }}\"\n}" },
+      "metaSortKey": 20,
+      "isPrivate": false,
+      "_type": "grpc_request"
+    },
+    {
+      "_id": "pf_orders",
+      "parentId": "wrk_shop",
+      "name": "orders.proto",
+      "protoText": "syntax = \"proto3\";\npackage shop.v1;\nservice Orders { rpc GetOrder (GetOrderRequest) returns (Order); }\nmessage GetOrderRequest { string id = 1; }\nmessage Order { string id = 1; }\n",
+      "_type": "proto_file"
+    },
+    {
+      "_id": "ws-req_feed",
+      "parentId": "wrk_shop",
+      "url": "wss://{{ _.ws_host }}/feed",
+      "name": "Order feed",
+      "metaSortKey": 30,
+      "headers": [ { "name": "Origin", "value": "https://shop.example" } ],
+      "parameters": [ { "name": "channel", "value": "orders" } ],
+      "authentication": { "type": "bearer", "token": "{{ _.token }}" },
+      "settingEncodeUrl": true,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingFollowRedirects": "global",
+      "_type": "websocket_request"
+    },
+    {
+      "_id": "ws-payload_feed",
+      "parentId": "ws-req_feed",
+      "value": "{\"subscribe\": \"{{ _.channel }}\"}",
+      "mode": "application/json",
+      "_type": "websocket_payload"
+    },
+    {
+      "_id": "uts_smoke",
+      "parentId": "wrk_shop",
+      "name": "Smoke tests",
+      "metaSortKey": 40,
+      "_type": "unit_test_suite"
+    },
+    {
+      "_id": "ut_1",
+      "parentId": "uts_smoke",
+      "name": "Returns 200",
+      "code": "const r = await insomnia.send();",
+      "requestId": "req_list_users",
+      "_type": "unit_test"
+    },
+    {
+      "_id": "spc_shop",
+      "parentId": "wrk_shop",
+      "fileName": "Shop API",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_shop",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "https://api.shop.example/{{ _.api.version }}",
+        "token": "",
+        "user": { "login": "ada", "name": "Ada" }
+      },
+      "dataPropertyOrder": { "&": ["base_url", "token", "user"], "&~|user": ["login", "name"] },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_staging",
+      "parentId": "env_base",
+      "name": "Staging",
+      "data": { "base_url": "https://staging.shop.example/v2", "user_id": 42 },
+      "color": "#7d69cb",
+      "isPrivate": false,
+      "metaSortKey": 2,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_local",
+      "parentId": "env_base",
+      "name": "Local (private)",
+      "data": { "base_url": "http://localhost:8080", "token": "dev-token-123" },
+      "isPrivate": true,
+      "metaSortKey": 1,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_vault",
+      "parentId": "env_base",
+      "name": "Production",
+      "environmentType": "kv",
+      "data": {},
+      "kvPairData": [
+        { "id": "kv_1", "name": "base_url", "value": "https://shop.example/v2", "type": "str", "enabled": true },
+        { "id": "kv_2", "name": "token", "value": "vault:v1:ZW5jcnlwdGVk", "type": "secret", "enabled": true },
+        { "id": "kv_3", "name": "debug", "value": "1", "type": "str", "enabled": false }
+      ],
+      "metaSortKey": 3,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_shop",
+      "parentId": "wrk_shop",
+      "name": "Default Jar",
+      "cookies": [
+        { "key": "session", "value": "abc", "domain": "shop.example", "path": "/" },
+        { "key": "theme", "value": "dark", "domain": "shop.example", "path": "/" }
+      ],
+      "_type": "cookie_jar"
+    }
+  ]
+}

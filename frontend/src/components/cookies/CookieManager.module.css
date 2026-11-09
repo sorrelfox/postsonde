@@ -1,0 +1,466 @@
+/* The cookie manager (CK-02), in the style of the other dialogs:
+ * the shared Dialog panel, a toolbar, then one section per domain with a
+ * compact table (header row on --bg0, --line separators, mono for cookie
+ * data). The form reuses the dialogs' label-over-field fields. */
+
+.body {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-2) var(--space-8) var(--space-8);
+  overflow: hidden;
+}
+
+/* Which jar the list is (CK-03), and the per-environment setting. */
+.jarBar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-6);
+}
+
+.jar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+.jarCaption {
+  color: var(--text3);
+}
+
+.jarName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--fw-semibold);
+}
+
+.jarScope {
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.jarSetting {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  white-space: nowrap;
+}
+
+.toolbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.filter {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+}
+
+.count {
+  color: var(--text3);
+  font-size: var(--fs-md);
+  white-space: nowrap;
+}
+
+.list {
+  min-height: 160px;
+  max-height: min(62vh, 640px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  overflow: auto;
+}
+
+.muted {
+  margin: 0;
+  color: var(--text3);
+}
+
+.banner {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warn) 10%, transparent);
+  color: var(--text2);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+}
+
+.banner > svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--warn);
+}
+
+.bannerBad {
+  border-color: color-mix(in srgb, var(--bad) 40%, transparent);
+  background: color-mix(in srgb, var(--bad) 10%, transparent);
+}
+
+.bannerBad > svg {
+  color: var(--bad);
+}
+
+/* Domain groups */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.domain {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-semibold);
+}
+
+.groupCount {
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-round);
+  background: var(--bg3);
+  color: var(--text2);
+  font-size: var(--fs-sm);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.table {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: var(--fs-md);
+}
+
+.table th {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg0);
+  color: var(--text3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th:first-child {
+  width: 22%;
+  border-top-left-radius: var(--radius-md);
+}
+
+.table th:nth-child(3) {
+  width: 11%;
+}
+
+.table th:nth-child(4) {
+  width: 17%;
+}
+
+.table th:nth-child(7) {
+  width: 9%;
+}
+
+.table th:last-child {
+  border-top-right-radius: var(--radius-md);
+}
+
+.table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover td {
+  background: var(--bg2);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+}
+
+.name {
+  margin-right: var(--space-3);
+}
+
+.value {
+  color: var(--text2);
+}
+
+.expires {
+  color: var(--text2);
+}
+
+.badge {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);
+  color: var(--text3);
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+}
+
+.table .flag {
+  width: 8%;
+  text-align: center;
+  color: var(--ok);
+}
+
+.table .actionsCol {
+  width: 78px;
+}
+
+.actions {
+  text-align: right;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Buttons */
+
+.button {
+  height: var(--h-control);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-6);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg1);
+  color: var(--text2);
+  font: inherit;
+  font-size: var(--fs-base);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.button:not(:disabled):hover {
+  background: var(--bg2);
+  color: var(--text);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.primary:not(:disabled):hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+  filter: brightness(1.08);
+}
+
+.iconButton,
+.linkButton {
+  height: var(--h-control-sm);
+  display: inline-grid;
+  place-items: center;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.iconButton {
+  width: var(--h-control-sm);
+  padding: 0;
+}
+
+.iconButton:hover,
+.linkButton:not(:disabled):hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.linkButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.button:focus-visible,
+.iconButton:focus-visible,
+.linkButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Form */
+
+.formRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.label {
+  color: var(--text2);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+}
+
+.help {
+  color: var(--text3);
+  font-size: var(--fs-md);
+}
+
+.input {
+  height: var(--h-control);
+  width: 100%;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-md);
+  background: var(--bg0);
+  color: var(--text);
+  font-size: var(--fs-md2);
+}
+
+.input:disabled {
+  opacity: 0.6;
+}
+
+.textarea {
+  height: auto;
+  min-height: calc(var(--h-control) * 2);
+  padding: var(--space-3) var(--space-5);
+  resize: vertical;
+  line-height: var(--lh-code);
+  word-break: break-all;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--bad);
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-8);
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.check input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.error {
+  color: var(--bad);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  overflow-wrap: anywhere;
+}
+
+/* The status bar button that opens the manager. */
+
+.statusButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.statusButton:hover {
+  color: var(--text2);
+}
+
+.statusButton:focus-visible {
+  outline: none;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--focus-ring);
+}
+
+@media (max-width: 720px) {
+  .formRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,13 @@
+import requests
+
+response = requests.request(
+    "POST",
+    "https://api.test/blob",
+    headers={
+        "Content-Type": "application/json",
+    },
+    data=open("<root>/data.json", "rb"),
+)
+
+print(response.status_code)
+print(response.text)

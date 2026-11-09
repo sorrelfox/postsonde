@@ -1,0 +1,26 @@
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Security;
+using System.Text;
+
+var handler = new SocketsHttpHandler
+{
+    SslOptions = new SslClientAuthenticationOptions
+    {
+        RemoteCertificateValidationCallback = (_, _, _, _) => true,
+    },
+    AllowAutoRedirect = false,
+};
+using var client = new HttpClient(handler);
+
+using var request = new HttpRequestMessage(new HttpMethod("GET"), "http://api.test/me");
+request.Version = HttpVersion.Version20;
+request.VersionPolicy = HttpVersionPolicy.RequestVersionExact;
+request.Headers.Authorization = new AuthenticationHeaderValue("Basic",
+    Convert.ToBase64String(Encoding.UTF8.GetBytes("jürgen:pässwörd ✓")));
+
+using var response = await client.SendAsync(request);
+Console.WriteLine((int)response.StatusCode);
+Console.WriteLine(await response.Content.ReadAsStringAsync());

@@ -1,0 +1,4 @@
+grpcurl -plaintext \
+  -H 'trace-bin: AAEC' \
+  -H x-empty: \
+  localhost:50051 a.B/C

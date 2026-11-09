@@ -1,0 +1,24 @@
+# source
+extend schema @link(url: "x")
+extend schema { mutation: M }
+extend schema @a { subscription: S }
+# tree
+Document [0:96]
+  Definitions[0]: SchemaDefinition [0:29] Extend=0 Keyword=7 LBrace=-1 RBrace=-1
+    Directives[0]: Directive [14:29] At=14
+      Name: Name [15:19] Value="link"
+      Arguments: ArgumentList [19:29] LParen=19 RParen=28
+        Arguments[0]: Argument [20:28] Colon=23
+          Name: Name [20:23] Value="url"
+          Value: StringValue [25:28] Block=false Value="x"
+  Definitions[1]: SchemaDefinition [30:59] Extend=30 Keyword=37 LBrace=44 RBrace=58
+    OperationTypes[0]: RootOperationTypeDefinition [46:57] Operation=mutation Keyword=46 Colon=54
+      Type: NamedType [56:57]
+        Name: Name [56:57] Value="M"
+  Definitions[2]: SchemaDefinition [60:96] Extend=60 Keyword=67 LBrace=77 RBrace=95
+    Directives[0]: Directive [74:76] At=74
+      Name: Name [75:76] Value="a"
+    OperationTypes[0]: RootOperationTypeDefinition [79:94] Operation=subscription Keyword=79 Colon=91
+      Type: NamedType [93:94]
+        Name: Name [93:94] Value="S"
+# errors

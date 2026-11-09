@@ -1,0 +1,19 @@
+# source
+mutation { likeStory(storyID: 12345) { story { likeCount } } }
+# tree
+Document [0:62]
+  Definitions[0]: OperationDefinition [0:62] Operation=mutation Keyword=0
+    SelectionSet: SelectionSet [9:62] LBrace=9 RBrace=61
+      Selections[0]: Field [11:60] Colon=-1
+        Name: Name [11:20] Value="likeStory"
+        Arguments: ArgumentList [20:36] LParen=20 RParen=35
+          Arguments[0]: Argument [21:35] Colon=28
+            Name: Name [21:28] Value="storyID"
+            Value: IntValue [30:35] Raw="12345"
+        SelectionSet: SelectionSet [37:60] LBrace=37 RBrace=59
+          Selections[0]: Field [39:58] Colon=-1
+            Name: Name [39:44] Value="story"
+            SelectionSet: SelectionSet [45:58] LBrace=45 RBrace=57
+              Selections[0]: Field [47:56] Colon=-1
+                Name: Name [47:56] Value="likeCount"
+# errors

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="API" tests="10" failures="4" errors="2" skipped="2" time="2.500" timestamp="2026-09-21T14:13:20">
+  <testsuite name="API, iteration 1" id="0" tests="5" failures="2" errors="1" skipped="1" time="1.542" timestamp="2026-09-21T14:13:20">
+    <properties>
+      <property name="iteration" value="1"></property>
+      <property name="dataFile" value="users.csv"></property>
+      <property name="dataRow" value="1"></property>
+    </properties>
+    <testcase name="Create (iteration 1)" classname="API" time="0.012">
+      <system-out>POST Create: 201 Created, 12 ms&#xA;PASSED: Expected status code to equal 201, and it was 201.</system-out>
+    </testcase>
+    <testcase name="Get &lt;user&gt; &amp; &#34;co&#34; (iteration 1)" classname="API.Users" time="1.500">
+      <failure message="Expected header Authorization to equal &#34;Bearer x&#34;, but it was &#34;Bearer ••••••&#34;." type="invalid assertion">Expected header Authorization to equal &#34;Bearer x&#34;, but it was &#34;Bearer ••••••&#34;.&#xA;The JSONPath query &#34;$[&#34; is not valid.</failure>
+      <system-out>GET Get &lt;user&gt; &amp; &#34;co&#34;: 200 OK, 1500 ms&#xA;FAILED: Expected header Authorization to equal &#34;Bearer x&#34;, but it was &#34;Bearer ••••••&#34;.&#xA;INVALID: The JSONPath query &#34;$[&#34; is not valid.</system-out>
+    </testcase>
+    <testcase name="Undefined (iteration 1)" classname="API" time="0.000">
+      <error message="The variable {{nope}} is not defined." type="template.unresolved">The variable {{nope}} is not defined.&#xA;Define it in an environment.</error>
+      <system-out>GET Undefined, 0 ms</system-out>
+    </testcase>
+    <testcase name="Socket (iteration 1)" classname="API" time="0.000">
+      <skipped message="Not run: a run sends HTTP, GraphQL and SSE requests only."></skipped>
+    </testcase>
+    <testcase name="Create (iteration 1) (2)" classname="API" time="0.030">
+      <failure message="The response&#39;s status was 404 Not �Found." type="status">The response&#39;s status was 404 Not �Found.</failure>
+      <system-out>GET Create: 404 Not �Found, 30 ms, 0 events</system-out>
+    </testcase>
+  </testsuite>
+  <testsuite name="API, iteration 2" id="1" tests="5" failures="2" errors="1" skipped="1" time="1.542" timestamp="2026-09-21T14:13:20">
+    <properties>
+      <property name="iteration" value="2"></property>
+      <property name="dataFile" value="users.csv"></property>
+      <property name="dataRow" value="2"></property>
+    </properties>
+    <testcase name="Create (iteration 2)" classname="API" time="0.012">
+      <system-out>POST Create: 201 Created, 12 ms&#xA;PASSED: Expected status code to equal 201, and it was 201.</system-out>
+    </testcase>
+    <testcase name="Get &lt;user&gt; &amp; &#34;co&#34; (iteration 2)" classname="API.Users" time="1.500">
+      <failure message="Expected header Authorization to equal &#34;Bearer x&#34;, but it was &#34;Bearer ••••••&#34;." type="invalid assertion">Expected header Authorization to equal &#34;Bearer x&#34;, but it was &#34;Bearer ••••••&#34;.&#xA;The JSONPath query &#34;$[&#34; is not valid.</failure>
+      <system-out>GET Get &lt;user&gt; &amp; &#34;co&#34;: 200 OK, 1500 ms&#xA;FAILED: Expected header Authorization to equal &#34;Bearer x&#34;, but it was &#34;Bearer ••••••&#34;.&#xA;INVALID: The JSONPath query &#34;$[&#34; is not valid.</system-out>
+    </testcase>
+    <testcase name="Undefined (iteration 2)" classname="API" time="0.000">
+      <error message="The variable {{nope}} is not defined." type="template.unresolved">The variable {{nope}} is not defined.&#xA;Define it in an environment.</error>
+      <system-out>GET Undefined, 0 ms</system-out>
+    </testcase>
+    <testcase name="Socket (iteration 2)" classname="API" time="0.000">
+      <skipped message="Not run: a run sends HTTP, GraphQL and SSE requests only."></skipped>
+    </testcase>
+    <testcase name="Create (iteration 2) (2)" classname="API" time="0.030">
+      <failure message="The response&#39;s status was 404 Not �Found." type="status">The response&#39;s status was 404 Not �Found.</failure>
+      <system-out>GET Create: 404 Not �Found, 30 ms, 0 events</system-out>
+    </testcase>
+  </testsuite>
+</testsuites>

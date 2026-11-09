@@ -1,0 +1,4 @@
+curl https://api.test/items \
+  -H 'Content-Type: text/plain' \
+  --data-raw @not-a-file \
+  -L --max-redirs 10
