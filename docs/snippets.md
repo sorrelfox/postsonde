@@ -513,7 +513,11 @@ Running the commands against real servers is left to a manual check.
   receives what PostSonde sends, apart
   from the headers the client adds of its own, the multipart boundary and
   `Content-Length`. The cases a client cannot send the same way are
-  skipped with the reason (above).
+  skipped with the reason (above). The shell commands (curl, wget,
+  HTTPie) run in `sh`, or in bash for one with `$'…'` words where `sh`
+  cannot read them (dash before 0.5.13, [curl.md](curl.md#copy-as-curl)),
+  and not on Windows, where a POSIX shell hands native programs their
+  arguments through the C runtime's quoting and the ANSI code page.
 - `internal/app/services/http/snippet_test.go`:
   `TestSnippetModesAndSecretVariables` (secret variables of every level
   masked, local values shown, reveal equal to what the server receives,

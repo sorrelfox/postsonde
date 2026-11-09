@@ -266,9 +266,11 @@ asks for them (`includeSecrets`).
 (not starting with `-`) is written bare; anything else in single quotes,
 `'` as `'\''`, line breaks and tabs kept; a value with other control
 characters (a CR, an escape) or bytes that are not UTF-8 in `$'…'` with
-`\r \n \t \\ \' \xHH` escapes (POSIX.1-2024; bash, zsh, ksh), so a paste
-into a terminal cannot change it. A NUL byte cannot be in an argument:
-the command fails with `snippet.nul_byte`.
+`\r \n \t \\ \' \xHH` escapes, so a paste into a terminal cannot change
+it. `$'…'` is POSIX.1-2024: bash, zsh and ksh read it, and dash from
+0.5.13 on; the `sh` of Debian 13 (dash 0.5.12) does not, so such a
+command runs in bash there. A NUL byte cannot be in an argument: the
+command fails with `snippet.nul_byte`.
 
 **Differences that remain.** curl adds `User-Agent: curl/…` and
 `Accept: */*` when the request has none (PostSonde sends neither). With
@@ -293,7 +295,12 @@ connect timeout, proxy and client certificate settings are not written.
   back.
 - `curl_exec_test.go`: runs the commands with the machine's curl (skipped
   without it, or with `-short`) against a test server and checks it
-  receives what PostSonde's own client sends for the same request.
+  receives what PostSonde's own client sends for the same request. A
+  command runs in `sh`, or in bash when it has `$'…'` words and `sh`
+  cannot read them. Not on Windows, where a POSIX shell (Git Bash) hands
+  curl.exe its arguments through the C runtime's quoting and the ANSI
+  code page, which changes backslashes before a quote and text that is
+  not ASCII.
 - `import_test.go`: the mapping of each option and body shape, and every
   real-world command mapped to a request that `request.BuildHTTP` accepts
   and `projectfile.Marshal` writes, with a golden dump in

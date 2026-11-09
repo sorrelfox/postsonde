@@ -9,8 +9,10 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -38,20 +40,54 @@ type runner struct {
 	skip map[string]string
 	// noTextPartTypes: a text part's Content-Type is not sent.
 	noTextPartTypes bool
+	// posix: the code is a POSIX shell command (shellFor).
+	posix bool
 }
 
-// shellRun runs the command in root/name/cmd.sh with sh, with extra
-// words after it.
+// shellRun runs the command in root/name/cmd.sh with shellFor, with
+// extra words after it.
 func shellRun(extra string) func(ctx context.Context, root, name string) *exec.Cmd {
 	return func(ctx context.Context, root, name string) *exec.Cmd {
 		code, _ := os.ReadFile(filepath.Join(root, name, "cmd.sh"))
-		return exec.CommandContext(ctx, "sh", "-c", string(code)+extra)
+		return exec.CommandContext(ctx, shellFor(string(code)), "-c", string(code)+extra)
 	}
 }
 
+// noPOSIXShell is why the POSIX shell commands are not run on Windows:
+// there a POSIX shell (Git Bash) hands a native program such as curl.exe
+// its arguments through the C runtime's quoting and the ANSI code page,
+// which drops backslashes before a quote and turns text that is not ASCII
+// into question marks. The commands are for a POSIX system; cmd and
+// PowerShell have commands of their own.
+const noPOSIXShell = "POSIX shell commands are not run on Windows"
+
+// shellFor returns the shell to run the POSIX command cmd in: sh, or,
+// for a command with $'…' words (control characters, bytes that are not
+// UTF-8), bash where sh cannot read them. POSIX.1-2024 has $'…' and dash
+// reads it from 0.5.13 on, but the sh of Debian 13 is dash 0.5.12. It
+// returns "" when no shell here can run cmd.
+func shellFor(cmd string) string {
+	if !strings.Contains(cmd, "$'") {
+		return "sh"
+	}
+	return dollarQuoteShell()
+}
+
+// dollarQuoteShell is sh, or bash, whichever reads $'…' first; "" for
+// neither.
+var dollarQuoteShell = sync.OnceValue(func() string {
+	for _, sh := range []string{"sh", "bash"} {
+		out, err := exec.Command(sh, "-c", `printf '%s' $'a\tb'`).Output()
+		if err == nil && string(out) == "a\tb" {
+			return sh
+		}
+	}
+	return ""
+})
+
 func runners() []runner {
 	return []runner{
-		{lang: LanguageCurl, tool: "curl", file: "cmd.sh", run: shellRun(" -s -S -o /dev/null")},
+		{lang: LanguageCurl, tool: "curl", file: "cmd.sh", run: shellRun(" -s -S -o /dev/null"), posix: true},
 		{lang: "python", tool: "python3", file: "main.py",
 			ready: func() bool { return exec.Command("python3", "-c", "import requests").Run() == nil },
 			run: func(ctx context.Context, root, name string) *exec.Cmd {
@@ -89,7 +125,7 @@ func runners() []runner {
 				"quoting_multipart": "FormData sends a line feed in a text part as CRLF",
 			},
 			noTextPartTypes: true},
-		{lang: "wget", tool: "wget", file: "cmd.sh", run: shellRun(" -q"),
+		{lang: "wget", tool: "wget", file: "cmd.sh", run: shellRun(" -q"), posix: true,
 			skip: map[string]string{
 				"url_as_typed":  "wget percent-encodes { } | \" and removes dot segments",
 				"custom_method": "wget upper-cases the method",
@@ -121,7 +157,7 @@ func runners() []runner {
 				cmd.Dir = filepath.Join(root, name)
 				return cmd
 			}},
-		{lang: "httpie", tool: "http", file: "cmd.sh", run: shellRun(""), noTextPartTypes: true},
+		{lang: "httpie", tool: "http", file: "cmd.sh", run: shellRun(""), noTextPartTypes: true, posix: true},
 	}
 }
 
@@ -173,6 +209,10 @@ func available(t *testing.T) []runner {
 	}
 	var out []runner
 	for _, r := range runners() {
+		if r.posix && runtime.GOOS == "windows" {
+			t.Logf("%s: %s, skipped", r.lang, noPOSIXShell)
+			continue
+		}
 		if _, err := exec.LookPath(r.tool); err != nil {
 			t.Logf("%s: %s is not installed, skipped", r.lang, r.tool)
 			continue
@@ -291,6 +331,9 @@ func TestSnippetsSend(t *testing.T) {
 					t.Skip(err)
 				}
 				code, _ := os.ReadFile(filepath.Join(root, c.name, run.file))
+				if run.posix && shellFor(string(code)) == "" {
+					t.Skip("neither sh nor bash reads $'…'")
+				}
 				ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 				defer cancel()
 				cl := client

@@ -9,6 +9,8 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
@@ -34,11 +36,14 @@ func (fixedJar) SetCookieLines(*url.URL, []string) ([]string, []string) { return
 // TestCurlSendsTheSameRequest runs the copied commands with the curl
 // installed on the machine against a test server, and checks that the
 // server receives what PostSonde's own client sends for the same request.
-// It is skipped without curl.
+// It is skipped without curl, and on Windows (noPOSIXShell).
 func TestCurlSendsTheSameRequest(t *testing.T) {
 	curlPath, err := exec.LookPath("curl")
 	if err != nil || testing.Short() {
 		t.Skip("curl is not installed, or -short")
+	}
+	if runtime.GOOS == "windows" {
+		t.Skip(noPOSIXShell)
 	}
 	got := make(chan received, 1)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -72,6 +77,10 @@ func TestCurlSendsTheSameRequest(t *testing.T) {
 				c.req.URL = local(c.req.URL)
 			}
 			cmd, _ := generate(t, c)
+			shell := shellFor(cmd)
+			if shell == "" {
+				t.Skip("neither sh nor bash reads $'…'")
+			}
 			b := buildCase(t, c)
 
 			cl := client
@@ -85,8 +94,8 @@ func TestCurlSendsTheSameRequest(t *testing.T) {
 			}
 			want := <-got
 
-			sh := exec.CommandContext(ctx, "sh", "-c", cmd+" -s -S -o /dev/null")
-			sh.Env = []string{"PATH=" + strings.TrimSuffix(curlPath, "/curl")}
+			sh := exec.CommandContext(ctx, shell, "-c", cmd+" -s -S -o /dev/null")
+			sh.Env = []string{"PATH=" + filepath.Dir(curlPath)}
 			if out, err := sh.CombinedOutput(); err != nil {
 				t.Fatalf("curl: %v\n%s\ncommand:\n%s", err, out, cmd)
 			}
