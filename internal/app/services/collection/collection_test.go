@@ -71,7 +71,13 @@ func TestTree(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	golden.Assert(t, "dto/tree", []byte(strings.ReplaceAll(string(got), dir, "<root>")+"\n"))
+	// The golden file has the project folder as <root> and / separators,
+	// whatever the system: JSON writes a Windows path with \\.
+	text := string(got)
+	if filepath.Separator == '\\' {
+		text = strings.ReplaceAll(text, `\\`, "/")
+	}
+	golden.Assert(t, "dto/tree", []byte(strings.ReplaceAll(text, filepath.ToSlash(dir), "<root>")+"\n"))
 }
 
 func TestTreeFollowsWorkspace(t *testing.T) {

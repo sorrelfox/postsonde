@@ -3,6 +3,7 @@ package servers
 import (
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"errors"
 	"io"
 	"log/slog"
@@ -182,7 +183,12 @@ func TestSavedServerTLS(t *testing.T) {
 		t.Fatal(err)
 	}
 	file := readProjectFile(t, e.dirA, "chat/_folder.json")
-	for _, want := range []string{`"tls": {`, `"certificate": "files"`, certFile, keyFile} {
+	// The paths as JSON writes them: a Windows path has its \ escaped.
+	quoted := func(s string) string {
+		b, _ := json.Marshal(s)
+		return string(b)
+	}
+	for _, want := range []string{`"tls": {`, `"certificate": "files"`, quoted(certFile), quoted(keyFile)} {
 		if !strings.Contains(file, want) {
 			t.Errorf("folder file lacks %s:\n%s", want, file)
 		}
