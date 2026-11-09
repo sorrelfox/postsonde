@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -163,7 +164,8 @@ func TestSendNetrc(t *testing.T) {
 }
 
 // A host without an entry fails the send with the host named; a file
-// others can read is used, with a warning.
+// others can read is used, with a warning on Unix (Windows has no such
+// permission bits).
 func TestSendNetrcErrorsAndWarning(t *testing.T) {
 	t.Parallel()
 	f := newProjectFixture(t)
@@ -183,7 +185,11 @@ func TestSendNetrcErrorsAndWarning(t *testing.T) {
 	if !strings.Contains(resp.Body, "|bob:b0b|") {
 		t.Errorf("server got %s", resp.Body)
 	}
-	if len(resp.Warnings) != 1 || resp.Warnings[0].Code != request.WarningNetrcInsecure {
+	if runtime.GOOS == "windows" {
+		if len(resp.Warnings) != 0 {
+			t.Errorf("warnings = %+v, want none on Windows", resp.Warnings)
+		}
+	} else if len(resp.Warnings) != 1 || resp.Warnings[0].Code != request.WarningNetrcInsecure {
 		t.Errorf("warnings = %+v", resp.Warnings)
 	}
 

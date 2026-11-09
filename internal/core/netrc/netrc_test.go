@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -229,6 +230,13 @@ func TestLocate(t *testing.T) {
 	if _, err := fakeEnv("linux", nil, home).Locate("rel", ""); err == nil {
 		t.Error("a relative path without a project was accepted")
 	}
+	// On Windows a path from the root of a drive is on the project's
+	// drive, not under the project.
+	if runtime.GOOS == "windows" {
+		if got, err := fakeEnv("windows", nil, home).Locate(`\etc\netrc`, `D:\proj`); err != nil || got.Path != `D:\etc\netrc` {
+			t.Errorf("rooted override = %+v, %v", got, err)
+		}
+	}
 	e := fakeEnv("linux", nil, "")
 	if _, err := e.Locate("", root); !errors.Is(err, ErrNoHome) {
 		t.Errorf("no home: err = %v", err)
@@ -241,7 +249,7 @@ func TestLoad(t *testing.T) {
 	if err := os.WriteFile(path, []byte("machine a login a password pa\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	e := Env{GOOS: "linux"}
+	e := Env{}
 	l, err := e.Load(Location{Path: path})
 	if err != nil {
 		t.Fatal(err)
@@ -249,15 +257,29 @@ func TestLoad(t *testing.T) {
 	if l.Path != path || l.Insecure || len(l.File.Entries) != 1 {
 		t.Errorf("got %+v", l)
 	}
-
+	// A file others may read: a warning on Unix. Windows has no such
+	// permission bits (its files report 0666), so no warning there.
 	if err := os.Chmod(path, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if l, err = e.Load(Location{Path: path}); err != nil || !l.Insecure {
+	if l, err = e.Load(Location{Path: path}); err != nil || l.Insecure != (runtime.GOOS != "windows") {
 		t.Errorf("0644: insecure = %v, err %v", l.Insecure, err)
 	}
-	if l, err = (Env{GOOS: "windows"}).Load(Location{Path: path}); err != nil || l.Insecure {
-		t.Errorf("windows: insecure = %v, err %v", l.Insecure, err)
+	// The rule on each system, with the bits it reads.
+	for _, tc := range []struct {
+		goos     string
+		mode     fs.FileMode
+		insecure bool
+	}{
+		{"linux", 0o600, false}, {"linux", 0o644, true}, {"darwin", 0o640, true}, {"linux", 0o602, true},
+		{"windows", 0o666, false}, {"windows", 0o444, false},
+	} {
+		read := func(string) ([]byte, fs.FileMode, error) {
+			return []byte("machine a login a password pa\n"), tc.mode, nil
+		}
+		if l, err := (Env{GOOS: tc.goos, ReadFile: read}).Load(Location{Path: path}); err != nil || l.Insecure != tc.insecure {
+			t.Errorf("%s %v: insecure = %v, err %v", tc.goos, tc.mode, l.Insecure, err)
+		}
 	}
 
 	missing := filepath.Join(dir, "missing")

@@ -1758,7 +1758,7 @@ types are left out. What each type sends is in [auth.md](auth.md). Every string 
 | `tokenParams` | array of key-value rows, optional | Extra parameters of the token request's body, in order; a row with `disabled` is not sent. |
 | `issuer` | string, optional | OpenID Connect: the `iss` an ID token must name exactly. Left out: any non-empty `iss`. |
 | `idToken` | `true`, optional | OpenID Connect (AUTH-14): sends the ID token the server sent with the access token instead of the access token (the scope must ask for `openid`). |
-| `netrcFile` | string, optional | The netrc file to read: absolute, `~/…` in the home directory, or relative to the project root (`/` separators). Left out: the file the `NETRC` environment variable names, else `~/.netrc` (`~/_netrc`, then `~/.netrc`, on Windows). Not a secret: only the path is stored. |
+| `netrcFile` | string, optional | The netrc file to read: absolute, `~/…` in the home directory, or relative to the project root (`/` separators); on Windows a path from the root of a drive (`\netrc`) is on the project's drive. Left out: the file the `NETRC` environment variable names, else `~/.netrc` (`~/_netrc`, then `~/.netrc`, on Windows). Not a secret: only the path is stored. |
 | `disabled` | `true`, optional | The auth is kept but nothing is sent, and no folder's auth is used instead (AUTH-04). |
 | `localSecrets` | array of strings, optional | Names the secret members (`"password"`, `"token"`, `"value"`, `"secret"`, `"consumerSecret"`, `"tokenSecret"`, `"secretKey"`, `"sessionToken"`, `"hawkKey"`, `"clientSecret"`; an `oauth2` auth has `"clientSecret"` and `"password"`) whose value is kept in PostSonde's local storage; each member named is then left out. |
 

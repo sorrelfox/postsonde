@@ -829,7 +829,8 @@ not the header preview computed after every edit, which shows
 
 1. **The file** (`netrc.Env.Locate`): the auth's `netrcFile`, rendered
    (AUTH-32): absolute, `~/…` in the home directory, or relative to the
-   project root; without one, the file the `NETRC` environment variable
+   project root (on Windows a path from the root of a drive, `\netrc`, is
+   on the project's drive); without one, the file the `NETRC` environment variable
    names (as in curl); else `.netrc` in the home directory. On Windows,
    `_netrc`, then `.netrc` when it does not exist, the home directory being
    `HOME` when set (as in curl), else the user profile. At most 1 MiB; a

@@ -357,8 +357,10 @@ func (e Env) Home() (string, error) {
 
 // Locate returns the file to read. override is the path the request
 // names ("" for none): "~/" at its start is the home directory, and a
-// relative path is relative to root (an error when root is ""). Without
-// one, the NETRC environment variable names it, else .netrc in the home
+// relative path is relative to root (an error when root is ""). On
+// Windows a path from the root of a drive without one (\netrc) is on
+// root's drive, not under root. Without an override, the NETRC
+// environment variable names the file, else .netrc in the home
 // directory; on Windows _netrc, with .netrc as the fallback. Nothing is
 // read.
 func (e Env) Locate(override, root string) (Location, error) {
@@ -374,7 +376,12 @@ func (e Env) Locate(override, root string) (Location, error) {
 			if root == "" {
 				return Location{}, fmt.Errorf("netrc: relative path %q without a project", p)
 			}
-			p = filepath.Join(root, p)
+			if os.IsPathSeparator(p[0]) {
+				// Rooted but not absolute: Windows, without a drive.
+				p = filepath.Clean(filepath.VolumeName(root) + p)
+			} else {
+				p = filepath.Join(root, p)
+			}
 		}
 		return Location{Path: p, Source: SourceRequest}, nil
 	}
