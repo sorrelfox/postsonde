@@ -12,6 +12,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/core/xmldom"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 func TestOperatorsAndFunctions(t *testing.T) {
@@ -363,7 +364,7 @@ func TestLimits(t *testing.T) {
 	if !errors.As(err, &ee) || ee.Kind != errs.Unsupported || ee.Code != CodeTooComplex {
 		t.Fatalf("err = %v", err)
 	}
-	if d := time.Since(start); d > 2*time.Second {
+	if d := time.Since(start); d > testenv.Budget(2*time.Second) {
 		t.Errorf("stopping took %v", d)
 	}
 

@@ -523,6 +523,7 @@ internal/
   testutil/
     golden/             golden-file test helper
     fakeclock/          manual clock for timer tests (autosave.Clock)
+    testenv/            the time bounds of the speed tests, lifted under the race detector
     nodeharness/        runs the Node scripts of the opt-in Socket.IO interop tests
                         (scripts/sio-interop, docs/socketio.md#interop-with-the-official-implementations)
 frontend/               React + TypeScript UI (Vite, npm)
@@ -703,6 +704,14 @@ npx tsc --noEmit                    # strict mode, no opt-outs
   cases are independent.
 - **Race detector.** Tests are run with `go test -race ./...`, locally and in
   CI.
+- **Speed tests.** A test that bounds wall-clock time, to catch quadratic
+  work or a search index no longer used, takes its bound from
+  `testenv.Budget`, which lifts it under the race detector: there the
+  slowdown is too large and too uneven for any bound to mean something,
+  so the bounds hold in plain builds (`go test ./...` without `-race`, and
+  CI's Windows job). A tight bound (milliseconds) is checked against the
+  best of a few runs, or a percentile, rather than the slowest run, which
+  a loaded machine or a GC pause can push past any bound.
 - **Golden files.** For larger outputs (rendered requests, parsed documents,
   generated code), compare against `testdata/<name>.golden` with
   `golden.Assert(t, name, got)` from `internal/testutil/golden`. After an

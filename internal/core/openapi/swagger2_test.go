@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // swagger wraps paths and more top-level YAML in a minimal Swagger 2.0
@@ -681,7 +682,7 @@ func TestSwaggerVersionAndLimits(t *testing.T) {
 	}
 	start := time.Now()
 	_, _, err = ParseLimits([]byte(b.String()), Limits{MaxNodes: 20_000})
-	if !errors.As(err, &e) || e.Code != CodeTooLarge || time.Since(start) > 5*time.Second {
+	if !errors.As(err, &e) || e.Code != CodeTooLarge || time.Since(start) > testenv.Budget(5*time.Second) {
 		t.Errorf("err = %v after %v", err, time.Since(start))
 	}
 	// Aliased schemas stay shared.

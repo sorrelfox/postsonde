@@ -11,6 +11,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/graphql/ast"
 	"github.com/sorrelfox/postsonde/internal/core/graphql/lexer"
 	"github.com/sorrelfox/postsonde/internal/testutil/golden"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // render is the golden form of a parse: the source, the tree and the errors
@@ -395,7 +396,7 @@ func TestDeepNesting(t *testing.T) {
 			if depth > 4*DefaultMaxDepth+10 {
 				t.Errorf("tree depth %d exceeds the limit", depth)
 			}
-			if d := time.Since(start); d > 5*time.Second {
+			if d := time.Since(start); d > testenv.Budget(5*time.Second) {
 				t.Errorf("took %v", d)
 			}
 		})
@@ -444,7 +445,7 @@ func TestLinearTime(t *testing.T) {
 	src := strings.Repeat(unit, 5000)
 	start := time.Now()
 	doc, _ := Parse(src)
-	if d := time.Since(start); d > 5*time.Second {
+	if d := time.Since(start); d > testenv.Budget(5*time.Second) {
 		t.Errorf("took %v for %d bytes", d, len(src))
 	}
 	if len(doc.Definitions) == 0 {

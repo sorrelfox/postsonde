@@ -10,6 +10,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/errs"
 	"github.com/sorrelfox/postsonde/internal/testutil/golden"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 func parseOK(t *testing.T, src string) (*Document, []Diagnostic) {
@@ -1027,7 +1028,7 @@ components:
 		if findDiag(diags, CodeInvalidValue) == nil && findDiag(diags, CodeLimit) == nil {
 			t.Errorf("no diagnostic for expanded values:%s", diagList(diags))
 		}
-		if el := time.Since(start); el > 5*time.Second {
+		if el := time.Since(start); el > testenv.Budget(5*time.Second) {
 			t.Errorf("took %v", el)
 		}
 	})
@@ -1051,7 +1052,7 @@ components:
 		if len(d.Paths) != 2000 || !schemaOf(t, d, "S1999").Recursive {
 			t.Error("model")
 		}
-		if el := time.Since(start); el > 10*time.Second {
+		if el := time.Since(start); el > testenv.Budget(10*time.Second) {
 			t.Errorf("took %v", el)
 		}
 	})

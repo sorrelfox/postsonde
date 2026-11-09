@@ -9,6 +9,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/graphql/schema"
 	"github.com/sorrelfox/postsonde/internal/core/graphql/schemacache"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 func labels(c CompletionDTO) []string {
@@ -221,8 +222,8 @@ func TestCompleteLargeSchemaIsFast(t *testing.T) {
 	// The budget is per request. The median and the 90th percentile are
 	// checked rather than the worst call, which a loaded CI machine or a
 	// GC pause can push past any bound.
-	if median > 50*time.Millisecond || p90 > 50*time.Millisecond {
-		t.Errorf("completion took %v (median), %v (90th percentile), want under 50ms", median, p90)
+	if limit := testenv.Budget(50 * time.Millisecond); median > limit || p90 > limit {
+		t.Errorf("completion took %v (median), %v (90th percentile), want under %v", median, p90, limit)
 	}
 	t.Logf("%d completions: median %v, 90th percentile %v, slowest %v (document %d bytes)",
 		len(took), median, p90, took[len(took)-1], len(text))

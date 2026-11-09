@@ -12,6 +12,7 @@ import (
 
 	"github.com/sorrelfox/postsonde/internal/core/grpc/proto/ast"
 	"github.com/sorrelfox/postsonde/internal/testutil/golden"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // render is the golden form of a parse: the tree, the syntax errors and the
@@ -457,7 +458,9 @@ func TestDeepNesting(t *testing.T) {
 				t.Fatalf("file %v, %d errors", f, len(errs))
 			}
 			Check(f)
-			if d := time.Since(start); d > 10*time.Second {
+			// Linear work takes a fraction of the bound, quadratic work on
+			// this input far more.
+			if d := time.Since(start); d > testenv.Budget(10*time.Second) {
 				t.Errorf("took %v", d)
 			}
 		})

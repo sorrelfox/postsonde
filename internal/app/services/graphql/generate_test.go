@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/sorrelfox/postsonde/internal/core/graphql/validate"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 // problems returns the diagnostics of text against the cached schema key,
@@ -202,7 +203,7 @@ func TestSchemaActionsLargeSchema(t *testing.T) {
 		t.Errorf("target = %+v", target)
 	}
 	t.Logf("slowest call: %v", slowest)
-	if !testing.Short() && slowest > 250*time.Millisecond {
-		t.Errorf("slowest call took %v", slowest)
+	if limit := testenv.Budget(250 * time.Millisecond); !testing.Short() && slowest > limit {
+		t.Errorf("slowest call took %v, want under %v", slowest, limit)
 	}
 }

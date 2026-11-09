@@ -90,7 +90,10 @@ one side straight away:
   60-minute timeout. Each sets up the pinned Go (`actions/setup-go`, which
   caches the modules and the build cache by `go.sum`) and runs `go vet
   ./...` and `go test ./...`, with the race detector on macOS (Windows has
-  no cgo, which the race detector needs). macOS and Windows have code of
+  no cgo, which the race detector needs). Without it, the Windows job is
+  also the one that checks the time bounds of the speed tests, which the
+  race detector lifts ([test conventions](architecture.md#test-conventions)).
+  macOS and Windows have code of
   their own: the keychain backends, the system proxy, the Wails shell. The
   Intel macOS image: arm64 macOS runners are often short of capacity.
 

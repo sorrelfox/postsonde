@@ -13,6 +13,7 @@ import (
 	"github.com/sorrelfox/postsonde/internal/core/grpc/proto/desc"
 	"github.com/sorrelfox/postsonde/internal/core/grpc/proto/linker"
 	"github.com/sorrelfox/postsonde/internal/core/grpc/proto/parser"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 const completeProto = `syntax = "proto2";
@@ -317,7 +318,7 @@ func TestCompleteWithoutPool(t *testing.T) {
 	}
 }
 
-// TestCompleteSpeed completes in a large message many times; the
+// TestCompleteSpeed completes at the end of a large message: the
 // completion is linear in the text and needs no linking.
 func TestCompleteSpeed(t *testing.T) {
 	p, md := completeSetup(t)
@@ -331,10 +332,20 @@ func TestCompleteSpeed(t *testing.T) {
 	}
 	b.WriteString(`], `)
 	text := b.String()
-	start := time.Now()
-	c := Complete(p, md, text, len(text))
-	if d := time.Since(start); d > 200*time.Millisecond {
-		t.Errorf("completing %d bytes took %v", len(text), d)
+	// The best of a few runs: a loaded machine or a GC pause slows any one
+	// of them, a real regression all of them.
+	const runs = 3
+	var c Completion
+	var best time.Duration
+	for i := range runs {
+		start := time.Now()
+		c = Complete(p, md, text, len(text))
+		if d := time.Since(start); i == 0 || d < best {
+			best = d
+		}
+	}
+	if limit := testenv.Budget(200 * time.Millisecond); best > limit {
+		t.Errorf("completing %d bytes took %v at best of %d, want under %v", len(text), best, runs, limit)
 	}
 	if slices.Contains(labels(c), "lines") || !slices.Contains(labels(c), "pay") {
 		t.Errorf("labels = %v", labels(c))

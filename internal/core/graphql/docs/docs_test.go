@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/sorrelfox/postsonde/internal/core/graphql/schema"
+	"github.com/sorrelfox/postsonde/internal/testutil/testenv"
 )
 
 func fixture(t testing.TB) *schema.Schema {
@@ -227,9 +228,9 @@ func TestSearchLargeSchemaIsFast(t *testing.T) {
 		}
 	}
 	slowest := slices.Max(best)
-	if slowest > 100*time.Millisecond {
-		t.Errorf("search for %q took %v at best of %d, want well under 100ms",
-			queries[slices.Index(best, slowest)], slowest, rounds)
+	if limit := testenv.Budget(100 * time.Millisecond); slowest > limit {
+		t.Errorf("search for %q took %v at best of %d, want well under %v",
+			queries[slices.Index(best, slowest)], slowest, rounds, limit)
 	}
 	t.Logf("%d entries, slowest query %v (best of %d)", idx.Len(), slowest, rounds)
 }
