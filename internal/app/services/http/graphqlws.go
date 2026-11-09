@@ -89,7 +89,7 @@ func NewGraphQLSubscription(ctx context.Context, s *HTTPService, id string, allo
 	o := wsclient.Options{
 		URL:                b.URL,
 		Headers:            b.Headers,
-		Dialer:             s.dialer,
+		Dialer:             requestDialer(s.dialer, b.Proxy),
 		InsecureSkipVerify: b.InsecureSkipVerify,
 		HandshakeTimeout:   b.HandshakeTimeout,
 	}

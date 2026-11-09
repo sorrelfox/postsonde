@@ -36,7 +36,7 @@ func SendPrepared(s *HTTPService, req httpclient.Request) (operation.StartedDTO,
 		b.InsecureSkipVerify, b.TLSSource = true, request.TLSFromSettings
 	}
 	// The same client as a send: the trusted CA bundles apply too.
-	client, err := s.client(b.InsecureSkipVerify, b.Request.URL)
+	client, err := s.client(b.InsecureSkipVerify, b.Request.URL, b.Proxy)
 	if err != nil {
 		return operation.StartedDTO{}, err
 	}

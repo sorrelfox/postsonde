@@ -152,6 +152,7 @@ func partialResponseDTO(b request.HTTPBuild, head *httpclient.Response, elapsed 
 		TimeoutSource:     b.TimeoutSource,
 		InsecureTLS:       b.InsecureSkipVerify,
 		InsecureTLSSource: b.TLSSource,
+		RequestProxy:      b.Proxy.String(),
 		Warnings:          []WarningDTO{},
 		Timeline:          TimelineDTO{Hops: []TimelineHopDTO{}, Events: []TimelineEventDTO{}},
 		Tests:             []TestResultDTO{},

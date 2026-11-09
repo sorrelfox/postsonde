@@ -128,11 +128,19 @@ type HTTPService struct {
 type RootsFunc func() (*x509.CertPool, error)
 
 // clientKey tells the cached clients apart: verification off, or the
-// pool they verify against (nil for the system's).
+// pool they verify against (nil for the system's), and the request's own
+// proxy (the zero request.Proxy for the proxy in effect). Each request
+// proxy has clients of its own, so a connection opened through one
+// proxy, or directly, is never reused for a request meant for another.
 type clientKey struct {
 	insecure bool
 	roots    *x509.CertPool
+	proxy    request.Proxy
 }
+
+// maxProxyClients bounds the clients kept for requests' own proxies; past
+// it they are closed and built again on demand.
+const maxProxyClients = 16
 
 // New returns an HTTPService that loads requests with load, reads the
 // global default timeout (network.defaultTimeoutMs) from defaultTimeout on
@@ -272,7 +280,7 @@ func (s *HTTPService) prepare(ctx context.Context, id string, o buildOptions, re
 			WithDetail("requestId", id)
 	}
 
-	client, err := s.client(b.InsecureSkipVerify, b.Request.URL)
+	client, err := s.client(b.InsecureSkipVerify, b.Request.URL, b.Proxy)
 	if err != nil {
 		return nil, err
 	}
@@ -396,7 +404,10 @@ func (s *HTTPService) build(ctx context.Context, id string, o buildOptions) (col
 	if s.defaultTimeout != nil {
 		def = s.defaultTimeout()
 	}
-	opts := request.HTTPOptions{Expand: x.expand, Root: workspaceRoot(src), AllowedDirs: s.allowed(), DefaultTimeout: def, DefaultInsecure: s.defaultInsecure(), FolderHeaders: src.FolderHeaders, Netrc: s.netrcOptions(o.deferNetrc)}
+	opts := request.HTTPOptions{Expand: x.expand, Root: workspaceRoot(src), AllowedDirs: s.allowed(), DefaultTimeout: def, DefaultInsecure: s.defaultInsecure(), FolderHeaders: src.FolderHeaders, Netrc: s.netrcOptions(o.deferNetrc),
+		// What sends nothing does not fail on the request's own proxy:
+		// a half-typed one must not stop the header preview (below).
+		ProxyAsTyped: o.preview || o.templated}
 	auth := src.Auth
 	if o.templated {
 		opts.Expand = snippet.KeepReferences
@@ -435,6 +446,13 @@ func (s *HTTPService) build(ctx context.Context, id string, o buildOptions) (col
 	if o.preview {
 		// A copy or preview never asks the token endpoint (oauth2.go).
 		s.previewOAuth2(&b)
+		if !o.templated {
+			// The proxy a send would use, when it can be built; else a
+			// copy shows it as typed (snippet.FromBuild).
+			if p, err := request.BuildProxy(b.ProxySetting, opts.Expand); err == nil {
+				b.Proxy = p
+			}
+		}
 	}
 	return src, x, b, nil
 }
@@ -485,14 +503,16 @@ func WithClientCerts(pick httpclient.ClientCertFunc) Option {
 	return func(s *HTTPService) { s.clientCerts = pick }
 }
 
-// client returns the client for the TLS setting and the trusted CAs, built
-// on first use, so connections are reused across sends. When the CA
-// bundles change, the clients of the old pool are dropped (their idle
-// connections closed).
+// client returns the client for the TLS setting, the trusted CAs and the
+// request's own proxy, built on first use, so connections are reused
+// across sends. When the CA bundles change, the clients of the old pool
+// are dropped (their idle connections closed). The client of a request
+// proxy dials through netx.RequestProxyDialer, so its pool holds only
+// connections made with that proxy, whichever context dials.
 //
 // A CA bundle that cannot be used fails an https URL; a plain http one is
 // sent with the system roots (a redirect to https then trusts only them).
-func (s *HTTPService) client(insecure bool, url string) (*httpclient.Client, error) {
+func (s *HTTPService) client(insecure bool, url string, proxy request.Proxy) (*httpclient.Client, error) {
 	if err := s.checkTLSPolicy(insecure, "HTTP"); err != nil {
 		return nil, err
 	}
@@ -508,19 +528,36 @@ func (s *HTTPService) client(insecure bool, url string) (*httpclient.Client, err
 			s.logger.Warn("custom CA certificates not used", "err", err)
 		}
 	}
-	key := clientKey{insecure: insecure, roots: roots}
+	key := clientKey{insecure: insecure, roots: roots, proxy: proxy}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if c, ok := s.clients[key]; ok {
 		return c, nil
 	}
+	own := 0
 	for k, c := range s.clients {
-		if k.insecure == insecure {
+		if k.insecure == insecure && k.proxy == proxy {
 			c.CloseIdleConnections()
 			delete(s.clients, k)
+			continue
+		}
+		if k.proxy.Set {
+			own++
 		}
 	}
-	c := httpclient.New(s.dialer, httpclient.TransportOptions{InsecureSkipVerify: insecure, RootCAs: roots, ClientCerts: s.clientCerts})
+	if proxy.Set && own >= maxProxyClients {
+		for k, c := range s.clients {
+			if k.proxy.Set {
+				c.CloseIdleConnections()
+				delete(s.clients, k)
+			}
+		}
+	}
+	d := s.dialer
+	if proxy.Set {
+		d = netx.RequestProxyDialer(d, proxy.URL)
+	}
+	c := httpclient.New(d, httpclient.TransportOptions{InsecureSkipVerify: insecure, RootCAs: roots, ClientCerts: s.clientCerts})
 	s.clients[key] = c
 	return c, nil
 }

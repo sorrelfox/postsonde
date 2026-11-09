@@ -113,7 +113,7 @@ func hasHeader(headers []httpclient.Header, name string) bool {
 // oauth2 auth gets its token first, the session's or a new one from the
 // token endpoint (authorizeOAuth2).
 func (x *Stream) Open(ctx context.Context, lastEventID string, fn httpclient.StreamFunc) (*httpclient.Response, error) {
-	client, err := x.s.client(x.build.InsecureSkipVerify, x.build.Request.URL)
+	client, err := x.s.client(x.build.InsecureSkipVerify, x.build.Request.URL, x.build.Proxy)
 	if err != nil {
 		return nil, err
 	}

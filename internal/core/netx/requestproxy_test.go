@@ -112,3 +112,37 @@ func TestProxyRouterRequestProxy(t *testing.T) {
 		t.Errorf("ForwardProxy with no proxy = %v", p)
 	}
 }
+
+// TestRequestProxyDialer: a dialer over RequestProxyDialer routes every
+// dial, and answers ForwardProxy, with its proxy, whatever the ctx.
+func TestRequestProxyDialer(t *testing.T) {
+	t.Parallel()
+	own := &netxtest.SOCKS5Server{Hosts: map[string]string{}}
+	ownURL, _ := ParseProxyURL("socks5h://" + own.Start(t))
+	httpURL, _ := ParseProxyURL("http://127.0.0.1:3128")
+	direct := NewDirect(Options{})
+	r := NewProxyConfigRouter(direct, func(context.Context) (ProxyConfig, error) { return ProxyConfig{}, nil }, ProxyOptions{})
+	app := NewForwardProxier(Routed(r.Route), r.ForwardProxy)
+
+	d := RequestProxyDialer(app, ownURL)
+	if _, ok := d.(ForwardProxier); !ok {
+		t.Fatal("the request proxy dialer of a ForwardProxier is not one")
+	}
+	target := echoServer(t)
+	own.Hosts["echo.test"] = "127.0.0.1"
+	_, port, _ := net.SplitHostPort(target)
+	c, err := d.DialContext(t.Context(), "tcp", net.JoinHostPort("echo.test", port))
+	if err != nil {
+		t.Fatal(err)
+	}
+	roundTrip(t, c, "via the request proxy dialer")
+	if len(own.Requests()) != 1 {
+		t.Errorf("own proxy got %v", own.Requests())
+	}
+	if p := RequestProxyDialer(app, httpURL).(ForwardProxier).ForwardProxy(t.Context(), "api.example.test:80"); p == nil {
+		t.Error("ForwardProxy did not see the request's HTTP proxy")
+	}
+	if _, ok := RequestProxyDialer(direct, ownURL).(ForwardProxier); ok {
+		t.Error("a plain dialer became a ForwardProxier")
+	}
+}

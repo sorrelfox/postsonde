@@ -155,6 +155,12 @@ type ResponseDTO struct {
 	// response view shows a warning badge.
 	InsecureTLS       bool   `json:"insecureTls"`
 	InsecureTLSSource string `json:"insecureTlsSource"`
+	// RequestProxy is the request's own proxy setting when it has one
+	// (docs/network.md#a-requests-own-proxy): the proxy URL without its
+	// password for a custom proxy, "none" when it connects directly
+	// whatever proxy is in effect, "" when it inherits the proxy in effect.
+	// The connection's Via says where it actually went.
+	RequestProxy string `json:"requestProxy"`
 	// Warnings are problems that did not stop the send, such as a body
 	// dropped for HEAD.
 	Warnings []WarningDTO `json:"warnings"`
@@ -229,6 +235,7 @@ func toResponseDTO(b request.HTTPBuild, r *httpclient.Response, jar *jarRecorder
 		TimeoutSource:     b.TimeoutSource,
 		InsecureTLS:       b.InsecureSkipVerify,
 		InsecureTLSSource: b.TLSSource,
+		RequestProxy:      b.Proxy.String(),
 		Warnings:          make([]WarningDTO, 0, len(b.Warnings)),
 		Tests:             make([]TestResultDTO, 0),
 		Extractions:       make([]ExtractionResultDTO, 0),

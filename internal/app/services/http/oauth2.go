@@ -358,7 +358,7 @@ func (s *HTTPService) fetchToken(ctx context.Context, b *request.HTTPBuild, mode
 		}
 		return s.implicitToken(ctx, p, log, stage)
 	}
-	client, err := s.client(b.InsecureSkipVerify, p.Token.Config.TokenURL)
+	client, err := s.client(b.InsecureSkipVerify, p.Token.Config.TokenURL, b.Proxy)
 	if err != nil {
 		return nil, err
 	}

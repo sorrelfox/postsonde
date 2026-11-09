@@ -665,6 +665,36 @@ func WithRequestProxy(ctx context.Context, p ProxyURL) context.Context {
 	return context.WithValue(ctx, requestProxyKey{}, p)
 }
 
+// RequestProxyDialer returns d with p as the request proxy of every dial
+// (WithRequestProxy) and, when d is a ForwardProxier, of every
+// ForwardProxy question. A client built over it, with a pool of its own,
+// keeps the connections of that proxy apart from every other's.
+func RequestProxyDialer(d Dialer, p ProxyURL) Dialer {
+	rd := requestProxyDialer{next: d, proxy: p}
+	if fp, ok := d.(ForwardProxier); ok {
+		return requestProxyForwarder{requestProxyDialer: rd, forward: fp}
+	}
+	return rd
+}
+
+type requestProxyDialer struct {
+	next  Dialer
+	proxy ProxyURL
+}
+
+func (d requestProxyDialer) DialContext(ctx context.Context, network, address string) (net.Conn, error) {
+	return d.next.DialContext(WithRequestProxy(ctx, d.proxy), network, address)
+}
+
+type requestProxyForwarder struct {
+	requestProxyDialer
+	forward ForwardProxier
+}
+
+func (d requestProxyForwarder) ForwardProxy(ctx context.Context, address string) *HTTPProxy {
+	return d.forward.ForwardProxy(WithRequestProxy(ctx, d.proxy), address)
+}
+
 // RequestProxyFrom returns the proxy WithRequestProxy put in ctx; ok is
 // false when there is none, the proxy in effect then applies.
 func RequestProxyFrom(ctx context.Context) (p ProxyURL, ok bool) {

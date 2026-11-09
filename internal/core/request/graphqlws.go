@@ -35,9 +35,10 @@ type GraphQLWSBuild struct {
 	// folders' and the auth's, as for BuildHTTP (no Accept or
 	// Content-Type is added).
 	Headers []httpclient.Header
-	// InsecureSkipVerify and TLSSource are as in HTTPBuild.
+	// InsecureSkipVerify, TLSSource and Proxy are as in HTTPBuild.
 	InsecureSkipVerify bool
 	TLSSource          string
+	Proxy              Proxy
 	// HandshakeTimeout is the request's timeout (its own or the app's
 	// default), bounding the WebSocket handshake; zero leaves the client's
 	// default.
@@ -92,7 +93,7 @@ func BuildGraphQLWS(f projectfile.GraphQLRequest, auth projectfile.Auth, o HTTPO
 		return out, err
 	}
 	out.Headers = b.Request.Headers
-	out.InsecureSkipVerify, out.TLSSource = b.InsecureSkipVerify, b.TLSSource
+	out.InsecureSkipVerify, out.TLSSource, out.Proxy = b.InsecureSkipVerify, b.TLSSource, b.Proxy
 	out.HandshakeTimeout = b.Request.Settings.Timeout
 
 	query := f.Query

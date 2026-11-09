@@ -73,6 +73,11 @@ type HTTPOptions struct {
 	// Netrc says where a netrc auth finds its file (AUTH-19); the zero
 	// value reads the user's real file, for that auth type only.
 	Netrc NetrcOptions
+	// ProxyAsTyped leaves the request's own proxy unbuilt: HTTPBuild.Proxy
+	// stays the zero Proxy and ProxySetting holds it as typed. For a
+	// templated snippet, whose {{variables}} stay as written and so could
+	// not be parsed as a proxy URL.
+	ProxyAsTyped bool
 }
 
 // HTTPBuild is a request ready to send.
@@ -88,6 +93,12 @@ type HTTPBuild struct {
 	// TimeoutSource says where Request.Settings.Timeout came from:
 	// TimeoutFromRequest or TimeoutFromSettings; "" when there is none.
 	TimeoutSource string
+	// Proxy is the request's own proxy (settings.proxy, BuildProxy); the
+	// zero Proxy inherits the proxy in effect. Send with Proxy.Context, and
+	// keep the connections of each Proxy apart.
+	Proxy Proxy
+	// ProxySetting is settings.proxy as typed, its password merged.
+	ProxySetting projectfile.RequestProxy
 	// Warnings are problems that do not stop the send.
 	Warnings []Warning
 	// HeaderSources says where each of Request.Headers came from, index
@@ -356,6 +367,14 @@ func buildHTTP(f projectfile.HTTPRequest, auth projectfile.Auth, o HTTPOptions) 
 		out.InsecureSkipVerify, out.TLSSource = true, TLSFromSettings
 	}
 	out.TimeoutSource = source
+	// Last, so the undefined variables of every other field are reported
+	// with the proxy's.
+	out.ProxySetting = f.Settings.Proxy
+	if !o.ProxyAsTyped {
+		if out.Proxy, err = BuildProxy(f.Settings.Proxy, o.Expand); err != nil {
+			return out, err
+		}
+	}
 	return out, nil
 }
 

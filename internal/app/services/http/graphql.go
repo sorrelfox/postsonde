@@ -153,7 +153,7 @@ func (p *GraphQLPoster) Post(ctx context.Context, query, operationName string) (
 	if _, err := p.s.authorizeOAuth2(ctx, &b); err != nil {
 		return nil, err
 	}
-	client, err := p.s.client(b.InsecureSkipVerify, b.Request.URL)
+	client, err := p.s.client(b.InsecureSkipVerify, b.Request.URL, b.Proxy)
 	if err != nil {
 		return nil, err
 	}

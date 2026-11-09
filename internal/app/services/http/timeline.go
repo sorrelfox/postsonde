@@ -113,7 +113,13 @@ type TimelineEventDTO struct {
 // values of this build: a JWT is signed anew on every build, with its own
 // iat and jti.
 func secretsOf(x *expansion, b request.HTTPBuild) []string {
-	return append(append([]string(nil), x.secrets...), b.AuthSecrets...)
+	out := append(append([]string(nil), x.secrets...), b.AuthSecrets...)
+	// The password of the request's own proxy is never in a request, but
+	// is masked like the auth's should it be echoed anywhere.
+	if pw := b.Proxy.Secret(); pw != "" {
+		out = append(out, pw)
+	}
+	return out
 }
 
 // hopKind is the DTO kind of a hop before the final one: a hop without a

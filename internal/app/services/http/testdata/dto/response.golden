@@ -87,6 +87,7 @@
   "timeoutSource": "settings",
   "insecureTls": false,
   "insecureTlsSource": "",
+  "requestProxy": "",
   "warnings": [
     {
       "code": "request.body_omitted",
