@@ -382,6 +382,13 @@ func (s fsSource) read(p string) (string, error) {
 }
 func (fsSource) display(p string) string { return p }
 
+// quotePath quotes the disk path p for a message as strconv.Quote does,
+// but keeps its backslashes, so that a Windows path reads as it is written
+// ("C:\protos\a.proto", not "C:\\protos\\a.proto").
+func quotePath(p string) string {
+	return strings.ReplaceAll(strconv.Quote(p), `\\`, `\`)
+}
+
 // validImportPath reports whether p is a clean relative path with forward
 // slashes, as protoc requires for virtual paths.
 func validImportPath(p string) bool {
@@ -496,7 +503,7 @@ func (l *linker) openHit(importPath string, h hit, from *fileState, decl *ast.Im
 	} else {
 		var err error
 		if src, err = l.readFile(h.disk); err != nil {
-			msg := "cannot read " + strconv.Quote(l.src.display(h.disk)) + ": " + err.Error()
+			msg := "cannot read " + quotePath(l.src.display(h.disk)) + ": " + err.Error()
 			code := CodeReadFailed
 			if fileaccess.IsNotAllowed(err) {
 				code = fileaccess.CodeNotAllowed // a link changed after it was found
@@ -541,7 +548,7 @@ func (l *linker) warnShadowed(importPath string, hits []hit, from *fileState, de
 	var others []string
 	for _, h := range hits[1:] {
 		if !h.builtin {
-			others = append(others, strconv.Quote(l.src.display(h.disk)))
+			others = append(others, quotePath(l.src.display(h.disk)))
 		}
 	}
 	if len(others) == 0 {
@@ -549,7 +556,7 @@ func (l *linker) warnShadowed(importPath string, hits []hit, from *fileState, de
 	}
 	l.report(from, CodeImportShadowed, parser.SeverityWarning, decl.Path.Loc,
 		strconv.Quote(importPath)+" exists under more than one import path; using "+
-			strconv.Quote(l.src.display(hits[0].disk))+", not "+strings.Join(others, ", "))
+			quotePath(l.src.display(hits[0].disk))+", not "+strings.Join(others, ", "))
 }
 
 // openInput resolves one of Options.Files.
@@ -603,8 +610,8 @@ func (l *linker) openInput(name string) *fileState {
 		if !l.implicitWarned[dir] {
 			l.implicitWarned[dir] = true
 			l.reportFile(importPath, p, CodeImplicitImportPath, parser.SeverityWarning,
-				strconv.Quote(l.src.display(p))+" is not under any import path; added its directory "+
-					strconv.Quote(l.src.display(dir))+" as an import path")
+				quotePath(l.src.display(p))+" is not under any import path; added its directory "+
+					quotePath(l.src.display(dir))+" as an import path")
 		}
 	}
 	root := l.roots[rootIdx]
@@ -613,14 +620,14 @@ func (l *linker) openInput(name string) *fileState {
 			return f
 		}
 		l.reportFile(importPath, p, CodeInputShadowed, parser.SeverityError,
-			strconv.Quote(l.src.display(p))+" has import path "+strconv.Quote(importPath)+
+			quotePath(l.src.display(p))+" has import path "+strconv.Quote(importPath)+
 				", which is already loaded from "+describeOrigin(l, f)+"; remove one of them or reorder the import paths")
 		return nil
 	}
 	for _, r := range l.roots[:rootIdx] {
 		if q := l.src.join(r, importPath); l.exists(q) {
 			l.reportFile(importPath, p, CodeInputShadowed, parser.SeverityError,
-				strconv.Quote(l.src.display(p))+" is shadowed by "+strconv.Quote(l.src.display(q))+
+				quotePath(l.src.display(p))+" is shadowed by "+quotePath(l.src.display(q))+
 					", which has the same import path "+strconv.Quote(importPath)+
 					" in an earlier import path; imports of it resolve to that file. Load that file instead, or reorder the import paths")
 			break
@@ -633,7 +640,7 @@ func describeOrigin(l *linker, f *fileState) string {
 	if f.builtin {
 		return "the built-in well-known types"
 	}
-	return strconv.Quote(l.src.display(f.diskPath))
+	return quotePath(l.src.display(f.diskPath))
 }
 
 // visit loads f's imports depth-first and appends f to l.order after them.

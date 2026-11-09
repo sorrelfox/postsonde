@@ -236,6 +236,22 @@ func TestImportPaths(t *testing.T) {
 	}
 }
 
+// TestQuotePath: a disk path in a message keeps its backslashes, so a
+// Windows path reads as written; other characters are quoted as by
+// strconv.Quote.
+func TestQuotePath(t *testing.T) {
+	for in, want := range map[string]string{
+		`C:\protos\a.proto`: `"C:\protos\a.proto"`,
+		"/work/a.proto":     `"/work/a.proto"`,
+		`say "hi".proto`:    `"say \"hi\".proto"`,
+		"line\nbreak":       `"line\nbreak"`,
+	} {
+		if got := quotePath(in); got != want {
+			t.Errorf("quotePath(%q) = %s, want %s", in, got, want)
+		}
+	}
+}
+
 func TestLoadErrors(t *testing.T) {
 	_, err := Load(context.Background(), Options{})
 	if errs.KindOf(err) != errs.InvalidArgument {
